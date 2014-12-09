@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SexyTalk</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_live_card_service">Hello World LiveCard</string>
+    <string name="action_stop">Stop</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="menu_calendar">Days</string>
+    <string name="menu_select_sex">Sex</string>
+    <string name="menu_send_a_kiss">Send a kiss</string>
+    <string name="menu_send_message">Send a message</string>
+    <string name="menu_edit_partner">Choose your partner</string>
+    <string name="dialog_menu_title">Are you a guy or a girl?</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="hint_login_username">Username</string>
+    <string name="hint_login_password">Password</string>
+    <string name="log_in_button">SIGN IN</string>
+    <string name="sign_up_text">Don\'t have an account? Sign up!</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="hint_email">Email</string>
+    <string name="sign_up_error_message">Please make sure you enter username, password and email address!</string>
+    <string name="error_unable_to_sign_in">You were unable to sign in. Please try again</string>
+    <string name="sign_up_error_title">Oops!</string>
+    <string name="login_error_message">Please make sure you enter username and password!</string>
+    <string name="general_login_error_message">Login unsuccessful, please try again.</string>
+    <string name="login_error_title">Oops!</string>
+    <string name="logout_menu_title">Logout</string>
+    <string name="tab_days_title">Love Days</string>
+    <string name="tab_chat_title">Love Box</string>
+    <string name="tab_friends_title">Friends</string>
+    <string name="no_friends_added_message">Add friends to begin</string>
+    <string name="no_messages">You have no new messages</string>
+    <string name="title_activity_edit_friends">EditFriendsActivity</string>
+    <string name="error_title">Oops!</string>
+    <string name="menu_camera">Camera</string>
+    <string name="menu_camera_alertdialog_title">What would you like to do?</string>
+    <string name="error_message_toast_external_storage">There was a problem accessing your device\'s external storage</string>
+    <string name="general_error_message">Sorry, there was an error</string>
+    <string name="warning_max_video_size">The selected video must be less than 10MB.</string>
+    <string name="error_selected_file">There was a problem with the selected file.</string>
+    <string name="error_file_too_large">The selected file is too large.</string>
+    <string name="title_activity_recipients">ActivityRecipients</string>
+    <string name="recipients_send_button_action_bar">Send</string>
+    <string name="error_sending_file_selected">There was an error with the file selected. Please select a different file.</string>
+    <string name="error_sending_file">The message was not sent. Please try again.</string>
+    <string name="error_loading_thumbnail">Error loading the thumbnail image</string>
+    <string name="message_successfully_sent">The message was sent successfully</string>
+    <string name="title_activity_view_image">ViewImageActivity</string>
+    <string name="main_message_female">Your upcoming fertile days are:</string>
+    <string name="main_message_male">Your partner\'s upcoming fertile days are:</string>
+    <string name="messaged_successfully_saved_to_server">Your selection was saved</string>
+    <string name="messaged_unsuccessfully_saved_to_server">Unfortunately, there was a server error and your selection was not saved. Please try again later.</string>
+    <string name="send_a_kiss_message">kisses you</string>
+    <string name="send_a_message_message">sent you a message</string>
+    <string name="title_receive_a_kiss_message">You received a kiss</string>
+    <string name="title_receive_a_message_message">You received a message</string>
+    <string name="title_update_calendar_notification">Sexy Calendar update</string>
+    <string name="button_send_kiss">Send a kiss</string>
+    <string name="button_send_message">Send a message</string>
+    <string name="send_message_to">To:_____</string>
+    <string name="send_message_to_add_users">To: </string>
+    <string name="empty_recipients_message">Chose your partner(s) first</string>
+    <string name="view_sexy_calendar_button">Sexy Calendar</string>
+    <string name="title_activity_send_message">SendMessage</string>
+    <string name="title_activity_send_to">SendTo</string>
+    <string name="title_activity_view_movie">ViewMovieActivity</string>
+    <string name="title_activity_sexy_calendar">SexyCalendar</string>
+    <string name="show_private_days_dialog_button">Private Days</string>
+    <string name="error_sending_calendar_updates">Sorry, there was an error sending the Sexy Calendar update</string>
+    <string name="calendar_update_sent_singular">You sent Sexy Calendar update to your partner</string>
+    <string name="calendar_update_sent_plural">You sent Sexy Calendar update to your partners</string>
+    <string name="send_sexy_calendar_update_checkbox">Send Sexy Calendar update</string>
+    <string name="push_notification_message_update_sexy_calendar">updated her Sexy Calendar</string>
+    <string name="sexy_calendar_for_guys">Sexy Calendar for guys</string>
+    <string name="top_message_sexy_calendar_for_guys">Check the sexy calendar of your partner</string>
+    <string name="image_rotate_left">Rotate left</string>
+    <string name="image_rotate_right">Rotate right</string>
+    <string name="title_activity_view_text_message">ViewTextMessageActivity</string>
+    <string name="error_user_registered_but_unable_to_log_in">The user was successfully created but you were unable to log in due to a server error. Please try again</string>
+    <string-array name="camera_choices">
+        <item>Take Picture</item>
+        <item>Take Video</item>
+        <item>Choose Picture</item>
+        <item>Choose Video</item>
+    </string-array>
+
+    <string-array name="sex_options">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+
+</resources>
