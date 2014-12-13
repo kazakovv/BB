@@ -20,13 +20,14 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class SendTo extends ListActivity {
     protected BackendlessUser[] mPartners;
     protected ArrayList<Integer> mSendTo;
     protected ArrayList<String> mRecepientUserNames;
-    protected ArrayList<String> mRecepientIDs;
+    protected ArrayList<String> mRecepientEmails;
 
 
 
@@ -35,7 +36,7 @@ public class SendTo extends ListActivity {
         super.onCreate(savedInstanceState);
 
         //inicializirame arraylists, za da mozem da dobaviame info kam tiah
-        mRecepientIDs = new ArrayList<String>();
+        mRecepientEmails = new ArrayList<String>();
         mSendTo = new ArrayList<Integer>();
         mRecepientUserNames = new ArrayList<String>();
 
@@ -58,12 +59,12 @@ public class SendTo extends ListActivity {
 
         if(l.isItemChecked(position)) {
             mSendTo.add(position);
-            mRecepientIDs.add(mPartners[position].getObjectId());
+            mRecepientEmails.add(mPartners[position].getEmail());
             mRecepientUserNames.add((String) mPartners[position].getProperty(Statics.KEY_USERNAME));
         } else {
             int positionToRemove = mSendTo.indexOf(position);
             mSendTo.remove(positionToRemove);
-            mRecepientIDs.remove(positionToRemove);
+            mRecepientEmails.remove(positionToRemove);
             mRecepientUserNames.remove(positionToRemove);
 
         }
@@ -77,10 +78,11 @@ public class SendTo extends ListActivity {
                 Intent intent = new Intent(SendTo.this, SendMessage.class);
 
                 intent.putStringArrayListExtra(Statics.KEY_USERNAME,mRecepientUserNames);
-                intent.putStringArrayListExtra(Statics.KEY_RECEPIENT_IDS, mRecepientIDs);
+                intent.putStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS,  mRecepientEmails);
                 setResult(RESULT_OK, intent);
                 finish();
                 return true;
+
             case R.id.action_settings:
                 Intent intentSendMessage = new Intent(this, EditPartnersActivity.class);
                 startActivity(intentSendMessage);
@@ -122,7 +124,7 @@ public class SendTo extends ListActivity {
 
                          mPartners = (BackendlessUser[]) user.getProperty(Statics.KEY_PARTNERS);
 
-                         //Crashesh if there are no partners!!!!!
+                         //Crashes if there are no partners!!!!!
                          // needs A FIX
 
                          int numberOfPartners = mPartners.length;

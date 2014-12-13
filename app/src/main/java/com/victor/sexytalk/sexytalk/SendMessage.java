@@ -20,10 +20,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.UserService;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.messaging.MessageStatus;
+import com.backendless.persistence.BackendlessDataQuery;
 
 import java.io.File;
 import java.io.IOException;
@@ -41,7 +43,7 @@ public class SendMessage extends Activity {
     String mMessageType;
 
     ArrayList<String> backendlessUserNames; //spisak s Usernames na poluchatelite na saobshtenieto
-    ArrayList<String> backendlessUserIDs; //spisak s ID na poluchatelite na saobshtenieto
+    ArrayList<String> backendlessRecepientEmails; //spisak s emails na poluchatelite na saobshtenieto
 
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
@@ -190,7 +192,7 @@ public class SendMessage extends Activity {
             if (requestCode == ACTIVITY_SEND_TO) {
 
                 backendlessUserNames = data.getStringArrayListExtra(Statics.KEY_USERNAME);
-                backendlessUserIDs = data.getStringArrayListExtra(Statics.KEY_RECEPIENT_IDS);
+                backendlessRecepientEmails = data.getStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS);
                 String message = constructListOfRecepeintsAsStringTo(backendlessUserNames);
                 mSendMessageTo.setText(message);
                 Log.d("Vic","the message is "+message);
@@ -390,68 +392,92 @@ public class SendMessage extends Activity {
         if(id == R.id.action_send) {
 
 
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            String whereClause = constructWhereClause();
+            dataQuery.setWhereClause(whereClause);
+            final List<BackendlessUser> recepients = new ArrayList<BackendlessUser>();
 
-
-            Messages message = new Messages();
-
-            message.setSender(Backendless.UserService.CurrentUser());
-            message.setLoveMessage(messageToSend.getText().toString());
-
-            List<BackendlessUser> recepients = new ArrayList<BackendlessUser>();
-
-            recepients.add( Backendless.UserService.CurrentUser());
-
-
-
-            BackendlessUser currnentUser = Backendless.UserService.CurrentUser();
-            message.setRecepients(recepients);
-
-
-            message.setmMediaUri(mMediaUri);
-
-            //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
-            if(mMessageType == null) {
-                mMessageType = Statics.TYPE_TEXTMESSAGE;
-            }
-            message.setMessageType(mMessageType);
-
-            //send message to Backendless
-            Backendless.Persistence.save(message, new AsyncCallback<Messages>() {
+            Backendless.Data.of(BackendlessUser.class).find(dataQuery,
+                    new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
                 @Override
-                public void handleResponse(Messages messages) {
-                    Toast.makeText(SendMessage.this,R.string.message_successfully_sent,Toast.LENGTH_LONG).show();
-                    //izprashtame push notification, che ima novo saobshtenie
-                    //!!
+                public void handleResponse(BackendlessCollection<BackendlessUser> collection) {
+                    int numberOfUsers = collection.getCurrentPage().size();
+
+                    for (int i = 0; i < numberOfUsers ; i++) {
+                        recepients.add(collection.getCurrentPage().get(i));
+                    }
+
+                    Messages message = new Messages();
+                    message.setSender(Backendless.UserService.CurrentUser());
+                    message.setLoveMessage(messageToSend.getText().toString());
+                    message.setRecepients(recepients);
+
+                    //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
+                    if(mMessageType == null) {
+                        mMessageType = Statics.TYPE_TEXTMESSAGE;
+                    }
+                    message.setMessageType(mMessageType);
+
+                    //izprashtame saobshtenieto
+                    Backendless.Persistence.save(message, new AsyncCallback<Messages>() {
+                        @Override
+                        public void handleResponse(Messages messages) {
+                            Toast.makeText(SendMessage.this,R.string.message_successfully_sent,Toast.LENGTH_LONG).show();
+                            //izprashtame push notification, che ima novo saobshtenie
+                            //!!
+
+                            //Message sent.Switch to main screen.
+                            Intent intent = new Intent(SendMessage.this,Main.class);
+                            //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            Log.d("Vic","error sending message " + backendlessFault.toString());
+                            AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
+                            //builder.setMessage(R.string.error_sending_file)
+                            builder.setMessage(R.string.error_sending_message)
+                                    .setTitle(R.string.error_title)
+                                    .setPositiveButton(android.R.string.ok, null);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    });
                 }
 
                 @Override
                 public void handleFault(BackendlessFault backendlessFault) {
-                    Log.d("Vic","error sending message " + backendlessFault.toString());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
-                    //builder.setMessage(R.string.error_sending_file)
-                    builder.setMessage(R.string.error_sending_message)
-                            .setTitle(R.string.error_title)
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                Log.d("Vic","Fault");
                 }
             });
-
-
-
-
-            //Message sent.Switch to main screen.
-            Intent intent = new Intent(SendMessage.this,Main.class);
-            //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
 
         }
 
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected String constructWhereClause() {
+    String whereClause  = "";
+
+        int numberOfRecepients = backendlessRecepientEmails.size();
+
+        for(int i=0; i < numberOfRecepients; i++) {
+
+
+            whereClause = whereClause + "email=";
+            whereClause = whereClause + "'" + backendlessRecepientEmails.get(i) + "'";
+
+            if(i < numberOfRecepients -1) {
+            whereClause = whereClause + " OR ";
+            }
+        }
+
+        return whereClause;
     }
 
 }

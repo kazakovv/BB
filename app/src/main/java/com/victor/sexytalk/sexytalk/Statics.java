@@ -8,6 +8,8 @@ public class Statics {
 
     public static final String KEY_USERNAME = "userName";
     public static final String KEY_RECEPIENT_IDS = "recepientIDs";
+    public static final String KEY_RECEPIENT_EMAILS = "recepientsEmails";
+
     public static final String KEY_PARTNERS = "partners";
 
     public static final String KEY_MALE_OR_FEMALE = "maleOrFemale";

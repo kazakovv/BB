@@ -1,9 +1,7 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.content.Context;
 import android.net.Uri;
 
-import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 
 import java.util.ArrayList;
@@ -32,7 +30,7 @@ public class Messages {
         return recepients;
     }
 
-    public void setRecepients(List<BackendlessUser> recepients) {
+    public void setRecepients(List<BackendlessUser>  recepients) {
         this.recepients = recepients;
     }
 
