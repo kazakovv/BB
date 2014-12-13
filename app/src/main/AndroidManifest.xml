@@ -31,6 +31,20 @@
             android:name="com.victor.sexytalk.sexytalk.SignUpActivity"
             android:label="@string/title_activity_sign_up" >
         </activity>
+        <activity
+            android:name="com.victor.sexytalk.sexytalk.SendMessage"
+            android:label="@string/title_activity_send_message" >
+        </activity>
+        <activity
+            android:name="com.victor.sexytalk.sexytalk.SendTo"
+            android:label="@string/app_name"
+            android:parentActivityName=".SendMessage">
+
+        </activity>
+        <activity
+            android:name="com.victor.sexytalk.sexytalk.EditPartnersActivity"
+            android:label="@string/title_activity_edit_partners" >
+        </activity>
     </application>
 
 </manifest>

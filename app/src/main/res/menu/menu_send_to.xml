@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.victor.swipeviews.ListWithPartners">
+
+    <item android:id="@+id/action_ok"
+        android:title="@string/ok"
+        android:icon="@drawable/ic_action_accept"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:visible="true"/>
+
+    <item
+        android:id="@+id/main_menu"
+        android:title="menu"
+        android:icon="@drawable/ic_action_overflow"
+        android:orderInCategory="101"
+        android:showAsAction="always">
+        <menu>
+            <item android:id="@+id/action_settings"
+                android:title="@string/menu_edit_partner"
+                android:orderInCategory="100"
+                android:showAsAction="never" />
+        </menu>
+    </item>
+
+
+</menu>

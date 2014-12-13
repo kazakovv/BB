@@ -53,7 +53,8 @@
     <string name="main_message_female">Your upcoming fertile days are:</string>
     <string name="main_message_male">Your partner\'s upcoming fertile days are:</string>
     <string name="messaged_successfully_saved_to_server">Your selection was saved</string>
-    <string name="messaged_unsuccessfully_saved_to_server">Unfortunately, there was a server error and your selection was not saved. Please try again later.</string>
+    <string name="messaged_unsuccessfully_saved_to_server">There was a server error and your selection was not saved. Please try again later.</string>
+    <string name="error_sending_message">Error sending message. Please try again.</string>
     <string name="send_a_kiss_message">kisses you</string>
     <string name="send_a_message_message">sent you a message</string>
     <string name="title_receive_a_kiss_message">You received a kiss</string>
@@ -81,17 +82,18 @@
     <string name="image_rotate_right">Rotate right</string>
     <string name="title_activity_view_text_message">ViewTextMessageActivity</string>
     <string name="error_user_registered_but_unable_to_log_in">The user was successfully created but you were unable to log in due to a server error. Please try again</string>
+
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>
         <item>Choose Picture</item>
         <item>Choose Video</item>
     </string-array>
-
     <string-array name="sex_options">
         <item>Male</item>
         <item>Female</item>
     </string-array>
 
+    <string name="title_activity_edit_partners">EditPartnersActivity</string>
 
 </resources>

@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.victor.swipeviews.SendMessage">
+
+
+    <item android:id="@+id/action_send"
+        android:title="@string/recipients_send_button_action_bar"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:visible="true"/>
+
+</menu>
