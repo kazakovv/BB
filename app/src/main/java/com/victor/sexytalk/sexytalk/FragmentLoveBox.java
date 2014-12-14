@@ -119,13 +119,14 @@ public class FragmentLoveBox extends ListFragment {
         }
 
         if(messageType.equals(Statics.TYPE_IMAGE)) {
-            /*
+
             //view image
+
             Intent intent = new Intent(getActivity(), ViewImageActivity.class);
-            //intent.setData(fileUri);
+            intent.putExtra(Statics.KEY_URL, fileUrl);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             startActivity(intent);
-            */
+
         } else if (messageType.equals(Statics.TYPE_TEXTMESSAGE)){
             //ako e text go otvariame v sashtotia view kato image
             Intent intent = new Intent(getActivity(), ViewTextMessageActivity.class);
@@ -133,153 +134,16 @@ public class FragmentLoveBox extends ListFragment {
             startActivity(intent);
 
         } else  {
-            /*
+
             //view video
             Intent intent = new Intent(getActivity(),ViewMovieActivity.class);
-            //intent.setData(fileUrl);
+            intent.putExtra(Statics.KEY_URL,fileUrl);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE,loveMessage);
             startActivity(intent);
-            */
-
-        }
-    }
-
-    /*
-    public static final String TAG = FragmentChat.class.getSimpleName();
-
-    protected List<ParseObject> mMessages;
-
-    View myView;
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        return inflater.inflate(R.layout.fragment_love_box, container, false);
-    }
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        myView = getListView();
-    }
-
-    @Override
-    public void onViewCreated(final View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-
-        //tarsim dali imame polucheni saobshtenia
-        if(ParseUser.getCurrentUser() !=null) {
-            //getActivity().setProgressBarIndeterminateVisibility(true);
-
-            ParseQuery<ParseObject> query = new ParseQuery(ParseConstants.CLASS_MESSAGES);
-            query.whereEqualTo(ParseConstants.KEY_RECEPIENT_IDS, ParseUser.getCurrentUser()
-                    .getObjectId());
-            query.addAscendingOrder(ParseConstants.KEY_CREATEDAT);
-            query.findInBackground(new FindCallback<ParseObject>() {
-                @Override
-                public void done(List<ParseObject> messages, ParseException e) {
-                 //   getActivity().setProgressBarIndeterminateVisibility(false);
-
-
-                    if (e == null) {
-
-                        //sucessful!
-                        mMessages = messages;
-
-                        String[] usernames = new String[mMessages.size()];
-                        int i = 0;
-
-                        for (ParseObject message : mMessages) {
-                          usernames[i] = message.getString(ParseConstants.KEY_SENDER_NAME);
-                            i++;
-                        }
-                        //sortirame mMessages, taka che poslednite saobshtenia da izlizat parvi
-
-                        Collections.sort(mMessages,new Comparator<ParseObject>() {
-                            @Override
-                            public int compare(ParseObject o1, ParseObject o2) {
-                                return o2.getCreatedAt().compareTo(o1.getCreatedAt());
-                            }
-                        });
-                        //Tova e po-gotinia ni ArrayAdaptor s kartinka v zavisimost ot tipa na file
-
-                        MessageAdapter adapter = new MessageAdapter(myView.getContext(),
-                                mMessages);
-
-                        setListAdapter(adapter);
-
-                        //sazdavame adapter, ako list se niama takav. Naprimer, ako se
-                        // sazdava za prav pat
-
-
-                    } else {
-
-                        Log.e(TAG, e.getMessage());
-                        AlertDialog.Builder builder = new AlertDialog.Builder(getListView().getContext());
-                        builder.setTitle(R.string.error_title)
-                                .setMessage(R.string.general_error_message)
-                                .setPositiveButton(R.string.ok, null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                    }
-                }
-            });
-
-
-        }//zatvariam check dali parsuser ne e null
-
-
-    }
-
-
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
-        //otvariame saobshteniata i gi gledame
-        /*
-        ParseObject message = mMessages.get(position);
-        String messageType = (String) message.get(ParseConstants.KEY_FILE_TYPE);
-        String loveMessage = (String) message.get(ParseConstants.KEY_LOVE_MESSAGE);
-
-        ParseFile file;
-        Uri fileUri = null;
-
-        //ako saobshtenieto ne e text, zapisvame reference kam file
-        if(!messageType.equals(ParseConstants.TYPE_TEXTMESSAGE) ) {
-            file = message.getParseFile(ParseConstants.KEY_FILE);
-            fileUri = Uri.parse(file.getUrl());
-
-        }
-        if(messageType.equals(ParseConstants.TYPE_IMAGE)) {
-            //view image
-            Intent intent = new Intent(getActivity(), ViewImageActivity.class);
-            intent.setData(fileUri);
-            intent.putExtra(ParseConstants.KEY_LOVE_MESSAGE, loveMessage);
-            startActivity(intent);
-        } else if (messageType.equals(ParseConstants.TYPE_TEXTMESSAGE)){
-            //ako e text go otvariame v sashtotia view kato image
-            Intent intent = new Intent(getActivity(), ViewTextMessageActivity.class);
-            intent.putExtra(ParseConstants.KEY_LOVE_MESSAGE, loveMessage);
-            startActivity(intent);
-
-        } else  {
-        //view video
-            Intent intent = new Intent(getActivity(),ViewMovieActivity.class);
-            intent.setData(fileUri);
-            intent.putExtra(ParseConstants.KEY_LOVE_MESSAGE,loveMessage);
-            startActivity(intent);
 
 
         }
-
     }
-    */
+
+
 }

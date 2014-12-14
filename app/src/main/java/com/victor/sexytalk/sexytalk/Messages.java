@@ -16,7 +16,7 @@ public class Messages {
     private List<BackendlessUser> recepients;
     private String messageType;
     private String loveMessage;
-    private String mMediaUrl;
+    private String mediaUrl;
     private String senderUsername;
     private String mRecepientEmails;
     private Date created;
@@ -55,11 +55,11 @@ public class Messages {
     }
 
     public String getMediaUrl() {
-        return mMediaUrl;
+        return mediaUrl;
     }
 
     public void setMediaUrl(String mMediaUrl) {
-        this.mMediaUrl = mMediaUrl;
+        this.mediaUrl = mMediaUrl;
     }
 
     public void setSederUsername(String senderUsername) {

@@ -23,6 +23,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':backendless')
     compile project(':commons-io-2.4')
-    compile "com.android.support:appcompat-v7:19.0.+"
-
+    compile 'com.android.support:appcompat-v7:19.0.+'
+    compile project(':picasso-2.3.4')
 }
