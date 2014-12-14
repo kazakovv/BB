@@ -1,22 +1,45 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.app.Activity;
+import android.app.ActionBar;
+import android.app.DialogFragment;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.Window;
+import android.widget.TextView;
+import android.widget.Toast;
+import java.util.ArrayList;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.BackendlessCallback;
 
 
-public class Main extends Activity {
-    BackendlessUser currentUser;
 
-    @Override
+
+
+public class Main extends FragmentActivity implements ActionBar.TabListener {
+    ViewPager pager;
+    ActionBar actionbar;
+    static Context context;
+    protected BackendlessUser currentUser;
+
+    protected String MaleOrFemale;
+    TextView mainMessage;
+
+    public static final int ACTIVITY_SEND_TO = 11;
+
+    public static final String TAG = Main.class.getSimpleName();
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
         //vrazvame osnovnotosaobshtenie
@@ -28,35 +51,56 @@ public class Main extends Activity {
             navigateToLogin();
         } else {
             // ako ima lognat potrebitel prodalzhava natatak
-            Log.i("Vic", "imame lognat potrebitel");
+            Log.i(TAG, "imame lognat potrebitel");
 
             //proveriavame dali e maz ili zhena
+            MaleOrFemale = (String) currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
 
-        }
-    }
+            //tuk zadavam osnovnoto saobshtenie
+            /*
+            if (MaleOrFemale.equals(Statics.SEX_FEMALE)) {
+                mainMessage.setText(R.string.main_message_female);
 
+            } else {
+                //ako ne e zhena triabva da e maz
+                mainMessage.setText(R.string.main_message_male);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            }
+            */
         }
 
-        return super.onOptionsItemSelected(item);
+        pager = (ViewPager) findViewById(R.id.pager);
+        PagerAdapter pAdapter = new PagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(pAdapter);
+        pager.setOffscreenPageLimit(1);
+
+        actionbar = getActionBar();
+        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        actionbar.addTab(actionbar.newTab().setText(R.string.tab_days_title).setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setText(R.string.tab_chat_title).setTabListener(this));
+        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                actionbar.setSelectedNavigationItem(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
+
     }
+
+
 
     protected void navigateToLogin() {
         //preprashta kam login screen
@@ -70,4 +114,102 @@ public class Main extends Activity {
         startActivity(intent);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+
+        switch (item.getItemId()) {
+            case R.id.menu_send_kiss:
+
+                //SendPushMessages sadarza metoda za izprashtane na push
+                String message = currentUser.getProperty(Statics.KEY_USERNAME) + " " +
+                        getString(R.string.send_a_kiss_message); //niakoi ti izprati celuvka
+                Intent intentSendTo = new Intent(Main.this, SendTo.class);
+                startActivityForResult(intentSendTo, ACTIVITY_SEND_TO);
+                return true;
+            case R.id.menu_send_message:
+                Intent intent = new Intent(this, SendMessage.class);
+                startActivity(intent);
+                return true;
+
+            case R.id.menu_sex:
+                DialogFragment sexDialog = new MaleOrFemaleDialog();
+                sexDialog.show(getFragmentManager(), "Welcome");
+
+                return true;
+            case R.id.menu_logout:
+                Backendless.UserService.logout();
+
+                //prashta kam login screen
+                navigateToLogin();
+                return true;
+
+            case R.id.menu_edit_friends:
+                Intent intentSendMessage = new Intent(this, EditPartnersActivity.class);
+                startActivity(intentSendMessage);
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //tuk se izprashta push message sled cakane za izprashtane na celuvka
+
+        String user = (String) currentUser.getProperty(Statics.KEY_USERNAME);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == ACTIVITY_SEND_TO) {
+                ArrayList<String> parseUserNames =
+                        data.getStringArrayListExtra(Statics.KEY_USERNAME);
+                ArrayList<String> parseObjectIDs =
+                        data.getStringArrayListExtra(Statics.KEY_RECEPIENT_IDS);
+                //send push message
+
+                //for a kiss
+
+            } else if (resultCode != RESULT_CANCELED) {
+                Toast.makeText(this, R.string.general_error_message, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+        pager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        //Sahraniavam shared preferences kato izlizam ot fragmenta
+
+        SharedPreferences savedSettings = getSharedPreferences("MYPREFS",0);
+        SharedPreferences.Editor editor = savedSettings.edit();
+        editor.commit();
+
+    }
 }

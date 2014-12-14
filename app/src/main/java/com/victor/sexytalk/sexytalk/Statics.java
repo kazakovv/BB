@@ -19,6 +19,7 @@ public class Statics {
     public static final String TYPE_VIDEO = "video";
     public static final String TYPE_TEXTMESSAGE = "textMessage";
 
-
+    public static final String SEX_MALE = "Male";
+    public static final String SEX_FEMALE = "Female";
 }
 

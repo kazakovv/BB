@@ -124,8 +124,8 @@ public class SendTo extends ListActivity {
 
                          mPartners = (BackendlessUser[]) user.getProperty(Statics.KEY_PARTNERS);
 
-                         //Crashes if there are no partners!!!!!
-                         // needs A FIX
+                         //TODO: Crashes if there are no partners!!!!!
+                         //TODO: needs A FIX
 
                          int numberOfPartners = mPartners.length;
 

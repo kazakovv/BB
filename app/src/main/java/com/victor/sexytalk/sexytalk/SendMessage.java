@@ -43,6 +43,7 @@ public class SendMessage extends Activity {
 
     ArrayList<String> backendlessUserNames; //spisak s Usernames na poluchatelite na saobshtenieto
     ArrayList<String> backendlessRecepientEmails; //spisak s emails na poluchatelite na saobshtenieto
+    String recepientEmails="";
 
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int TAKE_VIDEO_REQUEST = 1;
@@ -418,13 +419,19 @@ public class SendMessage extends Activity {
 
                     for (int i = 0; i < numberOfUsers ; i++) {
                         recepients.add(collection.getCurrentPage().get(i));
+
+                        recepientEmails += collection.getCurrentPage().get(i).getEmail();
+                        if(i < numberOfUsers -1) {
+                        recepientEmails += ","; //dobaviame zapetaia ako ima oshte recepients
+                        }
                     }
 
                     final Messages message = new Messages();
                     message.setSender(Backendless.UserService.CurrentUser());
                     message.setLoveMessage(messageToSend.getText().toString());
                     message.setRecepients(recepients);
-
+                    message.setSederUsername((String) Backendless.UserService.CurrentUser().getProperty(Statics.KEY_USERNAME));
+                    message.setRecepientEmails(recepientEmails);
                     //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
                     if(mMessageType == null) {
                         mMessageType = Statics.TYPE_TEXTMESSAGE;
@@ -468,8 +475,9 @@ public class SendMessage extends Activity {
                                     public void handleResponse(Messages messages) {
                                         Toast.makeText(SendMessage.this,
                                                 R.string.message_successfully_sent,Toast.LENGTH_LONG).show();
-                                        //izprashtame push notification, che ima novo saobshtenie
-                                        //!!
+
+                                        //TODO: izprashtame push notification, che ima novo saobshtenie
+
 
 
                                     }
@@ -507,8 +515,8 @@ public class SendMessage extends Activity {
                             @Override
                             public void handleResponse(Messages messages) {
                                 Toast.makeText(SendMessage.this, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
-                                //izprashtame push notification, che ima novo saobshtenie
-                                //!!
+
+                                //TODO: izprashtame push notification, che ima novo saobshtenie
 
                             }
 

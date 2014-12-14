@@ -23,7 +23,7 @@ public class SexyTalkApplication extends Application {
 
 
         Backendless.Data.mapTableToClass("Users", BackendlessUser.class);
-
+        Backendless.Data.mapTableToClass("Messages",BackendlessUser.class);
 
     }
 }

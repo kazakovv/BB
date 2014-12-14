@@ -86,7 +86,9 @@ public class FileHelper {
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-		if (fileType.equals(Statics.TYPE_IMAGE)) {
+        //TODO: tr da se dobavi random string/number kam imeto na fila
+
+        if (fileType.equals(Statics.TYPE_IMAGE)) {
             fileName="IMG"+timeStamp;
             fileName += ".png";
 		}
