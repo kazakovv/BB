@@ -21,5 +21,7 @@ public class Statics {
 
     public static final String SEX_MALE = "Male";
     public static final String SEX_FEMALE = "Female";
+
+    public static final String KEY_LOVE_MESSAGE = "loveMessage";
 }
 

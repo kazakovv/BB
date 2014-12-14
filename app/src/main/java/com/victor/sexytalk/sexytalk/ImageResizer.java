@@ -22,7 +22,11 @@ public class ImageResizer {
         
         // Decode bitmap with inSampleSize and target dimensions set
         options.inJustDecodeBounds = false;	
-        
+
+        //TODO: tuk poniakoga zabavia s out of memory error, ako ima mnogo otvoreni programi.
+        //Eto reshenieto:
+        //TODO: http://stackoverflow.com/questions/15254272/bitmapfactory-decodestream-out-of-memory-despite-using-reduced-sample-size
+
         Bitmap reducedBitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(reducedBitmap, targetWidth, targetHeight, false);
 

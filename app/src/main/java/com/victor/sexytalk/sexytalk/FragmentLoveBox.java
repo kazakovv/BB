@@ -3,12 +3,15 @@ package com.victor.sexytalk.sexytalk;
 
 
 import android.app.AlertDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -62,7 +65,7 @@ public class FragmentLoveBox extends ListFragment {
                 public void handleResponse(BackendlessCollection<Messages> messages) {
                   Log.d("Vic", "Found something");
 
-                    List<Messages> messagesToDisplay = new ArrayList<Messages>();
+                   messagesToDisplay = new ArrayList<Messages>();
                     int numberOfMesages = messages.getCurrentPage().size();
 
                     for (int i = 0; i <numberOfMesages; i++) {
@@ -70,15 +73,15 @@ public class FragmentLoveBox extends ListFragment {
                         Log.d("Vic","one more added");
                     }
 
-                    //TODO: sortirame mMessages, taka che poslednite saobshtenia da izlizat parvi
-                    /*
-                    Collections.sort(mMessages,new Comparator<ParseObject>() {
+
+                    Collections.sort(messagesToDisplay,new Comparator<Messages>() {
                         @Override
-                        public int compare(ParseObject o1, ParseObject o2) {
-                            return o2.getCreatedAt().compareTo(o1.getCreatedAt());
+                        public int compare(Messages o1, Messages o2) {
+
+                            return o2.getCreated().compareTo(o1.getCreated());
                         }
                     });
-                    */
+
 
                     MessageAdapter adapter = new MessageAdapter(myView.getContext(),
                             messagesToDisplay);
@@ -98,6 +101,49 @@ public class FragmentLoveBox extends ListFragment {
             });
         }
     }
+
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        super.onListItemClick(l, v, position, id);
+
+        Messages message = messagesToDisplay.get(position);
+
+        String messageType = message.getMessageType();
+        String loveMessage =  message.getLoveMessage();
+
+        String fileUrl = "";
+
+        //ako saobshtenieto ne e text, zapisvame link kam file
+        if(!messageType.equals(Statics.TYPE_TEXTMESSAGE) ) {
+           fileUrl = message.getMediaUrl();
+        }
+
+        if(messageType.equals(Statics.TYPE_IMAGE)) {
+            /*
+            //view image
+            Intent intent = new Intent(getActivity(), ViewImageActivity.class);
+            //intent.setData(fileUri);
+            intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            startActivity(intent);
+            */
+        } else if (messageType.equals(Statics.TYPE_TEXTMESSAGE)){
+            //ako e text go otvariame v sashtotia view kato image
+            Intent intent = new Intent(getActivity(), ViewTextMessageActivity.class);
+            intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            startActivity(intent);
+
+        } else  {
+            /*
+            //view video
+            Intent intent = new Intent(getActivity(),ViewMovieActivity.class);
+            //intent.setData(fileUrl);
+            intent.putExtra(Statics.KEY_LOVE_MESSAGE,loveMessage);
+            startActivity(intent);
+            */
+
+        }
+    }
+
     /*
     public static final String TAG = FragmentChat.class.getSimpleName();
 
