@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 
 public class ViewMovieActivity extends Activity {
@@ -24,6 +25,12 @@ public class ViewMovieActivity extends Activity {
         String loveMessageToDisplay = getIntent().getStringExtra(Statics.KEY_LOVE_MESSAGE);
         loveMessage.setText(loveMessageToDisplay);
 
+
+        Uri uri=Uri.parse(videoUrl);
+
+        VideoView video=(VideoView)findViewById(R.id.videoView);
+        video.setVideoURI(uri);
+        video.start();
        playVideo.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
