@@ -82,7 +82,7 @@
     <string name="image_rotate_right">Rotate right</string>
     <string name="title_activity_view_text_message">ViewTextMessageActivity</string>
     <string name="error_user_registered_but_unable_to_log_in">The user was successfully created but you were unable to log in due to a server error. Please try again</string>
-
+    <string name="error_uploading_file">File upload error</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>

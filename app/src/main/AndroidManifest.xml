@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.victor.sexytalk.sexytalk" >
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:name="com.victor.sexytalk.sexytalk.SexyTalkApplication"
@@ -16,7 +19,6 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -25,15 +27,15 @@
 
         <activity
             android:name="com.victor.sexytalk.sexytalk.LoginActivity"
-            android:label="@string/title_activity_login" >
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.victor.sexytalk.sexytalk.SignUpActivity"
-            android:label="@string/title_activity_sign_up" >
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.victor.sexytalk.sexytalk.SendMessage"
-            android:label="@string/title_activity_send_message" >
+            android:label="@string/app_name" >
         </activity>
         <activity
             android:name="com.victor.sexytalk.sexytalk.SendTo"
@@ -43,7 +45,7 @@
         </activity>
         <activity
             android:name="com.victor.sexytalk.sexytalk.EditPartnersActivity"
-            android:label="@string/title_activity_edit_partners" >
+            android:label="@string/app_name" >
         </activity>
     </application>
 

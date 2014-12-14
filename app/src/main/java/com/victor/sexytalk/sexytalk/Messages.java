@@ -4,7 +4,6 @@ import android.net.Uri;
 
 import com.backendless.BackendlessUser;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,7 +15,7 @@ public class Messages {
     private List<BackendlessUser> recepients;
     private String messageType;
     private String loveMessage;
-    private Uri mMediaUri;
+    private String mMediaUrl;
 
     public BackendlessUser getSender() {
         return sender;
@@ -50,11 +49,12 @@ public class Messages {
         this.loveMessage = loveMessage;
     }
 
-    public Uri getmMediaUri() {
-        return mMediaUri;
+    public String getMediaUrl() {
+        return mMediaUrl;
     }
-    public void setmMediaUri(Uri mMediaUri) {
-        this.mMediaUri = mMediaUri;
+
+    public void setMediaUrl(String mMediaUrl) {
+        this.mMediaUrl = mMediaUrl;
     }
 
 

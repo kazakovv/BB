@@ -1,1 +1,1 @@
-include ':app', ':backendless'
+include ':app', ':backendless', ':commons-io-2.4'
