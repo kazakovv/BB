@@ -31,11 +31,7 @@ public class Main extends Activity {
             Log.i("Vic", "imame lognat potrebitel");
 
             //proveriavame dali e maz ili zhena
-           // MaleOrFemale = currentUser.getString(ParseConstants.KEY_MALEORFEMALE);
 
-            //za test!!!
-            Intent intent = new Intent(Main.this, SendMessage.class);
-            startActivity(intent);
         }
     }
 
