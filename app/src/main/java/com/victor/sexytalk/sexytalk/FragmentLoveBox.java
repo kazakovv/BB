@@ -56,8 +56,8 @@ public class FragmentLoveBox extends ListFragment {
             BackendlessDataQuery query = new BackendlessDataQuery();
             QueryOptions queryOptions = new QueryOptions();
             query.setWhereClause(whereClause);
-            queryOptions.addRelated( "recepients" );
-            queryOptions.addRelated( "recepients.RELATION-OF-RELATION" );
+            //queryOptions.addRelated( "recepients" );
+            //queryOptions.addRelated( "recepients.RELATION-OF-RELATION" );
             query.setQueryOptions( queryOptions );
 
             Backendless.Data.of(Messages.class).find(query, new AsyncCallback<BackendlessCollection<Messages>>() {
@@ -133,14 +133,73 @@ public class FragmentLoveBox extends ListFragment {
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             startActivity(intent);
 
-        } else  {
+        } else if (messageType.equals(Statics.TYPE_KISS)) {
+            //otvariame kiss message
+            Intent intent = new Intent(getActivity(),ViewKissActivity.class);
+            intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            startActivity(intent);
+            //delete the kiss
+           String stringOfRecepients = message.getRecepientEmails();
+           String[] emails = stringOfRecepients.split(",");
+           int numberOfRecepients = emails.length;
+
+            if(numberOfRecepients == 1) {
+                Backendless.Persistence.of(Messages.class).remove(message, new AsyncCallback<Long>() {
+                    @Override
+                    public void handleResponse(Long aLong) {
+                        //TODO: moze da dobavaia neshto tuk
+                        Log.d("Vic","deletion suucess");
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        //TODO: moze da dobavaia neshto tuk
+                        Log.d("Vic", "deleted error" + backendlessFault.toString());
+                    }
+                });
+            } else {
+                String newStringOfRecepients="";
+                String emailOfCurrentUser = Backendless.UserService.CurrentUser().getEmail();
+
+                //ne iztrivame saobshtenieto, a samo mahame emaila na poluchatelia i zapazvame saobshtenieto
+                //za celta sazdavame nov string s emails bez emaila na satovetnia poluchatel
+                for(int i = 0; i < numberOfRecepients; i++) {
+                    if(! emails[i].equals(emailOfCurrentUser) ) {
+                        newStringOfRecepients += emails[i];
+                        if(i<numberOfRecepients - 1) {
+                        newStringOfRecepients +=","; //dobaviame zapetaia, ako ima oshte emaili
+                        }
+                    }
+                }
+                //updatevame message i go zapisvame v Backenless
+
+                message.setRecepientEmails(newStringOfRecepients);
+                Backendless.Persistence.save(message, new AsyncCallback<Messages>() {
+                    @Override
+                    public void handleResponse(Messages messages) {
+                        //TODO: moze da dobavaia neshto tuk
+                        Log.d("Vic","saved");
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        //TODO: moze da dobavaia neshto tuk
+                        Log.d("Vic","saved error" + backendlessFault.toString());
+
+
+                    }
+                });
+
+            }
+        }
+
+        else  {
 
             //view video
             Intent intent = new Intent(getActivity(),ViewMovieActivity.class);
             intent.putExtra(Statics.KEY_URL,fileUrl);
-            intent.putExtra(Statics.KEY_LOVE_MESSAGE,loveMessage);
+            intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             startActivity(intent);
-
 
         }
     }

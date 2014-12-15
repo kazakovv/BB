@@ -19,9 +19,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-
-
-
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 
 public class Main extends FragmentActivity implements ActionBar.TabListener {
@@ -162,13 +161,51 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
         String user = (String) currentUser.getProperty(Statics.KEY_USERNAME);
         if (resultCode == RESULT_OK) {
             if (requestCode == ACTIVITY_SEND_TO) {
-                ArrayList<String> parseUserNames =
+
+                //tezi dva arraylist se vrashtat ot SendTo, sled kato izberem na kogo da pratim celuvka
+                ArrayList<String> recepientUserNames =
                         data.getStringArrayListExtra(Statics.KEY_USERNAME);
-                ArrayList<String> parseObjectIDs =
-                        data.getStringArrayListExtra(Statics.KEY_RECEPIENT_IDS);
+                ArrayList<String> recepientEmails =
+                        data.getStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS);
+
+
+
+                //sazvavame string s emailite na poluchatelite
+                String emailsOfRecepients="";
+                int numberOfRecepients  = recepientEmails.size();
+                for (int i = 0; i < numberOfRecepients ; i++) {
+
+                    emailsOfRecepients += recepientEmails.get(i);
+                    if(i < numberOfRecepients -1) {
+                        emailsOfRecepients += ","; //dobaviame zapetaia ako ima oshte recepients
+                    }
+                }
+                //message
+                String someoneSendsYouAKiss = user + " " + getString(R.string.send_a_kiss_message);
+
+                //sazdavame saobshtenieto
+                Messages kissMessage =  new Messages();
+                kissMessage.setMessageType(Statics.TYPE_KISS);
+                kissMessage.setLoveMessage(someoneSendsYouAKiss);
+                kissMessage.setRecepientEmails(emailsOfRecepients);
+                kissMessage.setSederUsername((String) Backendless.UserService.CurrentUser().getProperty(Statics.KEY_USERNAME));
+                kissMessage.setSender(Backendless.UserService.CurrentUser());
+
+                //i go izprashtame
+                Backendless.Persistence.of(Messages.class).save(kissMessage, new AsyncCallback<Messages>() {
+                    @Override
+                    public void handleResponse(Messages messages) {
+                        Toast.makeText(Main.this,getString(R.string.send_a_kiss_toast_successful),Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        Toast.makeText(Main.this,getString(R.string.send_a_kiss_toast_unsuccessful),Toast.LENGTH_LONG).show();
+
+                    }
+                });
                 //send push message
 
-                //for a kiss
 
             } else if (resultCode != RESULT_CANCELED) {
                 Toast.makeText(this, R.string.general_error_message, Toast.LENGTH_LONG).show();

@@ -77,7 +77,7 @@ public class SendTo extends ListActivity {
             case R.id.action_ok:
                 Intent intent = new Intent(SendTo.this, SendMessage.class);
 
-                intent.putStringArrayListExtra(Statics.KEY_USERNAME,mRecepientUserNames);
+                intent.putStringArrayListExtra(Statics.KEY_USERNAME, mRecepientUserNames);
                 intent.putStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS,  mRecepientEmails);
                 setResult(RESULT_OK, intent);
                 finish();

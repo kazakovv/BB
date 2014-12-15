@@ -56,7 +56,11 @@ public class MessageAdapter extends ArrayAdapter<Messages> {
         } else if (message.getMessageType().equals(Statics.TYPE_VIDEO)){
             holder.iconImageView.setImageResource(R.drawable.ic_action_play_over_video);
 
-        } else {
+        } else if (message.getMessageType().equals(Statics.TYPE_KISS)) {
+            holder.iconImageView.setImageResource(R.drawable.ic_kiss_dark);
+        }
+
+        else {
             holder.iconImageView.setImageResource(R.drawable.ic_action_unread);
         }
         String namesender = message.getSenderUsername();

@@ -26,11 +26,8 @@ public class ViewMovieActivity extends Activity {
         loveMessage.setText(loveMessageToDisplay);
 
 
-        Uri uri=Uri.parse(videoUrl);
 
-        VideoView video=(VideoView)findViewById(R.id.videoView);
-        video.setVideoURI(uri);
-        video.start();
+
        playVideo.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {

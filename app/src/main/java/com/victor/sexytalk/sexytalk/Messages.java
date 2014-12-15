@@ -18,7 +18,7 @@ public class Messages {
     private String loveMessage;
     private String mediaUrl;
     private String senderUsername;
-    private String mRecepientEmails;
+    private String recepientEmails;
     private Date created;
     private Date updated;
 
@@ -69,10 +69,10 @@ public class Messages {
     public String getSenderUsername() { return senderUsername; }
 
     public void setRecepientEmails(String recepientEmails) {
-    mRecepientEmails = recepientEmails;
+        this.recepientEmails = recepientEmails;
     }
 
-    public String getRecepientEmails() { return mRecepientEmails; }
+    public String getRecepientEmails() { return recepientEmails; }
 
     public Date getCreated()  { return created;  }
 
