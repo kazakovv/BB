@@ -23,7 +23,6 @@ public class ViewMovieActivity extends Activity {
         loveMessage = (TextView) findViewById(R.id.loveMessage);
         playVideo = (ImageView) findViewById(R.id.playVideo);
         final String videoUrl = getIntent().getStringExtra(Statics.KEY_URL);
-        //final Uri videoUri = getIntent().getData(); //vzima Uri deto go podadohme ot drugata strana
         String loveMessageToDisplay = getIntent().getStringExtra(Statics.KEY_LOVE_MESSAGE);
         loveMessage.setText(loveMessageToDisplay);
 
@@ -33,6 +32,7 @@ public class ViewMovieActivity extends Activity {
        playVideo.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View v) {
+               //TODO: ne raboti
                Uri myUri = Uri.parse(videoUrl);
                Intent intent = new Intent(Intent.ACTION_VIEW, myUri);
                intent.setDataAndType(myUri,"video/*");

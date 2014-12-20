@@ -12,21 +12,25 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.UserService;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 
 /**
  * Created by Victor on 19/10/2014.
  */
 public class MaleOrFemaleDialog extends DialogFragment {
-    /*
+
     TextView mainMessage;
-    //View fertilityCalandarIcon;
-    ParseUser parseUser;
+    BackendlessUser currentUser;
 
     //butonite za kalendarite za mache i zheni
-    private Button showSexyCalendarButton;
-    private Button showPrivateDaysCalendarButton;
-    private Button sexyCalendarForGuysButton;
+    //private Button showSexyCalendarButton;
+    //private Button showPrivateDaysCalendarButton;
+    //private Button sexyCalendarForGuysButton;
 
     ViewPager pager; //izpolzvat se za updatvane na fragmenta sled kato izbera maz ili zhena
     PagerAdapter adapter;
@@ -35,11 +39,12 @@ public class MaleOrFemaleDialog extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //vrazvam osnovnoto sabshtenie i butonite za kalendarite
-        parseUser = ParseUser.getCurrentUser();
-        mainMessage = (TextView) getActivity().findViewById(R.id.mainMessage);
-        showSexyCalendarButton = (Button) getActivity().findViewById(R.id.showSexyCalendarButton);
-        showPrivateDaysCalendarButton = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
-        sexyCalendarForGuysButton = (Button) getActivity().findViewById(R.id.sexyCalendarGuys);
+        currentUser = Backendless.UserService.CurrentUser();
+        //TODO: butonite za mazki i zhenski kalendari
+        //mainMessage = (TextView) getActivity().findViewById(R.id.mainMessage);
+        //showSexyCalendarButton = (Button) getActivity().findViewById(R.id.showSexyCalendarButton);
+        //showPrivateDaysCalendarButton = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
+        //sexyCalendarForGuysButton = (Button) getActivity().findViewById(R.id.sexyCalendarGuys);
 
         pager = (ViewPager) getActivity().findViewById(R.id.pager);
         adapter = (PagerAdapter) pager.getAdapter();
@@ -48,40 +53,39 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.dialog_menu_title)
-                .setItems(R.array.guy_or_girl_option, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
+                .setItems(R.array.sex_options, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
                 // The 'which' argument contains the index position
                 // of the selected item
                 switch(which) {
                     case 0:
-                        mainMessage.setText(R.string.main_message_male);
+                        //mainMessage.setText(R.string.main_message_male);
 
-                          parseUser.put(ParseConstants.KEY_MALEORFEMALE, ParseConstants.SEX_MALE);
-                            parseUser.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                    //sucess
-                                    //
-                                    Toast.makeText(context, R.string.messaged_successfully_saved_to_server, Toast.LENGTH_LONG).show();
-                                    } else {
-                                    //error
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                        builder.setTitle(R.string.login_error_title)
-                                                .setMessage(R.string.messaged_unsuccessfully_saved_to_server)
-                                                .setPositiveButton(R.string.ok, null);
-                                        AlertDialog dialog = builder.create();
-                                        dialog.show();
-                                    }
-                                }
-                            });
-                        //pokazvame mazhkia kalendar i skrivame zhenskite kalendari
+                        //update v backendless che e male
+                        currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_MALE);
+                        Backendless.Data.of(BackendlessUser.class).save(currentUser, new AsyncCallback<BackendlessUser>() {
+                            @Override
+                            public void handleResponse(BackendlessUser backendlessUser) {
+                            Toast.makeText(context,
+                                    R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
+                            }
 
-                        showSexyCalendarButton.setVisibility(View.INVISIBLE);
-                        showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
-                        sexyCalendarForGuysButton.setVisibility(View.VISIBLE);
+                            @Override
+                            public void handleFault(BackendlessFault backendlessFault) {
+                                Toast.makeText(context,
+                                        R.string.selection_not_saved,Toast.LENGTH_LONG).show();
+                            }
+                        });
 
-                        adapter.notifyDataSetChanged(); //tova updatva fragmenta.
+
+                        //TODO: pokazvame mazhkia kalendar i skrivame zhenskite kalendari
+
+                        //showSexyCalendarButton.setVisibility(View.INVISIBLE);
+                        //showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
+                        //sexyCalendarForGuysButton.setVisibility(View.VISIBLE);
+
+                        //adapter.notifyDataSetChanged(); //tova updatva fragmenta.
                         //preprashta kam PagerAdapter getItemPosition();
                         // return POSITION_NONE; oznachava da updatene fragmentite
 
@@ -90,33 +94,28 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
                         break;
                     case 1:
-                        mainMessage.setText(R.string.main_message_female);
-                        parseUser.put(ParseConstants.KEY_MALEORFEMALE, ParseConstants.SEX_FEMALE);
-                        parseUser.saveInBackground(new SaveCallback() {
-                            @Override
-                            public void done(ParseException e) {
-                                if (e == null) {
-                                    //sucess
-                                    //
-                                    Toast.makeText(context, R.string.messaged_successfully_saved_to_server, Toast.LENGTH_LONG).show();
-                                } else {
-                                    //error
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                                    builder.setTitle(R.string.login_error_title)
-                                            .setMessage(R.string.messaged_unsuccessfully_saved_to_server)
-                                            .setPositiveButton(R.string.ok, null);
-                                    AlertDialog dialog = builder.create();
-                                    dialog.show();
+                       // update v backendless che e female
 
-                                }
+                        currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_FEMALE);
+                        Backendless.Data.of(BackendlessUser.class).save(currentUser, new AsyncCallback<BackendlessUser>() {
+                            @Override
+                            public void handleResponse(BackendlessUser backendlessUser) {
+                                Toast.makeText(context,
+                                        R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault backendlessFault) {
+                                Toast.makeText(context,
+                                        R.string.selection_not_saved,Toast.LENGTH_LONG).show();
                             }
                         });
-                        //pokazvame zhenskite kalendari i skrivame mazhkia
-                        showSexyCalendarButton.setVisibility(View.VISIBLE);
-                        showPrivateDaysCalendarButton.setVisibility(View.VISIBLE);
-                        sexyCalendarForGuysButton.setVisibility(View.INVISIBLE);
+                        //TODO: pokazvame zhenskite kalendari i skrivame mazhkia
+                        //showSexyCalendarButton.setVisibility(View.VISIBLE);
+                        //showPrivateDaysCalendarButton.setVisibility(View.VISIBLE);
+                        //sexyCalendarForGuysButton.setVisibility(View.INVISIBLE);
 
-                        adapter.notifyDataSetChanged();//tova updatva fragmenta.
+                        //adapter.notifyDataSetChanged();//tova updatva fragmenta.
                         //preprashta kam PagerAdapter getItemPosition();
                         // return POSITION_NONE; oznachava da updatene fragmentite//tova updatva fragmenta.
 
@@ -127,5 +126,5 @@ public class MaleOrFemaleDialog extends DialogFragment {
         return builder.create();
 
     }
-    */
+
 }
