@@ -56,8 +56,7 @@ public class FragmentLoveBox extends ListFragment {
             BackendlessDataQuery query = new BackendlessDataQuery();
             QueryOptions queryOptions = new QueryOptions();
             query.setWhereClause(whereClause);
-            //queryOptions.addRelated( "recepients" );
-            //queryOptions.addRelated( "recepients.RELATION-OF-RELATION" );
+            //TODO: Eventualno, ako dobavia relations kato users poluchaeli moga da tarsia i po tozi kriterii
             query.setQueryOptions( queryOptions );
 
             Backendless.Data.of(Messages.class).find(query, new AsyncCallback<BackendlessCollection<Messages>>() {
@@ -106,6 +105,7 @@ public class FragmentLoveBox extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
+
         Messages message = messagesToDisplay.get(position);
 
         String messageType = message.getMessageType();
@@ -138,6 +138,7 @@ public class FragmentLoveBox extends ListFragment {
             Intent intent = new Intent(getActivity(),ViewKissActivity.class);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             startActivity(intent);
+
             //delete the kiss
            String stringOfRecepients = message.getRecepientEmails();
            String[] emails = stringOfRecepients.split(",");

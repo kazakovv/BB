@@ -19,6 +19,7 @@ public class Messages {
     private String mediaUrl;
     private String senderUsername;
     private String recepientEmails;
+    private String objectId;
     private Date created;
     private Date updated;
 
@@ -81,4 +82,13 @@ public class Messages {
     public Date getUpdated() { return updated; }
 
     public void setUpdated( Date updated ) { this.updated = updated; }
+
+    public String getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId( String objectId ) {
+        this.objectId = objectId;
+    }
 }
+

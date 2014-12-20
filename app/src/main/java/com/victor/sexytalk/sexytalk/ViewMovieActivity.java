@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.backendless.Backendless;
+
 
 public class ViewMovieActivity extends Activity {
     TextView loveMessage;
