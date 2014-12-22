@@ -29,7 +29,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
     //butonite za kalendarite za mache i zheni
     //private Button showSexyCalendarButton;
-    //private Button showPrivateDaysCalendarButton;
+    private Button showPrivateDaysCalendarButton;
     //private Button sexyCalendarForGuysButton;
 
     ViewPager pager; //izpolzvat se za updatvane na fragmenta sled kato izbera maz ili zhena
@@ -43,7 +43,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
         //TODO: butonite za mazki i zhenski kalendari
         //mainMessage = (TextView) getActivity().findViewById(R.id.mainMessage);
         //showSexyCalendarButton = (Button) getActivity().findViewById(R.id.showSexyCalendarButton);
-        //showPrivateDaysCalendarButton = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
+        showPrivateDaysCalendarButton = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
         //sexyCalendarForGuysButton = (Button) getActivity().findViewById(R.id.sexyCalendarGuys);
 
         pager = (ViewPager) getActivity().findViewById(R.id.pager);
@@ -69,6 +69,8 @@ public class MaleOrFemaleDialog extends DialogFragment {
                             public void handleResponse(BackendlessUser backendlessUser) {
                             Toast.makeText(context,
                                     R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
+                                showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
+
                             }
 
                             @Override
@@ -82,7 +84,6 @@ public class MaleOrFemaleDialog extends DialogFragment {
                         //TODO: pokazvame mazhkia kalendar i skrivame zhenskite kalendari
 
                         //showSexyCalendarButton.setVisibility(View.INVISIBLE);
-                        //showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
                         //sexyCalendarForGuysButton.setVisibility(View.VISIBLE);
 
                         //adapter.notifyDataSetChanged(); //tova updatva fragmenta.
@@ -102,6 +103,8 @@ public class MaleOrFemaleDialog extends DialogFragment {
                             public void handleResponse(BackendlessUser backendlessUser) {
                                 Toast.makeText(context,
                                         R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
+                                showPrivateDaysCalendarButton.setVisibility(View.VISIBLE);
+
                             }
 
                             @Override

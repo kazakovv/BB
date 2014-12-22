@@ -14,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,6 +26,36 @@ import java.util.GregorianCalendar;
  * Created by Victor on 13/10/2014.
  */
 public class FragmentLoveDays extends Fragment {
+    protected BackendlessUser currentUser;
+    protected Button showPrivateDaysDialog;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        currentUser = Backendless.UserService.CurrentUser();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
+
+
+        return inflatedView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        showPrivateDaysDialog = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
+
+        if(currentUser != null) {
+            if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
+                showPrivateDaysDialog.setVisibility(View.INVISIBLE);
+            } else {
+                showPrivateDaysDialog.setVisibility(View.VISIBLE);
+
+            }
+        }
+    }
     /*
 
     private TextView mainMessage;
@@ -279,15 +312,14 @@ public class FragmentLoveDays extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        /* Tova po princip raboti, obache savedInstanceStave v onCrreateView e vinagi null
+        //Tova po princip raboti, obache savedInstanceStave v onCrreateView e vinagi null
         i zatova ne moga da vazstanovia tia stoinosti
 
         outState.putInt(Statics.CALENDAR_YEAR, mYear);
         outState.putInt(Statics.CALENDAR_MONTH, mMonth);
         outState.putInt(Statics.CALENDAR_DAY, mDay);
         outState.putInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE, mAverageLengthOfMenstrualCycle);
-        */
-/*
+
         //workaroud, zashtoto SavedInstanceStave vinagi e null v onCreate i ne moga da vazsnanovia stoinostite
         SharedPreferences savedSettings = getActivity()
                 .getSharedPreferences(Statics.SHARED_PREFS_CALENDAR_VALUES,0);
@@ -299,7 +331,7 @@ public class FragmentLoveDays extends Fragment {
         editor.putInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,mAverageLengthOfMenstrualCycle);
         editor.commit();
     }
-*/
 
+*/
 
 }
