@@ -30,6 +30,15 @@ public class FragmentLoveDays extends Fragment {
     protected Button showPrivateDaysDialog;
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
 
+    private int mYear;
+    private int mMonth;
+    private int mDay;
+    private int mAverageLengthOfMenstrualCycle;
+    private boolean mSendSexyCalendarUpdateToPartners;
+
+    TextView cyclePhase;
+    Calendar firstDayOfCycle;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +57,7 @@ public class FragmentLoveDays extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         showPrivateDaysDialog = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
+        cyclePhase = (TextView) getActivity().findViewById(R.id.cyclePhase);
 
         if(currentUser != null) {
             if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
@@ -74,9 +84,79 @@ public class FragmentLoveDays extends Fragment {
 
 
             if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(getActivity(),"Good",Toast.LENGTH_LONG).show();
+                Bundle bundle =data.getExtras();
+
+
+                mYear   =      bundle.getInt(Statics.CALENDAR_YEAR);
+                mMonth  =      bundle.getInt(Statics.CALENDAR_MONTH); //mesec -1, Jan e 0, Dec e 11
+                mDay    =      bundle.getInt(Statics.CALENDAR_DAY);
+                mAverageLengthOfMenstrualCycle =
+                        bundle.getInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+                mSendSexyCalendarUpdateToPartners =
+                        bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
+
+                //izchisliavam v koi etap ot cikala e
+
+                determineCyclePhase();
+
+
+                if(mSendSexyCalendarUpdateToPartners == true) {
+                //TODO: izprashtam update na partniorite
+                }
             }
+        }
+    }
+
+    protected void determineCyclePhase() {
+        //izchisliava v koi etap ot cikala e i promenia saobshtenieto
+        if(mYear != 0 && mMonth != 0 && mDay != 0 && mAverageLengthOfMenstrualCycle != 0) {
+            //firstDayOfCycle = new GregorianCalendar(mYear, mMonth, mDay);
+            firstDayOfCycle = Calendar.getInstance();
+            firstDayOfCycle.set(Calendar.YEAR, mYear);
+            firstDayOfCycle.set(Calendar.MONTH, mMonth);
+            firstDayOfCycle.set(Calendar.DAY_OF_MONTH, mDay);
+            Calendar now = Calendar.getInstance();
+
+            long difference = now.getTimeInMillis() - firstDayOfCycle.getTimeInMillis();
+
+            long days = difference /(24 * 60 * 60 * 1000);
+            long ovulation = days /2; //ovulaciata e v sredata na cikala
+
+            //Tova sa etapite ot cikala
+            /*
+            Follicular: right after bleeding stops, for about 7 days
+            Ovulation: 3 or 4 days of the most fertile time, midway through the cycle
+            Luteal: the 10 days or so after ovulation and before menstruation
+            Menstruation: the 2-7 days of bleeding
+            */
+
+            //razpredeliame dnite
+
+            if(days > 0 && days <= 5 ) {
+            //bleeding
+                cyclePhase.setText("Blood " + days);
+            } else if (days > 5 && days <= 12 ) {
+            //folicurar phase
+            // active energetic
+                cyclePhase.setText("Active " + days);
+
+            } else if (days > 12 && days <= 16) {
+            //ovulation
+                //sexy
+                cyclePhase.setText("Sexy " + days);
+
+            } else if (days > 16 && days <= mAverageLengthOfMenstrualCycle) {
+            //luteal
+                cyclePhase.setText("Sexy 2 " + days);
+
+            } else if (days > mAverageLengthOfMenstrualCycle) {
+            //tr da se updatene
+                cyclePhase.setText("Update " + days);
+
             }
+
+
+        }
     }
     /*
 

@@ -93,6 +93,7 @@
         <item>Choose Picture</item>
         <item>Choose Video</item>
     </string-array>
+
     <string-array name="sex_options">
         <item>Male</item>
         <item>Female</item>
