@@ -28,6 +28,8 @@ import java.util.GregorianCalendar;
 public class FragmentLoveDays extends Fragment {
     protected BackendlessUser currentUser;
     protected Button showPrivateDaysDialog;
+    private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +54,29 @@ public class FragmentLoveDays extends Fragment {
                 showPrivateDaysDialog.setVisibility(View.INVISIBLE);
             } else {
                 showPrivateDaysDialog.setVisibility(View.VISIBLE);
-
             }
         }
+
+        showPrivateDaysDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SetFirstDayOfCycle newDialog = new SetFirstDayOfCycle();
+                newDialog.setTargetFragment(FragmentLoveDays.this, MENSTRUAL_CALENDAR_DIALOG);
+                newDialog.show(getFragmentManager(),"Welcome");
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == MENSTRUAL_CALENDAR_DIALOG) {
+
+
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(getActivity(),"Good",Toast.LENGTH_LONG).show();
+            }
+            }
     }
     /*
 

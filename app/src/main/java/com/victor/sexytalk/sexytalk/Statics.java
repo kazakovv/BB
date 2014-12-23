@@ -25,5 +25,13 @@ public class Statics {
 
     public static final String KEY_LOVE_MESSAGE = "loveMessage";
     public static final String KEY_URL = "urlAddress";
+
+    //keys za podavane na values m/u Private Days calendar i Love Days fragment
+    public static final String CALENDAR_YEAR = "caldenarYear";
+    public static final String CALENDAR_MONTH = "calendarMonth";
+    public static final String CALENDAR_DAY = "calendarDay";
+    public static final String AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE = "averageLengthOfCycle";
+    public static final String SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS = "sendSexyCalendarUpdate";
+
 }
 
