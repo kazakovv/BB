@@ -18,12 +18,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
+        android:text="Title of cycle stage"
         android:id="@+id/cyclePhase"
         android:layout_below="@+id/showPrivateDaysDialog"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="42dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Sexy status"
+        android:id="@+id/sexyStatus"
+        android:layout_marginTop="42dp"
+        android:layout_below="@+id/cyclePhase"
+        android:layout_alignRight="@+id/cyclePhase"
+        android:layout_alignEnd="@+id/cyclePhase"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

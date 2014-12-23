@@ -87,6 +87,7 @@
     <string name="error_uploading_file">File upload error</string>
     <string name="selection_saved_successfully">Your selection was saved</string>
     <string name="selection_not_saved">Your selection was not saved due to a server problem </string>
+    <string name="logout_error">Can\'t log out due to a server error</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>

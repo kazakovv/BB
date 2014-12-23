@@ -75,8 +75,8 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
         actionbar = getActionBar();
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionbar.addTab(actionbar.newTab().setText(R.string.tab_days_title).setTabListener(this));
         actionbar.addTab(actionbar.newTab().setText(R.string.tab_chat_title).setTabListener(this));
+        actionbar.addTab(actionbar.newTab().setText(R.string.tab_days_title).setTabListener(this));
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -137,10 +137,20 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
                 return true;
             case R.id.menu_logout:
-                Backendless.UserService.logout();
+                Backendless.UserService.logout(new AsyncCallback<Void>() {
+                    @Override
+                    public void handleResponse(Void aVoid) {
+                        //prashta kam login screen
+                        navigateToLogin();
+                    }
 
-                //prashta kam login screen
-                navigateToLogin();
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        Toast.makeText(Main.this,R.string.logout_error,Toast.LENGTH_LONG).show();
+                    }
+                });
+
+
                 return true;
 
             case R.id.menu_edit_friends:

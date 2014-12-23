@@ -2,7 +2,6 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
@@ -11,16 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 
-import java.text.DateFormatSymbols;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 /**
  * Created by Victor on 13/10/2014.
@@ -36,7 +31,8 @@ public class FragmentLoveDays extends Fragment {
     private int mAverageLengthOfMenstrualCycle;
     private boolean mSendSexyCalendarUpdateToPartners;
 
-    TextView cyclePhase;
+    TextView cyclePhaseTitle;
+    TextView cyclePhaseStatus;
     Calendar firstDayOfCycle;
 
     @Override
@@ -57,7 +53,8 @@ public class FragmentLoveDays extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         showPrivateDaysDialog = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
-        cyclePhase = (TextView) getActivity().findViewById(R.id.cyclePhase);
+        cyclePhaseTitle = (TextView) getActivity().findViewById(R.id.cyclePhase);
+        cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
 
         if(currentUser != null) {
             if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
@@ -132,27 +129,37 @@ public class FragmentLoveDays extends Fragment {
 
             //razpredeliame dnite
 
+            //TODO: tr da se napraviat dnite
+
             if(days > 0 && days <= 5 ) {
             //bleeding
-                cyclePhase.setText("Blood " + days);
+                cyclePhaseTitle.setText("Blood " + days);
+                cyclePhaseStatus.setText("I am bloody");
             } else if (days > 5 && days <= 12 ) {
             //folicurar phase
             // active energetic
-                cyclePhase.setText("Active " + days);
+                cyclePhaseTitle.setText("Active " + days);
+                cyclePhaseStatus.setText("I am energetic");
 
             } else if (days > 12 && days <= 16) {
             //ovulation
                 //sexy
-                cyclePhase.setText("Sexy " + days);
+                cyclePhaseTitle.setText("Sexy " + days);
+                cyclePhaseStatus.setText("Fuck me");
 
             } else if (days > 16 && days <= mAverageLengthOfMenstrualCycle) {
             //luteal
-                cyclePhase.setText("Sexy 2 " + days);
+                cyclePhaseTitle.setText("Sexy 2 " + days);
+                cyclePhaseStatus.setText("Fuck me 2");
 
             } else if (days > mAverageLengthOfMenstrualCycle) {
             //tr da se updatene
-                cyclePhase.setText("Update " + days);
+                cyclePhaseTitle.setText("Update " + days);
+                cyclePhaseStatus.setText("Update me");
 
+            } else if (days < 0) {
+                cyclePhaseTitle.setText("Error baby " + days);
+                cyclePhaseStatus.setText("Error");
             }
 
 

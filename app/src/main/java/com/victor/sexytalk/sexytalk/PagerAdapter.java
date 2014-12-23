@@ -18,9 +18,9 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new FragmentLoveDays();
-            case 1:
                 return new FragmentLoveBox();
+            case 1:
+                return new FragmentLoveDays();
             default:
                 break;
         }
