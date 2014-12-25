@@ -116,8 +116,10 @@ public class FragmentLoveDays extends Fragment {
 
             long difference = now.getTimeInMillis() - firstDayOfCycle.getTimeInMillis();
 
-            long days = difference /(24 * 60 * 60 * 1000);
-            long ovulation = days /2; //ovulaciata e v sredata na cikala
+            int days = (int) (difference /(24 * 60 * 60 * 1000));
+            int ovulation = mAverageLengthOfMenstrualCycle /2; //ovulaciata e v sredata na cikala
+            int firstDayOfOvulation = ovulation -2;
+            int lastDayOfOvulation = ovulation +2;
 
             //Tova sa etapite ot cikala
             /*
@@ -131,23 +133,23 @@ public class FragmentLoveDays extends Fragment {
 
             //TODO: tr da se napraviat dnite
 
-            if(days > 0 && days <= 5 ) {
+            if(days >= 0 && days <= 5 ) {
             //bleeding
                 cyclePhaseTitle.setText("Blood " + days);
                 cyclePhaseStatus.setText("I am bloody");
-            } else if (days > 5 && days <= 12 ) {
+            } else if (days > 5 && days < firstDayOfOvulation ) {
             //folicurar phase
             // active energetic
                 cyclePhaseTitle.setText("Active " + days);
                 cyclePhaseStatus.setText("I am energetic");
 
-            } else if (days > 12 && days <= 16) {
+            } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
             //ovulation
                 //sexy
                 cyclePhaseTitle.setText("Sexy " + days);
                 cyclePhaseStatus.setText("Fuck me");
 
-            } else if (days > 16 && days <= mAverageLengthOfMenstrualCycle) {
+            } else if (days > lastDayOfOvulation && days <= mAverageLengthOfMenstrualCycle) {
             //luteal
                 cyclePhaseTitle.setText("Sexy 2 " + days);
                 cyclePhaseStatus.setText("Fuck me 2");
@@ -161,8 +163,6 @@ public class FragmentLoveDays extends Fragment {
                 cyclePhaseTitle.setText("Error baby " + days);
                 cyclePhaseStatus.setText("Error");
             }
-
-
         }
     }
     /*

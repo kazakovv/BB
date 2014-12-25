@@ -111,6 +111,10 @@ public class SendTo extends ListActivity {
              public void handleResponse(BackendlessCollection<BackendlessUser> collection) {
                  if (collection.getCurrentPage().isEmpty()) {
                      //no partners
+                     //TODO: ne raboti toya check
+                     //TODO: Crashes if there are no partners!!!!!
+                     //TODO: needs A FIX
+
                      AlertDialog.Builder builder = new AlertDialog.Builder(SendTo.this);
                      builder.setTitle(R.string.error_title)
                              .setMessage(R.string.general_error_message)
@@ -124,8 +128,6 @@ public class SendTo extends ListActivity {
 
                          mPartners = (BackendlessUser[]) user.getProperty(Statics.KEY_PARTNERS);
 
-                         //TODO: Crashes if there are no partners!!!!!
-                         //TODO: needs A FIX
 
                          int numberOfPartners = mPartners.length;
 
