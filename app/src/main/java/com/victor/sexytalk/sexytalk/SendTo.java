@@ -109,11 +109,13 @@ public class SendTo extends ListActivity {
          Backendless.Data.of(BackendlessUser.class).find(query, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
              @Override
              public void handleResponse(BackendlessCollection<BackendlessUser> collection) {
-                 if (collection.getCurrentPage().isEmpty()) {
+                 List<BackendlessUser> users = collection.getData();
+
+                 int numberOfUsers = users.size();
+
+                 if (numberOfUsers == 0) {
                      //no partners
-                     //TODO: ne raboti toya check
-                     //TODO: Crashes if there are no partners!!!!!
-                     //TODO: needs A FIX
+
 
                      AlertDialog.Builder builder = new AlertDialog.Builder(SendTo.this);
                      builder.setTitle(R.string.error_title)

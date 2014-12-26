@@ -33,5 +33,10 @@ public class Statics {
     public static final String AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE = "averageLengthOfCycle";
     public static final String SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS = "sendSexyCalendarUpdate";
 
+    //keys za tarsene v Backendless table s cycle statusi i titles
+    public static final String KEY_MENSTRUATION = "Menstruation";
+    public static final String KEY_OVULATION = "Ovulation";
+    public static final String KEY_FOLLICULAR = "Follicular";
+    public static final String KEY_LUTEAL = "Luteal";
 }
 
