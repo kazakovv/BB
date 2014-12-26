@@ -71,6 +71,8 @@ public class FragmentLoveDays extends Fragment {
             }
         }
 
+        //TODO: run determine cycle stage, za da updatene statusite i dnite
+
         showPrivateDaysDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,7 +90,7 @@ public class FragmentLoveDays extends Fragment {
 
 
             if (resultCode == Activity.RESULT_OK) {
-                Bundle bundle =data.getExtras();
+                Bundle bundle = data.getExtras();
 
 
                 mYear   =      bundle.getInt(Statics.CALENDAR_YEAR);
@@ -99,8 +101,7 @@ public class FragmentLoveDays extends Fragment {
                 mSendSexyCalendarUpdateToPartners =
                         bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
 
-                //izchisliavam v koi etap ot cikala e
-
+                //izchisliavam v koi etap ot cikala e i updatevame statusite
                 determineCyclePhase();
 
 
@@ -111,6 +112,9 @@ public class FragmentLoveDays extends Fragment {
         }
     }
 
+
+
+    //Helper metod
     protected void determineCyclePhase() {
         //izchisliava v koi etap ot cikala e i promenia saobshtenieto
         if(mYear != 0 && mMonth != 0 && mDay != 0 && mAverageLengthOfMenstrualCycle != 0) {
@@ -137,7 +141,8 @@ public class FragmentLoveDays extends Fragment {
             */
 
 
-            //svaliame statusite ot Backendless i zadavame statusite
+
+            //svaliame statusite ot Backendless i updatevame statusite na ekrana
 
             Backendless.Data.of(CycleTitles.class).find(new AsyncCallback<BackendlessCollection<CycleTitles>>() {
                 @Override
@@ -221,11 +226,8 @@ public class FragmentLoveDays extends Fragment {
                     //TODO: kakvo pravim, ako ima greshka
                 }
             });
-
-
-
         }
-    }
+    } //krai na determine cycle phase helper method
 
 
 }
