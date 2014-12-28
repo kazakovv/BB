@@ -38,5 +38,7 @@ public class Statics {
     public static final String KEY_OVULATION = "Ovulation";
     public static final String KEY_FOLLICULAR = "Follicular";
     public static final String KEY_LUTEAL = "Luteal";
+
+    public static final String SHARED_PREFS_CALENDAR_VALUES = "calendarValuesSharesPrefs";
 }
 

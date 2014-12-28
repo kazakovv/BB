@@ -2,6 +2,7 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.backendless.Backendless;
@@ -45,6 +47,8 @@ public class FragmentLoveDays extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUser = Backendless.UserService.CurrentUser();
+
+
     }
 
     @Override
@@ -71,7 +75,11 @@ public class FragmentLoveDays extends Fragment {
             }
         }
 
-        //TODO: run determine cycle stage, za da updatene statusite i dnite
+        //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam serverasaved
+        restoreCalendarValuesFromSharedPrefs();
+        if(mYear !=0 && mMonth != 0 && mDay != 0 && mAverageLengthOfMenstrualCycle != 0) {
+            determineCyclePhase();
+        }
 
         showPrivateDaysDialog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,7 +120,20 @@ public class FragmentLoveDays extends Fragment {
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
 
+        SharedPreferences savedSettings = getActivity()
+                .getSharedPreferences(Statics.SHARED_PREFS_CALENDAR_VALUES,0);
+
+        SharedPreferences.Editor editor = savedSettings.edit();
+        editor.putInt(Statics.CALENDAR_YEAR,mYear);
+        editor.putInt(Statics.CALENDAR_MONTH,mMonth);
+        editor.putInt(Statics.CALENDAR_DAY,mDay);
+        editor.putInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,mAverageLengthOfMenstrualCycle);
+        editor.commit();
+    }
 
     //Helper metod
     protected void determineCyclePhase() {
@@ -229,5 +250,20 @@ public class FragmentLoveDays extends Fragment {
         }
     } //krai na determine cycle phase helper method
 
+    //Helper method
+    private void restoreCalendarValuesFromSharedPrefs() {
 
+        //workaroud, zashtoto savedinstanceState vrashta null i ne moga da vazstanovia dannite za
+        //kalendara vav fragmenta
+        SharedPreferences savedValues = getActivity()
+                .getSharedPreferences(Statics.SHARED_PREFS_CALENDAR_VALUES,0);
+        mYear = savedValues.getInt(Statics.CALENDAR_YEAR,0);
+        mMonth = savedValues.getInt(Statics.CALENDAR_MONTH,0);
+        mDay = savedValues.getInt(Statics.CALENDAR_DAY,0);
+        mAverageLengthOfMenstrualCycle =
+                savedValues.getInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,0);
+
+
+
+    }
 }
