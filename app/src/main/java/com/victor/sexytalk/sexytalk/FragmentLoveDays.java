@@ -9,7 +9,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +21,10 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
+import com.backendless.persistence.QueryOptions;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -29,6 +34,9 @@ import java.util.List;
 public class FragmentLoveDays extends Fragment {
     protected BackendlessUser currentUser;
     protected Button showPrivateDaysDialog;
+    protected Spinner listOfPartnersSpinner;
+    BackendlessUser[] mPartners; //array s partnirite
+
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
 
     private int mYear;
@@ -66,6 +74,7 @@ public class FragmentLoveDays extends Fragment {
         cyclePhaseTitle = (TextView) getActivity().findViewById(R.id.cyclePhase);
         cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
         cycleExplainationText = (TextView) getActivity().findViewById(R.id.explainationText);
+        listOfPartnersSpinner = (Spinner) getActivity().findViewById(R.id.listOfPartners);
 
         if(currentUser != null) {
             if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
@@ -75,12 +84,15 @@ public class FragmentLoveDays extends Fragment {
             }
         }
 
-        //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam serverasaved
+        //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam servera
         restoreCalendarValuesFromSharedPrefs();
         if(mYear !=0 && mMonth != 0 && mDay != 0 && mAverageLengthOfMenstrualCycle != 0) {
             determineCyclePhase();
         }
-
+        //zapalvame spinnera s imenata na partnirite
+        if(Backendless.UserService.CurrentUser() != null) {
+            findPartnersAndPopulateSpinner();
+        }
         showPrivateDaysDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -134,6 +146,12 @@ public class FragmentLoveDays extends Fragment {
         editor.putInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,mAverageLengthOfMenstrualCycle);
         editor.commit();
     }
+
+     /*
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!     NACHALO NA HELPER METODITE     !!!!!!!!!!!!!!!!!!!!!!!!!!
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    */
 
     //Helper metod
     protected void determineCyclePhase() {
@@ -250,6 +268,7 @@ public class FragmentLoveDays extends Fragment {
         }
     } //krai na determine cycle phase helper method
 
+
     //Helper method
     private void restoreCalendarValuesFromSharedPrefs() {
 
@@ -265,5 +284,55 @@ public class FragmentLoveDays extends Fragment {
 
 
 
+    }
+
+    //Helper metod namira spisak s partniorite i dobavia imenata im v spinnera
+
+    private void findPartnersAndPopulateSpinner() {
+
+        //sashtoto kato SendTo metoda
+        //tarsim spisak s partniori
+
+        BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+
+        String whereClause = "email='" + currentUser.getEmail() + "'";
+
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        QueryOptions queryOptions = new QueryOptions();
+        query.setWhereClause(whereClause);
+        queryOptions.addRelated( "partners" );
+        queryOptions.addRelated( "partners.RELATION-OF-RELATION" );
+        query.setQueryOptions( queryOptions );
+
+
+        Backendless.Data.of(BackendlessUser.class).find(query, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<BackendlessUser> partners) {
+
+                if(partners.getData().size() > 0) {
+                    //spisakat sadarza samo 1 potrebitel - tekushtiat
+                    List<BackendlessUser> listOfPartners = partners.getData();
+
+                    //Vzimame spisakat s partniorite kato izposlvame .getProperty("partners") na tekushtiat potrebitel
+                    mPartners =
+                            (BackendlessUser[]) listOfPartners.get(0).getProperty(Statics.KEY_PARTNERS);
+                    //sazdavame spisak s usernames
+                    List<String> usernamesSpinnerArray = new ArrayList<String>();
+                    for (BackendlessUser partner : mPartners) {
+                        usernamesSpinnerArray.add(partner.getProperty(Statics.KEY_USERNAME).toString());
+                    }
+                    //zapalvame list
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                            getActivity(), android.R.layout.simple_spinner_item, usernamesSpinnerArray);
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    listOfPartnersSpinner.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                Toast.makeText(getActivity(), R.string.general_server_error,Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
