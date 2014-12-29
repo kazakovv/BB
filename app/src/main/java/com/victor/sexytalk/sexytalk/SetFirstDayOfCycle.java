@@ -15,6 +15,19 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
 
 /**
  * Created by Victor on 17/10/2014.
@@ -25,6 +38,8 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
     int averageLengthOfMenstrualCycle;
     CheckBox sendSexyCalendarUpdateToPartners;
     Context context;
+
+    protected TextView cyclePhaseStatus; //vzimame statusa, za da izprashtame calendar updates
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -37,6 +52,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
         spinnerCycle = (Spinner) inflatedView.findViewById(R.id.spinnerMenstrualCycleLength);
         sendSexyCalendarUpdateToPartners = (CheckBox) inflatedView.findViewById(R.id.sendSexyCalendarUpdateCheck);
         context = inflatedView.getContext();
+        cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
 
         //sazdavame masiv s vazmoznostite za prodalzhitelnostta na cikala
         //stoinostite sa ot 21 do 35 dena
@@ -78,6 +94,8 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                         boolean test = sendSexyCalendarUpdateToPartners.isChecked();
                         i.putExtras(extras);
                         getTargetFragment().onActivityResult(getTargetRequestCode(),Activity.RESULT_OK,i);
+
+                        sendSendSexyCalendarUpdateToPartners(); //helper metod po-dolu
                         dismiss() ;
 
 
@@ -104,6 +122,75 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+    public void sendSendSexyCalendarUpdateToPartners() {
+        if(sendSexyCalendarUpdateToPartners.isChecked()) { //izprashtame update
+
+            final Calendar firstDayOfCycle = Calendar.getInstance();
+            firstDayOfCycle.set(Calendar.YEAR,datePicker.getYear());
+            firstDayOfCycle.set(Calendar.MONTH, datePicker.getMonth());
+            firstDayOfCycle.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
+
+
+            String whereClause = "senderEmail='" + Backendless.UserService.CurrentUser().getEmail() + "'";
+            BackendlessDataQuery query = new BackendlessDataQuery();
+            query.setWhereClause(whereClause);
+
+
+            //parvo namirame predishnata info za choveka, za da updatenem kalendara
+            Backendless.Persistence.of(CycleDays.class).find(query, new AsyncCallback<BackendlessCollection<CycleDays>>() {
+                @Override
+                public void handleResponse(BackendlessCollection<CycleDays> result) {
+                    CycleDays cycle;
+                    if(result.getData().size() > 0) { //ako veche ima info ot predshen pat samo updatevame
+
+                        cycle = result.getCurrentPage().get(0);
+                        cycle.setFirstDayOfCycle(firstDayOfCycle.getTime());
+                        //TODO: tr da se porvaboti ot kade da se vzima statusa
+                        cycle.setSatusText(cyclePhaseStatus.getText().toString());
+                        cycle.setAverageCycleLength(Integer.parseInt(spinnerCycle.getSelectedItem().toString()));
+                    } else { //sazdavame nova tablica, ponezhe niama talava
+
+                        cycle = new CycleDays();
+
+                        cycle.setSender(Backendless.UserService.CurrentUser());
+                        cycle.setSenderEmail(Backendless.UserService.CurrentUser().getEmail());
+                        cycle.setFirstDayOfCycle(firstDayOfCycle.getTime());
+                        //TODO: tr da se porvaboti ot kade da se vzima statusa
+                        cycle.setSatusText(cyclePhaseStatus.getText().toString());
+                        cycle.setAverageCycleLength(Integer.parseInt(spinnerCycle.getSelectedItem().toString()));
+                    }
+                    //updatvame, ili sazvame nov calendar calendar
+                    Backendless.Persistence.save(cycle, new AsyncCallback<CycleDays>() {
+                        @Override
+                        public void handleResponse(CycleDays cycleDays) {
+                            Toast.makeText(context,R.string.calendar_update_sent_plural, Toast.LENGTH_LONG).show();
+
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            Toast.makeText(context,R.string.error_sending_calendar_updates, Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    //error pri find query
+                    Toast.makeText(context,R.string.error_sending_calendar_updates, Toast.LENGTH_LONG).show();
+
+                }
+            });
+
+
+
+        }
+
 
     }
 
