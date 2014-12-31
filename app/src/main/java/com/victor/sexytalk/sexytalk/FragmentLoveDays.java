@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -26,6 +27,7 @@ import com.backendless.persistence.QueryOptions;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,14 +57,11 @@ public class FragmentLoveDays extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUser = Backendless.UserService.CurrentUser();
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
-
 
         return inflatedView;
     }
@@ -79,18 +78,25 @@ public class FragmentLoveDays extends Fragment {
         if(currentUser != null) {
             if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
                 showPrivateDaysDialog.setVisibility(View.INVISIBLE);
+                listOfPartnersSpinner.setVisibility(View.VISIBLE);
+
             } else {
                 showPrivateDaysDialog.setVisibility(View.VISIBLE);
+                listOfPartnersSpinner.setVisibility(View.INVISIBLE);
             }
         }
 
         //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam servera
+        //TODO: triabva da razkaram shared prefs i da se vrazva kam servera otnachalo vseki pat
+
         restoreCalendarValuesFromSharedPrefs();
         if(mYear !=0 && mMonth != 0 && mDay != 0 && mAverageLengthOfMenstrualCycle != 0) {
-            determineCyclePhase();
+            determineCyclePhase(mYear, mMonth, mDay, mAverageLengthOfMenstrualCycle);
         }
         //zapalvame spinnera s imenata na partnirite
         if(Backendless.UserService.CurrentUser() != null) {
+            //TODO:determineCyclePhase e asynchronous i zatova ne izlizat pravilite saobshtenia,
+            //TODO: ako naprimer niamam dobaven partnior
             findPartnersAndPopulateSpinner();
         }
         showPrivateDaysDialog.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +105,21 @@ public class FragmentLoveDays extends Fragment {
                 SetFirstDayOfCycle newDialog = new SetFirstDayOfCycle();
                 newDialog.setTargetFragment(FragmentLoveDays.this, MENSTRUAL_CALENDAR_DIALOG);
                 newDialog.show(getFragmentManager(),"Welcome");
+            }
+        });
+
+        listOfPartnersSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                BackendlessUser selectedPartner = mPartners[position];
+                //Kato se izpere partner
+                // vikame helper metod, za da updatenem statusite, messages, etc.
+                updateMessagesForPartner(selectedPartner);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
             }
         });
     }
@@ -122,7 +143,7 @@ public class FragmentLoveDays extends Fragment {
                         bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
 
                 //izchisliavam v koi etap ot cikala e i updatevame statusite
-                determineCyclePhase();
+                determineCyclePhase(mYear, mMonth, mDay, mAverageLengthOfMenstrualCycle);
 
 
                 if(mSendSexyCalendarUpdateToPartners == true) {
@@ -154,22 +175,21 @@ public class FragmentLoveDays extends Fragment {
     */
 
     //Helper metod
-    protected void determineCyclePhase() {
+    protected void determineCyclePhase(int year, int month, int day, int averageLengthOfMenstruation) {
         //izchisliava v koi etap ot cikala e i promenia saobshtenieto
-        if(mYear != 0 && mMonth != 0 && mDay != 0 && mAverageLengthOfMenstrualCycle != 0) {
+        if(year != 0 && month != 0 && day != 0 && averageLengthOfMenstruation != 0) {
             //firstDayOfCycle = new GregorianCalendar(mYear, mMonth, mDay);
             firstDayOfCycle = Calendar.getInstance();
-            firstDayOfCycle.set(Calendar.YEAR, mYear);
-            firstDayOfCycle.set(Calendar.MONTH, mMonth);
-            firstDayOfCycle.set(Calendar.DAY_OF_MONTH, mDay);
+            firstDayOfCycle.set(Calendar.YEAR, year);
+            firstDayOfCycle.set(Calendar.MONTH, month);
+            firstDayOfCycle.set(Calendar.DAY_OF_MONTH, day);
             Calendar now = Calendar.getInstance();
 
             long difference = now.getTimeInMillis() - firstDayOfCycle.getTimeInMillis();
 
             final int days = (int) (difference /(24 * 60 * 60 * 1000));
-            int ovulation = mAverageLengthOfMenstrualCycle /2; //ovulaciata e v sredata na cikala
-            final int firstDayOfOvulation = mAverageLengthOfMenstrualCycle - 14;
-            final int lastDayOfOvulation = mAverageLengthOfMenstrualCycle -10;
+            final int firstDayOfOvulation = averageLengthOfMenstruation - 14;
+            final int lastDayOfOvulation = averageLengthOfMenstruation -10;
 
             //Tova sa etapite ot cikala
             /*
@@ -247,8 +267,8 @@ public class FragmentLoveDays extends Fragment {
                             }
                         }
 
-
                         //handles errors
+                        //TODO:tr da se opravi
                     } else if (days > mAverageLengthOfMenstrualCycle) {
                         //tr da se updatene
                         cyclePhaseTitle.setText("Update " + days);
@@ -265,6 +285,11 @@ public class FragmentLoveDays extends Fragment {
                     //TODO: kakvo pravim, ako ima greshka
                 }
             });
+        } else {
+        //ako sa nuli znachi partniorat ne si e updatenal kalendara
+            cyclePhaseTitle.setText(" ");
+            cyclePhaseStatus.setText(R.string.general_calendar_error);
+            cycleExplainationText.setText(" ");
         }
     } //krai na determine cycle phase helper method
 
@@ -314,18 +339,27 @@ public class FragmentLoveDays extends Fragment {
                     List<BackendlessUser> listOfPartners = partners.getData();
 
                     //Vzimame spisakat s partniorite kato izposlvame .getProperty("partners") na tekushtiat potrebitel
-                    mPartners =
-                            (BackendlessUser[]) listOfPartners.get(0).getProperty(Statics.KEY_PARTNERS);
-                    //sazdavame spisak s usernames
-                    List<String> usernamesSpinnerArray = new ArrayList<String>();
-                    for (BackendlessUser partner : mPartners) {
-                        usernamesSpinnerArray.add(partner.getProperty(Statics.KEY_USERNAME).toString());
+                    //s instanceof proveriavame dali ima zadadeni partniori
+                    if(listOfPartners.get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                        mPartners =
+                                (BackendlessUser[]) listOfPartners.get(0).getProperty(Statics.KEY_PARTNERS);
+                        //sazdavame spisak s usernames
+                        List<String> usernamesSpinnerArray = new ArrayList<String>();
+                        for (BackendlessUser partner : mPartners) {
+                            usernamesSpinnerArray.add(partner.getProperty(Statics.KEY_USERNAME).toString());
+                        }
+                        //zapalvame list
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                getActivity(), android.R.layout.simple_spinner_item, usernamesSpinnerArray);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        listOfPartnersSpinner.setAdapter(adapter);
+                    } else {
+                        //niamame dobaveni partniori, izkarvame niakakvo saobshtenie
+                        cyclePhaseTitle.setText(" ");
+                        cyclePhaseStatus.setText(R.string.no_partners_message);
+                        cycleExplainationText.setText(" ");
                     }
-                    //zapalvame list
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                            getActivity(), android.R.layout.simple_spinner_item, usernamesSpinnerArray);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    listOfPartnersSpinner.setAdapter(adapter);
+
                 }
             }
 
@@ -335,4 +369,53 @@ public class FragmentLoveDays extends Fragment {
             }
         });
     }
+
+    //helper metod, koito updateva kategoriite i saobshteniata na osnovnia ekran
+    private void updateMessagesForPartner(final BackendlessUser partner) {
+      final String partnerUsername = (String) partner.getProperty(Statics.KEY_USERNAME);
+      String partnerEmail = partner.getEmail();
+      String whereClause = "senderEmail='" + partnerEmail +"'";
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        query.setWhereClause(whereClause);
+        Backendless.Data.of(CycleDays.class).find(query, new AsyncCallback<BackendlessCollection<CycleDays>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<CycleDays> cycleStatuses) {
+                if(cycleStatuses.getData().size() > 0) {
+                    List<CycleDays> statuses = cycleStatuses.getData();
+                    //triabva da ima samo edno savpadenie poneze tarsim po email
+                    //zatova list triabva da e ot samo edin element
+
+                    Calendar firstDayOfCycle = Calendar.getInstance();
+                    firstDayOfCycle.setTime(statuses.get(0).getFirstDayOfCycle());
+                    int year = firstDayOfCycle.get(Calendar.YEAR);
+                    int month = firstDayOfCycle.get(Calendar.MONTH);
+                    int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
+                    int averageCyclelength = statuses.get(0).getAverageCycleLength();
+
+                    //vikame helper metod, za da updatenem statusite
+                    determineCyclePhase(year,month,day,averageCyclelength);
+                    //zadavame personaliziranoto saobshtenie
+                    cyclePhaseStatus.setText(statuses.get(0).getSatusText());
+
+                } else {
+                    //nishto ne e namereno, sledovatelno partnera ne si e updatenal kalendara
+                    String message = partnerUsername + " " + getString(R.string.partner_hasnt_updated_calendar);
+
+                    cyclePhaseTitle.setText(" ");
+                    cyclePhaseStatus.setText(message);
+                    cycleExplainationText.setText(" ");
+
+                    //po-dolu e drug variant za error message, no gornoto e po-personalizirano
+                    //determineCyclePhase(0,0,0,0);
+
+                }
+            }
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_LONG).show();
+            }
+        });
+
+    }
+
 }

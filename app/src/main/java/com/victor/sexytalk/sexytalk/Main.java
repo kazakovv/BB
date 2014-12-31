@@ -119,7 +119,6 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
         switch (item.getItemId()) {
             case R.id.menu_send_kiss:
-
                 //SendPushMessages sadarza metoda za izprashtane na push
                 String message = currentUser.getProperty(Statics.KEY_USERNAME) + " " +
                         getString(R.string.send_a_kiss_message); //niakoi ti izprati celuvka
@@ -130,11 +129,9 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
                 Intent intent = new Intent(this, SendMessage.class);
                 startActivity(intent);
                 return true;
-
             case R.id.menu_sex:
                 DialogFragment sexDialog = new MaleOrFemaleDialog();
                 sexDialog.show(getFragmentManager(), "Welcome");
-
                 return true;
             case R.id.menu_logout:
                 Backendless.UserService.logout(new AsyncCallback<Void>() {

@@ -90,6 +90,9 @@
     <string name="logout_error">Can\'t log out due to a server error</string>
     <string name="empty_search_field_message">Please enter a valid email address</string>
     <string name="general_server_error">Sorry, there was a server errorf</string>
+    <string name="partner_hasnt_updated_calendar">has not updated her calendar</string>
+    <string name="general_calendar_error">Please update your calendar</string>
+    <string name="no_partners_message">Add your partners to start using SexyTalk</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>

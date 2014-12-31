@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +31,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
     //butonite za kalendarite za mache i zheni
     //private Button showSexyCalendarButton;
     private Button showPrivateDaysCalendarButton;
+    private Spinner showPartnersList;
     //private Button sexyCalendarForGuysButton;
 
     ViewPager pager; //izpolzvat se za updatvane na fragmenta sled kato izbera maz ili zhena
@@ -44,6 +46,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
         //mainMessage = (TextView) getActivity().findViewById(R.id.mainMessage);
         //showSexyCalendarButton = (Button) getActivity().findViewById(R.id.showSexyCalendarButton);
         showPrivateDaysCalendarButton = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
+        showPartnersList = (Spinner) getActivity().findViewById(R.id.listOfPartners);
         //sexyCalendarForGuysButton = (Button) getActivity().findViewById(R.id.sexyCalendarGuys);
 
         pager = (ViewPager) getActivity().findViewById(R.id.pager);
@@ -70,7 +73,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
                             Toast.makeText(context,
                                     R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
                                 showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
-
+                                showPartnersList.setVisibility(View.VISIBLE);
                             }
 
                             @Override
@@ -89,10 +92,6 @@ public class MaleOrFemaleDialog extends DialogFragment {
                         //adapter.notifyDataSetChanged(); //tova updatva fragmenta.
                         //preprashta kam PagerAdapter getItemPosition();
                         // return POSITION_NONE; oznachava da updatene fragmentite
-
-
-
-
                         break;
                     case 1:
                        // update v backendless che e female
@@ -104,6 +103,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
                                 Toast.makeText(context,
                                         R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
                                 showPrivateDaysCalendarButton.setVisibility(View.VISIBLE);
+                                showPartnersList.setVisibility(View.INVISIBLE);
 
                             }
 

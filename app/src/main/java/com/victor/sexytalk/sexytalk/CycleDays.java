@@ -9,6 +9,7 @@ import java.util.Date;
  */
 public class CycleDays {
     private String objectId;
+    private Boolean sendCalendarUpdateToPartners;
     private BackendlessUser sender;
     private String senderEmail;
     private String satusText;
@@ -22,6 +23,11 @@ public class CycleDays {
     public void setObjectId( String objectId ) {
         this.objectId = objectId;
     }
+
+    public Boolean getSendCalendarUpdateToPartners() {return sendCalendarUpdateToPartners;}
+
+    public void setSendCalendarUpdateToPartners(Boolean sendCalendarUpdateToPartners) {
+        this.sendCalendarUpdateToPartners = sendCalendarUpdateToPartners; }
 
     public BackendlessUser getSender() {return sender;}
 

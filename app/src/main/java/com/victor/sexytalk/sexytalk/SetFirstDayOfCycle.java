@@ -158,6 +158,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                         cycle.setSender(Backendless.UserService.CurrentUser());
                         cycle.setSenderEmail(Backendless.UserService.CurrentUser().getEmail());
                         cycle.setFirstDayOfCycle(firstDayOfCycle.getTime());
+                        cycle.setSendCalendarUpdateToPartners(true);
                         //TODO: tr da se porvaboti ot kade da se vzima statusa
                         cycle.setSatusText(cyclePhaseStatus.getText().toString());
                         cycle.setAverageCycleLength(Integer.parseInt(spinnerCycle.getSelectedItem().toString()));
@@ -188,6 +189,9 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
             });
 
 
+
+        } else { //ne iska da izprati calendar update to partners
+        //samo zapisvame firstdayOfCycle i averagecyclelength na servera
 
         }
 
