@@ -1,6 +1,7 @@
 package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -16,7 +17,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
@@ -28,6 +28,7 @@ import com.backendless.persistence.QueryOptions;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -79,22 +80,22 @@ public class FragmentLoveDays extends Fragment {
             if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
                 showPrivateDaysDialog.setVisibility(View.INVISIBLE);
                 listOfPartnersSpinner.setVisibility(View.VISIBLE);
-
+                restoreValuesForLoggedInUser();
             } else {
                 showPrivateDaysDialog.setVisibility(View.VISIBLE);
                 listOfPartnersSpinner.setVisibility(View.INVISIBLE);
+                restoreValuesForLoggedInUser();
             }
         }
 
         //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam servera
         //TODO: triabva da razkaram shared prefs i da se vrazva kam servera otnachalo vseki pat
 
-        restoreCalendarValuesFromSharedPrefs();
-        if(mYear !=0 && mMonth != 0 && mDay != 0 && mAverageLengthOfMenstrualCycle != 0) {
-            determineCyclePhase(mYear, mMonth, mDay, mAverageLengthOfMenstrualCycle);
-        }
+
         //zapalvame spinnera s imenata na partnirite
-        if(Backendless.UserService.CurrentUser() != null) {
+
+        if(currentUser != null &&
+                currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
             //TODO:determineCyclePhase e asynchronous i zatova ne izlizat pravilite saobshtenia,
             //TODO: ako naprimer niamam dobaven partnior
             findPartnersAndPopulateSpinner();
@@ -119,7 +120,6 @@ public class FragmentLoveDays extends Fragment {
 
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
-
             }
         });
     }
@@ -132,7 +132,6 @@ public class FragmentLoveDays extends Fragment {
 
             if (resultCode == Activity.RESULT_OK) {
                 Bundle bundle = data.getExtras();
-
 
                 mYear   =      bundle.getInt(Statics.CALENDAR_YEAR);
                 mMonth  =      bundle.getInt(Statics.CALENDAR_MONTH); //mesec -1, Jan e 0, Dec e 11
@@ -295,6 +294,7 @@ public class FragmentLoveDays extends Fragment {
 
 
     //Helper method
+    //!!!!!!! not used!!!!!!!
     private void restoreCalendarValuesFromSharedPrefs() {
 
         //workaroud, zashtoto savedinstanceState vrashta null i ne moga da vazstanovia dannite za
@@ -356,7 +356,7 @@ public class FragmentLoveDays extends Fragment {
                     } else {
                         //niamame dobaveni partniori, izkarvame niakakvo saobshtenie
                         cyclePhaseTitle.setText(" ");
-                        cyclePhaseStatus.setText(R.string.no_partners_message);
+                        cyclePhaseStatus.setText(R.string.no_partners_message); //Add your partners to start using SexyTalk
                         cycleExplainationText.setText(" ");
                     }
 
@@ -418,4 +418,39 @@ public class FragmentLoveDays extends Fragment {
 
     }
 
+    private void restoreValuesForLoggedInUser() {
+        BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+        String currentUserEmail = currentUser.getEmail();
+        String whereClause="senderEmail='" + currentUserEmail + "'";
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        query.setWhereClause(whereClause);
+
+        Backendless.Data.of(CycleDays.class).find(query, new AsyncCallback<BackendlessCollection<CycleDays>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<CycleDays> cycleDays) {
+                if(cycleDays.getData().size() > 0) { //proveriava dali ima data
+                    mAverageLengthOfMenstrualCycle = cycleDays.getCurrentPage().get(0).getAverageCycleLength();
+                    Date firstDayOfCycle = cycleDays.getCurrentPage().get(0).getFirstDayOfCycle();
+                    Calendar firstDay = new GregorianCalendar();
+                    firstDay.setTime(firstDayOfCycle);
+
+                    mYear = firstDay.get(Calendar.YEAR);
+                    mMonth = firstDay.get(Calendar.MONTH);
+                    mDay = firstDay.get(Calendar.DAY_OF_MONTH);
+                    //na baza na stoinostite opredelia fazata
+                    determineCyclePhase(mYear, mMonth, mDay, mAverageLengthOfMenstrualCycle);
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle(R.string.general_error_title)
+                        .setMessage(R.string.load_settings_error)
+                        .setPositiveButton(R.string.ok, null);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
+    }
 }

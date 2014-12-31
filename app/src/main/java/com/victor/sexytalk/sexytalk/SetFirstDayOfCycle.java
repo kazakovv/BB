@@ -126,7 +126,6 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
     }
 
     public void sendSendSexyCalendarUpdateToPartners() {
-        if(sendSexyCalendarUpdateToPartners.isChecked()) { //izprashtame update
 
             final Calendar firstDayOfCycle = Calendar.getInstance();
             firstDayOfCycle.set(Calendar.YEAR,datePicker.getYear());
@@ -151,6 +150,11 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                         //TODO: tr da se porvaboti ot kade da se vzima statusa
                         cycle.setSatusText(cyclePhaseStatus.getText().toString());
                         cycle.setAverageCycleLength(Integer.parseInt(spinnerCycle.getSelectedItem().toString()));
+                        if(sendSexyCalendarUpdateToPartners.isChecked()) {
+                            cycle.setSendCalendarUpdateToPartners(true);
+                        } else {
+                            cycle.setSendCalendarUpdateToPartners(false);
+                        }
                     } else { //sazdavame nova tablica, ponezhe niama talava
 
                         cycle = new CycleDays();
@@ -158,7 +162,13 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                         cycle.setSender(Backendless.UserService.CurrentUser());
                         cycle.setSenderEmail(Backendless.UserService.CurrentUser().getEmail());
                         cycle.setFirstDayOfCycle(firstDayOfCycle.getTime());
-                        cycle.setSendCalendarUpdateToPartners(true);
+
+                        if(sendSexyCalendarUpdateToPartners.isChecked()) {
+                            cycle.setSendCalendarUpdateToPartners(true);
+                        } else {
+                            cycle.setSendCalendarUpdateToPartners(false);
+                        }
+
                         //TODO: tr da se porvaboti ot kade da se vzima statusa
                         cycle.setSatusText(cyclePhaseStatus.getText().toString());
                         cycle.setAverageCycleLength(Integer.parseInt(spinnerCycle.getSelectedItem().toString()));
@@ -167,7 +177,13 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                     Backendless.Persistence.save(cycle, new AsyncCallback<CycleDays>() {
                         @Override
                         public void handleResponse(CycleDays cycleDays) {
-                            Toast.makeText(context,R.string.calendar_update_sent_plural, Toast.LENGTH_LONG).show();
+                            if(sendSexyCalendarUpdateToPartners.isChecked()) {
+                                //TODO: tr da se poraboti v/u check kolko partniora imame i da se smeni saobstehnieto na plular ili singular
+                                Toast.makeText(context,R.string.calendar_update_sent_plural, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(context,R.string.calendar_saved, Toast.LENGTH_LONG).show();
+                            }
+
 
                         }
 
@@ -190,10 +206,6 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
 
 
 
-        } else { //ne iska da izprati calendar update to partners
-        //samo zapisvame firstdayOfCycle i averagecyclelength na servera
-
-        }
 
 
     }

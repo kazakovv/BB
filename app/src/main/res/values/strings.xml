@@ -27,7 +27,9 @@
     <string name="sign_up_error_title">Oops!</string>
     <string name="login_error_message">Please make sure you enter username and password!</string>
     <string name="general_login_error_message">Login unsuccessful, please try again.</string>
+    <string name="load_settings_error">I could not load your profile due to a server error. Please try again.</string>
     <string name="login_error_title">Oops!</string>
+    <string name="general_error_title">Oops!</string>
     <string name="logout_menu_title">Logout</string>
     <string name="tab_days_title">Love Days</string>
     <string name="tab_chat_title">Love Box</string>
@@ -76,6 +78,7 @@
     <string name="error_sending_calendar_updates">Sorry, there was an error sending the Sexy Calendar update</string>
     <string name="calendar_update_sent_singular">You sent Sexy Calendar update to your partner</string>
     <string name="calendar_update_sent_plural">You sent Sexy Calendar update to your partners</string>
+    <string name="calendar_saved">Your Sexy Calendar update was saved</string>
     <string name="send_sexy_calendar_update_checkbox">Send Sexy Calendar update</string>
     <string name="push_notification_message_update_sexy_calendar">updated her Sexy Calendar</string>
     <string name="sexy_calendar_for_guys">Sexy Calendar for guys</string>
