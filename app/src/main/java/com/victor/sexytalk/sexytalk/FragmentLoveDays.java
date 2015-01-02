@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -58,6 +59,8 @@ public class FragmentLoveDays extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         currentUser = Backendless.UserService.CurrentUser();
+
+
     }
 
     @Override
@@ -76,30 +79,32 @@ public class FragmentLoveDays extends Fragment {
         cycleExplainationText = (TextView) getActivity().findViewById(R.id.explainationText);
         listOfPartnersSpinner = (Spinner) getActivity().findViewById(R.id.listOfPartners);
 
-        if(currentUser != null) {
-            if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
-                showPrivateDaysDialog.setVisibility(View.INVISIBLE);
-                listOfPartnersSpinner.setVisibility(View.VISIBLE);
-                restoreValuesForLoggedInUser();
-            } else {
-                showPrivateDaysDialog.setVisibility(View.VISIBLE);
-                listOfPartnersSpinner.setVisibility(View.INVISIBLE);
-                restoreValuesForLoggedInUser();
-            }
-        }
 
         //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam servera
         //TODO: triabva da razkaram shared prefs i da se vrazva kam servera otnachalo vseki pat
 
+        if(currentUser != null) {
+            if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
+                showPrivateDaysDialog.setVisibility(View.INVISIBLE);
+                listOfPartnersSpinner.setVisibility(View.VISIBLE);
+
+                //ako e maz samo zarezhdame partniorite v spinnera
+                mYear = 0;
+                mMonth = 0;
+                mDay = 0;
+                mAverageLengthOfMenstrualCycle=0;
+                findPartnersAndPopulateSpinner();
+            } else {
+                showPrivateDaysDialog.setVisibility(View.VISIBLE);
+                listOfPartnersSpinner.setVisibility(View.INVISIBLE);
+                //ako e zhena vazstanoviavame kalendara: Year, month,day,cyclelength
+                restoreValuesForLoggedInUser();
+            }
+        }
 
         //zapalvame spinnera s imenata na partnirite
 
-        if(currentUser != null &&
-                currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
-            //TODO:determineCyclePhase e asynchronous i zatova ne izlizat pravilite saobshtenia,
-            //TODO: ako naprimer niamam dobaven partnior
-            findPartnersAndPopulateSpinner();
-        }
+
         showPrivateDaysDialog.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -167,7 +172,8 @@ public class FragmentLoveDays extends Fragment {
         editor.commit();
     }
 
-     /*
+
+    /*
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!     NACHALO NA HELPER METODITE     !!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -307,13 +313,11 @@ public class FragmentLoveDays extends Fragment {
         mAverageLengthOfMenstrualCycle =
                 savedValues.getInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,0);
 
-
-
     }
 
     //Helper metod namira spisak s partniorite i dobavia imenata im v spinnera
 
-    private void findPartnersAndPopulateSpinner() {
+    protected void findPartnersAndPopulateSpinner() {
 
         //sashtoto kato SendTo metoda
         //tarsim spisak s partniori

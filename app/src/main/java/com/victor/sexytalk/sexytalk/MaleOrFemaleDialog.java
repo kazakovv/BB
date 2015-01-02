@@ -6,7 +6,9 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -18,6 +20,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.UserService;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+
 
 
 /**
@@ -74,7 +77,10 @@ public class MaleOrFemaleDialog extends DialogFragment {
                                     R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
                                 showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
                                 showPartnersList.setVisibility(View.VISIBLE);
-                            }
+
+                                }
+
+
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
@@ -84,14 +90,6 @@ public class MaleOrFemaleDialog extends DialogFragment {
                         });
 
 
-                        //TODO: pokazvame mazhkia kalendar i skrivame zhenskite kalendari
-
-                        //showSexyCalendarButton.setVisibility(View.INVISIBLE);
-                        //sexyCalendarForGuysButton.setVisibility(View.VISIBLE);
-
-                        //adapter.notifyDataSetChanged(); //tova updatva fragmenta.
-                        //preprashta kam PagerAdapter getItemPosition();
-                        // return POSITION_NONE; oznachava da updatene fragmentite
                         break;
                     case 1:
                        // update v backendless che e female
@@ -120,7 +118,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
                         //adapter.notifyDataSetChanged();//tova updatva fragmenta.
                         //preprashta kam PagerAdapter getItemPosition();
-                        // return POSITION_NONE; oznachava da updatene fragmentite//tova updatva fragmenta.
+                        //return POSITION_NONE; oznachava da updatene fragmentite//tova updatva fragmenta.
 
                         break;
                 }
@@ -130,4 +128,9 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
     }
 
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        //refresh FragmentLoveDays
+    }
 }

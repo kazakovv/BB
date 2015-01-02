@@ -20,6 +20,7 @@ public class PagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new FragmentLoveBox();
             case 1:
+
                 return new FragmentLoveDays();
             default:
                 break;
