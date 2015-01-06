@@ -77,6 +77,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
                                     R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
                                 showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
                                 showPartnersList.setVisibility(View.VISIBLE);
+                                refreshFragments();
 
                                 }
 
@@ -102,7 +103,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
                                         R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
                                 showPrivateDaysCalendarButton.setVisibility(View.VISIBLE);
                                 showPartnersList.setVisibility(View.INVISIBLE);
-
+                                refreshFragments();
                             }
 
                             @Override
@@ -127,7 +128,12 @@ public class MaleOrFemaleDialog extends DialogFragment {
         return builder.create();
 
     }
+protected void refreshFragments(){
+  PagerAdapter adapter = (PagerAdapter) pager.getAdapter();
+    pager.setAdapter(adapter);
+   pager.setCurrentItem(1);
 
+}
     @Override
     public void onDetach() {
         super.onDetach();

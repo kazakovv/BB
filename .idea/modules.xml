@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/STB.iml" filepath="$PROJECT_DIR$/STB.iml" />
+      <module fileurl="file://$PROJECT_DIR$/STB2.iml" filepath="$PROJECT_DIR$/STB2.iml" />
       <module fileurl="file://$PROJECT_DIR$/SexyTalk-Backendless.iml" filepath="$PROJECT_DIR$/SexyTalk-Backendless.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/backendless/backendless.iml" filepath="$PROJECT_DIR$/backendless/backendless.iml" />
