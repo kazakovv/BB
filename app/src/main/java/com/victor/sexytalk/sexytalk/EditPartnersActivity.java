@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -21,11 +22,17 @@ import com.backendless.persistence.QueryOptions;
 
 import java.util.List;
 
+/*
+
+Tuk tarsim partniorite
+
+ */
 
 public class EditPartnersActivity extends Activity {
     protected EditText searchField;
     protected Button searchButton;
     protected ListView listWithFoundUsers;
+    protected TextView emptyMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,7 @@ public class EditPartnersActivity extends Activity {
         searchField = (EditText) findViewById(R.id.searchField);
         searchButton = (Button) findViewById(R.id.searchButton);
         listWithFoundUsers = (ListView) findViewById(R.id.listFoundUsers);
+        emptyMessage = (TextView) findViewById(R.id.emptyMessage);
     }
 
 
@@ -41,6 +49,8 @@ public class EditPartnersActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_edit_partners, menu);
+
+        listWithFoundUsers.setEmptyView(emptyMessage);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,10 +82,12 @@ public class EditPartnersActivity extends Activity {
                                 );
                                 listWithFoundUsers.setAdapter(adapter);
 
-                            } else { //zatvariame check dali sme namerili neshto
-                            //TODO:tr da se napishe neshto, ako niama nishto namereno
-                            //TODO: da se izchisti spisaka, ako v nego veche ima neshot, etc.
 
+                            } else { //zatvariame check dali sme namerili neshto
+                                //TODO:izchistvame spisaka, ako ne e namereno nishto
+
+                                listWithFoundUsers.setAdapter(null);
+                                listWithFoundUsers.setEmptyView(emptyMessage);
                             }
                          }
 

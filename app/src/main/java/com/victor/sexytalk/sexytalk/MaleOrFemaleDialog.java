@@ -129,8 +129,8 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
     }
 protected void refreshFragments(){
-  PagerAdapter adapter = (PagerAdapter) pager.getAdapter();
-    pager.setAdapter(adapter);
+   PagerAdapter adapter = (PagerAdapter) pager.getAdapter();
+   pager.setAdapter(adapter);
    pager.setCurrentItem(1);
 
 }

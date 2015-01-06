@@ -13,7 +13,7 @@
     <string name="menu_select_sex">Sex</string>
     <string name="menu_send_a_kiss">Send a kiss</string>
     <string name="menu_send_message">Send a message</string>
-    <string name="menu_edit_partner">Choose your partner</string>
+    <string name="menu_edit_partner">Find your partner</string>
     <string name="dialog_menu_title">Are you a guy or a girl?</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="hint_login_username">Username</string>
@@ -96,6 +96,7 @@
     <string name="partner_hasnt_updated_calendar">has not updated her calendar</string>
     <string name="general_calendar_error">Please update your calendar</string>
     <string name="no_partners_message">Add your partners to start using SexyTalk</string>
+    <string name="no_partners_found">No partners were found</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>
