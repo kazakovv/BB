@@ -2,9 +2,11 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,6 +35,7 @@ public class EditPartnersActivity extends Activity {
     protected Button searchButton;
     protected ListView listWithFoundUsers;
     protected TextView emptyMessage;
+    List<BackendlessUser> foundUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,8 @@ public class EditPartnersActivity extends Activity {
         searchButton = (Button) findViewById(R.id.searchButton);
         listWithFoundUsers = (ListView) findViewById(R.id.listFoundUsers);
         emptyMessage = (TextView) findViewById(R.id.emptyMessage);
+
+        listWithFoundUsers.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
     }
 
 
@@ -66,7 +71,7 @@ public class EditPartnersActivity extends Activity {
                         public void handleResponse(BackendlessCollection<BackendlessUser> users) {
                          //Sazdavame spisak s namerenite potrebiteli
 
-                            List<BackendlessUser> foundUsers = users.getData();
+                            foundUsers = users.getData();
                             int numberOfUsersFound  = foundUsers.size();
 
                             if(numberOfUsersFound > 0) {
@@ -84,7 +89,7 @@ public class EditPartnersActivity extends Activity {
 
 
                             } else { //zatvariame check dali sme namerili neshto
-                                //TODO:izchistvame spisaka, ako ne e namereno nishto
+                                //izchistvame spisaka, ako ne e namereno nishto
 
                                 listWithFoundUsers.setAdapter(null);
                                 listWithFoundUsers.setEmptyView(emptyMessage);
@@ -108,9 +113,21 @@ public class EditPartnersActivity extends Activity {
             }
         });
 
+        listWithFoundUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                BackendlessUser user = foundUsers.get(position);
+                Log.d("Vic", "clicked");
+            }
+        });
+
         return true;
 
     }
+
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

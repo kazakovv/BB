@@ -66,7 +66,6 @@ public class SendTo extends ListActivity {
             mSendTo.remove(positionToRemove);
             mRecepientEmails.remove(positionToRemove);
             mRecepientUserNames.remove(positionToRemove);
-
         }
     }
 
@@ -116,7 +115,6 @@ public class SendTo extends ListActivity {
                  if (numberOfUsers == 0) {
                      //no partners
 
-
                      AlertDialog.Builder builder = new AlertDialog.Builder(SendTo.this);
                      builder.setTitle(R.string.error_title)
                              .setMessage(R.string.general_error_message)
@@ -149,8 +147,6 @@ public class SendTo extends ListActivity {
                          );
                          setListAdapter(adapter);
                  }
-
-
              }
 
              @Override
