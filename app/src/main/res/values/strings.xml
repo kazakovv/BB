@@ -97,6 +97,8 @@
     <string name="general_calendar_error">Please update your calendar</string>
     <string name="no_partners_message">Add your partners to start using SexyTalk</string>
     <string name="no_partners_found">No partners were found</string>
+    <string name="edit_partners_search_button">Search</string>
+    <string name="edit_partners_search_hint">Email</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>

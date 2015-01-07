@@ -1,6 +1,7 @@
 package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,6 +24,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -35,7 +38,10 @@ public class EditPartnersActivity extends Activity {
     protected Button searchButton;
     protected ListView listWithFoundUsers;
     protected TextView emptyMessage;
-    List<BackendlessUser> foundUsers;
+    protected List<BackendlessUser> foundUsers;
+    protected ArrayList<Integer> selectedUsers;
+
+    MenuItem checkButtonSendPartnerRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,31 +51,30 @@ public class EditPartnersActivity extends Activity {
         searchButton = (Button) findViewById(R.id.searchButton);
         listWithFoundUsers = (ListView) findViewById(R.id.listFoundUsers);
         emptyMessage = (TextView) findViewById(R.id.emptyMessage);
+        emptyMessage.setText(""); //za da ne izkarva saobshtenie ot nachalo
 
         listWithFoundUsers.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_partners, menu);
+        selectedUsers = new ArrayList<Integer>();
 
         listWithFoundUsers.setEmptyView(emptyMessage);
 
+
+
+        //onClick Listener za search button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String textToSearch = searchField.getText().toString();
                 if(!textToSearch.equals("")) {
-                    String whereClause = "email='" + textToSearch + "'";
+                    //TODO: izkarva rezultati po niakolko potati. Tr da se opravi kriteriat
+                    String whereClause = "email LIKE'%" + textToSearch + "%'";
                     BackendlessDataQuery query = new BackendlessDataQuery();
                     query.setWhereClause(whereClause);
 
                     Backendless.Data.of(BackendlessUser.class).find(query, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
                         @Override
                         public void handleResponse(BackendlessCollection<BackendlessUser> users) {
-                         //Sazdavame spisak s namerenite potrebiteli
+                            //Sazdavame spisak s namerenite potrebiteli
 
                             foundUsers = users.getData();
                             int numberOfUsersFound  = foundUsers.size();
@@ -90,11 +95,11 @@ public class EditPartnersActivity extends Activity {
 
                             } else { //zatvariame check dali sme namerili neshto
                                 //izchistvame spisaka, ako ne e namereno nishto
-
+                                emptyMessage.setText(R.string.no_partners_found);//gore go zadadohme da e prazno
                                 listWithFoundUsers.setAdapter(null);
                                 listWithFoundUsers.setEmptyView(emptyMessage);
                             }
-                         }
+                        }
 
                         @Override
                         public void handleFault(BackendlessFault backendlessFault) {
@@ -113,21 +118,43 @@ public class EditPartnersActivity extends Activity {
             }
         });
 
+        //OnClick listener za cakane varhu rezultatite v spisaka
         listWithFoundUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                BackendlessUser user = foundUsers.get(position);
-                Log.d("Vic", "clicked");
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CheckedTextView item = (CheckedTextView) view;
+                if(item.isChecked()) {
+                    selectedUsers.add(position);
+                     checkButtonSendPartnerRequest.setVisible(true);
+                } else {
+                    int positionToRemove = selectedUsers.indexOf(position);
+                    selectedUsers.remove(positionToRemove);
+
+                    //pokazvame ili skrivame butona ot menuto za izprashtane na partner request
+                    if(selectedUsers.size()>0) {
+                        checkButtonSendPartnerRequest.setVisible(true);
+                    } else {
+                        checkButtonSendPartnerRequest.setVisible(false);
+                    }
+                }
             }
         });
-
-        return true;
 
     }
 
 
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_edit_partners, menu);
 
+        //tova e checkButton ot menuto, koito izprashta partner request
+        //Predi da izberem pone edin chovek ot spisaka toi ne se vizda
+        checkButtonSendPartnerRequest = (MenuItem) menu.findItem(R.id.action_send_partner_request);
+        return true;
+
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -137,10 +164,19 @@ public class EditPartnersActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_ok) {
+            if(selectedUsers.size()>0) {
+            //izprashtame request da si stanem partniori
+            } else {
+            //ako niama izbrani potrebiteli samo zatvariame prozoreca
+
+            }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+
+
 }
