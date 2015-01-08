@@ -22,8 +22,10 @@ import java.util.List;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.Subscription;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.messaging.Message;
 
 
 public class Main extends FragmentActivity implements ActionBar.TabListener {
@@ -72,6 +74,36 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
                     Log.d("Vic","device not registered " +backendlessFault.getMessage());
                 }
             });
+
+            //subscribe to the channel, za da poluchvam saobshtenia
+            Backendless.Messaging.subscribe( channel,
+                    new AsyncCallback<List<Message>>()
+                    {
+                        public void handleResponse( List<Message> response )
+                        {
+                            for( Message message : response )
+                            {
+                                //tuk se obrabotvat pristignalite saobshtenia
+                                String publisherId = message.getPublisherId();
+                                Object data = message.getData();
+                            }
+                        }
+                        public void handleFault( BackendlessFault fault )
+                        {
+                    }
+        },
+        new AsyncCallback<Subscription>()
+        {
+            public void handleResponse( Subscription response )
+            {
+            Log.d("Vic","subscribed" + response.getChannelName());
+            }
+            public void handleFault( BackendlessFault fault )
+            {
+                Log.d("Vic","subscription error" + fault.getMessage());
+            }
+        }
+        );
 
         }
 

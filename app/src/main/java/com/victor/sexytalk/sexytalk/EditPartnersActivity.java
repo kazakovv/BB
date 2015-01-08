@@ -21,6 +21,10 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.messaging.DeliveryOptions;
+import com.backendless.messaging.MessageStatus;
+import com.backendless.messaging.PublishOptions;
+import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 
@@ -176,6 +180,27 @@ public class EditPartnersActivity extends Activity {
 
 
             if(selectedUsers.size()>0) {
+
+                int receiverNumber = selectedUsers.get(0);
+                BackendlessUser receiverBackendless = foundUsers.get(receiverNumber);
+                String receiverID = receiverBackendless.getObjectId();
+
+                Backendless.Messaging.publish(receiverID,"partnerRequest",new AsyncCallback<MessageStatus>() {
+                    @Override
+                    public void handleResponse(MessageStatus messageStatus) {
+                        Log.d("Vic","sent");
+
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        Log.d("Vic","not sent");
+
+                    }
+                });
+
+
+                /*
                 //zatvariame prozoreca i se vrashtame kam main activity
                 finish();
 
@@ -214,7 +239,10 @@ public class EditPartnersActivity extends Activity {
             } else {
             //ako niama izbrani potrebiteli samo zatvariame prozoreca
                 finish();
+                */
             }
+
+
             return true;
         }
 
