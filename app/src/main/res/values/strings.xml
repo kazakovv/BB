@@ -99,6 +99,8 @@
     <string name="no_partners_found">No partners were found</string>
     <string name="edit_partners_search_button">Search</string>
     <string name="edit_partners_search_hint">Email</string>
+    <string name="partner_request_sent_toast">Your partner request was sent</string>
+    <string name="partner_request_not_sent_toast">Your partner request was not sent. Please try again.</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>

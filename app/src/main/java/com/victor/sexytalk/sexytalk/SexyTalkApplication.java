@@ -5,7 +5,9 @@ import android.util.Log;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
 import com.backendless.async.callback.BackendlessCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 /**
  * Created by Victor on 09/12/2014.
@@ -24,6 +26,7 @@ public class SexyTalkApplication extends Application {
 
         Backendless.Data.mapTableToClass("Users", BackendlessUser.class);
         //Backendless.Data.mapTableToClass("Messages",BackendlessUser.class);
+
 
     }
 }

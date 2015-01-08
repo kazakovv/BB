@@ -40,6 +40,7 @@ public class EditPartnersActivity extends Activity {
     protected TextView emptyMessage;
     protected List<BackendlessUser> foundUsers;
     protected ArrayList<Integer> selectedUsers;
+    protected BackendlessUser currentUser;
 
     MenuItem checkButtonSendPartnerRequest;
 
@@ -54,16 +55,23 @@ public class EditPartnersActivity extends Activity {
         emptyMessage.setText(""); //za da ne izkarva saobshtenie ot nachalo
 
         listWithFoundUsers.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        selectedUsers = new ArrayList<Integer>();
 
         listWithFoundUsers.setEmptyView(emptyMessage);
 
 
-
+        if(Backendless.UserService.CurrentUser() != null) {
+            currentUser = Backendless.UserService.CurrentUser();
+        }
         //onClick Listener za search button
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //mahame otmetkata ot menuto za izprashtane na partner request
+                checkButtonSendPartnerRequest.setVisible(false);
+                //inicializirame array i po tozi nachin iztrivame predhodnite soinosti,
+                // ot predishni tarsenia ako ima takiva
+                selectedUsers = new ArrayList<Integer>();
+
                 String textToSearch = searchField.getText().toString();
                 if(!textToSearch.equals("")) {
                     //TODO: izkarva rezultati po niakolko potati. Tr da se opravi kriteriat
@@ -164,19 +172,52 @@ public class EditPartnersActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_ok) {
+        if (id == R.id.action_send_partner_request) {
+
+
             if(selectedUsers.size()>0) {
-            //izprashtame request da si stanem partniori
+                //zatvariame prozoreca i se vrashtame kam main activity
+                finish();
+
+                //izprashtame request da si stanem partniori
+                PartnersAddRequest partnersToAdd = new PartnersAddRequest();
+                for(int i = 0; i < selectedUsers.size(); i++) {
+                    //selectedUsers sadarza poziciite na otbeliazanite partniori,
+                    // koito iskame da dobavim ot vsichki foundUsers
+
+                    int selectedUser = selectedUsers.get(i); //dava poziciata ot foundUsers
+                    BackendlessUser selectedPartner = foundUsers.get(selectedUser);
+                    partnersToAdd.setEmail_partnerToConfirm(selectedPartner.getEmail());
+                    partnersToAdd.setEmail_userRequesting(currentUser.getEmail());
+                    partnersToAdd.setPartnerAddRequestConfirmed(false);
+                    partnersToAdd.setPartnerToConfirm(selectedPartner);
+                    partnersToAdd.setUserRequesting(currentUser);
+                }
+
+                //Kachvame zaiavkata v Backendless
+
+                Backendless.Data.of(PartnersAddRequest.class).save(partnersToAdd, new AsyncCallback<PartnersAddRequest>() {
+                    @Override
+                    public void handleResponse(PartnersAddRequest partnersAddRequest) {
+                       Toast.makeText(EditPartnersActivity.this,
+                               R.string.partner_request_sent_toast,Toast.LENGTH_LONG).show();
+
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        Toast.makeText(EditPartnersActivity.this,
+                                R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();
+                    }
+                });
+
             } else {
             //ako niama izbrani potrebiteli samo zatvariame prozoreca
-
+                finish();
             }
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }

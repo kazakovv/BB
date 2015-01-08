@@ -57,25 +57,29 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
             //proveriavame dali e maz ili zhena
             MaleOrFemale = (String) currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
+            //register device for push notifications
+            String GCMSenderID = "473995671207";
+            String channel = currentUser.getObjectId();
 
-            //tuk zadavam osnovnoto saobshtenie
-            /*
-            if (MaleOrFemale.equals(Statics.SEX_FEMALE)) {
-                mainMessage.setText(R.string.main_message_female);
+            Backendless.Messaging.registerDevice(GCMSenderID,channel, new AsyncCallback<Void>() {
+                @Override
+                public void handleResponse(Void aVoid) {
+                    Log.d("Vic","device registered for messaging");
+                }
 
-            } else {
-                //ako ne e zhena triabva da e maz
-                mainMessage.setText(R.string.main_message_male);
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    Log.d("Vic","device not registered " +backendlessFault.getMessage());
+                }
+            });
 
-            }
-            */
         }
 
         pager = (ViewPager) findViewById(R.id.pager);
         PagerAdapter pAdapter = new PagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pAdapter);
         pager.setOffscreenPageLimit(1);
-
+        //TODO: actionbar is depreciated in API 21
         actionbar = getActionBar();
         actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionbar.addTab(actionbar.newTab().setText(R.string.tab_chat_title).setTabListener(this));
@@ -249,15 +253,5 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
 
-        //Sahraniavam shared preferences kato izlizam ot fragmenta
-
-        SharedPreferences savedSettings = getSharedPreferences("MYPREFS",0);
-        SharedPreferences.Editor editor = savedSettings.edit();
-        editor.commit();
-
-    }
 }
