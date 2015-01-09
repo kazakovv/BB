@@ -41,6 +41,8 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
     public static final String TAG = Main.class.getSimpleName();
 
+    protected MenuItem addPartner;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
@@ -85,7 +87,10 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
                             {
                                 //tuk se obrabotvat pristignalite saobshtenia
                                 String publisherId = message.getPublisherId();
-                                Object data = message.getData();
+                                if(message.getData().equals(Statics.KEY_PARTNER_REQUEST)) {
+                                    //pokazvame butona za dobaviane na nov partnior
+                                    addPartner.setVisible(true);
+                                }
                             }
                         }
                         public void handleFault( BackendlessFault fault )
@@ -266,6 +271,8 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
 
+        //vrazvame butona za dobaviane na novi partniori
+        addPartner = menu.findItem(R.id.partner_request);
         return super.onCreateOptionsMenu(menu);
     }
 

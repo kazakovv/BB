@@ -58,7 +58,7 @@ public class EditPartnersActivity extends Activity {
         emptyMessage = (TextView) findViewById(R.id.emptyMessage);
         emptyMessage.setText(""); //za da ne izkarva saobshtenie ot nachalo
 
-        listWithFoundUsers.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        listWithFoundUsers.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
         listWithFoundUsers.setEmptyView(emptyMessage);
 
@@ -180,52 +180,45 @@ public class EditPartnersActivity extends Activity {
 
 
             if(selectedUsers.size()>0) {
+            //zatvariame prozoreca i se vrashtame kam main activity
+            finish();
 
+                //imame samo 1 izbran partnior, zatova prosto vzimame parvia element ot array
                 int receiverNumber = selectedUsers.get(0);
-                BackendlessUser receiverBackendless = foundUsers.get(receiverNumber);
-                String receiverID = receiverBackendless.getObjectId();
-
-                Backendless.Messaging.publish(receiverID,"partnerRequest",new AsyncCallback<MessageStatus>() {
-                    @Override
-                    public void handleResponse(MessageStatus messageStatus) {
-                        Log.d("Vic","sent");
-
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        Log.d("Vic","not sent");
-
-                    }
-                });
-
-
-                /*
-                //zatvariame prozoreca i se vrashtame kam main activity
-                finish();
+                final BackendlessUser selectedPartner = foundUsers.get(receiverNumber);
 
                 //izprashtame request da si stanem partniori
-                PartnersAddRequest partnersToAdd = new PartnersAddRequest();
-                for(int i = 0; i < selectedUsers.size(); i++) {
-                    //selectedUsers sadarza poziciite na otbeliazanite partniori,
-                    // koito iskame da dobavim ot vsichki foundUsers
+                PartnersAddRequest partnerToAdd = new PartnersAddRequest();
+                partnerToAdd.setEmail_partnerToConfirm(selectedPartner.getEmail());
+                partnerToAdd.setEmail_userRequesting(currentUser.getEmail());
+                partnerToAdd.setPartnerAddRequestConfirmed(false);
+                partnerToAdd.setPartnerToConfirm(selectedPartner);
+                partnerToAdd.setUserRequesting(currentUser);
 
-                    int selectedUser = selectedUsers.get(i); //dava poziciata ot foundUsers
-                    BackendlessUser selectedPartner = foundUsers.get(selectedUser);
-                    partnersToAdd.setEmail_partnerToConfirm(selectedPartner.getEmail());
-                    partnersToAdd.setEmail_userRequesting(currentUser.getEmail());
-                    partnersToAdd.setPartnerAddRequestConfirmed(false);
-                    partnersToAdd.setPartnerToConfirm(selectedPartner);
-                    partnersToAdd.setUserRequesting(currentUser);
-                }
 
                 //Kachvame zaiavkata v Backendless
 
-                Backendless.Data.of(PartnersAddRequest.class).save(partnersToAdd, new AsyncCallback<PartnersAddRequest>() {
+                Backendless.Data.of(PartnersAddRequest.class).save(partnerToAdd, new AsyncCallback<PartnersAddRequest>() {
                     @Override
                     public void handleResponse(PartnersAddRequest partnersAddRequest) {
-                       Toast.makeText(EditPartnersActivity.this,
-                               R.string.partner_request_sent_toast,Toast.LENGTH_LONG).show();
+                        //sled kato kachim data v backendless izprashtame i push
+
+                        //tova e za kanala, po koito da izpratim push message
+                        String receiverID = selectedPartner.getObjectId();
+
+                        Backendless.Messaging.publish(receiverID,Statics.KEY_PARTNER_REQUEST,new AsyncCallback<MessageStatus>() {
+                            @Override
+                            public void handleResponse(MessageStatus messageStatus) {
+                              Toast.makeText(EditPartnersActivity.this,
+                                        R.string.partner_request_sent_toast,Toast.LENGTH_LONG).show();                            }
+
+                            @Override
+                            public void handleFault(BackendlessFault backendlessFault) {
+                                Toast.makeText(EditPartnersActivity.this,
+                                        R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();                            }
+                        });
+
+
 
                     }
 
@@ -239,7 +232,7 @@ public class EditPartnersActivity extends Activity {
             } else {
             //ako niama izbrani potrebiteli samo zatvariame prozoreca
                 finish();
-                */
+
             }
 
 
