@@ -21,11 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.Subscription;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.Message;
+import com.backendless.persistence.BackendlessDataQuery;
 
 
 public class Main extends FragmentActivity implements ActionBar.TabListener {
@@ -33,6 +35,7 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
     ActionBar actionbar;
     static Context context;
     protected BackendlessUser currentUser;
+    protected static Boolean pendingPartnerRequest;
 
     protected String MaleOrFemale;
     TextView mainMessage;
@@ -57,13 +60,16 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
             navigateToLogin();
         } else {
             // ako ima lognat potrebitel prodalzhava natatak
-            Log.i(TAG, "imame lognat potrebitel");
+
+            //check za pending parner request
+            checkForPendingParnerRequests();
 
             //proveriavame dali e maz ili zhena
             MaleOrFemale = (String) currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
             //register device for push notifications
             String GCMSenderID = "473995671207";
             String channel = currentUser.getObjectId();
+
 
             Backendless.Messaging.registerDevice(GCMSenderID,channel, new AsyncCallback<Void>() {
                 @Override
@@ -78,37 +84,33 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
             });
 
             //subscribe to the channel, za da poluchvam saobshtenia
-            Backendless.Messaging.subscribe( channel,
-                    new AsyncCallback<List<Message>>()
-                    {
-                        public void handleResponse( List<Message> response )
-                        {
-                            for( Message message : response )
-                            {
+            Backendless.Messaging.subscribe(channel,
+                    new AsyncCallback<List<Message>>() {
+                        public void handleResponse(List<Message> response) {
+                            for (Message message : response) {
                                 //tuk se obrabotvat pristignalite saobshtenia
                                 String publisherId = message.getPublisherId();
-                                if(message.getData().equals(Statics.KEY_PARTNER_REQUEST)) {
+                                if (message.getData().equals(Statics.KEY_PARTNER_REQUEST)) {
                                     //pokazvame butona za dobaviane na nov partnior
                                     addPartner.setVisible(true);
+                                    pendingPartnerRequest = true;
                                 }
                             }
                         }
-                        public void handleFault( BackendlessFault fault )
-                        {
+
+                        public void handleFault(BackendlessFault fault) {
+                        }
+                    },
+                    new AsyncCallback<Subscription>() {
+                        public void handleResponse(Subscription response) {
+                            Log.d("Vic", "subscribed" + response.getChannelName());
+                        }
+
+                        public void handleFault(BackendlessFault fault) {
+                            Log.d("Vic", "subscription error" + fault.getMessage());
+                        }
                     }
-        },
-        new AsyncCallback<Subscription>()
-        {
-            public void handleResponse( Subscription response )
-            {
-            Log.d("Vic","subscribed" + response.getChannelName());
-            }
-            public void handleFault( BackendlessFault fault )
-            {
-                Log.d("Vic","subscription error" + fault.getMessage());
-            }
-        }
-        );
+            );
 
         }
 
@@ -172,6 +174,11 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
             case R.id.menu_send_message:
                 Intent intent = new Intent(this, SendMessage.class);
                 startActivity(intent);
+                return true;
+            case R.id.partner_request:
+
+                //TODO: tr da se dobavie kod
+
                 return true;
             case R.id.menu_sex:
                 DialogFragment sexDialog = new MaleOrFemaleDialog();
@@ -273,7 +280,48 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
         //vrazvame butona za dobaviane na novi partniori
         addPartner = menu.findItem(R.id.partner_request);
+        //po podrazbirane partner request butona e nevidim,
+        // no go pokazvame, ako ima pending partner request
+        if(pendingPartnerRequest != null && pendingPartnerRequest == true) {
+            addPartner.setVisible(true);
+        }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    protected void checkForPendingParnerRequests(){
+
+        String whereClause="email_partnerToConfirm='" + currentUser.getEmail() +"'";
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        query.setWhereClause(whereClause);
+        Backendless.Data.of(PartnersAddRequest.class).find(query, new AsyncCallback<BackendlessCollection<PartnersAddRequest>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<PartnersAddRequest> partners) {
+                if(partners.getData().size()>0) {
+                    //ako query vrashta rezultat, znachi ima pending request
+                    pendingPartnerRequest = true;
+                    //pokazvame butona za dobaviane na partniori, ako reference kam nego ne e null
+                    if(addPartner != null) {
+                        addPartner.setVisible(true);
+                    }
+                } else {
+                    //ako ne varne nishto mahame butona
+                    pendingPartnerRequest = false;
+                    if(addPartner != null) {
+                        addPartner.setVisible(false);
+                    }
+                }
+
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                pendingPartnerRequest = false;
+                if(addPartner != null) {
+                    addPartner.setVisible(false);
+                }
+            }
+        });
+
     }
 
 
