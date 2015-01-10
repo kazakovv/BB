@@ -28,7 +28,7 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null ) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.add_partner_item, null);
@@ -41,7 +41,16 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
             holder = (ViewHolder) convertView.getTag();
         }
         BackendlessUser partner = mPartners.get(position);
-            holder.nameLabel.setText( partner.getProperty(Statics.KEY_USERNAME).toString());
+        holder.nameLabel.setText( partner.getProperty(Statics.KEY_USERNAME).toString());
+
+        holder.buttonAddPartner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //tova e metod ot EditPartners, koito izprashta partner request
+                ((EditPartnersActivity)mContext).sendPartnerRequest(position);
+            }
+        });
+
         return convertView;
     }
 

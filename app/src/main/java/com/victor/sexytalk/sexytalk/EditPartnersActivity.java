@@ -46,7 +46,6 @@ public class EditPartnersActivity extends Activity {
     protected ArrayList<Integer> selectedUsers;
     protected BackendlessUser currentUser;
 
-    MenuItem checkButtonSendPartnerRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +67,7 @@ public class EditPartnersActivity extends Activity {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //mahame otmetkata ot menuto za izprashtane na partner request
-                checkButtonSendPartnerRequest.setVisible(false);
+
                 //inicializirame array i po tozi nachin iztrivame predhodnite soinosti,
                 // ot predishni tarsenia ako ima takiva
                 selectedUsers = new ArrayList<Integer>();
@@ -129,6 +127,8 @@ public class EditPartnersActivity extends Activity {
         listWithFoundUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                /*
                 CheckedTextView item = (CheckedTextView) view;
                 if(item.isChecked()) {
                     selectedUsers.add(position);
@@ -144,81 +144,62 @@ public class EditPartnersActivity extends Activity {
                         checkButtonSendPartnerRequest.setVisible(false);
                     }
                 }
+                */
             }
         });
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_partners, menu);
 
-        //tova e checkButton ot menuto, koito izprashta partner request
-        //Predi da izberem pone edin chovek ot spisaka toi ne se vizda
-        checkButtonSendPartnerRequest = (MenuItem) menu.findItem(R.id.action_send_partner_request);
-        return true;
-    }
+    protected void sendPartnerRequest(int selectedPartnerPosition) {
+        //Tozi metod se izvikva ot PartnersAdapter i  izprashta partner request
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        if (id == R.id.action_send_partner_request) {
-            //Ako caknem na ok ot menu se sluchvat 2 neshta chrez 2 async tasks edna v druga
-            //1. Kazchavame data table s user request
-            //2. Izprashtame push message, che ima pending partner request na saotvetnia user
+        //Ako caknem na add ot list se sluchvat 2 neshta chrez 2 async tasks edna v druga
+        //1. Kazchavame data table s user request
+        //2. Izprashtame push message, che ima pending partner request na saotvetnia user
 
-            if(selectedUsers.size()>0) {
-                //zatvariame prozoreca i se vrashtame kam main activity
-                finish();
+            //zatvariame prozoreca i se vrashtame kam main activity
+            finish();
 
-                //imame samo 1 izbran partnior, zatova prosto vzimame parvia element ot array
-                int receiverNumber = selectedUsers.get(0);
-                final BackendlessUser selectedPartner = foundUsers.get(receiverNumber);
+            final BackendlessUser selectedPartner = foundUsers.get(selectedPartnerPosition);
 
-                //izprashtame request da si stanem partniori
-                PartnersAddRequest partnerToAdd = new PartnersAddRequest();
-                partnerToAdd.setEmail_partnerToConfirm(selectedPartner.getEmail());
-                partnerToAdd.setEmail_userRequesting(currentUser.getEmail());
-                partnerToAdd.setPartnerAddRequestConfirmed(false);
-                partnerToAdd.setPartnerToConfirm(selectedPartner);
-                partnerToAdd.setUserRequesting(currentUser);
+            //izprashtame request da si stanem partniori
+            PartnersAddRequest partnerToAdd = new PartnersAddRequest();
+            partnerToAdd.setEmail_partnerToConfirm(selectedPartner.getEmail());
+            partnerToAdd.setEmail_userRequesting(currentUser.getEmail());
+            partnerToAdd.setPartnerAddRequestConfirmed(false);
+            partnerToAdd.setPartnerToConfirm(selectedPartner);
+            partnerToAdd.setUserRequesting(currentUser);
 
-                //Kachvame zaiavkata v Backendless
+            //Kachvame zaiavkata v Backendless
 
-                Backendless.Data.of(PartnersAddRequest.class).save(partnerToAdd, new AsyncCallback<PartnersAddRequest>() {
-                    @Override
-                    public void handleResponse(PartnersAddRequest partnersAddRequest) {
-                        //sled kato kachim data v backendless izprashtame i push
+            Backendless.Data.of(PartnersAddRequest.class).save(partnerToAdd, new AsyncCallback<PartnersAddRequest>() {
+                @Override
+                public void handleResponse(PartnersAddRequest partnersAddRequest) {
+                    //sled kato kachim data v backendless izprashtame i push
 
-                        //tova e za kanala, po koito da izpratim push message
-                        String receiverID = selectedPartner.getObjectId();
+                    //tova e za kanala, po koito da izpratim push message
+                    String receiverID = selectedPartner.getObjectId();
 
-                        Backendless.Messaging.publish(receiverID,Statics.KEY_PARTNER_REQUEST,new AsyncCallback<MessageStatus>() {
-                            @Override
-                            public void handleResponse(MessageStatus messageStatus) {
-                              Toast.makeText(EditPartnersActivity.this,
-                                        R.string.partner_request_sent_toast,Toast.LENGTH_LONG).show();                            }
-                            @Override
-                            public void handleFault(BackendlessFault backendlessFault) {
-                                Toast.makeText(EditPartnersActivity.this,
-                                        R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();                            }
-                        });
-                  }
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        Toast.makeText(EditPartnersActivity.this,
-                                R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();
-                    }
-                });
-            } else {
-            //ako niama izbrani potrebiteli samo zatvariame prozoreca
-                finish();
-            }
-            return true;
+                    Backendless.Messaging.publish(receiverID,Statics.KEY_PARTNER_REQUEST,new AsyncCallback<MessageStatus>() {
+                        @Override
+                        public void handleResponse(MessageStatus messageStatus) {
+                            Toast.makeText(EditPartnersActivity.this,
+                                    R.string.partner_request_sent_toast,Toast.LENGTH_LONG).show();                            }
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            //TODO:tr da se promeni saobshtenieto. Izpratili sme tablicata, no ne push message
+                            Toast.makeText(EditPartnersActivity.this,
+                                    R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();                            }
+                    });
+                }
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    Toast.makeText(EditPartnersActivity.this,
+                            R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();
+                }
+            });
+
         }
-        return super.onOptionsItemSelected(item);
-    }
+
+
 }
