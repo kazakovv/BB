@@ -30,12 +30,6 @@ public class MessageAdapter extends ArrayAdapter<Messages> {
         mMessages = messages;
     }
 
-
-
-
-
-
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;

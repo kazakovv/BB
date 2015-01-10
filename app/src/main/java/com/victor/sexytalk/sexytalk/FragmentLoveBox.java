@@ -62,7 +62,6 @@ public class FragmentLoveBox extends ListFragment {
             Backendless.Data.of(Messages.class).find(query, new AsyncCallback<BackendlessCollection<Messages>>() {
                 @Override
                 public void handleResponse(BackendlessCollection<Messages> messages) {
-                  Log.d("Vic", "Found something");
 
                    messagesToDisplay = new ArrayList<Messages>();
                     int numberOfMesages = messages.getCurrentPage().size();

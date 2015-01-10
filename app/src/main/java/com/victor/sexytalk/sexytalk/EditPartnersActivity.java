@@ -57,9 +57,7 @@ public class EditPartnersActivity extends Activity {
         listWithFoundUsers = (ListView) findViewById(R.id.listFoundUsers);
         emptyMessage = (TextView) findViewById(R.id.emptyMessage);
         emptyMessage.setText(""); //za da ne izkarva saobshtenie ot nachalo
-
         listWithFoundUsers.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-
         listWithFoundUsers.setEmptyView(emptyMessage);
 
 
@@ -97,13 +95,15 @@ public class EditPartnersActivity extends Activity {
                                 for (int i = 0; i < numberOfUsersFound; i++) {
                                     userName[i] = (String) foundUsers.get(0).getProperty(Statics.KEY_USERNAME);
                                 }
+
+                                /*
                                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                                         EditPartnersActivity.this,
                                         android.R.layout.simple_list_item_checked,
                                         userName
-                                );
+                                );*/
+                                PartnersAdapter adapter = new PartnersAdapter(listWithFoundUsers.getContext(),foundUsers);
                                 listWithFoundUsers.setAdapter(adapter);
-
 
                             } else { //zatvariame check dali sme namerili neshto
                                 //izchistvame spisaka, ako ne e namereno nishto
@@ -112,7 +112,6 @@ public class EditPartnersActivity extends Activity {
                                 listWithFoundUsers.setEmptyView(emptyMessage);
                             }
                         }
-
                         @Override
                         public void handleFault(BackendlessFault backendlessFault) {
                             Toast.makeText(EditPartnersActivity.this, R.string.general_server_error,
@@ -123,13 +122,9 @@ public class EditPartnersActivity extends Activity {
                     //display message che search e prazen
                     Toast.makeText(EditPartnersActivity.this, R.string.empty_search_field_message,
                             Toast.LENGTH_LONG).show();
-
                 }
-
-
             }
         });
-
         //OnClick listener za cakane varhu rezultatite v spisaka
         listWithFoundUsers.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -151,11 +146,7 @@ public class EditPartnersActivity extends Activity {
                 }
             }
         });
-
     }
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -165,7 +156,6 @@ public class EditPartnersActivity extends Activity {
         //Predi da izberem pone edin chovek ot spisaka toi ne se vizda
         checkButtonSendPartnerRequest = (MenuItem) menu.findItem(R.id.action_send_partner_request);
         return true;
-
     }
 
     @Override
@@ -175,13 +165,14 @@ public class EditPartnersActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_send_partner_request) {
-
+            //Ako caknem na ok ot menu se sluchvat 2 neshta chrez 2 async tasks edna v druga
+            //1. Kazchavame data table s user request
+            //2. Izprashtame push message, che ima pending partner request na saotvetnia user
 
             if(selectedUsers.size()>0) {
-            //zatvariame prozoreca i se vrashtame kam main activity
-            finish();
+                //zatvariame prozoreca i se vrashtame kam main activity
+                finish();
 
                 //imame samo 1 izbran partnior, zatova prosto vzimame parvia element ot array
                 int receiverNumber = selectedUsers.get(0);
@@ -194,7 +185,6 @@ public class EditPartnersActivity extends Activity {
                 partnerToAdd.setPartnerAddRequestConfirmed(false);
                 partnerToAdd.setPartnerToConfirm(selectedPartner);
                 partnerToAdd.setUserRequesting(currentUser);
-
 
                 //Kachvame zaiavkata v Backendless
 
@@ -211,34 +201,24 @@ public class EditPartnersActivity extends Activity {
                             public void handleResponse(MessageStatus messageStatus) {
                               Toast.makeText(EditPartnersActivity.this,
                                         R.string.partner_request_sent_toast,Toast.LENGTH_LONG).show();                            }
-
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
                                 Toast.makeText(EditPartnersActivity.this,
                                         R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();                            }
                         });
-
-
-
-                    }
-
+                  }
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
                         Toast.makeText(EditPartnersActivity.this,
                                 R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();
                     }
                 });
-
             } else {
             //ako niama izbrani potrebiteli samo zatvariame prozoreca
                 finish();
-
             }
-
-
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
