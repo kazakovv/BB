@@ -83,7 +83,7 @@ public class SendTo extends ListActivity {
                 return true;
 
             case R.id.action_settings:
-                Intent intentSendMessage = new Intent(this, EditPartnersActivity.class);
+                Intent intentSendMessage = new Intent(this, ManagePartnersMain.class);
                 startActivity(intentSendMessage);
                 return true;
         }

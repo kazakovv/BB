@@ -78,7 +78,11 @@
             android:label="@string/app_name"
             android:parentActivityName=".Main" >
         </activity>
-
+        <activity
+            android:name=".ManagePartnersMain"
+            android:label="@string/app_name"
+            android:parentActivityName=".Main" >
+        </activity>
         <receiver
             android:name="com.backendless.push.BackendlessBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -90,10 +94,7 @@
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name=".ManagePartnersMain"
-            android:label="@string/title_activity_manage_partners_main" >
-        </activity>
+
     </application>
 
 </manifest>
