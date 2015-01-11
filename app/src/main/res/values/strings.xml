@@ -102,18 +102,20 @@
     <string name="partner_request_sent_toast">Your partner request was sent</string>
     <string name="partner_request_not_sent_toast">Your partner request was not sent. Please try again.</string>
     <string name="new_partner_request">New partner request</string>
+    <string name="search_partners_tab">Search</string>
+    <string name="requests_partners_tab">Requests</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>
         <item>Choose Picture</item>
         <item>Choose Video</item>
     </string-array>
-
     <string-array name="sex_options">
         <item>Male</item>
         <item>Female</item>
     </string-array>
 
     <string name="title_activity_edit_partners">EditPartnersActivity</string>
+    <string name="title_activity_manage_partners_main">ManagePartnersMain</string>
 
 </resources>

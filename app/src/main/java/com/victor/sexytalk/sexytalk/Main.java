@@ -203,8 +203,12 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
                 return true;
 
             case R.id.menu_edit_friends:
+                Intent intentManagePartners = new Intent(this, ManagePartnersMain.class);
+                startActivity(intentManagePartners);
+                /*
                 Intent intentSendMessage = new Intent(this, EditPartnersActivity.class);
                 startActivity(intentSendMessage);
+                */
                 return true;
 
         }

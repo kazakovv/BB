@@ -4,13 +4,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-
 /**
- * Tova e pager adapter za Main activity
+ * Tova e adapter za manage partners
  */
-public class PagerAdapter extends FragmentPagerAdapter {
-
-    public PagerAdapter(FragmentManager fm) {
+public class PagerAdapterManagePartners extends FragmentPagerAdapter {
+    public PagerAdapterManagePartners(FragmentManager fm) {
         super(fm);
     }
 
@@ -18,23 +16,13 @@ public class PagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new FragmentLoveBox();
+                return new FragmentSearchPartners();
             case 1:
-
-                return new FragmentLoveDays();
+                return new FragmentPartnerRequests();
             default:
                 break;
         }
-
         return null;
-    }
-
-
-    @Override
-    public int getItemPosition(Object object) {
-
-
-        return super.getItemPosition(object);
     }
 
     @Override

@@ -25,7 +25,7 @@
         android:paddingLeft="@dimen/message_list_vertical_margin"
         android:layout_centerVertical="true"
         android:id="@+id/partnerUsername"
-        android:layout_alignBottom="@+id/thumbnail_partner"
+        android:layout_alignBaseline="@+id/thumbnail_partner"
         android:layout_toRightOf="@+id/thumbnail_partner"
         android:layout_toEndOf="@+id/thumbnail_partner" />
 
@@ -34,7 +34,6 @@
         android:layout_height="wrap_content"
         android:text="Add"
         android:id="@+id/addPartnerButton"
-        android:layout_alignBottom="@+id/partnerUsername"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
