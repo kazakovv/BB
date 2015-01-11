@@ -13,6 +13,8 @@ public class PartnersAddRequest {
     private BackendlessUser partnerToConfirm;
     private String email_userRequesting;
     private String email_partnerToConfirm;
+    private String username_userRequesting;
+    private String username_userToConfirm;
 
     public String getObjectId() {
         return objectId;
@@ -49,5 +51,14 @@ public class PartnersAddRequest {
 
     public void setEmail_partnerToConfirm(String email_partnerToConfirm) {
         this.email_partnerToConfirm = email_partnerToConfirm;
+    }
+
+    public String getUsername_userRequesting() {return username_userRequesting;}
+    public void setUsername_userRequesting(String username_userRequesting) {
+        this.username_userRequesting = username_userRequesting;
+    }
+    public String getUsername_userToConfirm() {return username_userToConfirm;}
+    public void setUsername_userToConfirm(String username_userToConfirm) {
+        this.username_userToConfirm = username_userToConfirm;
     }
 }

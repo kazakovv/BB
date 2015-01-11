@@ -94,7 +94,8 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
         partnerToAdd.setPartnerAddRequestConfirmed(false);
         partnerToAdd.setPartnerToConfirm(selectedPartner);
         partnerToAdd.setUserRequesting(mCurrentUser);
-
+        partnerToAdd.setUsername_userRequesting((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
+        partnerToAdd.setUsername_userToConfirm((String) selectedPartner.getProperty(Statics.KEY_USERNAME));
         //Kachvame zaiavkata v Backendless
 
         Backendless.Data.of(PartnersAddRequest.class).save(partnerToAdd, new AsyncCallback<PartnersAddRequest>() {
