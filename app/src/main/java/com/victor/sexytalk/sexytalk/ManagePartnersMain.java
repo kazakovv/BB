@@ -47,7 +47,7 @@ public class ManagePartnersMain extends FragmentActivity implements ActionBar.Ta
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-
+        pager.setCurrentItem(tab.getPosition());
     }
 
     @Override
