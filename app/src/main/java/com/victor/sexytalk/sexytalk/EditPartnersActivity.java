@@ -41,7 +41,6 @@ Tuk tarsim partniorite
 public class EditPartnersActivity extends Activity {
 
 
-    ////
     protected EditText searchField;
     protected Button searchButton;
     protected ListView listWithFoundUsers;
@@ -104,7 +103,7 @@ public class EditPartnersActivity extends Activity {
                                         android.R.layout.simple_list_item_checked,
                                         userName
                                 );*/
-                                PartnersAdapter adapter = new PartnersAdapter(listWithFoundUsers.getContext(),foundUsers);
+                                PartnersAdapter adapter = new PartnersAdapter(listWithFoundUsers.getContext(),foundUsers, currentUser);
                                 listWithFoundUsers.setAdapter(adapter);
 
                             } else { //zatvariame check dali sme namerili neshto
