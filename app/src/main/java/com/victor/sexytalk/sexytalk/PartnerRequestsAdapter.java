@@ -8,9 +8,13 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 import java.util.List;
 
@@ -28,7 +32,7 @@ public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null ) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.partner_request_item, null);
@@ -46,6 +50,26 @@ public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
             holder.nameLabel.setText(userName);
         //TODO:add on click listeners za 2 butona tuk
 
+            holder.buttonRejectPartner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //iztrivame request ot backendless
+                    Backendless.Data.of(PartnersAddRequest.class)
+                            .remove(mPendingPartnerRequests.get(position), new AsyncCallback<Long>() {
+                                @Override
+                                public void handleResponse(Long aLong) {
+                                    //iztrivame reda ot spisaka
+                                    mPendingPartnerRequests.remove(position);
+                                    notifyDataSetChanged();
+                                }
+
+                                @Override
+                                public void handleFault(BackendlessFault backendlessFault) {
+                                    Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+            });
         return convertView;
     }
     private static class ViewHolder {
