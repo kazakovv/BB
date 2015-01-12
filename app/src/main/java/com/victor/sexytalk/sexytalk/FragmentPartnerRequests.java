@@ -17,6 +17,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.backendless.persistence.QueryOptions;
 
 import java.util.List;
 
@@ -49,17 +50,20 @@ public class FragmentPartnerRequests extends ListFragment {
         //proveriavame dali ima pending partner requests
         String whereClause="email_partnerToConfirm='" + mCurrentUser.getEmail() + "'";
         BackendlessDataQuery query = new BackendlessDataQuery();
+        QueryOptions queryOptions = new QueryOptions();
+        queryOptions.addRelated( "userRequesting" );
+        queryOptions.addRelated( "userRequesting.RELATION-OF-RELATION" );
         query.setWhereClause(whereClause);
         Backendless.Data.of(PartnersAddRequest.class).find(query, new AsyncCallback<BackendlessCollection<PartnersAddRequest>>() {
             @Override
             public void handleResponse(BackendlessCollection<PartnersAddRequest> pendingPartnerRequests) {
                 if(pendingPartnerRequests.getData().size()>0) {
                     mPendingPartnerRequests = pendingPartnerRequests.getData();
+                    Log.d("Vic","ia da vidia tuk");
                     PartnerRequestsAdapter adapter =
-                            new PartnerRequestsAdapter(mPendingPartnersRequestList.getContext(),mPendingPartnerRequests);
+                            new PartnerRequestsAdapter(mPendingPartnersRequestList.getContext(),mPendingPartnerRequests, mCurrentUser);
                     mPendingPartnersRequestList.setAdapter(adapter);
                 }
-                Log.d("Vic","found sth" );
             }
 
             @Override
