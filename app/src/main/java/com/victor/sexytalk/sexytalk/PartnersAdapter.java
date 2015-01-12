@@ -55,7 +55,6 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
         holder.buttonAddPartner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Vic","we are ahre");
                 sendPartnerRequest(position);
                // ((FragmentSearchPartners)mContext).sendPartnerRequest(position);
             }
@@ -74,16 +73,13 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
     }
 
 
-    protected void sendPartnerRequest(int selectedPartnerPosition) {
+    protected void sendPartnerRequest(final int selectedPartnerPosition) {
 
 
         //Ako caknem na add ot list se sluchvat 2 neshta chrez 2 async tasks edna v druga
         //1. Kazchavame data table s user request
         //2. Izprashtame push message, che ima pending partner request na saotvetnia user
 
-        //zatvariame prozoreca i se vrashtame kam main activity
-        Intent mainActivity = new Intent(mContext,Main.class);
-        mContext.startActivity(mainActivity);
 
         final BackendlessUser selectedPartner = mPartners.get(selectedPartnerPosition);
 
@@ -108,6 +104,9 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
                 Backendless.Messaging.publish(receiverID,Statics.KEY_PARTNER_REQUEST,new AsyncCallback<MessageStatus>() {
                     @Override
                     public void handleResponse(MessageStatus messageStatus) {
+                        //iztrivame rezultata ot spisaka i refreshvame spisaka
+                        mPartners.remove(selectedPartnerPosition);
+                        notifyDataSetChanged();
                         Toast.makeText(mContext,
                                 R.string.partner_request_sent_toast, Toast.LENGTH_LONG).show();                            }
                     @Override

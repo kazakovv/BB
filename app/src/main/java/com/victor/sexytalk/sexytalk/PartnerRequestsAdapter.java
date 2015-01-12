@@ -48,8 +48,19 @@ public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
             PartnersAddRequest request = mPendingPartnerRequests.get(position);
             String userName = request.getUsername_userRequesting();
             holder.nameLabel.setText(userName);
-        //TODO:add on click listeners za 2 butona tuk
+            //onClick za accept butona
+            holder.buttonAccceptPartner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //2 asnc tasks edna v druga
+                    //1.dobaviame partniora
+                    //2.iztrivame chakashtia request
 
+
+                }
+            });
+
+            //onClick za reject butona
             holder.buttonRejectPartner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
