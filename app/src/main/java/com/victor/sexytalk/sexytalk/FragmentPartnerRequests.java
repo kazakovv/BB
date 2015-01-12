@@ -47,7 +47,7 @@ public class FragmentPartnerRequests extends ListFragment {
             mCurrentUser = Backendless.UserService.CurrentUser();
         }
         //proveriavame dali ima pending partner requests
-        String whereClause="email_partnerToConfirm='" + mCurrentUser.getEmail() + "'" + "AND partnerAddRequestConfirmed='FALSE'";
+        String whereClause="email_partnerToConfirm='" + mCurrentUser.getEmail() + "'";
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);
         Backendless.Data.of(PartnersAddRequest.class).find(query, new AsyncCallback<BackendlessCollection<PartnersAddRequest>>() {

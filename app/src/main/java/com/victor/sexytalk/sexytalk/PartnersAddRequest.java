@@ -8,7 +8,6 @@ import com.backendless.BackendlessUser;
  */
 public class PartnersAddRequest {
     private String objectId;
-    private Boolean partnerAddRequestConfirmed;
     private BackendlessUser userRequesting;
     private BackendlessUser partnerToConfirm;
     private String email_userRequesting;
@@ -23,11 +22,6 @@ public class PartnersAddRequest {
     public void setObjectId( String objectId ) {
         this.objectId = objectId;
     }
-
-    public Boolean getPartnerAddRequestConfirmed() {return partnerAddRequestConfirmed;}
-
-    public void setPartnerAddRequestConfirmed(Boolean partnerAddRequestConfirmed) {
-        this.partnerAddRequestConfirmed = partnerAddRequestConfirmed;}
 
     public BackendlessUser getUserRequesting() {return userRequesting;}
 

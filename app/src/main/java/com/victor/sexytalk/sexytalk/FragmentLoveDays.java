@@ -158,20 +158,7 @@ public class FragmentLoveDays extends Fragment {
         }
     }
 
-    @Override
-    public void onStop() {
-        super.onStop();
 
-        SharedPreferences savedSettings = getActivity()
-                .getSharedPreferences(Statics.SHARED_PREFS_CALENDAR_VALUES,0);
-
-        SharedPreferences.Editor editor = savedSettings.edit();
-        editor.putInt(Statics.CALENDAR_YEAR,mYear);
-        editor.putInt(Statics.CALENDAR_MONTH,mMonth);
-        editor.putInt(Statics.CALENDAR_DAY,mDay);
-        editor.putInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,mAverageLengthOfMenstrualCycle);
-        editor.commit();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -188,7 +175,7 @@ public class FragmentLoveDays extends Fragment {
     //Helper metod
     protected void determineCyclePhase(int year, int month, int day, int averageLengthOfMenstruation) {
         //izchisliava v koi etap ot cikala e i promenia saobshtenieto
-        if(year != 0 && month != 0 && day != 0 && averageLengthOfMenstruation != 0) {
+        if(year != 0 && day != 0 && averageLengthOfMenstruation != 0) {
             //firstDayOfCycle = new GregorianCalendar(mYear, mMonth, mDay);
             firstDayOfCycle = Calendar.getInstance();
             firstDayOfCycle.set(Calendar.YEAR, year);
@@ -305,21 +292,7 @@ public class FragmentLoveDays extends Fragment {
     } //krai na determine cycle phase helper method
 
 
-    //Helper method
-    //!!!!!!! not used!!!!!!!
-    private void restoreCalendarValuesFromSharedPrefs() {
 
-        //workaroud, zashtoto savedinstanceState vrashta null i ne moga da vazstanovia dannite za
-        //kalendara vav fragmenta
-        SharedPreferences savedValues = getActivity()
-                .getSharedPreferences(Statics.SHARED_PREFS_CALENDAR_VALUES,0);
-        mYear = savedValues.getInt(Statics.CALENDAR_YEAR,0);
-        mMonth = savedValues.getInt(Statics.CALENDAR_MONTH,0);
-        mDay = savedValues.getInt(Statics.CALENDAR_DAY,0);
-        mAverageLengthOfMenstrualCycle =
-                savedValues.getInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,0);
-
-    }
 
     //Helper metod namira spisak s partniorite i dobavia imenata im v spinnera
 

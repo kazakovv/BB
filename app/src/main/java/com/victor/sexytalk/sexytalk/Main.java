@@ -176,8 +176,10 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
                 startActivity(intent);
                 return true;
             case R.id.partner_request:
-
-                //TODO: tr da se dobavie kod
+                Intent partnerRequest = new Intent(this,ManagePartnersMain.class);
+                //slagame toya KEY, za da prevkluchim na pravilia tab ot drugata strana kato otvorim ekrana
+                partnerRequest.putExtra(Statics.KEY_PARTNERS_SELECT_TAB,Statics.KEY_PARTNERS_SELECT_PENDING_REQUESTS);
+                startActivity(partnerRequest);
 
                 return true;
             case R.id.menu_sex:

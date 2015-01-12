@@ -41,6 +41,7 @@ public class Statics {
 
     public static final String KEY_PARTNER_REQUEST = "partnerRequest";
 
-    public static final String SHARED_PREFS_CALENDAR_VALUES = "calendarValuesSharesPrefs";
+    public static final String KEY_PARTNERS_SELECT_TAB = "selectPendingPartnerRequest";
+    public static final String KEY_PARTNERS_SELECT_PENDING_REQUESTS = "selectPendingRequestsTab";
 }
 

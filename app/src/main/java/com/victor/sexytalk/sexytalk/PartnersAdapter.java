@@ -91,7 +91,6 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
         PartnersAddRequest partnerToAdd = new PartnersAddRequest();
         partnerToAdd.setEmail_partnerToConfirm(selectedPartner.getEmail());
         partnerToAdd.setEmail_userRequesting(mCurrentUser.getEmail());
-        partnerToAdd.setPartnerAddRequestConfirmed(false);
         partnerToAdd.setPartnerToConfirm(selectedPartner);
         partnerToAdd.setUserRequesting(mCurrentUser);
         partnerToAdd.setUsername_userRequesting((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));

@@ -2,10 +2,10 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 
 
 public class ManagePartnersMain extends FragmentActivity implements ActionBar.TabListener {
@@ -43,6 +43,11 @@ public class ManagePartnersMain extends FragmentActivity implements ActionBar.Ta
             }
         });
 
+        //chek dali ekranat e otvoren ot main activity s cel da ni izprati kam pending partner requests
+        Intent intent = getIntent();
+        if(intent.getStringExtra(Statics.KEY_PARTNERS_SELECT_TAB) != null) {
+                pager.setCurrentItem(1);
+        }
     }
 
 
