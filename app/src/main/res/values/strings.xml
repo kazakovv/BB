@@ -108,6 +108,7 @@
     <string name="pending_partner_request_reject_button">Reject</string>
     <string name="partner_search_list_button">Add</string>
     <string name="no_pending_partner_requests_message">You have no pending partner requests</string>
+    <string name="new_partner_added_successfully">Partner was added</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>

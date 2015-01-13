@@ -59,7 +59,6 @@ public class FragmentPartnerRequests extends ListFragment {
             public void handleResponse(BackendlessCollection<PartnersAddRequest> pendingPartnerRequests) {
                 if(pendingPartnerRequests.getData().size()>0) {
                     mPendingPartnerRequests = pendingPartnerRequests.getData();
-                    Log.d("Vic","ia da vidia tuk");
                     PartnerRequestsAdapter adapter =
                             new PartnerRequestsAdapter(mPendingPartnersRequestList.getContext(),mPendingPartnerRequests, mCurrentUser);
                     mPendingPartnersRequestList.setAdapter(adapter);

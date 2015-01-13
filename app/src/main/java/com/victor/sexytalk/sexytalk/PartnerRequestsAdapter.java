@@ -20,7 +20,10 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by Victor on 11/01/2015.
@@ -38,7 +41,7 @@ public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null ) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.partner_request_item, null);
@@ -84,8 +87,52 @@ public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
                                         (BackendlessUser[]) currentUserData.get(0).getProperty(Statics.KEY_PARTNERS);
                                 //dobaviame novia partnior kam spisaka i uploadvame v Backendless
                                 BackendlessUser partnerToAdd  = mPendingPartnerRequests.get(position).getUserRequesting();
-                                Log.d("Vic","zashto vrashtash null bre");
-                                //TODO: !!!! return null fixed, prodalzhavame !!!!!
+                                //Dobaviame partnerToAdd kam sashtestvuvashtite partionri
+                                int newSize = partners.length + 1;
+                                BackendlessUser[] newListWithPartners = new BackendlessUser[newSize];
+                                //dobaviame novia partnior v nachaloto na spisaka
+                                newListWithPartners[0] = partnerToAdd;
+                                //dobaviame starite partniori kam novia spisak
+                                int i = 1;
+                                for(BackendlessUser existingPartner : partners) {
+                                    newListWithPartners[i] = existingPartner;
+                                    i++;
+                                }
+                                //updatevame propoerty za current user i kachvame v Backendless
+                               mCurrentUser.setProperty(Statics.KEY_PARTNERS, newListWithPartners);
+                               Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
+                                   @Override
+                                   public void handleResponse(BackendlessUser backendlessUser) {
+                                       //iztrivame pending partner request i updatvame spisaka
+                                       Backendless.Data.of(PartnersAddRequest.class)
+                                               .remove(mPendingPartnerRequests.get(position), new AsyncCallback<Long>() {
+                                                   @Override
+                                                   public void handleResponse(Long aLong) {
+                                                       mPendingPartnerRequests.remove(position);
+                                                       notifyDataSetChanged();
+                                                       Toast.makeText(mContext,R.string.new_partner_added_successfully,Toast.LENGTH_LONG).show();
+
+                                                   }
+
+                                                   @Override
+                                                   public void handleFault(BackendlessFault backendlessFault) {
+                                                       Log.d("Vic","error" + backendlessFault.getMessage());
+                                                       Toast.makeText(mContext,R.string.general_error_message,Toast.LENGTH_LONG).show();
+
+                                                   }
+                                               });
+                                   }
+
+                                   @Override
+                                   public void handleFault(BackendlessFault backendlessFault) {
+                                    Log.d("Vic","error" + backendlessFault.getMessage());
+                                       Toast.makeText(mContext,R.string.general_error_message,Toast.LENGTH_LONG).show();
+
+                                   }
+                               });
+
+
+
                             } else {
                             //tekushtiat potrebitel ne e otkrit, sledovatelno ima greshka
                                 Toast.makeText(mContext,R.string.general_error_message,Toast.LENGTH_LONG).show();
