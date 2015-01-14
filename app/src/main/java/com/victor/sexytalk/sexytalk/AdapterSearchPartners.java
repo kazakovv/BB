@@ -1,8 +1,6 @@
 package com.victor.sexytalk.sexytalk;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +21,14 @@ import java.util.List;
 /**
  * Created by Victor on 10/01/2015.
  */
-public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
+public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
 
     protected Context mContext;
     protected List<BackendlessUser> mPartners;
     protected BackendlessUser mCurrentUser;
 
-    public PartnersAdapter(Context context, List<BackendlessUser> partners, BackendlessUser currentUser) {
-        super(context,R.layout.add_partner_item, partners);
+    public AdapterSearchPartners(Context context, List<BackendlessUser> partners, BackendlessUser currentUser) {
+        super(context,R.layout.item_add_partner, partners);
         mContext = context;
         mPartners = partners;
         mCurrentUser = currentUser;
@@ -40,7 +38,7 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null ) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.add_partner_item, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_add_partner, null);
             holder = new ViewHolder();
             holder.nameLabel = (TextView) convertView.findViewById(R.id.partnerUsername);
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.thumbnail_partner);
@@ -56,7 +54,6 @@ public class PartnersAdapter extends ArrayAdapter<BackendlessUser> {
             @Override
             public void onClick(View v) {
                 sendPartnerRequest(position);
-               // ((FragmentSearchPartners)mContext).sendPartnerRequest(position);
             }
         });
 

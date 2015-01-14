@@ -4,7 +4,6 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -81,7 +80,7 @@ public class FragmentLoveBox extends ListFragment {
                     });
 
 
-                    MessageAdapter adapter = new MessageAdapter(myView.getContext(),
+                    AdapterMessage adapter = new AdapterMessage(myView.getContext(),
                             messagesToDisplay);
 
                     setListAdapter(adapter);

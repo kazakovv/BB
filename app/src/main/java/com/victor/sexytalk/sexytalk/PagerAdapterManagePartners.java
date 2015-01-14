@@ -19,6 +19,8 @@ public class PagerAdapterManagePartners extends FragmentPagerAdapter {
                 return new FragmentSearchPartners();
             case 1:
                 return new FragmentPartnerRequests();
+            case 2:
+                return new FragmentExistingPartners();
             default:
                 break;
         }
@@ -32,6 +34,6 @@ public class PagerAdapterManagePartners extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 }

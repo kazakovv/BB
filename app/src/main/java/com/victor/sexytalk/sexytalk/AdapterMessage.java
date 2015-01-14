@@ -11,20 +11,18 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import static com.victor.sexytalk.sexytalk.R.layout.*;
-
 /**
  * Tozi klas sazdava custom Array Adaptor za spisaka s polucheni saobshtenia.
  * Na vseki red ot liavo se pokazva kartinka v zavisimost dali e izpratena kartinka ili filmche
  * ot drugata strana izliza imeto na choveka
  */
-public class MessageAdapter extends ArrayAdapter<Messages> {
+public class AdapterMessage extends ArrayAdapter<Messages> {
     protected Context mContext;
     protected List<Messages> mMessages;
 
-    public MessageAdapter(Context context, List<Messages> messages) {
+    public AdapterMessage(Context context, List<Messages> messages) {
 
-        super(context, R.layout.message_item, messages);
+        super(context, R.layout.item_message, messages);
 
         mContext = context;
         mMessages = messages;
@@ -34,7 +32,7 @@ public class MessageAdapter extends ArrayAdapter<Messages> {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null ) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.message_item, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_message, null);
             holder = new ViewHolder();
             holder.nameLabel = (TextView) convertView.findViewById(R.id.senderLabel);
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.message_icon);

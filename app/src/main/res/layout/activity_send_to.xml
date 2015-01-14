@@ -10,7 +10,7 @@
         android:id="@android:id/empty"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/empty_recipients_message"
+        android:text="@string/no_exisiting_partners_message"
         />
 
     <ListView

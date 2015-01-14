@@ -68,7 +68,7 @@
     <string name="button_send_message">Send a message</string>
     <string name="send_message_to">To:_____</string>
     <string name="send_message_to_add_users">To: </string>
-    <string name="empty_recipients_message">Add a partner first</string>
+    <string name="no_exisiting_partners_message">Add a partner first</string>
     <string name="view_sexy_calendar_button">Sexy Calendar</string>
     <string name="title_activity_send_message">SendMessage</string>
     <string name="title_activity_send_to">SendTo</string>
@@ -104,9 +104,11 @@
     <string name="new_partner_request">New partner request</string>
     <string name="search_partners_tab">Search</string>
     <string name="requests_partners_tab">Requests</string>
+    <string name="existing_partners_tab">Partners</string>
     <string name="pending_partner_request_accept_button">Accept</string>
     <string name="pending_partner_request_reject_button">Reject</string>
     <string name="partner_search_list_button">Add</string>
+    <string name="partner_delete_list_button">Delete</string>
     <string name="no_pending_partner_requests_message">You have no pending partner requests</string>
     <string name="new_partner_added_successfully">Partner was added</string>
     <string-array name="camera_choices">

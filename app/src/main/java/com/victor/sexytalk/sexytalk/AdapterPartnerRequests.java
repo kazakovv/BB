@@ -28,11 +28,11 @@ import java.util.ListIterator;
 /**
  * Created by Victor on 11/01/2015.
  */
-public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
+public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
     protected Context mContext;
     protected List<PartnersAddRequest> mPendingPartnerRequests;
     protected BackendlessUser mCurrentUser;
-    public PartnerRequestsAdapter(Context context, List<PartnersAddRequest> pendingPartnerRequests,
+    public AdapterPartnerRequests(Context context, List<PartnersAddRequest> pendingPartnerRequests,
                                   BackendlessUser currentUser) {
         super(context, R.layout.partner_request_item, pendingPartnerRequests);
         mContext = context;
