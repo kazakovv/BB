@@ -61,15 +61,23 @@ public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
             holder.buttonAccceptPartner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //3 anync tasks edna v druga
-                    //1.namirame array s segashtinte partniori
+                    //3 async tasks edna v druga
+                    //
+                    //1.namirame array sas segashtinte partniori
                     //2.dobaviame novia partnior kam array i go kachvame v backendless
-                    //3.iztrivame chakashtia request
+                    //3.iztrivame chakashtia request i updatvame spisaka
 
-
+                    //TODO: tova e oprosten check po-dolu dali ima partniori ili ne.
+                    //moze da propusnem 1 async task
+                    /*
+                    Object partners = mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+                    if(partners instanceof BackendlessUser[]) {
+                            //sashtestvuvat partniori veche
+                    } else {
+                            //niama nito 1 partnior
+                    }*/
                     //1. Namirame sashtestvuvashtite partniori
                     String whereClause = "email='" + mCurrentUser.getEmail() + "'";
-
                     BackendlessDataQuery query = new BackendlessDataQuery();
                     QueryOptions queryOptions = new QueryOptions();
                     query.setWhereClause(whereClause);
@@ -81,29 +89,39 @@ public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
                         public void handleResponse(BackendlessCollection<BackendlessUser> currentUser) {
                           List<BackendlessUser> currentUserData = currentUser.getData();
                             if(currentUserData.size()>0 ) {
-                            //nameren e tekushtiat potrebitel
-                            //Tr da vzemem ot properties array s partniorite mu
-                                BackendlessUser[] partners =
-                                        (BackendlessUser[]) currentUserData.get(0).getProperty(Statics.KEY_PARTNERS);
-                                //dobaviame novia partnior kam spisaka i uploadvame v Backendless
-                                BackendlessUser partnerToAdd  = mPendingPartnerRequests.get(position).getUserRequesting();
-                                //Dobaviame partnerToAdd kam sashtestvuvashtite partionri
-                                int newSize = partners.length + 1;
-                                BackendlessUser[] newListWithPartners = new BackendlessUser[newSize];
-                                //dobaviame novia partnior v nachaloto na spisaka
-                                newListWithPartners[0] = partnerToAdd;
-                                //dobaviame starite partniori kam novia spisak
-                                int i = 1;
-                                for(BackendlessUser existingPartner : partners) {
-                                    newListWithPartners[i] = existingPartner;
-                                    i++;
+                                //nameren e tekushtiat potrebitel
+                                //Tr da vzemem ot properties array s partniorite mu
+                                BackendlessUser[] newListWithPartners;
+                                if(currentUserData.get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                                    //ako veche ima drugi partniori
+                                    BackendlessUser[] existingPartners =
+                                            (BackendlessUser[]) currentUserData.get(0).getProperty(Statics.KEY_PARTNERS);
+
+                                    //dobaviame novia partnior kam spisaka i uploadvame v Backendless
+                                    BackendlessUser partnerToAdd = mPendingPartnerRequests.get(position).getUserRequesting();
+                                    //Dobaviame partnerToAdd kam sashtestvuvashtite partionri
+                                    int newSize = existingPartners.length + 1;
+                                    newListWithPartners = new BackendlessUser[newSize];
+                                    //dobaviame novia partnior v nachaloto na spisaka
+                                    newListWithPartners[0] = partnerToAdd;
+                                    //dobaviame starite partniori kam novia spisak
+                                    int i = 1;
+                                    for (BackendlessUser existingPartner : existingPartners) {
+                                        newListWithPartners[i] = existingPartner;
+                                        i++;
+                                    }
+                                } else {
+                                    //ako niama drugi partniori dobaviame samo noviat
+                                    BackendlessUser partnerToAdd = mPendingPartnerRequests.get(position).getUserRequesting();
+                                    newListWithPartners = new BackendlessUser[1];
+                                    newListWithPartners[0] = partnerToAdd;
                                 }
-                                //updatevame propoerty za current user i kachvame v Backendless
+                                //2.updatevame propoerty za current user i kachvame v Backendless
                                mCurrentUser.setProperty(Statics.KEY_PARTNERS, newListWithPartners);
                                Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
                                    @Override
                                    public void handleResponse(BackendlessUser backendlessUser) {
-                                       //iztrivame pending partner request i updatvame spisaka
+                                       //3. iztrivame pending partner request i updatvame spisaka
                                        Backendless.Data.of(PartnersAddRequest.class)
                                                .remove(mPendingPartnerRequests.get(position), new AsyncCallback<Long>() {
                                                    @Override
@@ -111,7 +129,9 @@ public class PartnerRequestsAdapter extends ArrayAdapter<PartnersAddRequest> {
                                                        mPendingPartnerRequests.remove(position);
                                                        notifyDataSetChanged();
                                                        Toast.makeText(mContext,R.string.new_partner_added_successfully,Toast.LENGTH_LONG).show();
-
+                                                        //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                                        // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
+                                                        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
                                                    }
 
                                                    @Override

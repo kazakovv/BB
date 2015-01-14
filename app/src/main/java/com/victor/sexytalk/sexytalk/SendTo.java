@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -20,7 +21,7 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 
 import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class SendTo extends ListActivity {
@@ -30,15 +31,17 @@ public class SendTo extends ListActivity {
     protected ArrayList<String> mRecepientEmails;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_send_to);
 
         //inicializirame arraylists, za da mozem da dobaviame info kam tiah
         mRecepientEmails = new ArrayList<String>();
         mSendTo = new ArrayList<Integer>();
         mRecepientUserNames = new ArrayList<String>();
+
+
 
         //namirame partniorite i zapalvame spisaka
         findPartners();
@@ -92,7 +95,7 @@ public class SendTo extends ListActivity {
     }
 
     private void findPartners() {
-
+        //TODO: tuk moze vaobshte da ne se pravi request do backendless, a da se izpozvat current user properties
         BackendlessUser currentUser = Backendless.UserService.CurrentUser();
 
         String whereClause = "email='" + currentUser.getEmail() + "'";
@@ -108,45 +111,36 @@ public class SendTo extends ListActivity {
          Backendless.Data.of(BackendlessUser.class).find(query, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
              @Override
              public void handleResponse(BackendlessCollection<BackendlessUser> collection) {
-                 List<BackendlessUser> currentUserProperties = collection.getData();
 
-                 int currentUserFound = currentUserProperties.size();
-
-                 if (currentUserFound == 0) {
-                     //no partners
-
-                     AlertDialog.Builder builder = new AlertDialog.Builder(SendTo.this);
-                     builder.setTitle(R.string.error_title)
-                             .setMessage(R.string.general_error_message)
-                             .setPositiveButton(R.string.ok, null);
-                     AlertDialog dialog = builder.create();
-                     dialog.show();
-                 } else {
                      //create list of objects
                      BackendlessUser user = collection.getCurrentPage().get(0);
+                       if(user.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                           //ima partnirori
+                           mPartners = (BackendlessUser[]) user.getProperty(Statics.KEY_PARTNERS);
 
 
-                         mPartners = (BackendlessUser[]) user.getProperty(Statics.KEY_PARTNERS);
+                           int numberOfPartners = mPartners.length;
+
+                           String[] usernames = new String[numberOfPartners];
+                           int i = 0;
 
 
-                         int numberOfPartners = mPartners.length;
+                           for (BackendlessUser partner : mPartners) {
+                               usernames[i] = (String) partner.getProperty(Statics.KEY_USERNAME);
+                               i++;
+                           }
 
-                         String[] usernames = new String[numberOfPartners];
-                         int i = 0;
+                           ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                   SendTo.this,
+                                   android.R.layout.simple_list_item_checked,
+                                   usernames
+                           );
+                           setListAdapter(adapter);
+                       } else {
+                       //niama partniori
+                           //ne pravim nishto
+                       }
 
-
-                         for (BackendlessUser partner : mPartners) {
-                             usernames[i] = (String) partner.getProperty(Statics.KEY_USERNAME);
-                             i++;
-                         }
-
-                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                 SendTo.this,
-                                 android.R.layout.simple_list_item_checked,
-                                 usernames
-                         );
-                         setListAdapter(adapter);
-                 }
              }
 
              @Override

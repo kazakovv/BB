@@ -111,6 +111,23 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
                         }
                     }
             );
+            //Load all relations for users (partners, etc)
+            List<String> rels = new ArrayList<String>();
+            rels.add("*");
+
+                Backendless.Data.of(BackendlessUser.class).loadRelations(currentUser,rels, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser backendlessUser) {
+                        Log.d("Vic", "relation loaded");
+
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        Log.d("Vic", "relation not loaded loaded" + backendlessFault.getMessage());
+
+                    }
+                });
 
         }
 
