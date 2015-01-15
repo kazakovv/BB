@@ -70,33 +70,29 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
                         //update v backendless che e male
                         currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_MALE);
-                        Backendless.Data.of(BackendlessUser.class).save(currentUser, new AsyncCallback<BackendlessUser>() {
+                        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
                             @Override
                             public void handleResponse(BackendlessUser backendlessUser) {
-                            Toast.makeText(context,
-                                    R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
+                                Toast.makeText(context,
+                                        R.string.selection_saved_successfully, Toast.LENGTH_LONG).show();
                                 showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
                                 showPartnersList.setVisibility(View.VISIBLE);
                                 refreshFragments();
-
-                                }
-
-
+                            }
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
                                 Toast.makeText(context,
-                                        R.string.selection_not_saved,Toast.LENGTH_LONG).show();
+                                        R.string.selection_not_saved, Toast.LENGTH_LONG).show();
                             }
                         });
-
 
                         break;
                     case 1:
                        // update v backendless che e female
 
                         currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_FEMALE);
-                        Backendless.Data.of(BackendlessUser.class).save(currentUser, new AsyncCallback<BackendlessUser>() {
+                        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
                             @Override
                             public void handleResponse(BackendlessUser backendlessUser) {
                                 Toast.makeText(context,
@@ -108,10 +104,12 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
+                                String error = backendlessFault.getMessage();
                                 Toast.makeText(context,
                                         R.string.selection_not_saved,Toast.LENGTH_LONG).show();
                             }
                         });
+
                         //TODO: pokazvame zhenskite kalendari i skrivame mazhkia
                         //showSexyCalendarButton.setVisibility(View.VISIBLE);
                         //showPrivateDaysCalendarButton.setVisibility(View.VISIBLE);

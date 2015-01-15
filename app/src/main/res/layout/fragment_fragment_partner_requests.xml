@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/no_exisiting_partners_message"
+        android:text="@string/no_pending_partner_requests_message"
         android:id="@+id/noPendingPartnerRequestsMessage" />
 
     <ListView

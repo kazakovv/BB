@@ -69,6 +69,7 @@
     <string name="send_message_to">To:_____</string>
     <string name="send_message_to_add_users">To: </string>
     <string name="no_exisiting_partners_message">Add a partner first</string>
+
     <string name="view_sexy_calendar_button">Sexy Calendar</string>
     <string name="title_activity_send_message">SendMessage</string>
     <string name="title_activity_send_to">SendTo</string>
