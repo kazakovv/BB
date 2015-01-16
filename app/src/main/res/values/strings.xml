@@ -112,6 +112,10 @@
     <string name="partner_delete_list_button">Delete</string>
     <string name="no_pending_partner_requests_message">You have no pending partner requests</string>
     <string name="new_partner_added_successfully">Partner was added</string>
+    <string name="existing_partner_deleted">Partner was deleted</string>
+    <string name="dialog_delete_partner_confirmation">Are you sure you want to beak up with</string>
+    <string name="dialog_delete_partner_yes_button">Yes</string>
+    <string name="dialog_delete_partner_no_button">No</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Take Video</item>

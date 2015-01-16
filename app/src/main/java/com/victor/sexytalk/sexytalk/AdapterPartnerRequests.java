@@ -184,6 +184,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
                                 @Override
                                 public void handleFault(BackendlessFault backendlessFault) {
+                                    String error = backendlessFault.getMessage();
                                     Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
                                 }
                             });

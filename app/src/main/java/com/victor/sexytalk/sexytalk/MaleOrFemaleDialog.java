@@ -104,20 +104,10 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
-                                String error = backendlessFault.getMessage();
                                 Toast.makeText(context,
                                         R.string.selection_not_saved,Toast.LENGTH_LONG).show();
                             }
                         });
-
-                        //TODO: pokazvame zhenskite kalendari i skrivame mazhkia
-                        //showSexyCalendarButton.setVisibility(View.VISIBLE);
-                        //showPrivateDaysCalendarButton.setVisibility(View.VISIBLE);
-                        //sexyCalendarForGuysButton.setVisibility(View.INVISIBLE);
-
-                        //adapter.notifyDataSetChanged();//tova updatva fragmenta.
-                        //preprashta kam PagerAdapter getItemPosition();
-                        //return POSITION_NONE; oznachava da updatene fragmentite//tova updatva fragmenta.
 
                         break;
                 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,7 +22,7 @@ import java.util.List;
  */
 public class FragmentExistingPartners extends ListFragment {
     BackendlessUser mCurrentUser;
-    BackendlessUser[] mExistingPartners;
+    List<BackendlessUser> mExistingPartners;
     TextView emptyMessage;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,13 @@ public class FragmentExistingPartners extends ListFragment {
         }
         if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
             //imama partniori
-            mExistingPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+            BackendlessUser[] existingPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+
+            mExistingPartners = new ArrayList<BackendlessUser>();
+            for(BackendlessUser partner : existingPartners) {
+                mExistingPartners.add(partner);
+            }
+
             AdapterExistingPartners adapter =
                     new AdapterExistingPartners(getListView().getContext(),mExistingPartners, mCurrentUser);
             getListView().setAdapter(adapter);
