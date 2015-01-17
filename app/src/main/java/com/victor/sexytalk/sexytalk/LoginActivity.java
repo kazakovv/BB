@@ -31,8 +31,8 @@ public class LoginActivity extends Activity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); //vzmoznost da pokazva spinner dokato misli
         setContentView(R.layout.activity_login);
 
-        ActionBar actionbar = getActionBar();
-        actionbar.hide();//skirvame actionabar che e po-krasivo
+        //ActionBar actionbar = getActionBar();
+        //actionbar.hide();//skirvame actionabar che e po-krasivo
 
         //vrazvame ostanalite TextFields i butona
         mEmail = (EditText) findViewById(R.id.login_email);

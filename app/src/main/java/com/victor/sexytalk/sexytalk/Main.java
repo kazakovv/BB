@@ -136,10 +136,10 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
         pager.setAdapter(pAdapter);
         pager.setOffscreenPageLimit(1);
         //TODO: actionbar is depreciated in API 21
-        actionbar = getActionBar();
-        actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionbar.addTab(actionbar.newTab().setText(R.string.tab_chat_title).setTabListener(this));
-        actionbar.addTab(actionbar.newTab().setText(R.string.tab_days_title).setTabListener(this));
+        //actionbar = getActionBar();
+        //actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+        //actionbar.addTab(actionbar.newTab().setText(R.string.tab_chat_title).setTabListener(this));
+        //actionbar.addTab(actionbar.newTab().setText(R.string.tab_days_title).setTabListener(this));
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -149,7 +149,7 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
             @Override
             public void onPageSelected(int position) {
-                actionbar.setSelectedNavigationItem(position);
+              //  actionbar.setSelectedNavigationItem(position);
             }
 
             @Override
