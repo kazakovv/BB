@@ -33,7 +33,6 @@ public class FragmentExistingPartners extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_fragment_existing_partners,container,false);
         emptyMessage = (TextView) inflatedView.findViewById(R.id.noExistingPartnersMessage);
-
         return inflatedView;
     }
 

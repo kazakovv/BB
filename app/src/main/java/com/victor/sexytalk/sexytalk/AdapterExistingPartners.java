@@ -78,12 +78,10 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                                     public void handleResponse(BackendlessUser backendlessUser) {
                                         notifyDataSetChanged();
                                         Toast.makeText(mContext,R.string.existing_partner_deleted,Toast.LENGTH_LONG).show();
-
                                     }
 
                                     @Override
                                     public void handleFault(BackendlessFault backendlessFault) {
-                                        String error = backendlessFault.getMessage();
                                         Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
                                     }
                                 });
@@ -106,52 +104,6 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
 
 
         return convertView;
-    }
-
-    private void deletePartner(int position) {
-        /*
-        //delete partner
-        if (mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-            BackendlessUser[] existingPartners =
-                    (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
-            final int newNumberOfPartners = (existingPartners.length - 1) ;
-            newListWithPartners = new BackendlessUser[newNumberOfPartners];
-            //ako ima poveche ot 1 partnior
-            if(newNumberOfPartners > 0) {
-                //kopirame array kato propuskame user, koito iskame da iztriem
-                for(BackendlessUser user : existingPartners) {
-                    int i = 0;
-                    if(! user.equals(existingPartners[position]))
-                        newListWithPartners[i] = user;
-                    i++;
-                }
-                Log.d("Vic", "result");
-            }
-            //ako ima 1 partnior izprashtame prazen spisak v Backendless.
-            //toi veche e sazdaden gore, kadeto inicializirame newListWithPartners[0]
-            mCurrentUser.setProperty(Statics.KEY_PARTNERS,newListWithPartners);
-            Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
-                @Override
-                public void handleResponse(BackendlessUser backendlessUser) {
-                    Toast.makeText(mContext,R.string.existing_partner_deleted,Toast.LENGTH_LONG).show();
-                    if(newListWithPartners.length > 0) {
-                        mPartners = new BackendlessUser[newListWithPartners.length];
-                        mPartners = newListWithPartners;
-                    } else {
-                        mPartners = new BackendlessUser[0];
-                    }
-                    notifyDataSetChanged();
-                    Log.d("Vic","success");
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    String error = backendlessFault.getMessage();
-                    Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-        */
     }
 
     private static class ViewHolder {
