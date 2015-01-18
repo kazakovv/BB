@@ -52,8 +52,7 @@ public class Main extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Log.d("Vic","set up");
-
+        
         //vrazvame osnovnotosaobshtenie
         currentUser = Backendless.UserService.CurrentUser();
         //ako niama lognat potrebitel preprashta kam log-in ekrana
