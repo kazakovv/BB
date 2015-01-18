@@ -29,6 +29,17 @@ public class PagerAdapter extends FragmentPagerAdapter {
         return null;
     }
 
+    @Override
+    public CharSequence getPageTitle(int position) {
+        switch (position) {
+            case 0:
+                return "LoveBox";
+            case 1:
+                return "LoveDays";
+        }
+        return super.getPageTitle(position);
+
+    }
 
     @Override
     public int getItemPosition(Object object) {

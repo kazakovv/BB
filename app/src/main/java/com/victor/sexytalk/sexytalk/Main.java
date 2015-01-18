@@ -30,9 +30,13 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.Message;
 import com.backendless.persistence.BackendlessDataQuery;
 
+import it.neokree.materialtabs.MaterialTab;
+import it.neokree.materialtabs.MaterialTabHost;
+import it.neokree.materialtabs.MaterialTabListener;
 
-public class Main extends ActionBarActivity {
-    ViewPager pager;
+
+public class Main extends ActionBarActivity implements MaterialTabListener {
+    protected ViewPager pager;
     static Context context;
     protected BackendlessUser currentUser;
     protected static Boolean pendingPartnerRequest;
@@ -46,6 +50,8 @@ public class Main extends ActionBarActivity {
     public static final String TAG = Main.class.getSimpleName();
 
     protected MenuItem addPartner;
+
+    protected MaterialTabHost tabHost;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,12 +144,15 @@ public class Main extends ActionBarActivity {
         pager = (ViewPager) findViewById(R.id.pager);
         PagerAdapter pAdapter = new PagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pAdapter);
-        pager.setOffscreenPageLimit(1);
+        //pager.setOffscreenPageLimit(1);
+
+        tabHost = (MaterialTabHost) this.findViewById(R.id.materialTabHost);
 
         //actionbar = getActionBar();
         //actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         //actionbar.addTab(actionbar.newTab().setText(R.string.tab_chat_title).setTabListener(this));
         //actionbar.addTab(actionbar.newTab().setText(R.string.tab_days_title).setTabListener(this));
+
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
@@ -153,7 +162,8 @@ public class Main extends ActionBarActivity {
 
             @Override
             public void onPageSelected(int position) {
-              //  actionbar.setSelectedNavigationItem(position);
+                // when user do a swipe the selected tab change
+                tabHost.setSelectedNavigationItem(position);
             }
 
             @Override
@@ -162,8 +172,15 @@ public class Main extends ActionBarActivity {
             }
         });
 
+        // insert all tabs from pagerAdapter data
+        for (int i = 0; i < pAdapter.getCount(); i++) {
+            tabHost.addTab(
+                    tabHost.newTab()
+                            .setTabListener(this)
+                            .setText(pAdapter.getPageTitle(i))
 
-
+            );
+        }
     }
 
 
@@ -352,7 +369,19 @@ public class Main extends ActionBarActivity {
     }
 
 
+    @Override
+    public void onTabSelected(MaterialTab tab) {
+    // when the tab is clicked the pager swipe content to the tab position
+        pager.setCurrentItem(tab.getPosition());
+    }
 
+    @Override
+    public void onTabReselected(MaterialTab tab) {
 
+    }
 
+    @Override
+    public void onTabUnselected(MaterialTab tab) {
+
+    }
 }
