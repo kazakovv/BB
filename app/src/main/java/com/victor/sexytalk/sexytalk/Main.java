@@ -50,8 +50,9 @@ public class Main extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.app_toolbar);
-        //setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        Log.d("Vic","set up");
 
         //vrazvame osnovnotosaobshtenie
         currentUser = Backendless.UserService.CurrentUser();
@@ -61,9 +62,6 @@ public class Main extends ActionBarActivity {
             //prashta ni kam login screen
             navigateToLogin();
         } else {
-            // ako ima lognat potrebitel prodalzhava natatak
-            //TODO: actionbar is depreciated in API 21
-
 
 
             //check za pending parner request

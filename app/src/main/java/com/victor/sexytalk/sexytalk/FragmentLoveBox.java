@@ -2,6 +2,7 @@ package com.victor.sexytalk.sexytalk;
 
 
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -32,7 +33,6 @@ import java.util.List;
 public class FragmentLoveBox extends ListFragment {
    protected List<Messages> messagesToDisplay;
    protected View myView;
-   protected Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,7 +49,8 @@ public class FragmentLoveBox extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = (Toolbar) getActivity().findViewById(R.id.app_toolbar);
+        //set up the toolbar
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         ( (Main)getActivity()).setSupportActionBar(toolbar);
 
         final BackendlessUser currentUser = Backendless.UserService.CurrentUser();

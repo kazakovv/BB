@@ -2,11 +2,14 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ListFragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -40,7 +43,7 @@ public class FragmentLoveDays extends Fragment {
     protected BackendlessUser currentUser;
     protected Button showPrivateDaysDialog;
     protected Spinner listOfPartnersSpinner;
-    BackendlessUser[] mPartners; //array s partnirite
+    protected BackendlessUser[] mPartners; //array s partnirite
 
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
 
@@ -53,8 +56,10 @@ public class FragmentLoveDays extends Fragment {
     protected TextView cyclePhaseTitle;
     protected TextView cyclePhaseStatus;
     protected TextView cycleExplainationText;
-    List<CycleTitles> cycleTitles; //statusite, koito se svaliat ot backendless
+    protected List<CycleTitles> cycleTitles; //statusite, koito se svaliat ot backendless
     protected Calendar firstDayOfCycle;
+
+    protected Toolbar toolbar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,17 @@ public class FragmentLoveDays extends Fragment {
         final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
 
         return inflatedView;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //set up the toolbar
+
+        //toolbar.inflateMenu(R.menu.main_menu);
+        Log.d("Vic","What now");
+       // ( (Main)getActivity()).setSupportActionBar(toolbar);
+
     }
 
     @Override
