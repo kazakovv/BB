@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,13 +30,15 @@ public class SendTo extends ListActivity {
     protected ArrayList<Integer> mSendTo;
     protected ArrayList<String> mRecepientUserNames;
     protected ArrayList<String> mRecepientEmails;
-
+    protected Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_to);
-
+        //setup toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
         //inicializirame arraylists, za da mozem da dobaviame info kam tiah
         mRecepientEmails = new ArrayList<String>();
         mSendTo = new ArrayList<Integer>();

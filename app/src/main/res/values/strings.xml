@@ -31,8 +31,8 @@
     <string name="login_error_title">Oops!</string>
     <string name="general_error_title">Oops!</string>
     <string name="logout_menu_title">Logout</string>
-    <string name="tab_days_title">Love Days</string>
-    <string name="tab_chat_title">Love Box</string>
+    <string name="tab_love_days_title">Love Days</string>
+    <string name="tab_love_box_title">Love Box</string>
     <string name="tab_friends_title">Friends</string>
     <string name="no_friends_added_message">Add friends to begin</string>
     <string name="no_messages">You have no new messages</string>

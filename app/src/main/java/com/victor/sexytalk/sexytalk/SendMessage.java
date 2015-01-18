@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -35,11 +37,12 @@ import java.util.Date;
 import java.util.List;
 
 
-public class SendMessage extends Activity {
-    EditText messageToSend;
-    ImageView mUploadMedia;
-    TextView mSendMessageTo;
-    String mMessageType;
+public class SendMessage extends ActionBarActivity {
+    protected EditText messageToSend;
+    protected ImageView mUploadMedia;
+    protected TextView mSendMessageTo;
+    protected String mMessageType;
+    protected Toolbar toolbar;
 
     ArrayList<String> backendlessUserNames; //spisak s Usernames na poluchatelite na saobshtenieto
     ArrayList<String> backendlessRecepientEmails; //spisak s emails na poluchatelite na saobshtenieto
@@ -60,6 +63,7 @@ public class SendMessage extends Activity {
     public static final int FILE_SIZE_LIMIT = 1024*1024*10; //1024*1024 = 1MB
 
     public static final String TAG = SendMessage.class.getSimpleName();
+
 
     //onCLick listener za uload na picture ili video
     protected DialogInterface.OnClickListener mUploadPictureOrVideo =
@@ -348,6 +352,12 @@ public class SendMessage extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_message);
+        //setup toolbar
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        //toolbar.setLogo(R.drawable.launch_icon);
+        setSupportActionBar(toolbar);
+
         mUploadMedia = (ImageView) findViewById(R.id.uploadPictureOrMovie);
 
         mUploadMedia.setOnClickListener(new View.OnClickListener() {

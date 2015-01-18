@@ -6,4 +6,6 @@
     <dimen name="message_list_vertical_margin">8dp</dimen>
     <dimen name="login_vertical_margin">165dp</dimen>
     <dimen name="login_padding">10dp</dimen>
+    <dimen name="default_padding">10dp</dimen>
+    <dimen name="margin_top_send_message_activity">60dp</dimen>
 </resources>

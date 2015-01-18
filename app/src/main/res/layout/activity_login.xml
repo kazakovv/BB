@@ -14,10 +14,7 @@
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:paddingLeft="@dimen/login_padding"
-        android:paddingRight="@dimen/login_padding"
-
-
-        >
+        android:paddingRight="@dimen/login_padding" >
 
         <EditText
             android:layout_width="match_parent"

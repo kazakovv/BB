@@ -57,6 +57,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar.setLogo(R.drawable.launch_icon);
         setSupportActionBar(toolbar);
         
         //vrazvame osnovnotosaobshtenie
@@ -142,7 +143,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         }
 
         pager = (ViewPager) findViewById(R.id.pager);
-        PagerAdapter pAdapter = new PagerAdapter(getSupportFragmentManager());
+        PagerAdapter pAdapter = new PagerAdapter(getSupportFragmentManager(), this);
         pager.setAdapter(pAdapter);
         //pager.setOffscreenPageLimit(1);
 
