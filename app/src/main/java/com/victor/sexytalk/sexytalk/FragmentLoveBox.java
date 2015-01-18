@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,8 +30,9 @@ import java.util.List;
  * Created by Victor on 13/10/2014.
  */
 public class FragmentLoveBox extends ListFragment {
-    List<Messages> messagesToDisplay;
-    View myView;
+   protected List<Messages> messagesToDisplay;
+   protected View myView;
+   protected Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,9 +49,12 @@ public class FragmentLoveBox extends ListFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.app_toolbar);
+        ( (Main)getActivity()).setSupportActionBar(toolbar);
 
         final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
         if(currentUser != null) {
+
             String whereClause = "recepientEmails LIKE '%" + currentUser.getEmail() + "%'";
 
             BackendlessDataQuery query = new BackendlessDataQuery();

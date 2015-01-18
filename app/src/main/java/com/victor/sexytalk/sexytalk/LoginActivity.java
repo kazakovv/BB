@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 import android.view.Window;
@@ -30,6 +31,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); //vzmoznost da pokazva spinner dokato misli
         setContentView(R.layout.activity_login);
+
 
         //ActionBar actionbar = getActionBar();
         //actionbar.hide();//skirvame actionabar che e po-krasivo

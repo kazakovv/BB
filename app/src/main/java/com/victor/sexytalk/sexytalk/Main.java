@@ -1,8 +1,6 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.app.ActionBar;
 import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,6 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,12 +31,12 @@ import com.backendless.messaging.Message;
 import com.backendless.persistence.BackendlessDataQuery;
 
 
-public class Main extends FragmentActivity implements ActionBar.TabListener {
+public class Main extends ActionBarActivity {
     ViewPager pager;
-    ActionBar actionbar;
     static Context context;
     protected BackendlessUser currentUser;
     protected static Boolean pendingPartnerRequest;
+    protected Toolbar toolbar;
 
     protected String MaleOrFemale;
     TextView mainMessage;
@@ -48,8 +49,9 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.app_toolbar);
+        //setSupportActionBar(toolbar);
 
         //vrazvame osnovnotosaobshtenie
         currentUser = Backendless.UserService.CurrentUser();
@@ -60,6 +62,9 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
             navigateToLogin();
         } else {
             // ako ima lognat potrebitel prodalzhava natatak
+            //TODO: actionbar is depreciated in API 21
+
+
 
             //check za pending parner request
             checkForPendingParnerRequests();
@@ -129,13 +134,15 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
                     }
                 });
 
+
+
         }
 
         pager = (ViewPager) findViewById(R.id.pager);
         PagerAdapter pAdapter = new PagerAdapter(getSupportFragmentManager());
         pager.setAdapter(pAdapter);
         pager.setOffscreenPageLimit(1);
-        //TODO: actionbar is depreciated in API 21
+
         //actionbar = getActionBar();
         //actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         //actionbar.addTab(actionbar.newTab().setText(R.string.tab_chat_title).setTabListener(this));
@@ -299,7 +306,7 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
+         inflater.inflate(R.menu.main_menu, menu);
 
         //vrazvame butona za dobaviane na novi partniori
         addPartner = menu.findItem(R.id.partner_request);
@@ -348,20 +355,7 @@ public class Main extends FragmentActivity implements ActionBar.TabListener {
     }
 
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-        pager.setCurrentItem(tab.getPosition());
-    }
 
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
-
-    }
 
 
 }
