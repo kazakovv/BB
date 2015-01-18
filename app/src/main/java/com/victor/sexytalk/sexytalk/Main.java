@@ -3,10 +3,7 @@ package com.victor.sexytalk.sexytalk;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -143,7 +139,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         }
 
         pager = (ViewPager) findViewById(R.id.pager);
-        PagerAdapter pAdapter = new PagerAdapter(getSupportFragmentManager(), this);
+        PagerAdapterMain pAdapter = new PagerAdapterMain(getSupportFragmentManager(), this);
         pager.setAdapter(pAdapter);
         //pager.setOffscreenPageLimit(1);
 
@@ -219,7 +215,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 //slagame toya KEY, za da prevkluchim na pravilia tab ot drugata strana kato otvorim ekrana
                 partnerRequest.putExtra(Statics.KEY_PARTNERS_SELECT_TAB,Statics.KEY_PARTNERS_SELECT_PENDING_REQUESTS);
                 startActivity(partnerRequest);
-
                 return true;
             case R.id.menu_sex:
                 DialogFragment sexDialog = new MaleOrFemaleDialog();
@@ -246,10 +241,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             case R.id.menu_edit_friends:
                 Intent intentManagePartners = new Intent(this, ManagePartnersMain.class);
                 startActivity(intentManagePartners);
-                /*
-                Intent intentSendMessage = new Intent(this, EditPartnersActivity.class);
-                startActivity(intentSendMessage);
-                */
                 return true;
 
         }

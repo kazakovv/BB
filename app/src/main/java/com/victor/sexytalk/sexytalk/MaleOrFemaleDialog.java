@@ -6,9 +6,7 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.UserService;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
@@ -38,7 +35,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
     //private Button sexyCalendarForGuysButton;
 
     ViewPager pager; //izpolzvat se za updatvane na fragmenta sled kato izbera maz ili zhena
-    PagerAdapter adapter;
+    PagerAdapterMain adapter;
 
     Context context;
     @Override
@@ -53,7 +50,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
         //sexyCalendarForGuysButton = (Button) getActivity().findViewById(R.id.sexyCalendarGuys);
 
         pager = (ViewPager) getActivity().findViewById(R.id.pager);
-        adapter = (PagerAdapter) pager.getAdapter();
+        adapter = (PagerAdapterMain) pager.getAdapter();
 
         context = getActivity();
 
@@ -117,7 +114,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
     }
 protected void refreshFragments(){
-   PagerAdapter adapter = (PagerAdapter) pager.getAdapter();
+   PagerAdapterMain adapter = (PagerAdapterMain) pager.getAdapter();
    pager.setAdapter(adapter);
    pager.setCurrentItem(1);
 

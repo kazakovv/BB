@@ -9,9 +9,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 /**
  * Tova e pager adapter za Main activity
  */
-public class PagerAdapter extends FragmentPagerAdapter {
+public class PagerAdapterMain extends FragmentPagerAdapter {
     Context mContext;
-    public PagerAdapter(FragmentManager fm, Context context) {
+    public PagerAdapterMain(FragmentManager fm, Context context) {
 
         super(fm);
         this.mContext = context;
