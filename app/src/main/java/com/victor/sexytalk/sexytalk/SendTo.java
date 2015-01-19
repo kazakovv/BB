@@ -1,7 +1,6 @@
 package com.victor.sexytalk.sexytalk;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -9,26 +8,20 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
+
 
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.BackendlessDataQuery;
-import com.backendless.persistence.QueryOptions;
+
 
 import java.util.ArrayList;
 
 
 
-public class SendTo extends ActionBarActivity    {
+public class SendTo extends ActionBarActivity   {
     protected BackendlessUser[] mPartners;
     protected BackendlessUser mCurrentUSer;
     protected ArrayList<Integer> mSendTo;
@@ -58,6 +51,7 @@ public class SendTo extends ActionBarActivity    {
             mAdapter = new AdapterSendTo(mPartners);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
         }
         //setup toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,10 +66,6 @@ public class SendTo extends ActionBarActivity    {
         mRecepientUserNames = new ArrayList<String>();
 
 
-
-        //namirame partniorite i zapalvame spisaka
-        //findPartners();
-        //getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
     }
 
@@ -105,9 +95,13 @@ public class SendTo extends ActionBarActivity    {
 */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        //TODO:sigurno ima po-dobar variant ot tova da se izpolzvat statichni promenlivi v adaptora
+        mRecepientEmails = AdapterSendTo.mRecepientEmails;
+        mRecepientUserNames = AdapterSendTo.mRecepientUserNames;
         int id = item.getItemId();
         switch(item.getItemId()) {
             case R.id.action_ok:
+
                 Intent intent = new Intent(SendTo.this, SendMessage.class);
 
                 intent.putStringArrayListExtra(Statics.KEY_USERNAME, mRecepientUserNames);
@@ -124,5 +118,8 @@ public class SendTo extends ActionBarActivity    {
         return super.onOptionsItemSelected(item);
 
     }
+
+
+
 
 }

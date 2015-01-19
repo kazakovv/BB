@@ -2,7 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    >
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,6 +28,7 @@
         android:layout_toRightOf="@+id/thumbnail_partner"
         android:paddingLeft="@dimen/message_list_vertical_margin"
         android:text="Medium Text"
+
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <CheckBox
@@ -32,5 +37,7 @@
         android:id="@+id/sendYesNo"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+
+        />
 </RelativeLayout>

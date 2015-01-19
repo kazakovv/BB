@@ -1,24 +1,29 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.backendless.BackendlessUser;
+
+import java.util.ArrayList;
 
 /**
  * Created by Victor on 19/01/2015.
  */
 public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder> {
-    private BackendlessUser[] mPartners;
+    private static BackendlessUser[] mPartners;
+
+    //TODO:ne moga da nameria po-dobro reshenie
+    public static ArrayList<Integer> mSendTo = new ArrayList<Integer>();
+
+    public static ArrayList<String> mRecepientUserNames = new ArrayList<String>();
+    public static ArrayList<String> mRecepientEmails = new ArrayList<String>();
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -35,16 +40,28 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
             mSendYesNo = (CheckBox) itemLayoutView.findViewById(R.id.sendYesNo);
 
             //mSendYesNo.setOnClickListener(this);
+            mSendYesNo.setClickable(false);
             itemLayoutView.setOnClickListener(this);
         }
 
 
         @Override
         public void onClick(View v) {
+            //TODO: izpolzvam statichni promenlivi. Posle gi vzimam v SendTo kato se cakne na izprati ot toolbar
+            // Ne e nai-dobroto reshenie
+
             if(mSendYesNo.isChecked()) {
                 mSendYesNo.setChecked(false);
+                int positionToRemove = mSendTo.indexOf(getPosition());
+                mSendTo.remove(positionToRemove);
+                mRecepientEmails.remove(positionToRemove);
+                mRecepientUserNames.remove(positionToRemove);
+
             } else {
                 mSendYesNo.setChecked(true);
+                mSendTo.add(getPosition());
+                mRecepientEmails.add(mPartners[getPosition()].getEmail());
+                mRecepientUserNames.add((String) mPartners[getPosition()].getProperty(Statics.KEY_USERNAME));
             }
         }
     }

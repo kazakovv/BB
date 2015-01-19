@@ -20,7 +20,9 @@
         android:id="@+id/list_with_partners"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+
+        />
 
 
 </LinearLayout>
