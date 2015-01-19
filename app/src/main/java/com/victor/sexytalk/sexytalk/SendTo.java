@@ -1,17 +1,20 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.app.AlertDialog;
-import android.app.ListActivity;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.TextView;
+
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -25,20 +28,44 @@ import java.util.ArrayList;
 
 
 
-public class SendTo extends ListActivity {
+public class SendTo extends ActionBarActivity    {
     protected BackendlessUser[] mPartners;
+    protected BackendlessUser mCurrentUSer;
     protected ArrayList<Integer> mSendTo;
     protected ArrayList<String> mRecepientUserNames;
     protected ArrayList<String> mRecepientEmails;
     protected Toolbar toolbar;
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_to);
+        //vrazvam mCurrentUser i list
+        if (Backendless.UserService.CurrentUser() != null) {
+            mCurrentUSer = Backendless.UserService.CurrentUser();
+            mPartners = (BackendlessUser[]) mCurrentUSer.getProperty(Statics.KEY_PARTNERS);
+            //vrazvame recyclerview
+            mRecyclerView = (RecyclerView) findViewById(R.id.list_with_partners);
+            mRecyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            // specify an adapter (see also next example)
+            mAdapter = new AdapterSendTo(mPartners);
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        }
         //setup toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        setSupportActionBar(toolbar);
+
+
+
         //inicializirame arraylists, za da mozem da dobaviame info kam tiah
         mRecepientEmails = new ArrayList<String>();
         mSendTo = new ArrayList<Integer>();
@@ -47,8 +74,8 @@ public class SendTo extends ListActivity {
 
 
         //namirame partniorite i zapalvame spisaka
-        findPartners();
-        getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+        //findPartners();
+        //getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
     }
 
@@ -59,6 +86,7 @@ public class SendTo extends ListActivity {
 
     }
 
+/*
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
@@ -74,7 +102,7 @@ public class SendTo extends ListActivity {
             mRecepientUserNames.remove(positionToRemove);
         }
     }
-
+*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -96,69 +124,5 @@ public class SendTo extends ListActivity {
         return super.onOptionsItemSelected(item);
 
     }
-
-    private void findPartners() {
-        //TODO: tuk moze vaobshte da ne se pravi request do backendless, a da se izpozvat current user properties
-        BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-
-        String whereClause = "email='" + currentUser.getEmail() + "'";
-
-        BackendlessDataQuery query = new BackendlessDataQuery();
-        QueryOptions queryOptions = new QueryOptions();
-        query.setWhereClause(whereClause);
-        queryOptions.addRelated( "partners" );
-        queryOptions.addRelated( "partners.RELATION-OF-RELATION" );
-        query.setQueryOptions( queryOptions );
-
-
-         Backendless.Data.of(BackendlessUser.class).find(query, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
-             @Override
-             public void handleResponse(BackendlessCollection<BackendlessUser> collection) {
-
-                     //create list of objects
-                     BackendlessUser user = collection.getCurrentPage().get(0);
-                       if(user.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-                           //ima partnirori
-                           mPartners = (BackendlessUser[]) user.getProperty(Statics.KEY_PARTNERS);
-
-
-                           int numberOfPartners = mPartners.length;
-
-                           String[] usernames = new String[numberOfPartners];
-                           int i = 0;
-
-
-                           for (BackendlessUser partner : mPartners) {
-                               usernames[i] = (String) partner.getProperty(Statics.KEY_USERNAME);
-                               i++;
-                           }
-
-                           ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                   SendTo.this,
-                                   android.R.layout.simple_list_item_checked,
-                                   usernames
-                           );
-                           setListAdapter(adapter);
-                       } else {
-                       //niama partniori
-                           //ne pravim nishto
-                       }
-
-             }
-
-             @Override
-             public void handleFault(BackendlessFault backendlessFault) {
-                 Log.e("Vic", backendlessFault.getMessage());
-                 AlertDialog.Builder builder = new AlertDialog.Builder(SendTo.this);
-                 builder.setTitle(R.string.error_title)
-                         .setMessage(R.string.general_error_message)
-                         .setPositiveButton(R.string.ok, null);
-                 AlertDialog dialog = builder.create();
-                 dialog.show();
-             }
-         });
-
-    }
-
 
 }
