@@ -391,6 +391,20 @@ public class SendMessage extends ActionBarActivity {
 
 
         if(id == R.id.action_send) {
+            //proverka dali ima recepients i dali ima text
+            if(messageToSend.getText().toString().equals("")){
+                Toast.makeText(this,R.string.toast_no_love_message,Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
+            }
+
+            //proveriavame dali poleto za tova do kogo da izpratim saobsthenieto e prazno
+            //Ako e ravno na parvonachalnata stoinost To:___, znachi ne sa izprani poluchateli
+            String toMessage= mSendMessageTo.getText().toString();
+            String test = getResources().getString(R.string.send_message_to);
+            if( toMessage.equals(test) ) {
+                Toast.makeText(this,R.string.toast_no_recepients,Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
+            }
 
 
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -407,6 +421,8 @@ public class SendMessage extends ActionBarActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
 
+
+            //TODO: mozem da gi namerim direkto bez query
             //namirame backendless users po emails
             //kato namerim poluchatelite i zapalnim List<BackendlessUser> recepients izprashtame
             Backendless.Data.of(BackendlessUser.class).find(dataQuery,
