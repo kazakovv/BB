@@ -1,14 +1,36 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.victor.swipeviews.SendMessage">
 
-
-    <item android:id="@+id/action_send"
+    <item
+        android:id="@+id/photoMenu"
         android:title="@string/recipients_send_button_action_bar"
-        android:orderInCategory="100"
+        android:visible="true"
         android:showAsAction="always"
         app:showAsAction="always"
-        android:visible="true"/>
+        android:icon="@drawable/ic_action_camera">
 
+    </item>
+
+    <item android:id="@+id/action_rotate_left"
+        android:title="@string/image_rotate_left"
+        android:icon="@drawable/ic_action_rotate_left"
+        android:showAsAction="always"
+        app:showAsAction="always"
+        android:visible="false"/>
+    <item android:id="@+id/action_rotate_right"
+        android:title="@string/image_rotate_right"
+        android:icon="@drawable/ic_action_rotate_right"
+        android:showAsAction="always"
+        app:showAsAction="always"
+        android:visible="false"/>
+
+    <item
+    android:id="@+id/action_send"
+    android:orderInCategory="100"
+    android:showAsAction="always"
+    android:title="@string/recipients_send_button_action_bar"
+    android:visible="true"
+    app:showAsAction="always"/>
 </menu>

@@ -96,6 +96,7 @@ public class SendTo extends ActionBarActivity   {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //TODO:sigurno ima po-dobar variant ot tova da se izpolzvat statichni promenlivi v adaptora
+        AdapterSendTo.
         mRecepientEmails = AdapterSendTo.mRecepientEmails;
         mRecepientUserNames = AdapterSendTo.mRecepientUserNames;
         int id = item.getItemId();

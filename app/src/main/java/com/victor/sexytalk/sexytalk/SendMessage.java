@@ -39,23 +39,17 @@ import java.util.List;
 
 public class SendMessage extends ActionBarActivity {
     protected EditText messageToSend;
-    protected ImageView mUploadMedia;
     protected TextView mSendMessageTo;
     protected String mMessageType;
     protected Toolbar toolbar;
 
-    ArrayList<String> backendlessUserNames; //spisak s Usernames na poluchatelite na saobshtenieto
-    ArrayList<String> backendlessRecepientEmails; //spisak s emails na poluchatelite na saobshtenieto
-    String recepientEmails="";
+    protected ArrayList<String> backendlessUserNames; //spisak s Usernames na poluchatelite na saobshtenieto
+    protected ArrayList<String> backendlessRecepientEmails; //spisak s emails na poluchatelite na saobshtenieto
+    protected String recepientEmails="";
 
     public static final int TAKE_PHOTO_REQUEST = 0;
-    public static final int TAKE_VIDEO_REQUEST = 1;
     public static final int CHOOSE_PHOTO_REQUEST = 2;
-    public static final int CHOOSE_VIDEO_REQUEST =3;
-
     public static final int MEDIA_TYPE_IMAGE = 4;
-    public static final int MEDIA_TYPE_VIDEO = 5;
-
     public static final int ACTIVITY_SEND_TO = 11;
 
     protected Uri mMediaUri;
@@ -63,7 +57,9 @@ public class SendMessage extends ActionBarActivity {
     public static final int FILE_SIZE_LIMIT = 1024*1024*10; //1024*1024 = 1MB
 
     public static final String TAG = SendMessage.class.getSimpleName();
-
+    protected MenuItem mRotateLeft;
+    protected MenuItem mRotateRight;
+    ImageView imageViewForThumbnailPreview;
 
     //onCLick listener za uload na picture ili video
     protected DialogInterface.OnClickListener mUploadPictureOrVideo =
@@ -80,28 +76,14 @@ public class SendMessage extends ActionBarActivity {
                                 takePicture();
                             }
                             break;
-                        case 1: //take video
-                            mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO); //tova e metod, koito e definiran po-dolu
-                            if (mMediaUri == null) {
-                                Toast.makeText(SendMessage.this, R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();
-                            } else {
-                                mMessageType = Statics.TYPE_VIDEO;
-                                takeVideo();
-                            }
-                            break;
-                        case 2: //choose picture
+
+                        case 1: //choose picture
                             mMessageType = Statics.TYPE_IMAGE;
                             Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                             choosePhotoIntent.setType("image/*");
                             startActivityForResult(choosePhotoIntent,CHOOSE_PHOTO_REQUEST);
                             break;
-                        case 3: //choose video
-                            mMessageType = Statics.TYPE_VIDEO;
-                            Intent chooseVideoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                            chooseVideoIntent.setType("video/*");
-                            Toast.makeText(SendMessage.this,R.string.warning_max_video_size,Toast.LENGTH_LONG).show();
-                            startActivityForResult(chooseVideoIntent, CHOOSE_VIDEO_REQUEST);
-                            break;
+
                     }
                 }
 
@@ -118,11 +100,8 @@ public class SendMessage extends ActionBarActivity {
                         String environmentDirectory; //
                         //ako snimame picture zapismave v papkata za kartiniki, ako ne v papkata za Movies
 
-                        if(mediaType == MEDIA_TYPE_IMAGE) {
-                            environmentDirectory = Environment.DIRECTORY_PICTURES;
-                        } else {
-                            environmentDirectory = Environment.DIRECTORY_MOVIES;
-                        }
+
+                        environmentDirectory = Environment.DIRECTORY_PICTURES;
                         File mediaStorageDirectory = new File(
                                 Environment.getExternalStoragePublicDirectory(environmentDirectory),
                                 appName);
@@ -137,18 +116,13 @@ public class SendMessage extends ActionBarActivity {
 
                         //3.Create file name
                         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+
                         File mediaFile;
-                        if (mediaType == MEDIA_TYPE_IMAGE) {
-                            mediaFile = new File(mediaStorageDirectory.getPath() + File.separator +
-                                    "IMG_" + timeStamp + ".jpg");
-                        } else if (mediaType == MEDIA_TYPE_VIDEO) {
-                            mediaFile = new File(mediaStorageDirectory.getPath() + File.separator +
-                                    "MOV_" + timeStamp + ".mp4");
-                        } else {
-                            return null;
-                        }
+                        mediaFile = new File(mediaStorageDirectory.getPath() + File.separator +
+                                "IMG_" + timeStamp + ".jpg");
+
+
                         //4.Return the file's URI
-                        Log.d(TAG, "File path: " + Uri.fromFile(mediaFile));
                         return Uri.fromFile(mediaFile);
 
                     } else //ako niama external storage
@@ -172,13 +146,7 @@ public class SendMessage extends ActionBarActivity {
                     startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
                 }
 
-                private void takeVideo() {
-                    Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-                    takeVideoIntent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,10);
-                    takeVideoIntent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY,0);
-                    takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                    startActivityForResult(takeVideoIntent, TAKE_VIDEO_REQUEST);
-                }
+
             };
 
 
@@ -205,28 +173,25 @@ public class SendMessage extends ActionBarActivity {
 
 
             //tova obrabotva rezultata ot snimane ili kachvane na file
-            if (requestCode == CHOOSE_PHOTO_REQUEST || requestCode == CHOOSE_VIDEO_REQUEST) {
-                //tova e sluchaia v koito izbirame photo ili video ot galeriata
+            if (requestCode == CHOOSE_PHOTO_REQUEST ) {
+                //pokazvame dvete vratki za snimkite
+                mRotateRight.setVisible(true);
+                mRotateLeft.setVisible(true);
+
+                //tova e sluchaia v koito izbirame photo ot galeriata
                 if (data == null) {
                     Toast.makeText(this, R.string.general_error_message, Toast.LENGTH_LONG).show();
                 } else {
                     mMediaUri = data.getData();
                 }
 
-
-                if (requestCode == CHOOSE_VIDEO_REQUEST) {
-                    //proveriavame dali file size > 10MB
-
-                    if (checkFileSizeExceedsLimit(FILE_SIZE_LIMIT) == true) {
-                        Toast.makeText(SendMessage.this, R.string.error_file_too_large, Toast.LENGTH_LONG).show();
-                        mMediaUri = null;
-                        return; //prekratiavame metoda tuk.
-                    }
-
-                }
             } else {
+                //pokazvame dvete vratki za snimkite
+                mRotateRight.setVisible(true);
+                mRotateLeft.setVisible(true);
 
-                //dobaviame snimkata ili videoto kam galeriata
+
+                //dobaviame snimkata kam galeriata
                 //tova e v sluchaite v koito sme snimali neshto
 
 
@@ -316,7 +281,7 @@ public class SendMessage extends ActionBarActivity {
                     mMediaUri.getPath(), MediaStore.Images.Thumbnails.MINI_KIND), 800, 500);
         }
 
-        ImageView imageViewForThumbnailPreview = (ImageView) findViewById(R.id.thumbnailPreview);
+         imageViewForThumbnailPreview = (ImageView) findViewById(R.id.thumbnailPreview);
 
 
         imageViewForThumbnailPreview.setImageBitmap(thumbnail);
@@ -358,9 +323,9 @@ public class SendMessage extends ActionBarActivity {
         //toolbar.setLogo(R.drawable.launch_icon);
         setSupportActionBar(toolbar);
 
-        mUploadMedia = (ImageView) findViewById(R.id.uploadPictureOrMovie);
+        //mUploadMedia = (ImageView) findViewById(R.id.uploadPictureOrMovie);
 
-        mUploadMedia.setOnClickListener(new View.OnClickListener() {
+        /*mUploadMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
@@ -369,7 +334,8 @@ public class SendMessage extends ActionBarActivity {
                 AlertDialog dialog = builder.create();
                 dialog.show();
             }
-        });
+        });*/
+
         //Izbirane na poluchateli na saobshtenieto
         mSendMessageTo = (TextView) findViewById(R.id.sendTo);
         mSendMessageTo.setOnClickListener(new View.OnClickListener() {
@@ -388,8 +354,14 @@ public class SendMessage extends ActionBarActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_send_message, menu);
         messageToSend = (EditText) findViewById(R.id.messageToSend);
+        mRotateLeft = menu.findItem(R.id.action_rotate_left);
+        mRotateRight = menu.findItem(R.id.action_rotate_right);
+
         return true;
     }
+
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -397,6 +369,26 @@ public class SendMessage extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        int rotationAngle;
+        if(id==R.id.action_rotate_left) {
+            rotationAngle = (int) imageViewForThumbnailPreview.getRotation();
+            imageViewForThumbnailPreview.setRotation(rotationAngle -90);
+        }
+        if(id==R.id.action_rotate_right) {
+            rotationAngle = (int) imageViewForThumbnailPreview.getRotation();
+            imageViewForThumbnailPreview.setRotation(rotationAngle + 90);
+        }
+
+
+        if(id == R.id.photoMenu) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
+            builder.setTitle(R.string.menu_camera_alertdialog_title);
+            builder.setItems(R.array.camera_choices, mUploadPictureOrVideo);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
 
         if(id == R.id.action_send) {
 
@@ -558,7 +550,7 @@ public class SendMessage extends ActionBarActivity {
                     dialog.show();                }
             });//Krai na query koiato tarsi poluchatelite na saobshtenieto po emailite im
 
-        }
+        }//krai na send koda
 
 
 

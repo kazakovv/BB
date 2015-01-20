@@ -42,19 +42,15 @@
 
     <ImageView
         android:id="@+id/thumbnailPreview"
-        android:layout_width="150dip"
+        android:layout_width="match_parent"
         android:layout_height="150dip"
         android:layout_below="@+id/linerLayoutFields"
-        android:layout_marginTop="@dimen/activity_vertical_margin" />
-
-    <ImageView
-        android:id="@+id/uploadPictureOrMovie"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:clickable="true"
-        android:src="@drawable/ic_action_upload" />
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/linerLayoutFields"
+        android:layout_alignEnd="@+id/linerLayoutFields"
+        android:layout_alignLeft="@+id/linerLayoutFields"
+        android:layout_alignStart="@+id/linerLayoutFields" />
 
 
 </RelativeLayout>

@@ -116,11 +116,10 @@
     <string name="dialog_delete_partner_confirmation">Are you sure you want to beak up with</string>
     <string name="dialog_delete_partner_yes_button">Yes</string>
     <string name="dialog_delete_partner_no_button">No</string>
+
     <string-array name="camera_choices">
         <item>Take Picture</item>
-        <item>Take Video</item>
         <item>Choose Picture</item>
-        <item>Choose Video</item>
     </string-array>
     <string-array name="sex_options">
         <item>Male</item>

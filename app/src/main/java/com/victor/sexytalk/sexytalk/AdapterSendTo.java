@@ -63,7 +63,11 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
                 mRecepientEmails.add(mPartners[getPosition()].getEmail());
                 mRecepientUserNames.add((String) mPartners[getPosition()].getProperty(Statics.KEY_USERNAME));
             }
+
+
         }
+
+
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -96,6 +100,7 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
         holder.mPartnerUserName.setText(username);
 
     }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
