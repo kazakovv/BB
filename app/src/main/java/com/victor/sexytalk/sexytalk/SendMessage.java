@@ -9,6 +9,7 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -148,6 +149,7 @@ public class SendMessage extends ActionBarActivity {
 
 
             };
+
 
 
     @Override
@@ -323,24 +325,21 @@ public class SendMessage extends ActionBarActivity {
         //toolbar.setLogo(R.drawable.launch_icon);
         setSupportActionBar(toolbar);
 
-        //mUploadMedia = (ImageView) findViewById(R.id.uploadPictureOrMovie);
 
-        /*mUploadMedia.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
-                builder.setTitle(R.string.menu_camera_alertdialog_title);
-                builder.setItems(R.array.camera_choices, mUploadPictureOrVideo);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });*/
+
 
         //Izbirane na poluchateli na saobshtenieto
         mSendMessageTo = (TextView) findViewById(R.id.sendTo);
         mSendMessageTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //TODO nulirame static promenlivite s poluchatelite.
+                //TODO adski tapo!!!
+                if( AdapterSendTo.mRecepientEmails != null) {
+                    AdapterSendTo.mRecepientEmails.clear();
+                    AdapterSendTo.mRecepientUserNames.clear();
+                }
+
                 Intent intent = new Intent(SendMessage.this, SendTo.class);
                 startActivityForResult(intent,ACTIVITY_SEND_TO);
             }
