@@ -1,6 +1,7 @@
 package com.victor.sexytalk.sexytalk;
 
 
+import android.app.ListFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -40,7 +41,7 @@ public class SendTo extends ActionBarActivity   {
         //vrazvam mCurrentUser i list
         if (Backendless.UserService.CurrentUser() != null) {
             mCurrentUSer = Backendless.UserService.CurrentUser();
-            mPartners = (BackendlessUser[]) mCurrentUSer.getProperty(Statics.KEY_PARTNERS);
+
             //vrazvame recyclerview
             mRecyclerView = (RecyclerView) findViewById(R.id.list_with_partners);
             mRecyclerView.setHasFixedSize(true);
@@ -48,10 +49,13 @@ public class SendTo extends ActionBarActivity   {
             mRecyclerView.setLayoutManager(mLayoutManager);
 
             // specify an adapter (see also next example)
+            //samo ako ima partniori
+        if( mCurrentUSer.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+            mPartners = (BackendlessUser[]) mCurrentUSer.getProperty(Statics.KEY_PARTNERS);
             mAdapter = new AdapterSendTo(mPartners);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
+        }
         }
         //setup toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -76,23 +80,7 @@ public class SendTo extends ActionBarActivity   {
 
     }
 
-/*
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        super.onListItemClick(l, v, position, id);
 
-        if(l.isItemChecked(position)) {
-            mSendTo.add(position);
-            mRecepientEmails.add(mPartners[position].getEmail());
-            mRecepientUserNames.add((String) mPartners[position].getProperty(Statics.KEY_USERNAME));
-        } else {
-            int positionToRemove = mSendTo.indexOf(position);
-            mSendTo.remove(positionToRemove);
-            mRecepientEmails.remove(positionToRemove);
-            mRecepientUserNames.remove(positionToRemove);
-        }
-    }
-*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //TODO:sigurno ima po-dobar variant ot tova da se izpolzvat statichni promenlivi v adaptora
@@ -119,7 +107,6 @@ public class SendTo extends ActionBarActivity   {
         return super.onOptionsItemSelected(item);
 
     }
-
 
 
 
