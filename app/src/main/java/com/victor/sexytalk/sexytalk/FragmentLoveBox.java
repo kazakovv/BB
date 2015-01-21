@@ -36,7 +36,7 @@ public class FragmentLoveBox extends ListFragment {
    protected List<Messages> messagesToDisplay;
    protected View myView;
    protected SwipeRefreshLayout mSwipeRefreshLayout;
-    BackendlessUser currentUser;
+   protected BackendlessUser currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

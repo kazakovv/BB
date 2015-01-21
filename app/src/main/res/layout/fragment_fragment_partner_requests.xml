@@ -4,17 +4,23 @@
     android:layout_height="match_parent"
     tools:context="com.victor.sexytalk.sexytalk.FragmentPartnerRequests">
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayoutPartnerRequests"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <TextView
+        android:id="@+id/noPendingPartnerRequestsMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/no_pending_partner_requests_message"
-        android:id="@+id/noPendingPartnerRequestsMessage" />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@android:id/list" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
 </RelativeLayout>
