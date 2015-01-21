@@ -32,8 +32,6 @@ public class SignUpActivity extends Activity {
 
         setContentView(R.layout.activity_sign_up);
 
-        ActionBar actionbar = getActionBar();
-        actionbar.hide(); //skirvame actionabar che e po-krasivo
 
         //Vrazvame opciite za spinner
         final Spinner spinner = (Spinner) findViewById(R.id.spinnerMaleOrFemale);
