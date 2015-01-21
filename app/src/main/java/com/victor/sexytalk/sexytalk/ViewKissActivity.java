@@ -2,13 +2,16 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
 
-public class ViewKissActivity extends Activity {
-    TextView kissMessageToDisplay;
+public class ViewKissActivity extends ActionBarActivity {
+    protected TextView kissMessageToDisplay;
+    protected Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,6 +20,9 @@ public class ViewKissActivity extends Activity {
         kissMessageToDisplay = (TextView) findViewById(R.id.kissMessage);
         String loveMessage = getIntent().getStringExtra(Statics.KEY_LOVE_MESSAGE);
         kissMessageToDisplay.setText(loveMessage);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        setSupportActionBar(toolbar);
     }
 
 

@@ -3,6 +3,8 @@ package com.victor.sexytalk.sexytalk;
 import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -12,9 +14,11 @@ import com.squareup.picasso.Picasso;
 
 
 
-public class ViewImageActivity extends Activity {
-    TextView loveMessage;
-    ImageView imageViewToDisplay;
+public class ViewImageActivity extends ActionBarActivity {
+    protected TextView loveMessage;
+    protected ImageView imageViewToDisplay;
+    protected Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +26,10 @@ public class ViewImageActivity extends Activity {
         loveMessage = (TextView) findViewById(R.id.loveMessage);
         imageViewToDisplay = (ImageView) findViewById(R.id.imageView_to_display_picture);
         String loveMessageToDisplay = getIntent().getStringExtra(Statics.KEY_LOVE_MESSAGE);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_action_back);
+        setSupportActionBar(toolbar);
+
         loveMessage.setText(loveMessageToDisplay);
             //Uri imageUri = getIntent().getData(); //vzima Uri deto go podadohme ot drugata strana
             String imageUrl = getIntent().getStringExtra(Statics.KEY_URL);

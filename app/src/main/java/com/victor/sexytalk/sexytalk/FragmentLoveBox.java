@@ -7,12 +7,14 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -33,12 +35,25 @@ import java.util.List;
 public class FragmentLoveBox extends ListFragment {
    protected List<Messages> messagesToDisplay;
    protected View myView;
+   protected SwipeRefreshLayout mSwipeRefreshLayout;
+    BackendlessUser currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_love_box, container, false);
 
-        return inflater.inflate(R.layout.fragment_love_box, container, false);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        return rootView;
     }
+    //refresh listener za updatevane na tova dali ima novi saobstehnia
+    protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+
+            searchForMessages();
+        }
+    };
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -53,55 +68,9 @@ public class FragmentLoveBox extends ListFragment {
         Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         ( (Main)getActivity()).setSupportActionBar(toolbar);
 
-        final BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-        if(currentUser != null) {
-
-            String whereClause = "recepientEmails LIKE '%" + currentUser.getEmail() + "%'";
-
-            BackendlessDataQuery query = new BackendlessDataQuery();
-            QueryOptions queryOptions = new QueryOptions();
-            query.setWhereClause(whereClause);
-            //TODO: Eventualno, ako dobavia relations kato users poluchaeli moga da tarsia i po tozi kriterii
-            query.setQueryOptions( queryOptions );
-
-            Backendless.Data.of(Messages.class).find(query, new AsyncCallback<BackendlessCollection<Messages>>() {
-                @Override
-                public void handleResponse(BackendlessCollection<Messages> messages) {
-
-                   messagesToDisplay = new ArrayList<Messages>();
-                    int numberOfMesages = messages.getCurrentPage().size();
-
-                    for (int i = 0; i <numberOfMesages; i++) {
-                    messagesToDisplay.add(messages.getCurrentPage().get(i));
-                        Log.d("Vic","one more added");
-                    }
-
-
-                    Collections.sort(messagesToDisplay,new Comparator<Messages>() {
-                        @Override
-                        public int compare(Messages o1, Messages o2) {
-
-                            return o2.getCreated().compareTo(o1.getCreated());
-                        }
-                    });
-
-
-                    AdapterMessage adapter = new AdapterMessage(myView.getContext(),
-                            messagesToDisplay);
-
-                    setListAdapter(adapter);
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getListView().getContext());
-                    builder.setTitle(R.string.error_title)
-                            .setMessage(R.string.general_error_message)
-                            .setPositiveButton(R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                }
-            });
+        if(Backendless.UserService.CurrentUser() != null) {
+            currentUser = Backendless.UserService.CurrentUser();
+            searchForMessages();
         }
     }
 
@@ -198,16 +167,64 @@ public class FragmentLoveBox extends ListFragment {
             }
         }
 
-        else  {
 
-            //view video
-            Intent intent = new Intent(getActivity(),ViewMovieActivity.class);
-            intent.putExtra(Statics.KEY_URL,fileUrl);
-            intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
-            startActivity(intent);
-
-        }
     }
 
+   //Tozi metod se vrazva kam backendless da vidi dali imame saobsthenia
+protected void searchForMessages(){
+
+    String whereClause = "recepientEmails LIKE '%" + currentUser.getEmail() + "%'";
+
+    BackendlessDataQuery query = new BackendlessDataQuery();
+    QueryOptions queryOptions = new QueryOptions();
+    query.setWhereClause(whereClause);
+    //TODO: Eventualno, ako dobavia relations kato users poluchaeli moga da tarsia i po tozi kriterii
+    query.setQueryOptions( queryOptions );
+
+    Backendless.Data.of(Messages.class).find(query, new AsyncCallback<BackendlessCollection<Messages>>() {
+
+        @Override
+        public void handleResponse(BackendlessCollection<Messages> messages) {
+            //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
+            if(mSwipeRefreshLayout.isRefreshing()){
+            mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            messagesToDisplay = new ArrayList<Messages>();
+            int numberOfMesages = messages.getCurrentPage().size();
+
+            for (int i = 0; i <numberOfMesages; i++) {
+                messagesToDisplay.add(messages.getCurrentPage().get(i));
+                Log.d("Vic","one more added");
+            }
+
+
+            Collections.sort(messagesToDisplay,new Comparator<Messages>() {
+                @Override
+                public int compare(Messages o1, Messages o2) {
+
+                    return o2.getCreated().compareTo(o1.getCreated());
+                }
+            });
+
+
+            AdapterMessage adapter = new AdapterMessage(myView.getContext(),
+                    messagesToDisplay);
+
+            setListAdapter(adapter);
+        }
+
+        @Override
+        public void handleFault(BackendlessFault backendlessFault) {
+            //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
+            if(mSwipeRefreshLayout.isRefreshing()){
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+
+            Toast.makeText(getListView().getContext(),R.string.general_server_error,Toast.LENGTH_LONG).show();
+        }
+    });
+
+}
 
 }

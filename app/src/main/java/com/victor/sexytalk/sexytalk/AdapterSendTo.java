@@ -24,6 +24,7 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
     public static ArrayList<String> mRecepientUserNames = new ArrayList<String>();
     public static ArrayList<String> mRecepientEmails = new ArrayList<String>();
 
+
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -70,6 +71,7 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
 
     }
 
+
     // Provide a suitable constructor (depends on the kind of dataset)
     public AdapterSendTo(BackendlessUser[] myPartners) {
 
@@ -107,4 +109,6 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
     public int getItemCount() {
         return mPartners.length;
     }
+
+
 }

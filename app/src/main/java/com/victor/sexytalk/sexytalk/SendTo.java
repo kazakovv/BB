@@ -11,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 
 import com.backendless.Backendless;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 
 
 
-public class SendTo extends ActionBarActivity   {
+public class SendTo extends ActionBarActivity  {
     protected BackendlessUser[] mPartners;
     protected BackendlessUser mCurrentUSer;
     protected ArrayList<Integer> mSendTo;
@@ -55,6 +57,7 @@ public class SendTo extends ActionBarActivity   {
             mAdapter = new AdapterSendTo(mPartners);
             mRecyclerView.setAdapter(mAdapter);
             mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
         }
         }
         //setup toolbar
@@ -107,7 +110,6 @@ public class SendTo extends ActionBarActivity   {
         return super.onOptionsItemSelected(item);
 
     }
-
 
 
 }

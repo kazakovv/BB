@@ -19,13 +19,13 @@ public class ImageResizer {
         
         // inSampleSize is used to sample smaller versions of the image
         options.inSampleSize = calculateInSampleSize(options, targetWidth, targetHeight);
-        
         // Decode bitmap with inSampleSize and target dimensions set
-        options.inJustDecodeBounds = false;	
+        options.inJustDecodeBounds = false;
+        options.inPreferredConfig = Bitmap.Config.RGB_565;//tova mai go opravi da ne zabiva
 
         //TODO: tuk poniakoga zabavia s out of memory error, ako ima mnogo otvoreni programi.
         //Eto reshenieto:
-        //TODO: http://stackoverflow.com/questions/15254272/bitmapfactory-decodestream-out-of-memory-despite-using-reduced-sample-size
+        //TODO: http://stackoverflow.com/questions/11820266/android-bitmapfactory-decodestream-out-of-memory-with-a-400kb-file-with-2mb-f
 
         Bitmap reducedBitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length, options);
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(reducedBitmap, targetWidth, targetHeight, false);
