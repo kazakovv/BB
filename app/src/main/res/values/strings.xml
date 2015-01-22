@@ -13,7 +13,7 @@
     <string name="menu_select_sex">Sex</string>
     <string name="menu_send_a_kiss">Send a kiss</string>
     <string name="menu_send_message">Send a message</string>
-    <string name="menu_edit_partner">Find your partner</string>
+    <string name="menu_edit_partner">Partners</string>
     <string name="dialog_menu_title">Are you a guy or a girl?</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="hint_login_username">Username</string>

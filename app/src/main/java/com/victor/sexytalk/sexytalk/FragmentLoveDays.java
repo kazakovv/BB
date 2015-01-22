@@ -2,9 +2,7 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListFragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -40,7 +38,7 @@ import java.util.List;
  * Created by Victor on 13/10/2014.
  */
 public class FragmentLoveDays extends Fragment {
-    protected BackendlessUser currentUser;
+    protected BackendlessUser mCurrentUser;
     protected Button showPrivateDaysDialog;
     protected Spinner listOfPartnersSpinner;
     protected BackendlessUser[] mPartners; //array s partnirite
@@ -64,7 +62,7 @@ public class FragmentLoveDays extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        currentUser = Backendless.UserService.CurrentUser();
+        mCurrentUser = Backendless.UserService.CurrentUser();
 
 
     }
@@ -100,8 +98,8 @@ public class FragmentLoveDays extends Fragment {
         //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam servera
         //TODO: triabva da razkaram shared prefs i da se vrazva kam servera otnachalo vseki pat
 
-        if(currentUser != null) {
-            if (currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
+        if(mCurrentUser != null) {
+            if (mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
                 showPrivateDaysDialog.setVisibility(View.INVISIBLE);
                 listOfPartnersSpinner.setVisibility(View.VISIBLE);
 
@@ -313,60 +311,29 @@ public class FragmentLoveDays extends Fragment {
     //Helper metod namira spisak s partniorite i dobavia imenata im v spinnera
 
     protected void findPartnersAndPopulateSpinner() {
-
-        //sashtoto kato SendTo metoda
-        //tarsim spisak s partniori
-
-        BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-
-        String whereClause = "email='" + currentUser.getEmail() + "'";
-
-        BackendlessDataQuery query = new BackendlessDataQuery();
-        QueryOptions queryOptions = new QueryOptions();
-        query.setWhereClause(whereClause);
-        queryOptions.addRelated( "partners" );
-        queryOptions.addRelated( "partners.RELATION-OF-RELATION" );
-        query.setQueryOptions( queryOptions );
-
-
-        Backendless.Data.of(BackendlessUser.class).find(query, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
-            @Override
-            public void handleResponse(BackendlessCollection<BackendlessUser> partners) {
-
-                if(partners.getData().size() > 0) {
-                    //spisakat sadarza samo 1 potrebitel - tekushtiat
-                    List<BackendlessUser> listOfPartners = partners.getData();
-
-                    //Vzimame spisakat s partniorite kato izposlvame .getProperty("partners") na tekushtiat potrebitel
-                    //s instanceof proveriavame dali ima zadadeni partniori
-                    if(listOfPartners.get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-                        mPartners =
-                                (BackendlessUser[]) listOfPartners.get(0).getProperty(Statics.KEY_PARTNERS);
-                        //sazdavame spisak s usernames
-                        List<String> usernamesSpinnerArray = new ArrayList<String>();
-                        for (BackendlessUser partner : mPartners) {
-                            usernamesSpinnerArray.add(partner.getProperty(Statics.KEY_USERNAME).toString());
-                        }
-                        //zapalvame list
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                getActivity(), android.R.layout.simple_spinner_item, usernamesSpinnerArray);
-                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                        listOfPartnersSpinner.setAdapter(adapter);
-                    } else {
-                        //niamame dobaveni partniori, izkarvame niakakvo saobshtenie
-                        cyclePhaseTitle.setText(" ");
-                        cyclePhaseStatus.setText(R.string.no_partners_message); //Add your partners to start using SexyTalk
-                        cycleExplainationText.setText(" ");
-                    }
-
-                }
+        //TODO: tr da go opravia da ne tarsi v backendless
+        if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+            mPartners =
+                    (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+            //sazdavame spisak s usernames
+            List<String> usernamesSpinnerArray = new ArrayList<String>();
+            for (BackendlessUser partner : mPartners) {
+                usernamesSpinnerArray.add(partner.getProperty(Statics.KEY_USERNAME).toString());
             }
+            //zapalvame list
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                    getActivity(), android.R.layout.simple_spinner_item, usernamesSpinnerArray);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            listOfPartnersSpinner.setAdapter(adapter);
 
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                Toast.makeText(getActivity(), R.string.general_server_error,Toast.LENGTH_LONG).show();
-            }
-        });
+        } else {
+            //niamame dobaveni partniori, izkarvame niakakvo saobshtenie
+            cyclePhaseTitle.setText(" ");
+            cyclePhaseStatus.setText(R.string.no_partners_message); //Add your partners to start using SexyTalk
+            cycleExplainationText.setText(" ");
+        }
+
+
     }
 
     //helper metod, koito updateva kategoriite i saobshteniata na osnovnia ekran
