@@ -28,7 +28,6 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
     protected BackendlessUser mCurrentUser;
     protected List<BackendlessUser> mPartners;
 
-    protected BackendlessUser[] newListWithPartners;
 
     public AdapterExistingPartners(Context context,  List<BackendlessUser> partners, BackendlessUser currentUser) {
         super(context, R.layout.item_delete_partner, partners );
@@ -38,7 +37,7 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
     }
 
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder holder;
 
             if (convertView == null || convertView.getTag() == null) {
@@ -54,7 +53,6 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                 holder = (ViewHolder) convertView.getTag();
             }
 
-        //TODO: crashesh ako
         BackendlessUser partner = mPartners.get(position);
         holder.nameLabel.setText(partner.getProperty(Statics.KEY_USERNAME).toString());
 
@@ -67,17 +65,52 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                 String message = mContext.getString(R.string.dialog_delete_partner_confirmation)
                         + " " + namePartnerToDelete + "?";
                 builder.setMessage(message);
+                builder.setTitle(R.string.dialog_box_deleting_partner);
                 builder.setCancelable(true);
                 builder.setPositiveButton(R.string.dialog_delete_partner_yes_button,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //deletePartner(position);
-                                mPartners.remove(position);
+                                //sazdavame nov spisak s partniori za tekushtia potrebitel
+                                BackendlessUser[] newListWithPartnersForCurrentUser =
+                                        new BackendlessUser[(mPartners.size() - 1)];
+                                BackendlessUser[] currentListWithPartners =
+                                        (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+                                int i =0;
+                                for(BackendlessUser partner : currentListWithPartners) {
+                                    //kopirame vsichki partniori osven toya koito iskame da iztriem
+                                    if(! partner.getEmail().equals(mPartners.get(position).getEmail()))
+                                        newListWithPartnersForCurrentUser[i] = partner;
+                                        i++;
+                                }
+                                //updatevame spisaka s partniori za tekushtia potrebitel
+                                mCurrentUser.setProperty(Statics.KEY_PARTNERS,newListWithPartnersForCurrentUser);
+                                //kachvame novia spisak s partniori v backendless
                                 Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
                                     @Override
                                     public void handleResponse(BackendlessUser backendlessUser) {
-                                        notifyDataSetChanged();
-                                        Toast.makeText(mContext,R.string.existing_partner_deleted,Toast.LENGTH_LONG).show();
+                                        //iztrivame tekushtia poterbitel ot spisaka na partniorite i na drugia chovek
+                                        BackendlessUser[] newListWithPartners =
+                                                newListWithPartnersForUserThatWeAreBreakingUpWith(position);
+                                        BackendlessUser partnerWeAreBreakingUpWith = mPartners.get(position);
+                                        //updatevame spisaka s partniorite za potrebitelia, s koito kasame
+                                        partnerWeAreBreakingUpWith.setProperty(Statics.KEY_PARTNERS, newListWithPartners);
+                                        //updatevame v backendless
+                                        Backendless.UserService.update(partnerWeAreBreakingUpWith, new AsyncCallback<BackendlessUser>() {
+                                            @Override
+                                            public void handleResponse(BackendlessUser backendlessUser) {
+                                                //deletePartner(position);
+                                                mPartners.remove(position);
+                                                notifyDataSetChanged();
+                                                Toast.makeText(mContext,R.string.existing_partner_deleted,Toast.LENGTH_LONG).show();
+
+                                            }
+
+                                            @Override
+                                            public void handleFault(BackendlessFault backendlessFault) {
+                                                Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+
                                     }
 
                                     @Override
@@ -111,4 +144,32 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
         TextView nameLabel;
         Button deletePartnerButton;
     }
+
+    public BackendlessUser[] newListWithPartnersForUserThatWeAreBreakingUpWith(int position) {
+        BackendlessUser[] newListWithPartners;
+        BackendlessUser userBreakingUpWith = mPartners.get(position);
+
+        if(userBreakingUpWith.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+
+            BackendlessUser[] listOfPartners = (BackendlessUser[]) userBreakingUpWith.getProperty(Statics.KEY_PARTNERS);
+            newListWithPartners = new BackendlessUser[(listOfPartners.length -1)];
+
+            int i =0;
+            for(BackendlessUser partner : listOfPartners) {
+                //kopirame vsichki potrebiteli osven tekushtia v novia spisak
+                if(! partner.getEmail().equals(mCurrentUser.getEmail())) {
+                  newListWithPartners[i] = partner;
+                }
+                i++;
+            }
+
+        } else {
+            newListWithPartners = new BackendlessUser[0];
+
+        }
+        Log.d("Vic","a mi sega");
+        return newListWithPartners;
+
+    }
+
 }

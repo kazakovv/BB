@@ -332,8 +332,6 @@ public class FragmentLoveDays extends Fragment {
             cyclePhaseStatus.setText(R.string.no_partners_message); //Add your partners to start using SexyTalk
             cycleExplainationText.setText(" ");
         }
-
-
     }
 
     //helper metod, koito updateva kategoriite i saobshteniata na osnovnia ekran

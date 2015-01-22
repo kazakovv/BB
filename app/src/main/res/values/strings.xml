@@ -118,6 +118,7 @@
     <string name="dialog_delete_partner_no_button">No</string>
     <string name="toast_no_love_message">Please compose your love message first</string>
     <string name="toast_no_recepients">To who should I send the message to?</string>
+    <string name="dialog_box_deleting_partner">Are you breaking up?</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
