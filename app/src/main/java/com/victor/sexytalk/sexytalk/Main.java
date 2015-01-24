@@ -23,7 +23,11 @@ import com.backendless.BackendlessUser;
 import com.backendless.Subscription;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.Message;
+import com.backendless.messaging.MessageStatus;
+import com.backendless.messaging.PublishOptions;
+import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 
 import it.neokree.materialtabs.MaterialTab;
@@ -296,6 +300,34 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 Backendless.Persistence.of(Messages.class).save(kissMessage, new AsyncCallback<Messages>() {
                     @Override
                     public void handleResponse(Messages messages) {
+                        //TODO:!!!!!
+                        //TODO: push test!!!!!
+                        //TODO !!!!!!!!!!!!!
+
+                            String channel = mCurrentUser.getObjectId();
+
+                            DeliveryOptions deliveryOptions = new DeliveryOptions();
+                            deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY );
+                            deliveryOptions.addPushSinglecast(channel);
+
+                            PublishOptions publishOptions = new PublishOptions();
+                            publishOptions.putHeader( "android-ticker-text", "You just got a private push notification!" );
+                            publishOptions.putHeader( "android-content-title", "This is a notification title" );
+                            publishOptions.putHeader( "android-content-text", "Push Notifications are cool" );
+
+                            Backendless.Messaging.publish( "this is a private message!", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+                                @Override
+                                public void handleResponse(MessageStatus messageStatus) {
+                                    Log.d("Vic","ggod");
+                                }
+
+                                @Override
+                                public void handleFault(BackendlessFault backendlessFault) {
+                                    String error = backendlessFault.getMessage();
+                                    Log.d("Vic","basd");
+                                }
+                            } );
+
                         Toast.makeText(Main.this,getString(R.string.send_a_kiss_toast_successful),Toast.LENGTH_LONG).show();
                     }
 
