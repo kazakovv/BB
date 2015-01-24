@@ -40,6 +40,7 @@ public class Statics {
     public static final String KEY_LUTEAL = "Luteal";
 
     public static final String KEY_PARTNER_REQUEST = "partnerRequest";
+    public static final String KEY_PARTNER_DELETE = "deletePartner";
 
     public static final String KEY_PARTNERS_SELECT_TAB = "selectPendingPartnerRequest";
     public static final String KEY_PARTNERS_SELECT_PENDING_REQUESTS = "selectPendingRequestsTab";

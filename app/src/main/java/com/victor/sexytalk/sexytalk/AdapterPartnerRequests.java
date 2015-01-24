@@ -151,6 +151,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                                     mPendingPartnerRequests.remove(position);
                                                     notifyDataSetChanged();
                                                     Toast.makeText(mContext,R.string.new_partner_added_successfully,Toast.LENGTH_LONG).show();
+                                                    //TODO:tr da izpratim push na drugia chvek da si updatene spikat s partniorite
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
                                                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111

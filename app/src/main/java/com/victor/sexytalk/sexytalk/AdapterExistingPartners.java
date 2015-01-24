@@ -17,6 +17,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.messaging.MessageStatus;
 
 import java.util.List;
 
@@ -79,6 +80,8 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                                 for(BackendlessUser partner : currentListWithPartners) {
                                     //kopirame vsichki partniori osven toya koito iskame da iztriem
                                     if(! partner.getEmail().equals(mPartners.get(position).getEmail()))
+                                        //TODO: zabiva na toya red, ako iztriem partnior vednaga, sled kato sme go dobavili
+
                                         newListWithPartnersForCurrentUser[i] = partner;
                                         i++;
                                 }
@@ -88,28 +91,48 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                                 Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
                                     @Override
                                     public void handleResponse(BackendlessUser backendlessUser) {
-                                        //iztrivame tekushtia poterbitel ot spisaka na partniorite i na drugia chovek
-                                        BackendlessUser[] newListWithPartners =
-                                                newListWithPartnersForUserThatWeAreBreakingUpWith(position);
-                                        BackendlessUser partnerWeAreBreakingUpWith = mPartners.get(position);
-                                        //updatevame spisaka s partniorite za potrebitelia, s koito kasame
-                                        partnerWeAreBreakingUpWith.setProperty(Statics.KEY_PARTNERS, newListWithPartners);
-                                        //updatevame v backendless
-                                        Backendless.UserService.update(partnerWeAreBreakingUpWith, new AsyncCallback<BackendlessUser>() {
-                                            @Override
-                                            public void handleResponse(BackendlessUser backendlessUser) {
-                                                //deletePartner(position);
-                                                mPartners.remove(position);
-                                                notifyDataSetChanged();
-                                                Toast.makeText(mContext,R.string.existing_partner_deleted,Toast.LENGTH_LONG).show();
+                                        final BackendlessUser partnerToBeDeleted = mPartners.get(position);
+                                        mPartners.remove(position);
+                                        notifyDataSetChanged();
+                                        Toast.makeText(mContext,R.string.existing_partner_deleted,Toast.LENGTH_LONG).show();
+                                        //tova e za kanala, po koito da izpratim push message
+                                        final String receiverID = partnerToBeDeleted.getObjectId();
 
+                                        //kachvame delete request v backendless
+                                        PartnerDeleteRequest deleteRequest = new PartnerDeleteRequest();
+                                        deleteRequest.setEmail_userDeleted(partnerToBeDeleted.getEmail());
+                                        deleteRequest.setEmail_userDeleting(mCurrentUser.getEmail());
+                                        deleteRequest.setUserDeleted(partnerToBeDeleted);
+                                        deleteRequest.setUserDeleting(mCurrentUser);
+                                        deleteRequest.setUsername_userDeleted((String) partnerToBeDeleted.getProperty(Statics.KEY_USERNAME));
+                                        deleteRequest.setUsername_userDeleting((String)mCurrentUser.getProperty(Statics.KEY_USERNAME));
+                                        Backendless.Data.of(PartnerDeleteRequest.class).save(deleteRequest, new AsyncCallback<PartnerDeleteRequest>() {
+                                            @Override
+                                            public void handleResponse(PartnerDeleteRequest partnerDeleteRequest) {
+                                               //izprashtame push notification, che ima delete request
+                                                //izprashtame push notification na drugia chovek da si updatene partniorite
+
+                                                Backendless.Messaging.publish(receiverID,Statics.KEY_PARTNER_DELETE, new AsyncCallback<MessageStatus>() {
+                                                    @Override
+                                                    public void handleResponse(MessageStatus messageStatus) {
+                                                        /*
+                                                        TUK USPESHNO ZAVARSHVAME
+                                                         */
+                                                    }
+
+                                                    @Override
+                                                    public void handleFault(BackendlessFault backendlessFault) {
+                                                       //error sending push. Nisho ne mozem da napravim
+                                                    }
+                                                });
                                             }
 
                                             @Override
                                             public void handleFault(BackendlessFault backendlessFault) {
-                                                Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                                    //error uploading delete request. Nishto ne mozem da napravim
                                             }
                                         });
+
 
                                     }
 
@@ -145,31 +168,6 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
         Button deletePartnerButton;
     }
 
-    public BackendlessUser[] newListWithPartnersForUserThatWeAreBreakingUpWith(int position) {
-        BackendlessUser[] newListWithPartners;
-        BackendlessUser userBreakingUpWith = mPartners.get(position);
 
-        if(userBreakingUpWith.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-
-            BackendlessUser[] listOfPartners = (BackendlessUser[]) userBreakingUpWith.getProperty(Statics.KEY_PARTNERS);
-            newListWithPartners = new BackendlessUser[(listOfPartners.length -1)];
-
-            int i =0;
-            for(BackendlessUser partner : listOfPartners) {
-                //kopirame vsichki potrebiteli osven tekushtia v novia spisak
-                if(! partner.getEmail().equals(mCurrentUser.getEmail())) {
-                  newListWithPartners[i] = partner;
-                }
-                i++;
-            }
-
-        } else {
-            newListWithPartners = new BackendlessUser[0];
-
-        }
-        Log.d("Vic","a mi sega");
-        return newListWithPartners;
-
-    }
 
 }

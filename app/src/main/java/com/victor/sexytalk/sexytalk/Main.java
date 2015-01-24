@@ -34,7 +34,7 @@ import it.neokree.materialtabs.MaterialTabListener;
 public class Main extends ActionBarActivity implements MaterialTabListener {
     protected ViewPager pager;
     static Context context;
-    protected BackendlessUser currentUser;
+    protected BackendlessUser mCurrentUser;
     protected static Boolean pendingPartnerRequest;
     protected Toolbar toolbar;
 
@@ -57,10 +57,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         setSupportActionBar(toolbar);
         
         //vrazvame osnovnotosaobshtenie
-        currentUser = Backendless.UserService.CurrentUser();
+        mCurrentUser = Backendless.UserService.CurrentUser();
         //ako niama lognat potrebitel preprashta kam log-in ekrana
 
-        if (currentUser == null) {
+        if (mCurrentUser == null) {
             //prashta ni kam login screen
             navigateToLogin();
         } else {
@@ -68,12 +68,14 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
             //check za pending parner request
             checkForPendingParnerRequests();
+            //check za pending delete requests
+            checkForDeletePartnerRequest();
 
             //proveriavame dali e maz ili zhena
-            MaleOrFemale = (String) currentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
+            MaleOrFemale = (String) mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
             //register device for push notifications
             String GCMSenderID = "473995671207";
-            String channel = currentUser.getObjectId();
+            String channel = mCurrentUser.getObjectId();
 
 
             Backendless.Messaging.registerDevice(GCMSenderID,channel, new AsyncCallback<Void>() {
@@ -93,12 +95,20 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     new AsyncCallback<List<Message>>() {
                         public void handleResponse(List<Message> response) {
                             for (Message message : response) {
-                                //tuk se obrabotvat pristignalite saobshtenia
+                                /*
+                                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                !!!!tuk se obrabotvat pristignalite saobshtenia!!!!
+                                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                 */
+
                                 String publisherId = message.getPublisherId();
                                 if (message.getData().equals(Statics.KEY_PARTNER_REQUEST)) {
                                     //pokazvame butona za dobaviane na nov partnior
                                     addPartner.setVisible(true);
                                     pendingPartnerRequest = true;
+                                } else if(message.getData().equals(Statics.KEY_PARTNER_DELETE)) {
+                                    //niakoi iska da iztrie tekushtia potrebitel kato partnior
+                                    checkForDeletePartnerRequest();
                                 }
                             }
                         }
@@ -120,7 +130,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             List<String> rels = new ArrayList<String>();
             rels.add("*");
 
-                Backendless.Data.of(BackendlessUser.class).loadRelations(currentUser,rels, new AsyncCallback<BackendlessUser>() {
+                Backendless.Data.of(BackendlessUser.class).loadRelations(mCurrentUser,rels, new AsyncCallback<BackendlessUser>() {
                     @Override
                     public void handleResponse(BackendlessUser backendlessUser) {
                         Log.d("Vic", "relation loaded");
@@ -141,14 +151,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         pager = (ViewPager) findViewById(R.id.pager);
         PagerAdapterMain pAdapter = new PagerAdapterMain(getSupportFragmentManager(), this);
         pager.setAdapter(pAdapter);
-        //pager.setOffscreenPageLimit(1);
 
         tabHost = (MaterialTabHost) this.findViewById(R.id.materialTabHost);
 
-        //actionbar = getActionBar();
-        //actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        //actionbar.addTab(actionbar.newTab().setText(R.string.tab_chat_title).setTabListener(this));
-        //actionbar.addTab(actionbar.newTab().setText(R.string.tab_days_title).setTabListener(this));
+
 
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -201,7 +207,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         switch (item.getItemId()) {
             case R.id.menu_send_kiss:
                 //SendPushMessages sadarza metoda za izprashtane na push
-                String message = currentUser.getProperty(Statics.KEY_USERNAME) + " " +
+                String message = mCurrentUser.getProperty(Statics.KEY_USERNAME) + " " +
                         getString(R.string.send_a_kiss_message); //niakoi ti izprati celuvka
                 Intent intentSendTo = new Intent(Main.this, SendTo.class);
                 startActivityForResult(intentSendTo, ACTIVITY_SEND_TO);
@@ -253,7 +259,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         super.onActivityResult(requestCode, resultCode, data);
         //tuk se izprashta push message sled cakane za izprashtane na celuvka
 
-        String user = (String) currentUser.getProperty(Statics.KEY_USERNAME);
+        String user = (String) mCurrentUser.getProperty(Statics.KEY_USERNAME);
         if (resultCode == RESULT_OK) {
             if (requestCode == ACTIVITY_SEND_TO) {
 
@@ -326,7 +332,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     protected void checkForPendingParnerRequests(){
 
-        String whereClause="email_partnerToConfirm='" + currentUser.getEmail() +"'";
+        String whereClause="email_partnerToConfirm='" + mCurrentUser.getEmail() +"'";
         BackendlessDataQuery query = new BackendlessDataQuery();
         query.setWhereClause(whereClause);
         Backendless.Data.of(PartnersAddRequest.class).find(query, new AsyncCallback<BackendlessCollection<PartnersAddRequest>>() {
@@ -360,6 +366,91 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     }
 
+    protected void checkForDeletePartnerRequest() {
+        String whereClause = "email_userDeleted='" + mCurrentUser.getEmail() + "'";
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+
+        Backendless.Data.of(PartnerDeleteRequest.class).find(dataQuery, new AsyncCallback<BackendlessCollection<PartnerDeleteRequest>>() {
+            @Override
+            public void handleResponse(final BackendlessCollection<PartnerDeleteRequest> partnerDeleteRequest) {
+                final List<PartnerDeleteRequest> pendingDeleteRequests = partnerDeleteRequest.getData();
+
+                //svaliame masiv s tekushtite partniori
+                BackendlessUser[] currentListWithPartners;
+                if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                    currentListWithPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+                } else {
+                    currentListWithPartners = new BackendlessUser[0];
+                }
+
+                //kopirame currentlistWithPartners v array, za da moze po-lesno da triem ot nego
+                List<BackendlessUser> currentListWithPartnersArray = new ArrayList<BackendlessUser>();
+                for(BackendlessUser user : currentListWithPartners) {
+                    currentListWithPartnersArray.add(user);
+                }
+                //iztrivame partniorite koito sa pratili delete request ot currentListWithPartnersArray
+                for( PartnerDeleteRequest deleteRequest : pendingDeleteRequests ) {
+                    BackendlessUser userToRemove = deleteRequest.getUserDeleting();
+                    //po emaila tarsim dali ima takav user v sastesvuvashtite partniori
+                    //i go iztrivame, ako go namerim
+                        for(int i = 0; i < currentListWithPartnersArray.size(); i++ ) {
+                                String emailOfExisingPartner = currentListWithPartnersArray.get(i).getEmail();
+                                if(userToRemove.getEmail().equals(emailOfExisingPartner)) {
+                                //iztrivame toya partnior ot spisaka
+                                currentListWithPartnersArray.remove(i);
+                            }
+                        }
+
+
+                }
+                //kopirame vsichki ostavashti partiori v novia spisak s partniori
+                BackendlessUser[] newListWithPartners = new BackendlessUser[currentListWithPartnersArray.size()];
+                int i = 0;
+                for(BackendlessUser user : currentListWithPartnersArray) {
+                    newListWithPartners[i] = user;
+                    i++;
+                }
+                //updatevame novia spisak s partniori za tekushtia potrebitel
+                mCurrentUser.setProperty(Statics.KEY_PARTNERS, newListWithPartners);
+                //updatevame i na servera
+                Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
+                    @Override
+                    public void handleResponse(BackendlessUser backendlessUser) {
+                        //iztrivame pending delete request
+                        for(PartnerDeleteRequest deleteRequest:pendingDeleteRequests) {
+                            Backendless.Data.of(PartnerDeleteRequest.class).remove(deleteRequest, new AsyncCallback<Long>() {
+                                @Override
+                                public void handleResponse(Long aLong) {
+                                    /*
+                                    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                    !!!TOVA E KRAIAT NA USPESHNOTO IZTRIVAME NA PARTNER!!!
+                                    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                                     */
+                                }
+
+                                @Override
+                                public void handleFault(BackendlessFault backendlessFault) {
+                                    //TODO: tr da se pomisli kakvo da se napravi v sluchai na greshka
+                                }
+                            });
+                        }
+
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        //TODO: ne e zle da napravim neshto, ako ima greshka s updatevamento na partionri
+                    }
+                });
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                //TODO: NESHTO TR DA SE NAPRAVI
+            }
+        });
+    }
 
     @Override
     public void onTabSelected(MaterialTab tab) {
@@ -376,4 +467,5 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     public void onTabUnselected(MaterialTab tab) {
 
     }
+
 }
