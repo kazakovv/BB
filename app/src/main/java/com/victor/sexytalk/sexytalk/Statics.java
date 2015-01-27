@@ -44,5 +44,9 @@ public class Statics {
 
     public static final String KEY_PARTNERS_SELECT_TAB = "selectPendingPartnerRequest";
     public static final String KEY_PARTNERS_SELECT_PENDING_REQUESTS = "selectPendingRequestsTab";
+
+    public static final String GOOGLE_PROJECT_ID = "473995671207";
+
+    public static final String KEY_DEVICE_ID = "deviceId";
 }
 

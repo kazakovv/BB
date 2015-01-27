@@ -9,6 +9,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +31,7 @@ public class SendTo extends ActionBarActivity  {
     protected ArrayList<Integer> mSendTo;
     protected ArrayList<String> mRecepientUserNames;
     protected ArrayList<String> mRecepientEmails;
+    protected ArrayList<String> mDeviceIds;
     protected Toolbar toolbar;
 
     private RecyclerView mRecyclerView;
@@ -71,7 +73,7 @@ public class SendTo extends ActionBarActivity  {
         mRecepientEmails = new ArrayList<String>();
         mSendTo = new ArrayList<Integer>();
         mRecepientUserNames = new ArrayList<String>();
-
+        mDeviceIds = new ArrayList<String>();
 
 
     }
@@ -98,6 +100,7 @@ public class SendTo extends ActionBarActivity  {
 
                 intent.putStringArrayListExtra(Statics.KEY_USERNAME, mRecepientUserNames);
                 intent.putStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS,  mRecepientEmails);
+                intent.putStringArrayListExtra(Statics.KEY_DEVICE_ID, mDeviceIds);
                 setResult(RESULT_OK, intent);
                 finish();
                 return true;
@@ -110,6 +113,7 @@ public class SendTo extends ActionBarActivity  {
         return super.onOptionsItemSelected(item);
 
     }
+
 
 
 }

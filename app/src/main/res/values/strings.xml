@@ -69,7 +69,6 @@
     <string name="send_message_to">To:_____</string>
     <string name="send_message_to_add_users">To: </string>
     <string name="no_exisiting_partners_message">Add a partner first</string>
-
     <string name="view_sexy_calendar_button">Sexy Calendar</string>
     <string name="title_activity_send_message">SendMessage</string>
     <string name="title_activity_send_to">SendTo</string>
@@ -119,6 +118,7 @@
     <string name="toast_no_love_message">Please compose your love message first</string>
     <string name="toast_no_recepients">To who should I send the message to?</string>
     <string name="dialog_box_deleting_partner">Are you breaking up?</string>
+
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
@@ -130,5 +130,6 @@
 
     <string name="title_activity_edit_partners">EditPartnersActivity</string>
     <string name="title_activity_manage_partners_main">ManagePartnersMain</string>
+    <string name="title_activity_accept_chat">AcceptChatActivity</string>
 
 </resources>

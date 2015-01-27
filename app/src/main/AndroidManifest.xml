@@ -14,6 +14,9 @@
         android:name="com.victor.sexytalk.sexytalk.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
+
+
+
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -24,72 +27,67 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <service android:name="com.backendless.AndroidService" />
 
         <activity
             android:name=".Main"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".SignUpActivity"
-            android:label="@string/app_name" >
-        </activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".SendMessage"
-            android:label="@string/app_name"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:parentActivityName=".Main" >
-        </activity>
+            android:label="@string/app_name"
+            android:parentActivityName=".Main" />
         <activity
             android:name=".SendTo"
             android:label="@string/app_name"
-            android:parentActivityName=".SendMessage" >
-        </activity>
+            android:parentActivityName=".SendMessage" />
         <activity
             android:name=".ViewTextMessageActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".Main" >
-        </activity>
+            android:parentActivityName=".Main" />
         <activity
             android:name=".ViewImageActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".Main" >
-        </activity>
-        <activity
-            android:name=".ViewMovieActivity"
-            android:label="@string/app_name"
-            android:parentActivityName=".Main" >
-        </activity>
+            android:parentActivityName=".Main" />
         <activity
             android:name=".ViewKissActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".Main" >
-        </activity>
+            android:parentActivityName=".Main" />
         <activity
             android:name=".ManagePartnersMain"
             android:label="@string/app_name"
-            android:parentActivityName=".Main" >
-        </activity>
+            android:parentActivityName=".Main" />
+
+
+
         <receiver
-            android:name="com.backendless.push.BackendlessBroadcastReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:name=".PushReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
-                <category android:name="com.victor.sexytalk.sexytalk" />
+                <category android:name="com.backendless.sexytalk.sexytalk" />
             </intent-filter>
         </receiver>
 
+
+        <activity
+            android:name=".AcceptChatActivity"
+            android:label="@string/title_activity_accept_chat" >
+        </activity>
+
+        <service android:name="com.backendless.AndroidService" />
 
     </application>
 

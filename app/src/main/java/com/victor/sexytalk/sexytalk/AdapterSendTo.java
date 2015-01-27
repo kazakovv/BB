@@ -1,6 +1,8 @@
 package com.victor.sexytalk.sexytalk;
 
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,6 +35,7 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
         public TextView mPartnerUserName;
         public ImageView mPartnerThumbnail;
         public CheckBox mSendYesNo;
+        //public IMyViewHolderClicks mListener;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
@@ -40,9 +43,9 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
             mPartnerThumbnail = (ImageView) itemLayoutView.findViewById(R.id.thumbnail_partner);
             mSendYesNo = (CheckBox) itemLayoutView.findViewById(R.id.sendYesNo);
 
-            //mSendYesNo.setOnClickListener(this);
             mSendYesNo.setClickable(false);
             itemLayoutView.setOnClickListener(this);
+
         }
 
 
@@ -58,24 +61,32 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
                 mRecepientEmails.remove(positionToRemove);
                 mRecepientUserNames.remove(positionToRemove);
 
+
+
             } else {
                 mSendYesNo.setChecked(true);
                 mSendTo.add(getPosition());
                 mRecepientEmails.add(mPartners[getPosition()].getEmail());
                 mRecepientUserNames.add((String) mPartners[getPosition()].getProperty(Statics.KEY_USERNAME));
             }
-
+           // mListener.onPotato(v);
 
         }
-
-
+/*
+        public static interface IMyViewHolderClicks {
+            public void onPotato(View caller);
+            public void onTomato(ImageView callerImage);
+        }
+*/
     }
+
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public AdapterSendTo(BackendlessUser[] myPartners) {
 
         mPartners = myPartners;
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -102,6 +113,7 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
         holder.mPartnerUserName.setText(username);
 
     }
+
 
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -3,6 +3,7 @@ package com.victor.sexytalk.sexytalk;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -15,11 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.DeviceRegistration;
+import com.backendless.Messaging;
 import com.backendless.Subscription;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -27,6 +32,7 @@ import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.Message;
 import com.backendless.messaging.MessageStatus;
 import com.backendless.messaging.PublishOptions;
+import com.backendless.messaging.PushBroadcastMask;
 import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 
@@ -47,10 +53,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     public static final int ACTIVITY_SEND_TO = 11;
 
-    public static final String TAG = Main.class.getSimpleName();
-
     protected MenuItem addPartner;
-
     protected MaterialTabHost tabHost;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,21 +81,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             //proveriavame dali e maz ili zhena
             MaleOrFemale = (String) mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
             //register device for push notifications
-            String GCMSenderID = "473995671207";
-            String channel = mCurrentUser.getObjectId();
+            final String channel = mCurrentUser.getEmail();
 
 
-            Backendless.Messaging.registerDevice(GCMSenderID,channel, new AsyncCallback<Void>() {
-                @Override
-                public void handleResponse(Void aVoid) {
-                    Log.d("Vic","device registered for messaging");
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    Log.d("Vic","device not registered " +backendlessFault.getMessage());
-                }
-            });
 
             //subscribe to the channel, za da poluchvam saobshtenia
             Backendless.Messaging.subscribe(channel,
@@ -104,7 +95,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                                 !!!!tuk se obrabotvat pristignalite saobshtenia!!!!
                                 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                  */
-
+                                Log.d("Vic","I received sth");
                                 String publisherId = message.getPublisherId();
                                 if (message.getData().equals(Statics.KEY_PARTNER_REQUEST)) {
                                     //pokazvame butona za dobaviane na nov partnior
@@ -130,6 +121,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         }
                     }
             );
+
+
+
             //Load all relations for users (partners, etc)
             List<String> rels = new ArrayList<String>();
             rels.add("*");
@@ -295,12 +289,13 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 String someoneSendsYouAKiss = user + " " + getString(R.string.send_a_kiss_message);
 
                 //sazdavame saobshtenieto
-                Messages kissMessage =  new Messages();
+                final Messages kissMessage =  new Messages();
                 kissMessage.setMessageType(Statics.TYPE_KISS);
                 kissMessage.setLoveMessage(someoneSendsYouAKiss);
                 kissMessage.setRecepientEmails(emailsOfRecepients);
                 kissMessage.setSederUsername((String) Backendless.UserService.CurrentUser().getProperty(Statics.KEY_USERNAME));
                 kissMessage.setSender(Backendless.UserService.CurrentUser());
+
 
                 //i go izprashtame
                 Backendless.Persistence.of(Messages.class).save(kissMessage, new AsyncCallback<Messages>() {
@@ -310,29 +305,26 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         //TODO: push test!!!!!
                         //TODO !!!!!!!!!!!!!
 
-                            String channel = mCurrentUser.getObjectId();
-
-                            DeliveryOptions deliveryOptions = new DeliveryOptions();
-                            deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY );
-                            deliveryOptions.addPushSinglecast(channel);
-
-                            PublishOptions publishOptions = new PublishOptions();
-                            publishOptions.putHeader( "android-ticker-text", "You just got a private push notification!" );
-                            publishOptions.putHeader( "android-content-title", "This is a notification title" );
-                            publishOptions.putHeader( "android-content-text", "Push Notifications are cool" );
-
-                            Backendless.Messaging.publish( "this is a private message!", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+                        PublishOptions publishOptions = new PublishOptions();
+                        publishOptions.putHeader( PublishOptions.ANDROID_TICKER_TEXT_TAG, "Backendless" );
+                        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, getResources().getString(R.string.app_name));
+                        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, "Hi");
+                        DeliveryOptions deliveryOptions = new DeliveryOptions();
+                        deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
+                        //publishOptions.setSubtopic("Vic");
+                        deliveryOptions.addPushSinglecast("cad3a932");
+                        String message_subtopic = "Vic";
+                            Backendless.Messaging.publish(mCurrentUser.getEmail(),"Accept me", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
                                 @Override
                                 public void handleResponse(MessageStatus messageStatus) {
-                                    Log.d("Vic","ggod");
+
                                 }
 
                                 @Override
                                 public void handleFault(BackendlessFault backendlessFault) {
                                     String error = backendlessFault.getMessage();
-                                    Log.d("Vic","basd");
                                 }
-                            } );
+                            });
 
                         Toast.makeText(Main.this,getString(R.string.send_a_kiss_toast_successful),Toast.LENGTH_LONG).show();
                     }

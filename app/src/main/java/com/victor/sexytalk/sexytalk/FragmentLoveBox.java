@@ -59,6 +59,7 @@ public class FragmentLoveBox extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myView = getListView();
+
     }
 
     @Override

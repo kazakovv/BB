@@ -42,7 +42,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class SendMessage extends ActionBarActivity {
+public class SendMessage extends ActionBarActivity  {
     protected EditText messageToSend;
     protected TextView mSendMessageTo;
     protected String mMessageType;
@@ -603,4 +603,6 @@ public class SendMessage extends ActionBarActivity {
 
         return bitmap;
     }
+
+
 }
