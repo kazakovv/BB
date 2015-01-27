@@ -72,7 +72,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             navigateToLogin();
         } else {
 
-
+           //TODO moze da gi varna obratno, ako ima nuzda
             //check za pending parner request
             checkForPendingParnerRequests();
             //check za pending delete requests
@@ -124,6 +124,8 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
 
 
+            //TODO Sth is slowing it down a lot
+            //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //Load all relations for users (partners, etc)
             List<String> rels = new ArrayList<String>();
             rels.add("*");
@@ -210,6 +212,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 if( AdapterSendTo.mRecepientEmails != null) {
                     AdapterSendTo.mRecepientEmails.clear();
                     AdapterSendTo.mRecepientUserNames.clear();
+                    AdapterSendTo.mDeviceIds.clear();
                 }
                 String message = mCurrentUser.getProperty(Statics.KEY_USERNAME) + " " +
                         getString(R.string.send_a_kiss_message); //niakoi ti izprati celuvka
@@ -270,9 +273,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 //tezi dva arraylist se vrashtat ot SendTo, sled kato izberem na kogo da pratim celuvka
                 ArrayList<String> recepientUserNames =
                         data.getStringArrayListExtra(Statics.KEY_USERNAME);
-                ArrayList<String> recepientEmails =
+                final ArrayList<String> recepientEmails =
                         data.getStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS);
-
+                final ArrayList<String> deviceIds =
+                        data.getStringArrayListExtra(Statics.KEY_DEVICE_ID);
 
 
                 //sazvavame string s emailite na poluchatelite
@@ -301,36 +305,21 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 Backendless.Persistence.of(Messages.class).save(kissMessage, new AsyncCallback<Messages>() {
                     @Override
                     public void handleResponse(Messages messages) {
-                        //TODO:!!!!!
-                        //TODO: push test!!!!!
-                        //TODO !!!!!!!!!!!!!
+                        //send push message
+                        int i = 0;
+                        for(String device : deviceIds) {
+                            String channel = recepientEmails.get(i); //kanalat e email na poluchatelia
+                            sendPushMessage(device, channel);
+                            i++;
+                        }
 
-                        PublishOptions publishOptions = new PublishOptions();
-                        publishOptions.putHeader( PublishOptions.ANDROID_TICKER_TEXT_TAG, "Backendless" );
-                        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, getResources().getString(R.string.app_name));
-                        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, "Hi");
-                        DeliveryOptions deliveryOptions = new DeliveryOptions();
-                        deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
-                        //publishOptions.setSubtopic("Vic");
-                        deliveryOptions.addPushSinglecast("cad3a932");
-                        String message_subtopic = "Vic";
-                            Backendless.Messaging.publish(mCurrentUser.getEmail(),"Accept me", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
-                                @Override
-                                public void handleResponse(MessageStatus messageStatus) {
-
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault backendlessFault) {
-                                    String error = backendlessFault.getMessage();
-                                }
-                            });
 
                         Toast.makeText(Main.this,getString(R.string.send_a_kiss_toast_successful),Toast.LENGTH_LONG).show();
                     }
 
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
+                        String error = backendlessFault.getMessage();
                         Toast.makeText(Main.this,getString(R.string.send_a_kiss_toast_unsuccessful),Toast.LENGTH_LONG).show();
 
                     }
@@ -344,6 +333,33 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         }
     }
 
+    protected void sendPushMessage(String deviceId, String channel) {
+        //TODO: push test!!!!!
+        //TODO !!!!!!!!!!!!!
+
+        PublishOptions publishOptions = new PublishOptions();
+        publishOptions.putHeader( PublishOptions.ANDROID_TICKER_TEXT_TAG, "Backendless" );
+        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, getResources().getString(R.string.app_name));
+        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, "Hi");
+        DeliveryOptions deliveryOptions = new DeliveryOptions();
+        deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
+        deliveryOptions.addPushSinglecast(deviceId);
+
+        //TODO fix for more than 1 recepient push
+        String message_subtopic = "Vic";
+        Backendless.Messaging.publish(channel,"Accept me", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+            @Override
+            public void handleResponse(MessageStatus messageStatus) {
+
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                String error = backendlessFault.getMessage();
+            }
+        });
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

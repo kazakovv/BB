@@ -92,6 +92,8 @@ public class SendTo extends ActionBarActivity  {
 
         mRecepientEmails = AdapterSendTo.mRecepientEmails;
         mRecepientUserNames = AdapterSendTo.mRecepientUserNames;
+        mDeviceIds = AdapterSendTo.mDeviceIds;
+
         int id = item.getItemId();
         switch(item.getItemId()) {
             case R.id.action_ok:

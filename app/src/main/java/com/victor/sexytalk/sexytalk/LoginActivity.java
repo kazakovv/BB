@@ -124,6 +124,7 @@ public class LoginActivity extends Activity {
 
             final String channel = currentUser.getEmail();
 
+
             Backendless.Messaging.registerDevice(Statics.GOOGLE_PROJECT_ID, channel, new AsyncCallback<Void>() {
                 @Override
                 public void handleResponse(Void aVoid) {
@@ -140,10 +141,9 @@ public class LoginActivity extends Activity {
                             Backendless.Messaging.registerDeviceOnServer(token, channels, expiration.getTime(), new AsyncCallback<String>() {
                                 @Override
                                 public void handleResponse(String s) {
-                                    Toast.makeText(LoginActivity.this, "finally registered", Toast.LENGTH_LONG).show();
-                                    Log.d("Vic", "finally registerred?");
 
                                     currentUser.setProperty(Statics.KEY_DEVICE_ID,deviceRegistration.getDeviceId());
+
                                     Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
                                         @Override
                                         public void handleResponse(BackendlessUser backendlessUser) {
@@ -170,13 +170,14 @@ public class LoginActivity extends Activity {
 
                         @Override
                         public void handleFault(BackendlessFault backendlessFault) {
-
+                            //TODO handle fault
                         }
                     });
                 }
 
                 @Override
                 public void handleFault(BackendlessFault backendlessFault) {
+                    //TODO handle fault
                     Log.d("Vic", "device not registered " + backendlessFault.getMessage());
                 }
             });

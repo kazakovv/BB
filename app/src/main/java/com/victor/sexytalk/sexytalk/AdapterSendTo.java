@@ -25,7 +25,7 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
 
     public static ArrayList<String> mRecepientUserNames = new ArrayList<String>();
     public static ArrayList<String> mRecepientEmails = new ArrayList<String>();
-
+    public static ArrayList<String> mDeviceIds = new ArrayList<String>();
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -60,7 +60,7 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
                 mSendTo.remove(positionToRemove);
                 mRecepientEmails.remove(positionToRemove);
                 mRecepientUserNames.remove(positionToRemove);
-
+                mDeviceIds.remove(positionToRemove);
 
 
             } else {
@@ -68,6 +68,7 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
                 mSendTo.add(getPosition());
                 mRecepientEmails.add(mPartners[getPosition()].getEmail());
                 mRecepientUserNames.add((String) mPartners[getPosition()].getProperty(Statics.KEY_USERNAME));
+                mDeviceIds.add((String) mPartners[getPosition()].getProperty(Statics.KEY_DEVICE_ID));
             }
            // mListener.onPotato(v);
 
