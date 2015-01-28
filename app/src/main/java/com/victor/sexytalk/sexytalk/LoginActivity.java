@@ -3,6 +3,7 @@ package com.victor.sexytalk.sexytalk;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -70,7 +71,9 @@ public class LoginActivity extends Activity {
                     user.setEmail(userEmail);
                     user.setPassword(password);
 
-                    Backendless.UserService.login(userEmail, password, new AsyncCallback<BackendlessUser>() {
+                    String progressSignInMessage = getResources().getString(R.string.progress_sign_in_message);
+                    Backendless.UserService.login(userEmail, password,
+                            new DefaultCallback<BackendlessUser>(LoginActivity.this, progressSignInMessage) {
                         @Override
                         public void handleResponse(BackendlessUser backendlessUser) {
                             //Register device for push notifications

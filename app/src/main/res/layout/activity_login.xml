@@ -45,7 +45,9 @@
         android:textSize="13sp"
         android:textColor="@color/color_white"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"/>
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:background="@drawable/button_custom"
+        />
 
     <TextView
         android:layout_width="wrap_content"

@@ -4,5 +4,7 @@
     <color name="text_color">#ffffff</color>
     <color name="primary_color">#EF9A9A</color>
     <color name="accent_color">#212121</color>
-
+    <color name="button_default">#EF9A9A</color>
+    <color name="button_pressed">#F44336</color>
+    <color name="button_focused">#FFCDD2</color>
 </resources>
