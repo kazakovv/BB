@@ -118,6 +118,8 @@
     <string name="toast_no_love_message">Please compose your love message first</string>
     <string name="toast_no_recepients">To who should I send the message to?</string>
     <string name="dialog_box_deleting_partner">Are you breaking up?</string>
+    <string name="push_message_kiss">You received a kiss</string>
+    <string name="push_message_love_message">You received a love message</string>
 
     <string-array name="camera_choices">
         <item>Take Picture</item>

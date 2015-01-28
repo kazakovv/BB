@@ -462,8 +462,7 @@ public class SendMessage extends ActionBarActivity  {
                     //ako saobshtenieto e Image ili Video, go izprashtame
                     //Parvo uploadvame file, posle izprashteme i saboshtenieto
                     //uploadvame file, ako ima takav
-                    if(mMessageType.equals(Statics.TYPE_IMAGE) ||
-                            mMessageType.equals(Statics.TYPE_VIDEO)) {
+                    if(mMessageType.equals(Statics.TYPE_IMAGE)  ) {
                         //ako image uploadvame file na servera
                         //razbiva fila na array ot bitove, za da go smalim i kachim na servera
 
@@ -475,11 +474,6 @@ public class SendMessage extends ActionBarActivity  {
                              fileBytes = FileHelper.reduceImageForUpload(fileBytes);
                             path = "/pics/" +
                                     FileHelper.getFileName(SendMessage.this,mMediaUri,Statics.TYPE_IMAGE);
-                        } else {
-                            //ako e video zadavame druga dir
-                            path = "/mov/" +
-                                    FileHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_VIDEO);
-
                         }
 
 
@@ -497,9 +491,16 @@ public class SendMessage extends ActionBarActivity  {
                                         Toast.makeText(SendMessage.this,
                                                 R.string.message_successfully_sent,Toast.LENGTH_LONG).show();
 
-                                        //TODO: izprashtame push notification, che ima novo saobshtenie
+                                            //izprashtame push message
+                                            for(BackendlessUser recepient : recepients) {
+                                                String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
+                                                String channel = recepient.getEmail();
+                                                if(! (deviceId.isEmpty() && channel.isEmpty() ) ) {
+                                                    //ako ne sa prazni izprashtame push message
+                                                    sendPushMessage(deviceId,channel);
+                                                }
 
-
+                                            }
 
 
                                     }
@@ -538,8 +539,17 @@ public class SendMessage extends ActionBarActivity  {
                             public void handleResponse(Messages messages) {
                                 Toast.makeText(SendMessage.this, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
 
-                                //TODO: izprashtame push notification, che ima novo saobshtenie
 
+                                //izprashtame push message
+                                for(BackendlessUser recepient : recepients) {
+                                    String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
+                                    String channel = recepient.getEmail();
+                                    if(! (deviceId.isEmpty() && channel.isEmpty() ) ) {
+                                        //ako ne sa prazni izprashtame push message
+                                        sendPushMessage(deviceId,channel);
+                                    }
+
+                                }
                             }
 
                             @Override
@@ -575,6 +585,36 @@ public class SendMessage extends ActionBarActivity  {
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*
+            Helper metodi
+     */
+    protected void sendPushMessage(String deviceId, String channel) {
+
+        String message = getResources().getString(R.string.push_message_love_message);
+
+        PublishOptions publishOptions = new PublishOptions();
+        publishOptions.putHeader( PublishOptions.ANDROID_TICKER_TEXT_TAG, message );
+        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, getResources().getString(R.string.app_name));
+        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, message);
+        DeliveryOptions deliveryOptions = new DeliveryOptions();
+        deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
+        deliveryOptions.addPushSinglecast(deviceId);
+
+
+        Backendless.Messaging.publish(channel,"Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+            @Override
+            public void handleResponse(MessageStatus messageStatus) {
+
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                String error = backendlessFault.getMessage();
+            }
+        });
+
     }
 
     protected String constructWhereClause() {

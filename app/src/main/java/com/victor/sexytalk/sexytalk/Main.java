@@ -334,20 +334,19 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     }
 
     protected void sendPushMessage(String deviceId, String channel) {
-        //TODO: push test!!!!!
-        //TODO !!!!!!!!!!!!!
+
+        String message = getResources().getString(R.string.push_message_kiss);
 
         PublishOptions publishOptions = new PublishOptions();
-        publishOptions.putHeader( PublishOptions.ANDROID_TICKER_TEXT_TAG, "Backendless" );
+        publishOptions.putHeader( PublishOptions.ANDROID_TICKER_TEXT_TAG, message );
         publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, getResources().getString(R.string.app_name));
-        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, "Hi");
+        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, message);
         DeliveryOptions deliveryOptions = new DeliveryOptions();
         deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
         deliveryOptions.addPushSinglecast(deviceId);
 
-        //TODO fix for more than 1 recepient push
-        String message_subtopic = "Vic";
-        Backendless.Messaging.publish(channel,"Accept me", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+
+        Backendless.Messaging.publish(channel,"Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
             @Override
             public void handleResponse(MessageStatus messageStatus) {
 
