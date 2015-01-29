@@ -31,6 +31,7 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
+
         if (convertView == null || convertView.getTag() == null ) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_message, null);
             holder = new ViewHolder();
@@ -41,18 +42,18 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
             holder = (ViewHolder) convertView.getTag();
         }
 
+
+
+
         Messages message = mMessages.get(position);
         if(message.getMessageType().equals(Statics.TYPE_IMAGE)) {
             holder.iconImageView.setImageResource(R.drawable.ic_action_picture);
-
-        } else if (message.getMessageType().equals(Statics.TYPE_VIDEO)){
-            holder.iconImageView.setImageResource(R.drawable.ic_action_play_over_video);
 
         } else if (message.getMessageType().equals(Statics.TYPE_KISS)) {
             holder.iconImageView.setImageResource(R.drawable.ic_kiss_dark);
         }
 
-        else {
+        else { //prosto text saobstehnie
             holder.iconImageView.setImageResource(R.drawable.ic_action_unread);
         }
         String namesender = message.getSenderUsername();
@@ -66,13 +67,6 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
         TextView nameLabel;
     }
 
-
-
-    public void refill(List<Messages> messages) {
-        mMessages.clear();
-        mMessages.addAll(messages);
-        notifyDataSetChanged();
-    }
 
 
 }

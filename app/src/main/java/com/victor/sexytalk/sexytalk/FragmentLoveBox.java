@@ -2,9 +2,11 @@ package com.victor.sexytalk.sexytalk;
 
 
 
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -37,6 +40,7 @@ public class FragmentLoveBox extends ListFragment {
    protected View myView;
    protected SwipeRefreshLayout mSwipeRefreshLayout;
    protected BackendlessUser currentUser;
+   protected ListView mListView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class FragmentLoveBox extends ListFragment {
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+
         return rootView;
     }
     //refresh listener za updatevane na tova dali ima novi saobstehnia
@@ -59,10 +64,38 @@ public class FragmentLoveBox extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         myView = getListView();
+        mListView = getListView();
 
+        mListView.setOnScrollListener(mOnScrollListener);
     }
+    //on scroll listener za list view
+    protected ListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
 
-    @Override
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            boolean enable = false;
+            if(mListView != null && mListView.getChildCount() > 0){
+                // check if the first item of the list is visible
+                boolean firstItemVisible = mListView.getFirstVisiblePosition() == 0;
+                // check if the top of the first item is visible
+                boolean topOfFirstItemVisible = mListView.getChildAt(0).getTop() == 0;
+                // enabling or disabling the refresh layout
+                enable = firstItemVisible && topOfFirstItemVisible;
+            }
+            mSwipeRefreshLayout.setEnabled(enable);
+
+
+
+        }
+
+
+    };
+
+
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //set up the toolbar
@@ -179,6 +212,7 @@ protected void searchForMessages(){
     BackendlessDataQuery query = new BackendlessDataQuery();
     QueryOptions queryOptions = new QueryOptions();
     query.setWhereClause(whereClause);
+    queryOptions.setPageSize(50);
     //TODO: Eventualno, ako dobavia relations kato users poluchaeli moga da tarsia i po tozi kriterii
     query.setQueryOptions( queryOptions );
 
@@ -186,18 +220,16 @@ protected void searchForMessages(){
 
         @Override
         public void handleResponse(BackendlessCollection<Messages> messages) {
+
             //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
             if(mSwipeRefreshLayout.isRefreshing()){
             mSwipeRefreshLayout.setRefreshing(false);
             }
-
             messagesToDisplay = new ArrayList<Messages>();
-            int numberOfMesages = messages.getCurrentPage().size();
-
-            for (int i = 0; i <numberOfMesages; i++) {
-                messagesToDisplay.add(messages.getCurrentPage().get(i));
-                Log.d("Vic","one more added");
+            if(messages.getData().size() > 0) {
+                messagesToDisplay = messages.getData();
             }
+
 
 
             Collections.sort(messagesToDisplay,new Comparator<Messages>() {
@@ -227,5 +259,7 @@ protected void searchForMessages(){
     });
 
 }
+
+
 
 }

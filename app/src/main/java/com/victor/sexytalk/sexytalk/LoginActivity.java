@@ -150,7 +150,7 @@ public class LoginActivity extends Activity {
                                     Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
                                         @Override
                                         public void handleResponse(BackendlessUser backendlessUser) {
-                                            Toast.makeText(LoginActivity.this,"updated user" + currentUser.getProperty(Statics.KEY_DEVICE_ID),Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(LoginActivity.this,"updated user " + currentUser.getProperty(Statics.KEY_DEVICE_ID),Toast.LENGTH_LONG).show();
                                         }
 
                                         @Override

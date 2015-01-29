@@ -82,10 +82,7 @@
         </receiver>
 
 
-        <activity
-            android:name=".AcceptChatActivity"
-            android:label="@string/title_activity_accept_chat" >
-        </activity>
+
 
         <service android:name="com.backendless.AndroidService" />
 
