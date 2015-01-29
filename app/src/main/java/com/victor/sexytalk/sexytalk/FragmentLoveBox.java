@@ -2,11 +2,7 @@ package com.victor.sexytalk.sexytalk;
 
 
 
-import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -17,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -41,11 +38,12 @@ public class FragmentLoveBox extends ListFragment {
    protected SwipeRefreshLayout mSwipeRefreshLayout;
    protected BackendlessUser currentUser;
    protected ListView mListView;
+   protected TextView mEmptyMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_love_box, container, false);
-
+        mEmptyMessage = (TextView) rootView.findViewById(R.id.empty_message);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
@@ -65,7 +63,7 @@ public class FragmentLoveBox extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         myView = getListView();
         mListView = getListView();
-
+        mListView.setEmptyView(mEmptyMessage);//TODO ne pokazva praznoto saobstehnie
         mListView.setOnScrollListener(mOnScrollListener);
     }
     //on scroll listener za list view

@@ -14,7 +14,10 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.MessageStatus;
+import com.backendless.messaging.PublishOptions;
+import com.backendless.messaging.PushPolicyEnum;
 
 import java.util.List;
 
@@ -96,9 +99,11 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
                 //sled kato kachim data v backendless izprashtame i push
 
                 //tova e za kanala, po koito da izpratim push message
-                String receiverID = selectedPartner.getObjectId();
+                String channel = selectedPartner.getEmail();
+                //TODO tr da izpratim i istinsko push message
 
-                Backendless.Messaging.publish(receiverID,Statics.KEY_PARTNER_REQUEST,new AsyncCallback<MessageStatus>() {
+                Backendless.Messaging.publish(channel,Statics.KEY_PARTNER_REQUEST,
+                        new AsyncCallback<MessageStatus>() {
                     @Override
                     public void handleResponse(MessageStatus messageStatus) {
                         //iztrivame rezultata ot spisaka i refreshvame spisaka
