@@ -90,13 +90,14 @@ public class LoginActivity extends Activity {
                         @Override
                         public void handleFault(BackendlessFault backendlessFault) {
                             //neuspeshen login
-
+                            super.handleFault(backendlessFault);
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setTitle(R.string.login_error_title)
                                     .setMessage(R.string.general_login_error_message)
                                     .setPositiveButton(R.string.ok, null);
                             AlertDialog dialog = builder.create();
                             dialog.show();
+
                         }
                     });
 

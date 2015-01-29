@@ -1,5 +1,6 @@
 package com.victor.sexytalk.sexytalk;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
@@ -31,10 +32,12 @@ public class DefaultCallback<T> extends BackendlessCallback<T>
   }
 
   @Override
-  public void handleFault( BackendlessFault fault )
+  public void handleFault( BackendlessFault backendlessFault )
   {
     progressDialog.cancel();
-    Toast.makeText(context, fault.getMessage(), Toast.LENGTH_LONG).show();
+
   }
+
+
 }
                                             

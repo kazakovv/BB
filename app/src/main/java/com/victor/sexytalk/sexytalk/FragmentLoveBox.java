@@ -212,7 +212,7 @@ protected void searchForMessages(){
     BackendlessDataQuery query = new BackendlessDataQuery();
     QueryOptions queryOptions = new QueryOptions();
     query.setWhereClause(whereClause);
-    queryOptions.setPageSize(50);
+    queryOptions.setPageSize(50); //max saobshtenia koito shte izlizat. Ako ima poveche se gubiat. Max tuk e 100
     //TODO: Eventualno, ako dobavia relations kato users poluchaeli moga da tarsia i po tozi kriterii
     query.setQueryOptions( queryOptions );
 
