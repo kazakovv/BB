@@ -18,6 +18,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.Adaptors.AdapterSearchPartners;
 
 import java.util.ArrayList;
 import java.util.List;

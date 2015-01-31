@@ -19,6 +19,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
+import com.victor.sexytalk.sexytalk.Adaptors.AdapterPartnerRequests;
 
 import java.util.List;
 

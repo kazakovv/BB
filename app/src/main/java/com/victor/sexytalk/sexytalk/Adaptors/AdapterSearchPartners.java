@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.Adaptors;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -18,6 +18,9 @@ import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.MessageStatus;
 import com.backendless.messaging.PublishOptions;
 import com.backendless.messaging.PushPolicyEnum;
+import com.victor.sexytalk.sexytalk.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.List;
 
@@ -31,7 +34,7 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
     protected BackendlessUser mCurrentUser;
 
     public AdapterSearchPartners(Context context, List<BackendlessUser> partners, BackendlessUser currentUser) {
-        super(context,R.layout.item_add_partner, partners);
+        super(context, R.layout.item_add_partner, partners);
         mContext = context;
         mPartners = partners;
         mCurrentUser = currentUser;

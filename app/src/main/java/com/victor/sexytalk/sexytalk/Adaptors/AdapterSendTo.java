@@ -1,8 +1,6 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.Adaptors;
 
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.backendless.BackendlessUser;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.ArrayList;
 

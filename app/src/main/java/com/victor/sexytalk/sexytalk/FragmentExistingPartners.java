@@ -1,9 +1,6 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +9,7 @@ import android.widget.TextView;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.victor.sexytalk.sexytalk.Adaptors.AdapterExistingPartners;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.Adaptors;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -18,6 +18,9 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.MessageStatus;
+import com.victor.sexytalk.sexytalk.PartnerDeleteRequest;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.List;
 

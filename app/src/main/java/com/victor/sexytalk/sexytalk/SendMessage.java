@@ -1,6 +1,5 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -32,6 +30,7 @@ import com.backendless.messaging.MessageStatus;
 import com.backendless.messaging.PublishOptions;
 import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
 
 import java.io.File;
 import java.io.IOException;

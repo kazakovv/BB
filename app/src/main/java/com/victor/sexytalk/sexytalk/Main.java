@@ -3,7 +3,6 @@ package com.victor.sexytalk.sexytalk;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -16,15 +15,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.DeviceRegistration;
-import com.backendless.Messaging;
 import com.backendless.Subscription;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
@@ -32,9 +27,9 @@ import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.Message;
 import com.backendless.messaging.MessageStatus;
 import com.backendless.messaging.PublishOptions;
-import com.backendless.messaging.PushBroadcastMask;
 import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -235,18 +230,20 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
                 return true;
             case R.id.menu_logout:
-                Backendless.UserService.logout(new AsyncCallback<Void>() {
-                    @Override
-                    public void handleResponse(Void aVoid) {
-                        //prashta kam login screen
-                        navigateToLogin();
-                    }
+                Backendless.UserService
+                        .logout(new DefaultCallback<Void>(this, getResources().getString(R.string.logout_message)) {
+                            @Override
+                            public void handleResponse(Void aVoid) {
+                                //prashta kam login screen
+                                navigateToLogin();
+                            }
 
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        Toast.makeText(Main.this,R.string.logout_error,Toast.LENGTH_LONG).show();
-                    }
-                });
+                            @Override
+                            public void handleFault(BackendlessFault backendlessFault) {
+                                super.handleFault(backendlessFault);
+                                Toast.makeText(Main.this, R.string.logout_error, Toast.LENGTH_LONG).show();
+                            }
+                        });
 
 
                 return true;

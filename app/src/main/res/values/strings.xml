@@ -121,6 +121,7 @@
     <string name="push_message_kiss">You received a kiss</string>
     <string name="push_message_love_message">You received a love message</string>
     <string name="progress_sign_in_message">Signing in, please wait.</string>
+    <string name="logout_message">Logging out</string>
 
     <string-array name="camera_choices">
         <item>Take Picture</item>
