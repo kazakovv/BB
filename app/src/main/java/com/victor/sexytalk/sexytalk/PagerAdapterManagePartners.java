@@ -5,6 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.victor.sexytalk.sexytalk.FragmentExistingPartners;
+import com.victor.sexytalk.sexytalk.FragmentPartnerRequests;
+import com.victor.sexytalk.sexytalk.FragmentSearchPartners;
+import com.victor.sexytalk.sexytalk.R;
+
 /**
  * Tova e adapter za manage partners
  */

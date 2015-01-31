@@ -5,6 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.victor.sexytalk.sexytalk.FragmentLoveBox;
+import com.victor.sexytalk.sexytalk.FragmentLoveDays;
+import com.victor.sexytalk.sexytalk.R;
+
 
 /**
  * Tova e pager adapter za Main activity

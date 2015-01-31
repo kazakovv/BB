@@ -11,6 +11,7 @@
     <string name="cancel">Cancel</string>
     <string name="menu_calendar">Days</string>
     <string name="menu_select_sex">Sex</string>
+    <string name="menu_edit_profile">Edit Profile</string>
     <string name="menu_send_a_kiss">Send a kiss</string>
     <string name="menu_send_message">Send a message</string>
     <string name="menu_edit_partner">Partners</string>
@@ -135,5 +136,6 @@
     <string name="title_activity_edit_partners">EditPartnersActivity</string>
     <string name="title_activity_manage_partners_main">ManagePartnersMain</string>
     <string name="title_activity_accept_chat">AcceptChatActivity</string>
+    <string name="title_activity_edit_profile">EditProfileActivity</string>
 
 </resources>

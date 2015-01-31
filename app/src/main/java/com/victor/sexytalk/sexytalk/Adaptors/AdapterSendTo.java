@@ -2,6 +2,7 @@ package com.victor.sexytalk.sexytalk.Adaptors;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -81,8 +82,6 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
 */
     }
 
-
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public AdapterSendTo(BackendlessUser[] myPartners) {
 
@@ -102,9 +101,6 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
         ViewHolder vh = new ViewHolder(itemLayoutView);
         return vh;
     }
-
-
-
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
@@ -114,8 +110,6 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
         holder.mPartnerUserName.setText(username);
 
     }
-
-
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override

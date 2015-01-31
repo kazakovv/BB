@@ -24,6 +24,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterMessage;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 
 import java.util.ArrayList;
 import java.util.Collections;

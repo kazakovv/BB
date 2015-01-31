@@ -31,6 +31,7 @@ import com.backendless.messaging.PublishOptions;
 import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 
 import java.io.File;
 import java.io.IOException;

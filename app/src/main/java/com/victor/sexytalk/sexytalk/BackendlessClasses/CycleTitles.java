@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.BackendlessClasses;
 
 /**
  * Created by Victor on 26/12/14.

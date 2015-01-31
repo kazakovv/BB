@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.BackendlessClasses;
 
 import com.backendless.BackendlessUser;
 

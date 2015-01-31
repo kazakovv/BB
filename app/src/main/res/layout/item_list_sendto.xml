@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/list_item_hight"
     android:orientation="vertical"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
+
     >
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/list_item_hight"
+        android:layout_height="match_parent"
         android:id="@+id/thumbnail_partner"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:scaleType="fitXY"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/message_list_vertical_margin"
         android:paddingBottom="@dimen/message_list_vertical_margin"
@@ -22,14 +23,13 @@
         android:id="@+id/partnerUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/thumbnail_partner"
-        android:layout_centerVertical="true"
-        android:layout_toEndOf="@+id/thumbnail_partner"
-        android:layout_toRightOf="@+id/thumbnail_partner"
         android:paddingLeft="@dimen/message_list_vertical_margin"
         android:text="Medium Text"
 
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/thumbnail_partner"
+        android:layout_toEndOf="@+id/thumbnail_partner" />
 
     <CheckBox
         android:layout_width="wrap_content"

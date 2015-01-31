@@ -14,9 +14,6 @@
         android:name="com.victor.sexytalk.sexytalk.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-
-
-
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
@@ -27,12 +24,12 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".Main"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -68,11 +65,9 @@
             android:label="@string/app_name"
             android:parentActivityName=".Main" />
 
-
-
         <receiver
             android:name=".PushReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND">
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
@@ -81,11 +76,12 @@
             </intent-filter>
         </receiver>
 
-
-
-
         <service android:name="com.backendless.AndroidService" />
 
+        <activity
+            android:name=".EditProfileActivity"
+            android:label="@string/title_activity_edit_profile" >
+        </activity>
     </application>
 
 </manifest>

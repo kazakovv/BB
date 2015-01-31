@@ -30,6 +30,9 @@ import com.backendless.messaging.PublishOptions;
 import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
@@ -223,6 +226,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 //slagame toya KEY, za da prevkluchim na pravilia tab ot drugata strana kato otvorim ekrana
                 partnerRequest.putExtra(Statics.KEY_PARTNERS_SELECT_TAB,Statics.KEY_PARTNERS_SELECT_PENDING_REQUESTS);
                 startActivity(partnerRequest);
+                return true;
+            case R.id.menu_edit_profile:
+                Intent editProfileIntent = new Intent(this,EditProfileActivity.class);
+                startActivity(editProfileIntent);
                 return true;
             case R.id.menu_sex:
                 DialogFragment sexDialog = new MaleOrFemaleDialog();

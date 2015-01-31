@@ -19,7 +19,6 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 
-
 /**
  * Created by Victor on 19/10/2014.
  */

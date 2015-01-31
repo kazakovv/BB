@@ -1,9 +1,6 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -36,11 +33,7 @@ public class ManagePartnersMain extends ActionBarActivity implements MaterialTab
         setSupportActionBar(toolbar);
         tabHost = (MaterialTabHost) this.findViewById(R.id.materialTabHost);
 
-        //actionbar = getActionBar();
-        //actionbar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        //actionbar.addTab(actionbar.newTab().setText(R.string.search_partners_tab).setTabListener(this));
-        //actionbar.addTab(actionbar.newTab().setText(R.string.requests_partners_tab).setTabListener(this));
-        //actionbar.addTab(actionbar.newTab().setText(R.string.existing_partners_tab).setTabListener(this));
+
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,13 +10,14 @@
         layout="@layout/app_toolbar" />
 
     <TextView
-        android:id="@android:id/empty"
+        android:id="@+id/emptyMessageRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/app_toolbar"
+        android:layout_below="@+id/toolbar"
         android:text="@string/no_exisiting_partners_message" />
 
     <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/toolbar"
         android:id="@+id/list_with_partners"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
@@ -26,4 +27,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>

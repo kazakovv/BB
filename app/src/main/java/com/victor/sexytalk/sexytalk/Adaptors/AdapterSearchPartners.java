@@ -14,11 +14,8 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.MessageStatus;
-import com.backendless.messaging.PublishOptions;
-import com.backendless.messaging.PushPolicyEnum;
-import com.victor.sexytalk.sexytalk.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 

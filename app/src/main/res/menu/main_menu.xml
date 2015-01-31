@@ -34,6 +34,10 @@
             android:showAsAction="always">
                 <menu>
                     <item
+                        android:id="@+id/menu_edit_profile"
+                        android:title="@string/menu_edit_profile"
+                        />
+                    <item
                         android:id="@+id/menu_sex"
                         android:title="@string/menu_select_sex"
                         />

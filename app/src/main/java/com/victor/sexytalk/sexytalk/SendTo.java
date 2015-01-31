@@ -10,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 
 import com.backendless.Backendless;
@@ -29,6 +31,7 @@ public class SendTo extends ActionBarActivity  {
     protected ArrayList<String> mRecepientEmails;
     protected ArrayList<String> mDeviceIds;
     protected Toolbar toolbar;
+    protected TextView mEmptyMessageRecyclerView;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -42,6 +45,7 @@ public class SendTo extends ActionBarActivity  {
         if (Backendless.UserService.CurrentUser() != null) {
             mCurrentUSer = Backendless.UserService.CurrentUser();
 
+            mEmptyMessageRecyclerView = (TextView) findViewById(R.id.emptyMessageRecyclerView);
             //vrazvame recyclerview
             mRecyclerView = (RecyclerView) findViewById(R.id.list_with_partners);
             mRecyclerView.setHasFixedSize(true);
@@ -51,6 +55,7 @@ public class SendTo extends ActionBarActivity  {
             // specify an adapter (see also next example)
             //samo ako ima partniori
         if( mCurrentUSer.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+            mEmptyMessageRecyclerView.setVisibility(View.INVISIBLE);
             mPartners = (BackendlessUser[]) mCurrentUSer.getProperty(Statics.KEY_PARTNERS);
             mAdapter = new AdapterSendTo(mPartners);
             mRecyclerView.setAdapter(mAdapter);

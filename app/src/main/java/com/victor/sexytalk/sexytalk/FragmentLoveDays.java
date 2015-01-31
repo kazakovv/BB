@@ -26,7 +26,8 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
-import com.backendless.persistence.QueryOptions;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleDays;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleTitles;
 
 import java.util.ArrayList;
 import java.util.Calendar;
