@@ -1,23 +1,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context="com.victor.sexytalk.sexytalk.EditProfileActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/app_toolbar" />
 
     <ImageView
         android:layout_width="@dimen/thumbnail_width"
         android:layout_height="@dimen/thumbnail_height"
+        android:layout_below="@id/toolbar"
         android:id="@+id/profilePicture"
         android:src="@drawable/ic_action_person_black"
-        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <ListView
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/accountOptionsList"
+        android:id="@android:id/list"
         android:layout_below="@+id/profilePicture"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

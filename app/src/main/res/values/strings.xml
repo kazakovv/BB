@@ -128,9 +128,17 @@
         <item>Take Picture</item>
         <item>Choose Picture</item>
     </string-array>
+
     <string-array name="sex_options">
         <item>Male</item>
         <item>Female</item>
+    </string-array>
+
+    <string-array name="edit_profile_options">
+        <item>Change your sex</item>
+        <item>Change date of birth</item>
+        <item>Change password</item>
+        <item>Change profile picture</item>
     </string-array>
 
     <string name="title_activity_edit_partners">EditPartnersActivity</string>
