@@ -1,9 +1,12 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.Helper;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+
+import com.victor.sexytalk.sexytalk.ImageResizer;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import org.apache.commons.io.IOUtils;
 
@@ -20,7 +23,7 @@ public class FileHelper {
 	public static final String TAG = FileHelper.class.getSimpleName();
 	
 	public static final int SHORT_SIDE_TARGET = 1280;
-	
+
 	public static byte[] getByteArrayFromFile(Context context, Uri uri) {
 		byte[] fileBytes = null;
         InputStream inStream = null;

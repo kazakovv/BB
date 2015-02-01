@@ -32,6 +32,7 @@ import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
+import com.victor.sexytalk.sexytalk.Helper.FileHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,10 +65,10 @@ public class SendMessage extends ActionBarActivity  {
     public static final String TAG = SendMessage.class.getSimpleName();
     protected MenuItem mRotateLeft;
     protected MenuItem mRotateRight;
-    ImageView imageViewForThumbnailPreview;
+    protected ImageView imageViewForThumbnailPreview;
 
-    //onCLick listener za uload na picture ili video
-    protected DialogInterface.OnClickListener mUploadPictureOrVideo =
+    //onCLick listener za uload na picture
+    protected DialogInterface.OnClickListener mUploadPicture =
             new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -387,7 +388,7 @@ public class SendMessage extends ActionBarActivity  {
         if(id == R.id.photoMenu) {
             AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
             builder.setTitle(R.string.menu_camera_alertdialog_title);
-            builder.setItems(R.array.camera_choices, mUploadPictureOrVideo);
+            builder.setItems(R.array.camera_choices, mUploadPicture);
             AlertDialog dialog = builder.create();
             dialog.show();
         }

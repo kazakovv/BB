@@ -48,5 +48,7 @@ public class Statics {
     public static final String GOOGLE_PROJECT_ID = "473995671207";
 
     public static final String KEY_DEVICE_ID = "deviceId";
+
+    public static final String KEY_PROFILE_PIC_PATH = "profilePicPath";
 }
 
