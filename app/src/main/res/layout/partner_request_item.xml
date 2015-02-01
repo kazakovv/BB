@@ -4,8 +4,8 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/list_item_width"
+        android:layout_height="@dimen/list_item_hight"
         android:id="@+id/thumbnail_partner"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:text="@string/pending_partner_request_accept_button"
         android:id="@+id/acceptPartnerButton"
-        android:layout_alignParentTop="true"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/rejectPartnerButton"
         android:layout_toStartOf="@+id/rejectPartnerButton" />
     <Button
@@ -40,7 +40,8 @@
         android:layout_height="wrap_content"
         android:text="@string/pending_partner_request_reject_button"
         android:id="@+id/rejectPartnerButton"
-        android:layout_alignParentTop="true"
+        android:layout_alignTop="@+id/acceptPartnerButton"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 </RelativeLayout>

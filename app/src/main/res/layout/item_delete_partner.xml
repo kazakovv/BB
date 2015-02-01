@@ -6,8 +6,8 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/list_item_width"
+        android:layout_height="@dimen/list_item_hight"
         android:id="@+id/thumbnail_partner"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
@@ -34,8 +34,9 @@
         android:layout_height="wrap_content"
         android:text="@string/partner_delete_list_button"
         android:id="@+id/deletePartnerButton"
+        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

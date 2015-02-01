@@ -15,6 +15,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.MessageStatus;
+import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -59,6 +60,13 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
                 sendPartnerRequest(position);
             }
         });
+
+        //zarezdame profile pic, ako ima takava
+        BackendlessUser partnerSearch = mPartners.get(position);
+        if(partnerSearch.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
+            String existingProfilePicPath = (String) partnerSearch.getProperty(Statics.KEY_PROFILE_PIC_PATH);
+            Picasso.with(mContext).load(existingProfilePicPath).into(holder.iconImageView);
+        }
 
 
         return convertView;

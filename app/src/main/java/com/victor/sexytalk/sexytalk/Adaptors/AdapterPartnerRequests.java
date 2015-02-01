@@ -16,6 +16,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -56,6 +57,13 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
             PartnersAddRequest request = mPendingPartnerRequests.get(position);
             String userName = request.getUsername_userRequesting();
             holder.nameLabel.setText(userName);
+
+        //zarezdame profile pic, ako ima takava
+        BackendlessUser userRequesting = mPendingPartnerRequests.get(position).getUserRequesting();
+        if(userRequesting.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
+            String existingProfilePicPath = (String) userRequesting.getProperty(Statics.KEY_PROFILE_PIC_PATH);
+            Picasso.with(mContext).load(existingProfilePicPath).into(holder.iconImageView);
+        }
             //onClick za accept butona
             holder.buttonAccceptPartner.setOnClickListener(new View.OnClickListener() {
                 @Override

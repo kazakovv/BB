@@ -17,6 +17,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.MessageStatus;
+import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -58,6 +59,13 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
 
         BackendlessUser partner = mPartners.get(position);
         holder.nameLabel.setText(partner.getProperty(Statics.KEY_USERNAME).toString());
+
+        //zarezdame profilePic
+        if(mPartners.get(position).getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
+            String existingProfilePicPath = (String) mPartners.get(position).getProperty(Statics.KEY_PROFILE_PIC_PATH);
+            Picasso.with(mContext).load(existingProfilePicPath).into(holder.iconImageView);
+        }
+
 
         holder.deletePartnerButton.setOnClickListener(new View.OnClickListener() {
             @Override

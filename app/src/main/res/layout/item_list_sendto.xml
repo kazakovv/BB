@@ -9,7 +9,7 @@
 
     >
     <ImageView
-        android:layout_width="@dimen/list_item_hight"
+        android:layout_width="@dimen/list_item_width"
         android:layout_height="@dimen/list_item_hight"
         android:id="@+id/thumbnail_partner"
         android:layout_alignParentTop="true"
