@@ -17,6 +17,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.victor.sexytalk.sexytalk.DefaultCallback;
 import com.victor.sexytalk.sexytalk.PagerAdapterMain;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -27,31 +28,13 @@ import com.victor.sexytalk.sexytalk.Statics;
  */
 public class MaleOrFemaleDialog extends DialogFragment {
 
-    TextView mainMessage;
     BackendlessUser currentUser;
-
-    //butonite za kalendarite za mache i zheni
-    //private Button showSexyCalendarButton;
-    private Button showPrivateDaysCalendarButton;
-    private Spinner showPartnersList;
-    //private Button sexyCalendarForGuysButton;
-
-    ViewPager pager; //izpolzvat se za updatvane na fragmenta sled kato izbera maz ili zhena
-    PagerAdapterMain adapter;
-
     Context context;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        //vrazvam osnovnoto sabshtenie i butonite za kalendarite
         currentUser = Backendless.UserService.CurrentUser();
-        //TODO: butonite za mazki i zhenski kalendari
-        //mainMessage = (TextView) getActivity().findViewById(R.id.mainMessage);
-        //showSexyCalendarButton = (Button) getActivity().findViewById(R.id.showSexyCalendarButton);
-        showPrivateDaysCalendarButton = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
-        showPartnersList = (Spinner) getActivity().findViewById(R.id.listOfPartners);
 
-        pager = (ViewPager) getActivity().findViewById(R.id.pager);
-        adapter = (PagerAdapterMain) pager.getAdapter();
 
         context = getActivity();
 
@@ -62,24 +45,28 @@ public class MaleOrFemaleDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int which) {
                 // The 'which' argument contains the index position
                 // of the selected item
-                switch(which) {
+
+                  String messageCallback = context.getResources().getString(R.string.saving_preferences_message);
+
+                   switch(which) {
                     case 0:
+                        dialog.dismiss();
                         //mainMessage.setText(R.string.main_message_male);
 
                         //update v backendless che e male
                         currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_MALE);
-                        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
+                        Backendless.UserService.update(currentUser, new DefaultCallback<BackendlessUser>(context,messageCallback) {
                             @Override
                             public void handleResponse(BackendlessUser backendlessUser) {
+                                super.handleResponse(backendlessUser);
                                 Toast.makeText(context,
                                         R.string.selection_saved_successfully, Toast.LENGTH_LONG).show();
-                                showPrivateDaysCalendarButton.setVisibility(View.INVISIBLE);
-                                showPartnersList.setVisibility(View.VISIBLE);
-                                refreshFragments();
+
                             }
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
+                                super.handleFault(backendlessFault);
                                 Toast.makeText(context,
                                         R.string.selection_not_saved, Toast.LENGTH_LONG).show();
                             }
@@ -88,20 +75,21 @@ public class MaleOrFemaleDialog extends DialogFragment {
                         break;
                     case 1:
                        // update v backendless che e female
+                        dialog.dismiss();
 
                         currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_FEMALE);
-                        Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
+                        Backendless.UserService.update(currentUser, new DefaultCallback<BackendlessUser>(context, messageCallback) {
                             @Override
                             public void handleResponse(BackendlessUser backendlessUser) {
+                                super.handleResponse(backendlessUser);
                                 Toast.makeText(context,
                                         R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
-                                showPrivateDaysCalendarButton.setVisibility(View.VISIBLE);
-                                showPartnersList.setVisibility(View.INVISIBLE);
-                                refreshFragments();
+
                             }
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
+                                super.handleFault(backendlessFault);
                                 Toast.makeText(context,
                                         R.string.selection_not_saved,Toast.LENGTH_LONG).show();
                             }
@@ -113,16 +101,5 @@ public class MaleOrFemaleDialog extends DialogFragment {
         });
         return builder.create();
 
-    }
-protected void refreshFragments(){
-   PagerAdapterMain adapter = (PagerAdapterMain) pager.getAdapter();
-   pager.setAdapter(adapter);
-   pager.setCurrentItem(1);
-
-}
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        //refresh FragmentLoveDays
     }
 }

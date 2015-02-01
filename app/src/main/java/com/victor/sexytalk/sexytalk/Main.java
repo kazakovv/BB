@@ -232,11 +232,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 Intent editProfileIntent = new Intent(this,EditProfileActivity.class);
                 startActivity(editProfileIntent);
                 return true;
-            case R.id.menu_sex:
-                DialogFragment sexDialog = new MaleOrFemaleDialog();
-                sexDialog.show(getFragmentManager(), "Welcome");
-
-                return true;
             case R.id.menu_logout:
                 Backendless.UserService
                         .logout(new DefaultCallback<Void>(this, getResources().getString(R.string.logout_message)) {
