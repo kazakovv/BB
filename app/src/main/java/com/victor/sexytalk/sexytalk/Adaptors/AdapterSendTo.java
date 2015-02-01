@@ -5,12 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.backendless.BackendlessUser;
+import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -56,7 +56,11 @@ public class AdapterSendTo extends ArrayAdapter<BackendlessUser> {
 
         BackendlessUser partner = mPartners[position];
         holder.nameLabel.setText(partner.getProperty(Statics.KEY_USERNAME).toString());
-
+        //zarezdame avatarchetata
+        if(mPartners[position].getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
+            String existingProfilePicPath = (String) mPartners[position].getProperty(Statics.KEY_PROFILE_PIC_PATH);
+            Picasso.with(mContext).load(existingProfilePicPath).into(holder.iconImageView);
+        }
         //ako ne se napravi tova onClick listener vav SendTo fragment ne raboti
         holder.sendYesNoCheckbox.setClickable(false);
         holder.sendYesNoCheckbox.setFocusable(false);
@@ -79,108 +83,4 @@ public class AdapterSendTo extends ArrayAdapter<BackendlessUser> {
         CheckBox sendYesNoCheckbox;
     }
 
-
-
-
-
-    /*
-    private static BackendlessUser[] mPartners;
-
-    //TODO:ne moga da nameria po-dobro reshenie
-    public static ArrayList<Integer> mSendTo = new ArrayList<Integer>();
-
-    public static ArrayList<String> mRecepientUserNames = new ArrayList<String>();
-    public static ArrayList<String> mRecepientEmails = new ArrayList<String>();
-    public static ArrayList<String> mDeviceIds = new ArrayList<String>();
-
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder  implements View.OnClickListener {
-        // each data item is just a string in this case
-        public TextView mPartnerUserName;
-        public ImageView mPartnerThumbnail;
-        public CheckBox mSendYesNo;
-        //public IMyViewHolderClicks mListener;
-
-        public ViewHolder(View itemLayoutView) {
-            super(itemLayoutView);
-            mPartnerUserName = (TextView) itemLayoutView.findViewById(R.id.partnerUsername);
-            mPartnerThumbnail = (ImageView) itemLayoutView.findViewById(R.id.thumbnail_partner);
-            mSendYesNo = (CheckBox) itemLayoutView.findViewById(R.id.sendYesNo);
-
-            mSendYesNo.setClickable(false);
-            itemLayoutView.setOnClickListener(this);
-
-        }
-
-
-        @Override
-        public void onClick(View v) {
-            //TODO: izpolzvam statichni promenlivi. Posle gi vzimam v SendTo kato se cakne na izprati ot toolbar
-            // Ne e nai-dobroto reshenie
-
-            if(mSendYesNo.isChecked()) {
-                mSendYesNo.setChecked(false);
-                int positionToRemove = mSendTo.indexOf(getPosition());
-                mSendTo.remove(positionToRemove);
-                mRecepientEmails.remove(positionToRemove);
-                mRecepientUserNames.remove(positionToRemove);
-                mDeviceIds.remove(positionToRemove);
-
-
-            } else {
-                mSendYesNo.setChecked(true);
-                mSendTo.add(getPosition());
-                mRecepientEmails.add(mPartners[getPosition()].getEmail());
-                mRecepientUserNames.add((String) mPartners[getPosition()].getProperty(Statics.KEY_USERNAME));
-                mDeviceIds.add((String) mPartners[getPosition()].getProperty(Statics.KEY_DEVICE_ID));
-            }
-           // mListener.onPotato(v);
-
-        }
-
-        public static interface IMyViewHolderClicks {
-            public void onPotato(View caller);
-            public void onTomato(ImageView callerImage);
-        }
-
-    }
-
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public AdapterSendTo(BackendlessUser[] myPartners) {
-
-        mPartners = myPartners;
-
-    }
-
-    // Create new views (invoked by the layout manager)
-    @Override
-    public AdapterSendTo.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
-        // create a new view
-        View itemLayoutView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_list_sendto, parent, false);
-        // set the view's size, margins, paddings and layout parameters
-
-        ViewHolder vh = new ViewHolder(itemLayoutView);
-        return vh;
-    }
-    // Replace the contents of a view (invoked by the layout manager)
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        String username = (String) mPartners[position].getProperty(Statics.KEY_USERNAME);
-        holder.mPartnerUserName.setText(username);
-
-    }
-
-    // Return the size of your dataset (invoked by the layout manager)
-    @Override
-    public int getItemCount() {
-        return mPartners.length;
-    }
-
-*/
 } //krai na adaptera
