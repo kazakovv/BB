@@ -1,26 +1,20 @@
 package com.victor.sexytalk.sexytalk;
 
 import android.app.AlertDialog;
-import android.content.Context;
+import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ListFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -32,10 +26,9 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.files.BackendlessFile;
 import com.squareup.picasso.Picasso;
+import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
 import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
-
-import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 
 public class EditProfileActivity extends ActionBarActivity {
@@ -145,6 +138,8 @@ public class EditProfileActivity extends ActionBarActivity {
             switch (position) {
                 case 0:
                     //change sex
+                    DialogFragment sexDialog = new MaleOrFemaleDialog();
+                    sexDialog.show(getActivity().getFragmentManager(), "Welcome");
 
                     return;
                 case 1:

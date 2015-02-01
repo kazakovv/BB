@@ -33,6 +33,7 @@ import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;

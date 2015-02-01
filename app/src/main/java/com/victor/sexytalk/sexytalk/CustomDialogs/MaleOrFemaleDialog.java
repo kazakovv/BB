@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.CustomDialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,6 +17,9 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.victor.sexytalk.sexytalk.PagerAdapterMain;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 
 /**
@@ -46,7 +49,6 @@ public class MaleOrFemaleDialog extends DialogFragment {
         //showSexyCalendarButton = (Button) getActivity().findViewById(R.id.showSexyCalendarButton);
         showPrivateDaysCalendarButton = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
         showPartnersList = (Spinner) getActivity().findViewById(R.id.listOfPartners);
-        //sexyCalendarForGuysButton = (Button) getActivity().findViewById(R.id.sexyCalendarGuys);
 
         pager = (ViewPager) getActivity().findViewById(R.id.pager);
         adapter = (PagerAdapterMain) pager.getAdapter();
