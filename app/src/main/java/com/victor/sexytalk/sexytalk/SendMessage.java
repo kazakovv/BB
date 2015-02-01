@@ -339,12 +339,6 @@ public class SendMessage extends ActionBarActivity  {
         mSendMessageTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO nulirame static promenlivite s poluchatelite.
-                //TODO adski tapo!!!
-                if( AdapterSendTo.mRecepientEmails != null) {
-                    AdapterSendTo.mRecepientEmails.clear();
-                    AdapterSendTo.mRecepientUserNames.clear();
-                }
 
                 Intent intent = new Intent(SendMessage.this, SendTo.class);
                 startActivityForResult(intent,ACTIVITY_SEND_TO);

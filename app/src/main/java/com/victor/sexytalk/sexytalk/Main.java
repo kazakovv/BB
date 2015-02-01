@@ -206,13 +206,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         switch (item.getItemId()) {
             case R.id.menu_send_kiss:
                 //SendPushMessages sadarza metoda za izprashtane na push
-                //TODO nulirame static promenlivite s poluchatelite.
-                //TODO adski tapo!!!
-                if( AdapterSendTo.mRecepientEmails != null) {
-                    AdapterSendTo.mRecepientEmails.clear();
-                    AdapterSendTo.mRecepientUserNames.clear();
-                    AdapterSendTo.mDeviceIds.clear();
-                }
+
                 String message = mCurrentUser.getProperty(Statics.KEY_USERNAME) + " " +
                         getString(R.string.send_a_kiss_message); //niakoi ti izprati celuvka
                 Intent intentSendTo = new Intent(Main.this, SendTo.class);

@@ -33,14 +33,13 @@ import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
 
 public class EditProfileActivity extends ActionBarActivity {
     protected Toolbar toolbar;
-    protected  MyFragment fragment;
+    protected FragmentEditProfileActivity fragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_edit_profile);
 
         //fragment
-        fragment = new MyFragment();
+        fragment = new FragmentEditProfileActivity();
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
 
 
@@ -51,7 +50,7 @@ public class EditProfileActivity extends ActionBarActivity {
     NACHALO NA FRAGMENTA S LIST
     !!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
-    public static class MyFragment extends ListFragment {
+    public static class FragmentEditProfileActivity extends ListFragment {
         public static int MEDIA_TYPE_IMAGE = 111;
         public static int CHOOSE_PHOTO_REQUEST = 222;
         public static int TAKE_PHOTO_REQUEST = 333;

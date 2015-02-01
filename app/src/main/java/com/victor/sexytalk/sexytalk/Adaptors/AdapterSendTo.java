@@ -1,10 +1,11 @@
 package com.victor.sexytalk.sexytalk.Adaptors;
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,12 +14,76 @@ import com.backendless.BackendlessUser;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
-import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Created by Victor on 19/01/2015.
  */
-public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder> {
+public class AdapterSendTo extends ArrayAdapter<BackendlessUser> {
+    protected Context mContext;
+    protected BackendlessUser mCurrentUser;
+    protected BackendlessUser[] mPartners;
+
+
+    public AdapterSendTo(Context context,  BackendlessUser[] partners, BackendlessUser currentUser) {
+        super(context, R.layout.item_list_sendto, partners );
+        mContext = context;
+        mPartners = partners;
+        mCurrentUser = currentUser;
+
+
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final View view = View.inflate(mContext, R.layout.item_list_sendto, null);
+
+        final ViewHolder holder;
+
+        if (convertView == null || convertView.getTag() == null) {
+
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_list_sendto, null);
+            holder = new ViewHolder();
+            holder.nameLabel = (TextView) convertView.findViewById(R.id.partnerUsername);
+            holder.iconImageView = (ImageView) convertView.findViewById(R.id.thumbnail_partner);
+            holder.sendYesNoCheckbox = (CheckBox) convertView.findViewById(R.id.sendYesNo);
+            convertView.setTag(holder);
+
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+
+        BackendlessUser partner = mPartners[position];
+        holder.nameLabel.setText(partner.getProperty(Statics.KEY_USERNAME).toString());
+
+        //ako ne se napravi tova onClick listener vav SendTo fragment ne raboti
+        holder.sendYesNoCheckbox.setClickable(false);
+        holder.sendYesNoCheckbox.setFocusable(false);
+
+        holder.nameLabel.setFocusable(false);
+        holder.nameLabel.setClickable(false);
+
+        holder.iconImageView.setFocusable(false);
+        holder.iconImageView.setClickable(false);
+
+        convertView.setFocusable(false);
+        convertView.setClickable(false);
+
+        return convertView;
+    }
+
+    private static class ViewHolder {
+        ImageView iconImageView;
+        TextView nameLabel;
+        CheckBox sendYesNoCheckbox;
+    }
+
+
+
+
+
+    /*
     private static BackendlessUser[] mPartners;
 
     //TODO:ne moga da nameria po-dobro reshenie
@@ -74,12 +139,12 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
            // mListener.onPotato(v);
 
         }
-/*
+
         public static interface IMyViewHolderClicks {
             public void onPotato(View caller);
             public void onTomato(ImageView callerImage);
         }
-*/
+
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
@@ -117,5 +182,5 @@ public class AdapterSendTo extends RecyclerView.Adapter<AdapterSendTo.ViewHolder
         return mPartners.length;
     }
 
-
-}
+*/
+} //krai na adaptera
