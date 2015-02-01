@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -87,6 +88,9 @@ public class EditProfileActivity extends ActionBarActivity {
         protected Uri mMediaUri;
         public static final int FILE_SIZE_LIMIT = 1024*1024*10;
 
+        protected Boolean userAlreadyHasProfilePic;
+        protected String existingProfilePicPath;
+
         protected ListView editProfileOptionsList;
         protected Toolbar toolbar;
         protected ImageView profilePicture;
@@ -115,10 +119,16 @@ public class EditProfileActivity extends ActionBarActivity {
             if(Backendless.UserService.CurrentUser() != null) {
                 mCurrentUser = Backendless.UserService.CurrentUser();
                 //zarezdame profile pic, ako ima takava
-                if(! mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH).equals("")) {
+                if( mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null ) {
                     //ako ima profile pic ia zarezdame s picaso
-                    String imageUrl = mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH).toString();
-                    Picasso.with(getActivity()).load(imageUrl).into(profilePicture);
+                    userAlreadyHasProfilePic = true;
+                    //existingprofilePicPath se izpolzva i v sluchaite, kogato user si smenia profile pic
+                    // togava kachvame na servera novata kartinka i izpolzvame tazi promenliva,
+                    // za da iztriem starata profile pic ot servera
+                    existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
+                    Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePicture);
+                } else {
+                    userAlreadyHasProfilePic = false;
                 }
             }
 
@@ -185,14 +195,24 @@ public class EditProfileActivity extends ActionBarActivity {
             UploadPicture help = new UploadPicture(getActivity());
             //1. uploadvame profile picture v backendless
             //2. updatevame user s patia kam profile picture
+            //3. ako zamestvame stara profile pic, iztrivame predishnata, za da ne zaema mistno na servera
 
 
-            Bitmap profilePictureBitmap = help.createThumbnail(mMediaUri);
+            //sledvashtite 3 reda imat za cel da namaliat razmera na kartinkata
+            //parvo go oravim v array, sled tova namaliavame razmera i sled tova go uploadvame v backendless
+            byte[] imageBytes = FileHelper.getByteArrayFromFile(getActivity(), mMediaUri);
+            byte[] reducedImage = FileHelper.reduceImageForUpload(imageBytes);
+            Bitmap profilePictureBitmap = BitmapFactory.decodeByteArray(reducedImage, 0, reducedImage.length);
+
+            //Bitmap profilePictureBitmap = help.createThumbnail(mMediaUri);
             profilePicture.setImageBitmap(profilePictureBitmap);
 
             String fileName = "";
+
             if (mMediaUri != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
-                fileName = FileHelper.getFileName(getActivity(),mMediaUri,Statics.TYPE_IMAGE);
+                    //Zadavame patia kam profile pic
+                    fileName = FileHelper.getFileName(getActivity(), mMediaUri, Statics.TYPE_IMAGE);
+
             }
 
             //1. uploadvame profile picture v backendles
@@ -215,6 +235,21 @@ public class EditProfileActivity extends ActionBarActivity {
                                             Toast.makeText(context,
                                                     R.string.profile_pic_uploaded_successfully,Toast.LENGTH_LONG).show();
 
+                                            //3. iztrivame starata profile pic, ako ima takava
+                                            if(userAlreadyHasProfilePic == true) {
+                                                Backendless.Files.remove(existingProfilePicPath, new AsyncCallback<Void>() {
+                                                    @Override
+                                                    public void handleResponse(Void aVoid) {
+                                                        //niama nuzda pa pravim nishto
+                                                    }
+
+                                                    @Override
+                                                    public void handleFault(BackendlessFault backendlessFault) {
+                                                        //ako ne ia izptriem samo zaemame izlishno miasnta na servera
+                                                    }
+                                                });
+
+                                            }
                                         }
 
                                         @Override
@@ -238,6 +273,8 @@ public class EditProfileActivity extends ActionBarActivity {
 
 
         }
+
+
 
         //onClick listener za uploadvane na snimko
         protected DialogInterface.OnClickListener mUploadPicture =
