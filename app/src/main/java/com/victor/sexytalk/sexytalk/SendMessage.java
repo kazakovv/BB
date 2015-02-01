@@ -187,6 +187,7 @@ public class SendMessage extends ActionBarActivity  {
 
                 //tova e sluchaia v koito izbirame photo ot galeriata
                 if (data == null) {
+
                     Toast.makeText(this, R.string.general_error_message, Toast.LENGTH_LONG).show();
                 } else {
                     mMediaUri = data.getData();

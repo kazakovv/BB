@@ -53,32 +53,10 @@ public class EditProfileActivity extends ActionBarActivity {
 
     }
 
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_edit_profile, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            Toast.makeText(this,"Clicked",Toast.LENGTH_LONG).show();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     /*
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     NACHALO NA FRAGMENTA S LIST
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
     public static class MyFragment extends ListFragment {
         public static int MEDIA_TYPE_IMAGE = 111;
@@ -140,10 +118,12 @@ public class EditProfileActivity extends ActionBarActivity {
             super.onActivityResult(requestCode, resultCode, data);
             UploadPicture help = new UploadPicture(getActivity());
             if (resultCode == RESULT_OK) {
-                if (requestCode == CHOOSE_PHOTO_REQUEST ) {
-                    //tova e sluchaia v koito izbirame photo ot galeriata
-                    if (data == null) {
-                        Toast.makeText(getActivity(), R.string.general_error_message, Toast.LENGTH_LONG).show();
+                if (requestCode == CHOOSE_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
+                    if ( data == null ) {
+                        //ako e null i sme izbrali photo pokazvame error message
+                        if(requestCode == CHOOSE_PHOTO_REQUEST) {
+                            Toast.makeText(getActivity(), R.string.general_error_message, Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         mMediaUri = data.getData();
                     }
@@ -164,6 +144,8 @@ public class EditProfileActivity extends ActionBarActivity {
             super.onListItemClick(l, v, position, id);
             switch (position) {
                 case 0:
+                    //change sex
+
                     return;
                 case 1:
                     return;
