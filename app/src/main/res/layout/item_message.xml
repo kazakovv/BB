@@ -23,4 +23,15 @@
         android:id="@+id/senderLabel"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/message_icon" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/message_disappearing"
+        android:paddingRight="@dimen/login_padding"
+        android:id="@+id/timeToExpiry"
+        android:layout_alignBottom="@+id/message_icon"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 </RelativeLayout>

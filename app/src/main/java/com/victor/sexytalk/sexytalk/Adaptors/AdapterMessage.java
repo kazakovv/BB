@@ -13,6 +13,8 @@ import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +43,7 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
             holder = new ViewHolder();
             holder.nameLabel = (TextView) convertView.findViewById(R.id.senderLabel);
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.message_icon);
+            holder.timeToExpiry = (TextView) convertView.findViewById(R.id.timeToExpiry);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -53,12 +56,24 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
         if(message.getMessageType().equals(Statics.TYPE_IMAGE)) {
             holder.iconImageView.setImageResource(R.drawable.ic_action_picture);
 
+            if(message.getUpdated() !=null) {
+                holder.timeToExpiry.setText(calculateTimeToExpiry(message.getUpdated()));
+            } else { //ako saobshtenieto ne e bilo otvoreno , ne se otbroiava nishto
+                holder.timeToExpiry.setVisibility(View.INVISIBLE);
+            }
+
         } else if (message.getMessageType().equals(Statics.TYPE_KISS)) {
             holder.iconImageView.setImageResource(R.drawable.ic_kiss_dark);
+            holder.timeToExpiry.setVisibility(View.INVISIBLE);
         }
 
         else { //prosto text saobstehnie
             holder.iconImageView.setImageResource(R.drawable.ic_action_unread);
+            if(message.getUpdated() !=null) {
+                holder.timeToExpiry.setText(calculateTimeToExpiry(message.getUpdated()));
+            } else { //ako saobshtenieto ne e bilo otvoreno , ne se otbroiava nishto
+                holder.timeToExpiry.setVisibility(View.INVISIBLE);
+            }
         }
         String namesender = message.getSenderUsername();
         holder.nameLabel.setText(message.getSenderUsername());
@@ -69,6 +84,29 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
     private static class ViewHolder {
         ImageView iconImageView;
         TextView nameLabel;
+        TextView timeToExpiry;
+    }
+
+    private String calculateTimeToExpiry(Date updated) {
+        String message = "";
+        Calendar c = Calendar.getInstance();
+        Date now = c.getTime();
+
+        long diff = (now.getTime() - updated.getTime());
+        long seconds = diff / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+
+        if((24 - hours) > 1) {
+            int disappearing = (int) (24 - hours);
+        message = mContext.getResources().getString(R.string.message_disappearing) + " " +
+                Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.hours);
+        } else {
+            int disappearing = (int) (60 - minutes);
+        message = Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.minutes);
+        }
+
+        return message;
     }
 
 

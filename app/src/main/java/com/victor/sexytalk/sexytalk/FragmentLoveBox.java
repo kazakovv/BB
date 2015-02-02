@@ -27,6 +27,7 @@ import com.victor.sexytalk.sexytalk.Adaptors.AdapterMessage;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -132,12 +133,47 @@ public class FragmentLoveBox extends ListFragment {
             Intent intent = new Intent(getActivity(), ViewImageActivity.class);
             intent.putExtra(Statics.KEY_URL, fileUrl);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            //zadavame che sme otvorili saobshtenieto, ako ne e bilo otvariano predi
+            if(message.getUpdated() == null) {
+                Calendar c = Calendar.getInstance();
+                message.setUpdated(c.getTime());
+
+                Backendless.Data.of(Messages.class).save(message, new AsyncCallback<Messages>() {
+                    @Override
+                    public void handleResponse(Messages messages) {
+                        //niama nuzda da pravim nishto
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        //niama nuzhda da pravim nishto.
+                    }
+                });
+            }
             startActivity(intent);
+
 
         } else if (messageType.equals(Statics.TYPE_TEXTMESSAGE)){
             //ako e text go otvariame v sashtotia view kato image
             Intent intent = new Intent(getActivity(), ViewTextMessageActivity.class);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            //zadavame che sme otvorili saobshtenieto, ako ne e bilo otvariano predi
+            if(message.getUpdated() == null) {
+                Calendar c = Calendar.getInstance();
+                message.setUpdated(c.getTime());
+
+                Backendless.Data.of(Messages.class).save(message, new AsyncCallback<Messages>() {
+                    @Override
+                    public void handleResponse(Messages messages) {
+                        //niama nuzda da pravim nishto
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        //niama nuzhda da pravim nishto.
+                    }
+                });
+            }
             startActivity(intent);
 
         } else if (messageType.equals(Statics.TYPE_KISS)) {
