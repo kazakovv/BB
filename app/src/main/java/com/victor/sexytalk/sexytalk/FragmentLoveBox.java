@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -264,9 +265,11 @@ protected void searchForMessages(){
             messagesToDisplay = new ArrayList<Messages>();
             if(messages.getData().size() > 0) {
                 messagesToDisplay = messages.getData();
+                //proveriavame dali ima saobshtenia po-stari ot 24 chasa i gi iztrivame
+                checkIfMessagesOlderThan24Hours();
             }
 
-
+            //proveriavame dali ima saobshtenia po-stari ot 24 chasa i gi iztrivame
 
             Collections.sort(messagesToDisplay,new Comparator<Messages>() {
                 @Override
@@ -296,6 +299,41 @@ protected void searchForMessages(){
 
 }
 
+    private void checkIfMessagesOlderThan24Hours() {
+        int timeToDisplayMessage = Statics.MESSAGE_TIME_TO_DISPLAY;
 
+        Calendar c = Calendar.getInstance();
+        Date now = c.getTime();
+
+        int i = 0;
+        for(Messages message : messagesToDisplay) {
+            if(message.getUpdated() != null) { //ako ne e null, znachi veche e otvariano
+                Date firstOpened = message.getUpdated();
+                long diff = (now.getTime() - firstOpened.getTime());
+                long seconds = diff / 1000;
+                long minutes = seconds / 60;
+                long hours = minutes / 60;
+
+                if( (timeToDisplayMessage - hours) < 0 ) {
+                    //iztrivame go
+                    messagesToDisplay.remove(i);
+                    Backendless.Data.of(Messages.class).remove(message, new AsyncCallback<Long>() {
+                        @Override
+                        public void handleResponse(Long aLong) {
+                            //niama nuzda da pravim nishto, nai-mnogo da go vodim pak
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            //niama nuzda da pravim nishto, nai-mnogo da go vodim pak
+                        }
+                    });
+                }
+
+            }//krai na if statement
+            i++;
+        }//krai na for statement
+
+    }//krai na checkIfMessagesOlderThan24Hours
 
 }

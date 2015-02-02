@@ -88,6 +88,7 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
     }
 
     private String calculateTimeToExpiry(Date updated) {
+        int timeToDisplayMessage = Statics.MESSAGE_TIME_TO_DISPLAY;
         String message = "";
         Calendar c = Calendar.getInstance();
         Date now = c.getTime();
@@ -97,8 +98,8 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
         long minutes = seconds / 60;
         long hours = minutes / 60;
 
-        if((24 - hours) > 1) {
-            int disappearing = (int) (24 - hours);
+        if((timeToDisplayMessage - hours) > 1) {
+            int disappearing = (int) (timeToDisplayMessage - hours);
         message = mContext.getResources().getString(R.string.message_disappearing) + " " +
                 Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.hours);
         } else {

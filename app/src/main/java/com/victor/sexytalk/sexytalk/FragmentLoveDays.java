@@ -2,6 +2,7 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -60,11 +61,13 @@ public class FragmentLoveDays extends Fragment {
 
     protected Toolbar toolbar;
 
+    protected Context context;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCurrentUser = Backendless.UserService.CurrentUser();
-
+        context = getActivity();
 
     }
 
@@ -377,7 +380,7 @@ public class FragmentLoveDays extends Fragment {
             }
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                Toast.makeText(getActivity(),R.string.general_server_error,Toast.LENGTH_LONG).show();
+                Toast.makeText(context,R.string.general_server_error,Toast.LENGTH_LONG).show();
             }
         });
 
@@ -409,7 +412,7 @@ public class FragmentLoveDays extends Fragment {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 builder.setTitle(R.string.general_error_title)
                         .setMessage(R.string.load_settings_error)
                         .setPositiveButton(R.string.ok, null);
