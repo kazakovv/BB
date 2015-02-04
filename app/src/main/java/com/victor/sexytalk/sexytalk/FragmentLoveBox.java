@@ -322,7 +322,7 @@ protected void searchForMessages(){
                 long minutes = seconds / 60;
                 long hours = minutes / 60;
 
-                if( (timeToDisplayMessage - hours) < 0 ) {
+                if( (timeToDisplayMessage - hours) <= 0 ) {
                     //iztrivame go
                     messagesToDisplay.remove(i);
                     Backendless.Data.of(Messages.class).remove(message, new AsyncCallback<Long>() {
