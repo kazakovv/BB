@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -196,6 +197,7 @@ public class SendMessage extends ActionBarActivity  {
                     Toast.makeText(this, R.string.general_error_message, Toast.LENGTH_LONG).show();
                 } else {
                     mMediaUri = data.getData();
+
                 }
 
             } else {
@@ -469,7 +471,7 @@ public class SendMessage extends ActionBarActivity  {
 
                         //ako e image go smaliavame
                         if (fileBytes != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
-                             fileBytes = FileHelper.reduceImageForUpload(fileBytes);
+                             fileBytes = FileHelper.reduceImageForUpload(fileBytes,Statics.SHORT_SIDE_TARGET_PIC);
                             path = "/pics/" +
                                     FileHelper.getFileName(SendMessage.this,mMediaUri,Statics.TYPE_IMAGE);
                         }

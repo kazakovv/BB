@@ -22,6 +22,7 @@ public class Messages {
     private String objectId;
     private Date created;
     private Date updated;
+    private Date opened;
 
     public BackendlessUser getSender() {
         return sender;
@@ -90,5 +91,9 @@ public class Messages {
     public void setObjectId( String objectId ) {
         this.objectId = objectId;
     }
+
+    public Date getOpened() { return opened; }
+
+    public void setOpened( Date updated ) { this.opened = opened; }
 }
 

@@ -22,7 +22,7 @@ public class FileHelper {
 	
 	public static final String TAG = FileHelper.class.getSimpleName();
 	
-	public static final int SHORT_SIDE_TARGET = 500; //1280
+	//public static final int SHORT_SIDE_TARGET = 500; //1280
 
 	public static byte[] getByteArrayFromFile(Context context, Uri uri) {
 		byte[] fileBytes = null;
@@ -68,8 +68,8 @@ public class FileHelper {
         return fileBytes;
 	}
 	
-	public static byte[] reduceImageForUpload(byte[] imageData) {
-		Bitmap bitmap = ImageResizer.resizeImageMaintainAspectRatio(imageData, SHORT_SIDE_TARGET);
+	public static byte[] reduceImageForUpload(byte[] imageData, int shortSideTarget) {
+		Bitmap bitmap = ImageResizer.resizeImageMaintainAspectRatio(imageData, shortSideTarget);
 		
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);

@@ -177,7 +177,7 @@ public class EditProfileActivity extends ActionBarActivity {
             //sledvashtite 3 reda imat za cel da namaliat razmera na kartinkata
             //parvo go oravim v array, sled tova namaliavame razmera i sled tova go uploadvame v backendless
             byte[] imageBytes = FileHelper.getByteArrayFromFile(getActivity(), mMediaUri);
-            byte[] reducedImage = FileHelper.reduceImageForUpload(imageBytes);
+            byte[] reducedImage = FileHelper.reduceImageForUpload(imageBytes,Statics.SHORT_SIDE_TARGET_THUMBNAIL);
             Bitmap profilePictureBitmap = BitmapFactory.decodeByteArray(reducedImage, 0, reducedImage.length);
 
             //Bitmap profilePictureBitmap = help.createThumbnail(mMediaUri);
