@@ -56,8 +56,8 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
         if(message.getMessageType().equals(Statics.TYPE_IMAGE)) {
             holder.iconImageView.setImageResource(R.drawable.ic_action_picture);
 
-            if(message.getUpdated() !=null) {
-                holder.timeToExpiry.setText(calculateTimeToExpiry(message.getUpdated()));
+            if(message.getOpened() !=null) {
+                holder.timeToExpiry.setText(calculateTimeToExpiry(message.getOpened()));
             } else { //ako saobshtenieto ne e bilo otvoreno , ne se otbroiava nishto
                 holder.timeToExpiry.setVisibility(View.INVISIBLE);
             }
@@ -69,8 +69,8 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
 
         else { //prosto text saobstehnie
             holder.iconImageView.setImageResource(R.drawable.ic_action_unread);
-            if(message.getUpdated() !=null) {
-                holder.timeToExpiry.setText(calculateTimeToExpiry(message.getUpdated()));
+            if(message.getOpened() !=null) {
+                holder.timeToExpiry.setText(calculateTimeToExpiry(message.getOpened()));
             } else { //ako saobshtenieto ne e bilo otvoreno , ne se otbroiava nishto
                 holder.timeToExpiry.setVisibility(View.INVISIBLE);
             }
@@ -87,16 +87,16 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
         TextView timeToExpiry;
     }
 
-    private String calculateTimeToExpiry(Date updated) {
+    private String calculateTimeToExpiry(Date opened) {
         int timeToDisplayMessage = Statics.MESSAGE_TIME_TO_DISPLAY;
         String message = "";
         Calendar c = Calendar.getInstance();
         Date now = c.getTime();
 
-        long diff = (now.getTime() - updated.getTime());
-        long seconds = diff / 1000;
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
+        float diff = (now.getTime() - opened.getTime());
+        float seconds = diff / 1000;
+        float minutes = seconds / 60;
+        float hours = minutes / 60;
 
         if((timeToDisplayMessage - hours) > 1) {
             int disappearing = (int) (timeToDisplayMessage - hours);
@@ -106,6 +106,11 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
             int disappearing = (int) ((24 - hours)  * 60);
         message = mContext.getResources().getString(R.string.message_disappearing) + " " +
                 Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.minutes);
+            //ako ostava 1 pravim minute v edinstveno chislo
+            if(disappearing == 1) {
+                message = mContext.getResources().getString(R.string.message_disappearing) + " " +
+                        Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.minute);
+            }
         }
 
         return message;

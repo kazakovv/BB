@@ -94,6 +94,6 @@ public class Messages {
 
     public Date getOpened() { return opened; }
 
-    public void setOpened( Date updated ) { this.opened = opened; }
+    public void setOpened( Date opened ) { this.opened = opened; }
 }
 

@@ -135,9 +135,9 @@ public class FragmentLoveBox extends ListFragment {
             intent.putExtra(Statics.KEY_URL, fileUrl);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             //zadavame che sme otvorili saobshtenieto, ako ne e bilo otvariano predi
-            if(message.getUpdated() == null) {
+            if(message.getOpened() == null) {
                 Calendar c = Calendar.getInstance();
-                message.setUpdated(c.getTime());
+                message.setOpened(c.getTime());
 
                 Backendless.Data.of(Messages.class).save(message, new AsyncCallback<Messages>() {
                     @Override
@@ -163,9 +163,9 @@ public class FragmentLoveBox extends ListFragment {
             Intent intent = new Intent(getActivity(), ViewTextMessageActivity.class);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             //zadavame che sme otvorili saobshtenieto, ako ne e bilo otvariano predi
-            if(message.getUpdated() == null) {
+            if(message.getOpened() == null) {
                 Calendar c = Calendar.getInstance();
-                message.setUpdated(c.getTime());
+                message.setOpened(c.getTime());
 
                 Backendless.Data.of(Messages.class).save(message, new AsyncCallback<Messages>() {
                     @Override
@@ -315,8 +315,8 @@ protected void searchForMessages(){
 
         int i = 0;
         for(Messages message : messagesToDisplay) {
-            if(message.getUpdated() != null) { //ako ne e null, znachi veche e otvariano
-                Date firstOpened = message.getUpdated();
+            if(message.getOpened() != null) { //ako ne e null, znachi veche e otvariano
+                Date firstOpened = message.getOpened();
                 long diff = (now.getTime() - firstOpened.getTime());
                 long seconds = diff / 1000;
                 long minutes = seconds / 60;

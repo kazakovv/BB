@@ -131,6 +131,7 @@
     <string name="message_disappearing">Disappearing in</string>
     <string name="hours">hours</string>
     <string name="minutes">minutes</string>
+    <string name="minute">minute</string>
     <string name="sending_message">Sending love message...</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
