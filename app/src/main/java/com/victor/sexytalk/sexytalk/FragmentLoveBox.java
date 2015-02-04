@@ -143,11 +143,15 @@ public class FragmentLoveBox extends ListFragment {
                     @Override
                     public void handleResponse(Messages messages) {
                         //niama nuzda da pravim nishto
+                        Log.d("Vic","v");
                     }
 
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
                         //niama nuzhda da pravim nishto.
+                        String error = backendlessFault.getMessage();
+                        Log.d("Vic","v");
+
                     }
                 });
             }
@@ -167,11 +171,15 @@ public class FragmentLoveBox extends ListFragment {
                     @Override
                     public void handleResponse(Messages messages) {
                         //niama nuzda da pravim nishto
+                        Log.d("Vic","v");
+
                     }
 
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
                         //niama nuzhda da pravim nishto.
+                        String error = backendlessFault.getMessage();
+                        Log.d("Vic","v");
                     }
                 });
             }

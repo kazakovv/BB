@@ -30,6 +30,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/message_disappearing"
         android:paddingRight="@dimen/login_padding"
+        android:textSize="@dimen/disappearing_message_text_size"
         android:id="@+id/timeToExpiry"
         android:layout_alignBottom="@+id/message_icon"
         android:layout_alignParentRight="true"

@@ -103,8 +103,9 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
         message = mContext.getResources().getString(R.string.message_disappearing) + " " +
                 Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.hours);
         } else {
-            int disappearing = (int) (60 - minutes);
-        message = Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.minutes);
+            int disappearing = (int) ((24 - hours)  * 60);
+        message = mContext.getResources().getString(R.string.message_disappearing) + " " +
+                Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.minutes);
         }
 
         return message;

@@ -231,6 +231,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         .logout(new DefaultCallback<Void>(this, getResources().getString(R.string.logout_message)) {
                             @Override
                             public void handleResponse(Void aVoid) {
+
                                 //prashta kam login screen
                                 navigateToLogin();
                             }

@@ -1,6 +1,7 @@
 package com.victor.sexytalk.sexytalk;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,6 +46,9 @@ import java.util.List;
 
 
 public class SendMessage extends ActionBarActivity  {
+    protected BackendlessUser mCurrentUser;
+    protected Context mContext;
+
     protected EditText messageToSend;
     protected TextView mSendMessageTo;
     protected String mMessageType;
@@ -324,14 +329,17 @@ public class SendMessage extends ActionBarActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_send_message);
         //setup toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_action_back);
         //toolbar.setLogo(R.drawable.launch_icon);
         setSupportActionBar(toolbar);
-
-
+        mContext = SendMessage.this;
+        if(Backendless.UserService.CurrentUser() != null) {
+            mCurrentUser = Backendless.UserService.CurrentUser();
+        }
 
 
         //Izbirane na poluchateli na saobshtenieto
@@ -413,22 +421,16 @@ public class SendMessage extends ActionBarActivity  {
 
 
 
-            //Switch to main screen while waiting for the message to be sent.
-            Intent intent = new Intent(SendMessage.this,Main.class);
-            //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-
-
             //TODO: mozem da gi namerim direkto bez query
             //namirame backendless users po emails
             //kato namerim poluchatelite i zapalnim List<BackendlessUser> recepients izprashtame
+
+            final String sendingMessage = mContext.getResources().getString(R.string.sending_message);
             Backendless.Data.of(BackendlessUser.class).find(dataQuery,
-                    new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
+                    new DefaultCallback<BackendlessCollection<BackendlessUser>>(mContext,sendingMessage) {
                 @Override
                 public void handleResponse(BackendlessCollection<BackendlessUser> collection) {
-
+                    super.handleResponse(collection);
                     //uspeshno namirame poluchatelite po emailite im
 
                     //sazdavame List<BackendlessUser> s poluchatelite
@@ -447,7 +449,7 @@ public class SendMessage extends ActionBarActivity  {
                     message.setSender(Backendless.UserService.CurrentUser());
                     message.setLoveMessage(messageToSend.getText().toString());
                     message.setRecepients(recepients);
-                    message.setSederUsername((String) Backendless.UserService.CurrentUser().getProperty(Statics.KEY_USERNAME));
+                    message.setSederUsername((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
                     message.setRecepientEmails(recepientEmails);
                     //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
                     if(mMessageType == null) {
@@ -475,15 +477,17 @@ public class SendMessage extends ActionBarActivity  {
 
 
                         //kachvame file na servera
-                        Backendless.Files.saveFile(path, fileBytes, true, new AsyncCallback<String>() {
+                        Backendless.Files.saveFile(path, fileBytes, true, new DefaultCallback<String>(mContext,sendingMessage) {
                             @Override
                             public void handleResponse(String s) {
+                                super.handleResponse(s);
                                 message.setMediaUrl(s);
                                 //filat e kachen na servera. izprashtame saobshtenieto
 
-                                Backendless.Persistence.save(message, new AsyncCallback<Messages>() {
+                                Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext,sendingMessage) {
                                     @Override
                                     public void handleResponse(Messages messages) {
+                                        super.handleResponse(messages);
                                         Toast.makeText(SendMessage.this,
                                                 R.string.message_successfully_sent,Toast.LENGTH_LONG).show();
 
@@ -491,9 +495,11 @@ public class SendMessage extends ActionBarActivity  {
                                             for(BackendlessUser recepient : recepients) {
                                                 String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
                                                 String channel = recepient.getEmail();
-                                                if(! (deviceId.isEmpty() && channel.isEmpty() ) ) {
+                                                if(deviceId != null && channel != null ) {
                                                     //ako ne sa prazni izprashtame push message
                                                     sendPushMessage(deviceId,channel);
+
+                                                    switchToMainScreen();
                                                 }
 
                                             }
@@ -503,6 +509,7 @@ public class SendMessage extends ActionBarActivity  {
 
                                     @Override
                                     public void handleFault(BackendlessFault backendlessFault) {
+                                        super.handleFault(backendlessFault);
                                         Log.d("Vic","error sending message " + backendlessFault.toString());
                                         AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
                                         builder.setMessage(R.string.error_sending_message)
@@ -516,6 +523,7 @@ public class SendMessage extends ActionBarActivity  {
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
+                                super.handleFault(backendlessFault);
                                 Log.d("Vic","error sending message " + backendlessFault.toString());
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
                                 builder.setMessage(R.string.error_sending_message)
@@ -530,19 +538,23 @@ public class SendMessage extends ActionBarActivity  {
 
                     //izprashtame saobshtenieto
                     if( mMessageType.equals(Statics.TYPE_TEXTMESSAGE)) {
-                        Backendless.Persistence.save(message, new AsyncCallback<Messages>() {
+                        Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext,sendingMessage) {
                             @Override
                             public void handleResponse(Messages messages) {
-                                Toast.makeText(SendMessage.this, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
+                                super.handleResponse(messages);
+                                Toast.makeText(mContext, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
 
 
                                 //izprashtame push message
                                 for(BackendlessUser recepient : recepients) {
                                     String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
                                     String channel = recepient.getEmail();
-                                    if(! (deviceId.isEmpty() && channel.isEmpty() ) ) {
+                                    if(  deviceId != null &&  channel != null )
+                                             {
                                         //ako ne sa prazni izprashtame push message
                                         sendPushMessage(deviceId,channel);
+
+                                        switchToMainScreen();
                                     }
 
                                 }
@@ -550,8 +562,8 @@ public class SendMessage extends ActionBarActivity  {
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
+                                super.handleFault(backendlessFault);
                                 Log.d("Vic", "error sending message " + backendlessFault.toString());
-
                                 //TODO izkarva greshka:
                                 //TODO tr da se misli kak da se vzeme context za async tasks
                                 //android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@52a6d994 is not valid; is your activity running?
@@ -572,14 +584,19 @@ public class SendMessage extends ActionBarActivity  {
                 //tova e fault na osnovata query, koiato tarsi poluchatelite
                 @Override
                 public void handleFault(BackendlessFault backendlessFault) {
+                    super.handleFault(backendlessFault);
                     Log.d("Vic","error sending message " + backendlessFault.toString());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setMessage(R.string.error_sending_message)
                             .setTitle(R.string.error_title)
                             .setPositiveButton(android.R.string.ok, null);
                     AlertDialog dialog = builder.create();
                     dialog.show();                }
             });//Krai na query koiato tarsi poluchatelite na saobshtenieto po emailite im
+
+
+
+
 
         }//krai na send koda
 
@@ -643,6 +660,16 @@ public class SendMessage extends ActionBarActivity  {
         }
 
         return bitmap;
+    }
+
+    protected void switchToMainScreen() {
+        //Switch to main screen while waiting for the message to be sent.
+        Intent intent = new Intent(SendMessage.this,Main.class);
+        //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 
 
