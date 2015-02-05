@@ -126,6 +126,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             //TODO Sth is slowing it down a lot
             //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //Load all relations for users (partners, etc)
+            /*
             List<String> rels = new ArrayList<String>();
             rels.add("*");
 
@@ -142,7 +143,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
                     }
                 });
-
+*/
 
 
         }

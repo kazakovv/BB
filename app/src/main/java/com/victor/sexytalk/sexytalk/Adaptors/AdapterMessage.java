@@ -13,6 +13,7 @@ import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -97,19 +98,25 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
         float seconds = diff / 1000;
         float minutes = seconds / 60;
         float hours = minutes / 60;
+        //formatirane za time to display message
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMinimumFractionDigits(0);
+        formatter.setMaximumFractionDigits(0);
 
         if((timeToDisplayMessage - hours) > 1) {
-            int disappearing = (int) (timeToDisplayMessage - hours);
+
+         float disappearing = (timeToDisplayMessage - hours);
+
         message = mContext.getResources().getString(R.string.message_disappearing) + " " +
-                Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.hours);
+                formatter.format(disappearing) + " " + mContext.getResources().getString(R.string.hours);
         } else {
-            int disappearing = (int) ((24 - hours)  * 60);
+            float disappearing =  ((24 - hours)  * 60);
         message = mContext.getResources().getString(R.string.message_disappearing) + " " +
-                Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.minutes);
+                formatter.format(disappearing) + " " + mContext.getResources().getString(R.string.minutes);
             //ako ostava 1 pravim minute v edinstveno chislo
-            if(disappearing == 1) {
+            if(disappearing <= 1.5) {
                 message = mContext.getResources().getString(R.string.message_disappearing) + " " +
-                        Integer.toString(disappearing) + " " + mContext.getResources().getString(R.string.minute);
+                         mContext.getResources().getString(R.string.minute);
             }
         }
 

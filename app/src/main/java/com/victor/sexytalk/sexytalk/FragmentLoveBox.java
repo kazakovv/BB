@@ -313,8 +313,9 @@ protected void searchForMessages(){
         Calendar c = Calendar.getInstance();
         Date now = c.getTime();
 
-        int i = 0;
-        for(Messages message : messagesToDisplay) {
+
+        for(int i = 0; i< messagesToDisplay.size();i++) {
+           Messages message = messagesToDisplay.get(i);
             if(message.getOpened() != null) { //ako ne e null, znachi veche e otvariano
                 Date firstOpened = message.getOpened();
                 long diff = (now.getTime() - firstOpened.getTime());
@@ -337,9 +338,8 @@ protected void searchForMessages(){
                         }
                     });
                 }
-
             }//krai na if statement
-            i++;
+
         }//krai na for statement
 
     }//krai na checkIfMessagesOlderThan24Hours
