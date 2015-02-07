@@ -13,4 +13,7 @@
     <dimen name="thumbnail_height">100dp</dimen>
     <dimen name="thumbnail_width">100dp</dimen>
     <dimen name="disappearing_message_text_size">10sp</dimen>
+    <dimen name="card_corner_radius">4dp</dimen>
+    <dimen name="message_image_height">500dp</dimen>
+    <dimen name="image_rotation_arrow">30dp</dimen>
 </resources>

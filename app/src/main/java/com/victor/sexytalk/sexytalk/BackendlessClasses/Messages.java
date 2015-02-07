@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import com.backendless.BackendlessUser;
 
+import org.w3c.dom.Text;
+
 import java.util.Date;
 import java.util.List;
 

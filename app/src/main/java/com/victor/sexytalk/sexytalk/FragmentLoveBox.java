@@ -26,6 +26,8 @@ import com.backendless.persistence.QueryOptions;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterMessage;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
