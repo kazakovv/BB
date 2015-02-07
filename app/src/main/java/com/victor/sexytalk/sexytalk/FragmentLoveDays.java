@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleDays;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleTitles;
 
@@ -44,7 +46,7 @@ public class FragmentLoveDays extends Fragment {
     protected Button showPrivateDaysDialog;
     protected Spinner listOfPartnersSpinner;
     protected BackendlessUser[] mPartners; //array s partnirite
-
+    protected ImageView profilePic;
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
 
     private int mYear;
@@ -74,18 +76,13 @@ public class FragmentLoveDays extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
-
+        profilePic = (ImageView) inflatedView.findViewById(R.id.profilePicture);
         return inflatedView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //set up the toolbar
-
-        //toolbar.inflateMenu(R.menu.main_menu);
-        Log.d("Vic","What now");
-       // ( (Main)getActivity()).setSupportActionBar(toolbar);
 
     }
 
@@ -100,7 +97,6 @@ public class FragmentLoveDays extends Fragment {
 
 
         //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam servera
-        //TODO: triabva da razkaram shared prefs i da se vrazva kam servera otnachalo vseki pat
 
         if(mCurrentUser != null) {
             if (mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
@@ -113,6 +109,7 @@ public class FragmentLoveDays extends Fragment {
                 mDay = 0;
                 mAverageLengthOfMenstrualCycle=0;
                 findPartnersAndPopulateSpinner();
+
             } else {
                 showPrivateDaysDialog.setVisibility(View.VISIBLE);
                 listOfPartnersSpinner.setVisibility(View.INVISIBLE);
@@ -121,7 +118,6 @@ public class FragmentLoveDays extends Fragment {
             }
         }
 
-        //zapalvame spinnera s imenata na partnirite
 
 
         showPrivateDaysDialog.setOnClickListener(new View.OnClickListener() {
@@ -140,6 +136,12 @@ public class FragmentLoveDays extends Fragment {
                 //Kato se izpere partner
                 // vikame helper metod, za da updatenem statusite, messages, etc.
                 updateMessagesForPartner(selectedPartner);
+                if(selectedPartner.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
+                    String existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
+                    Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
+                } else {
+                    profilePic.setImageResource(R.drawable.ic_action_person_black);
+                }
             }
 
             @Override
@@ -341,48 +343,62 @@ public class FragmentLoveDays extends Fragment {
     //helper metod, koito updateva kategoriite i saobshteniata na osnovnia ekran
     private void updateMessagesForPartner(final BackendlessUser partner) {
       final String partnerUsername = (String) partner.getProperty(Statics.KEY_USERNAME);
-      String partnerEmail = partner.getEmail();
-      String whereClause = "senderEmail='" + partnerEmail +"'";
-        BackendlessDataQuery query = new BackendlessDataQuery();
-        query.setWhereClause(whereClause);
-        Backendless.Data.of(CycleDays.class).find(query, new AsyncCallback<BackendlessCollection<CycleDays>>() {
-            @Override
-            public void handleResponse(BackendlessCollection<CycleDays> cycleStatuses) {
-                if(cycleStatuses.getData().size() > 0) {
-                    List<CycleDays> statuses = cycleStatuses.getData();
-                    //triabva da ima samo edno savpadenie poneze tarsim po email
-                    //zatova list triabva da e ot samo edin element
 
-                    Calendar firstDayOfCycle = Calendar.getInstance();
-                    firstDayOfCycle.setTime(statuses.get(0).getFirstDayOfCycle());
-                    int year = firstDayOfCycle.get(Calendar.YEAR);
-                    int month = firstDayOfCycle.get(Calendar.MONTH);
-                    int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
-                    int averageCyclelength = statuses.get(0).getAverageCycleLength();
+        //ako e maz zapalvame s default saobshtenie za maz
 
-                    //vikame helper metod, za da updatenem statusite
-                    determineCyclePhase(year,month,day,averageCyclelength);
-                    //zadavame personaliziranoto saobshtenie
-                    cyclePhaseStatus.setText(statuses.get(0).getSatusText());
+        if(partner.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
+            //ako e maz
+            String message = partnerUsername + " " + getString(R.string.sexy_calendar_default_message_guys);
 
-                } else {
-                    //nishto ne e namereno, sledovatelno partnera ne si e updatenal kalendara
-                    String message = partnerUsername + " " + getString(R.string.partner_hasnt_updated_calendar);
+            cyclePhaseTitle.setText(" ");
+            cyclePhaseStatus.setText(message);
+            cycleExplainationText.setText(" ");
+        } else {
+            //ako e zhena
+            String partnerEmail = partner.getEmail();
+            String whereClause = "senderEmail='" + partnerEmail +"'";
+            BackendlessDataQuery query = new BackendlessDataQuery();
+            query.setWhereClause(whereClause);
+            Backendless.Data.of(CycleDays.class).find(query, new AsyncCallback<BackendlessCollection<CycleDays>>() {
+                @Override
+                public void handleResponse(BackendlessCollection<CycleDays> cycleStatuses) {
+                    if(cycleStatuses.getData().size() > 0) {
+                        List<CycleDays> statuses = cycleStatuses.getData();
+                        //triabva da ima samo edno savpadenie poneze tarsim po email
+                        //zatova list triabva da e ot samo edin element
 
-                    cyclePhaseTitle.setText(" ");
-                    cyclePhaseStatus.setText(message);
-                    cycleExplainationText.setText(" ");
+                        Calendar firstDayOfCycle = Calendar.getInstance();
+                        firstDayOfCycle.setTime(statuses.get(0).getFirstDayOfCycle());
+                        int year = firstDayOfCycle.get(Calendar.YEAR);
+                        int month = firstDayOfCycle.get(Calendar.MONTH);
+                        int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
+                        int averageCyclelength = statuses.get(0).getAverageCycleLength();
 
-                    //po-dolu e drug variant za error message, no gornoto e po-personalizirano
-                    //determineCyclePhase(0,0,0,0);
+                        //vikame helper metod, za da updatenem statusite
+                        determineCyclePhase(year,month,day,averageCyclelength);
+                        //zadavame personaliziranoto saobshtenie
+                        cyclePhaseStatus.setText(statuses.get(0).getSatusText());
 
+                    } else {
+                        //nishto ne e namereno, sledovatelno partnera ne si e updatenal kalendara
+                        String message = partnerUsername + " " + getString(R.string.partner_hasnt_updated_calendar);
+
+                        cyclePhaseTitle.setText(" ");
+                        cyclePhaseStatus.setText(message);
+                        cycleExplainationText.setText(" ");
+
+                        //po-dolu e drug variant za error message, no gornoto e po-personalizirano
+                        //determineCyclePhase(0,0,0,0);
+
+                    }
                 }
-            }
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                Toast.makeText(context,R.string.general_server_error,Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    Toast.makeText(context,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                }
+            });
+        }//krai na if statement maz ili zhena
+
 
     }
 

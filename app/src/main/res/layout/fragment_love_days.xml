@@ -16,6 +16,25 @@
         android:text="@string/show_private_days_dialog_button"
         android:id="@+id/showPrivateDaysDialog"
         android:layout_gravity="center_horizontal" />
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/listOfPartners"
+        android:layout_below="@+id/showPrivateDaysDialog"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/cyclePhase"
+        android:layout_alignEnd="@+id/cyclePhase" />
+
+    <ImageView
+        android:layout_width="@dimen/thumbnail_width"
+        android:layout_height="@dimen/thumbnail_height"
+        android:id="@+id/profilePicture"
+        android:src="@drawable/ic_action_person_black"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,13 +70,7 @@
         android:layout_alignLeft="@+id/sexyStatus"
         android:layout_alignStart="@+id/sexyStatus" />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listOfPartners"
-        android:layout_below="@+id/showPrivateDaysDialog"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+
 
 
 </RelativeLayout>
