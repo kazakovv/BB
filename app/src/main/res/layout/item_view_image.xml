@@ -23,9 +23,6 @@
             android:text="Love Message"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-
-
-
         <ImageView
             android:id="@+id/imageView_to_display_picture"
             android:layout_width="match_parent"
