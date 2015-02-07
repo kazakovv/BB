@@ -13,17 +13,18 @@ import com.victor.sexytalk.sexytalk.R;
 
 public class AdapterViewImage extends RecyclerView.Adapter<AdapterViewImage.ContactViewHolder> {
 
-
+    private String usernameSender;
     private String loveMessageToDisplay;
     private String imageUrl;
     private Context context;
 
     private int rotationAngle;
 
-    public AdapterViewImage(String loveMessageToDisplay, String imageUrl,  Context context) {
+    public AdapterViewImage(String loveMessageToDisplay,String usernameSender, String imageUrl, Context context) {
         this.loveMessageToDisplay = loveMessageToDisplay;
         this.imageUrl = imageUrl;
         this.context = context;
+        this.usernameSender = usernameSender;
     }
 
     @Override
@@ -33,7 +34,8 @@ public class AdapterViewImage extends RecyclerView.Adapter<AdapterViewImage.Cont
 
     @Override
     public void onBindViewHolder(final ContactViewHolder contactViewHolder, int i) {
-
+        String title = context.getResources().getString(R.string.love_message_title) + " " + usernameSender;
+        contactViewHolder.vTitle.setText(title);
         contactViewHolder.vLoveMessage.setText(loveMessageToDisplay);
 
         //Picasso e vanshta bibilioteka, koito ni pozvoliava da otvariame snimki ot internet
@@ -58,11 +60,13 @@ public class AdapterViewImage extends RecyclerView.Adapter<AdapterViewImage.Cont
     }
 
     public static class ContactViewHolder extends RecyclerView.ViewHolder {
+        protected TextView vTitle;
         protected TextView vLoveMessage;
         protected ImageView vPic;
         protected ImageView imageRotate;
         public ContactViewHolder(View v) {
             super(v);
+            vTitle = (TextView) v.findViewById(R.id.message_title);
             vLoveMessage =  (TextView) v.findViewById(R.id.loveMessage);
             vPic = (ImageView) v.findViewById(R.id.imageView_to_display_picture);
             imageRotate = (ImageView) v.findViewById(R.id.imageRotate);

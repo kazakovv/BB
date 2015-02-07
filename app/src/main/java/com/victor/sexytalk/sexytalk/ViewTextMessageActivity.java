@@ -20,6 +20,7 @@ public class ViewTextMessageActivity extends ActionBarActivity {
         setContentView(R.layout.activity_view_text_message);
         //loveMessageToDisplay = (TextView) findViewById(R.id.loveMessageTextMessage);
         String loveMessage = getIntent().getStringExtra(Statics.KEY_LOVE_MESSAGE);
+        String senderUsername = getIntent().getStringExtra(Statics.KEY_USERNAME_SENDER);
 
         //loveMessageToDisplay.setText(loveMessage);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -32,7 +33,7 @@ public class ViewTextMessageActivity extends ActionBarActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        AdapterViewTextMessage adapter = new AdapterViewTextMessage(loveMessage);
+        AdapterViewTextMessage adapter = new AdapterViewTextMessage(loveMessage, senderUsername,this);
         recList.setAdapter(adapter);
     }
 

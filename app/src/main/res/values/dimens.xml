@@ -16,4 +16,5 @@
     <dimen name="card_corner_radius">4dp</dimen>
     <dimen name="message_image_height">500dp</dimen>
     <dimen name="image_rotation_arrow">30dp</dimen>
+    <dimen name="message_title">30sp</dimen>
 </resources>

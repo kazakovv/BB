@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     card_view:cardCornerRadius="4dp"
     android:layout_margin="5dp">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/message_title"
+            android:background="@color/title_messages"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/message_title"
+            android:text="Love message for the day"/>
         <TextView
             android:id="@+id/loveMessage"
             android:layout_width="wrap_content"
@@ -15,4 +28,5 @@
             android:layout_alignParentTop="true"
             android:text="Love Message"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
 </android.support.v7.widget.CardView>

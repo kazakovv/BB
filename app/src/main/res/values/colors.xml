@@ -7,4 +7,5 @@
     <color name="button_default">#EF9A9A</color>
     <color name="button_pressed">#F44336</color>
     <color name="button_focused">#FFCDD2</color>
+    <color name="title_messages">#EF9A9A</color>
 </resources>

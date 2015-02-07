@@ -134,6 +134,7 @@
     <string name="minute">1 minute</string>
     <string name="sending_message">Sending love message...</string>
     <string name="sexy_calendar_default_message_guys">is a guy</string>
+    <string name="love_message_title">Today\'s love message from</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>

@@ -33,6 +33,7 @@ public class ViewImageActivity extends ActionBarActivity {
         //GET THE LOVE MESSAGE AND THE PIC
         String loveMessageToDisplay = getIntent().getStringExtra(Statics.KEY_LOVE_MESSAGE);
         String imageUrl = getIntent().getStringExtra(Statics.KEY_URL);
+        String senderUsername = getIntent().getStringExtra(Statics.KEY_USERNAME_SENDER);
 
         //SET UP THE RECYCLER VIEW
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
@@ -40,7 +41,7 @@ public class ViewImageActivity extends ActionBarActivity {
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        AdapterViewImage adapter = new AdapterViewImage(loveMessageToDisplay,imageUrl,this);
+        AdapterViewImage adapter = new AdapterViewImage(loveMessageToDisplay,senderUsername,imageUrl,this);
         recList.setAdapter(adapter);
 
         //loveMessage.setText(loveMessageToDisplay);

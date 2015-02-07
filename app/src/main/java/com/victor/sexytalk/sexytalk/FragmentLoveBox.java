@@ -121,6 +121,7 @@ public class FragmentLoveBox extends ListFragment {
 
         String messageType = message.getMessageType();
         String loveMessage =  message.getLoveMessage();
+        String usernameSender = message.getSenderUsername();
 
         String fileUrl = "";
 
@@ -136,6 +137,7 @@ public class FragmentLoveBox extends ListFragment {
             Intent intent = new Intent(getActivity(), ViewImageActivity.class);
             intent.putExtra(Statics.KEY_URL, fileUrl);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            intent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
             //zadavame che sme otvorili saobshtenieto, ako ne e bilo otvariano predi
             if(message.getOpened() == null) {
                 Calendar c = Calendar.getInstance();
@@ -164,6 +166,7 @@ public class FragmentLoveBox extends ListFragment {
             //ako e text go otvariame v sashtotia view kato image
             Intent intent = new Intent(getActivity(), ViewTextMessageActivity.class);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            intent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
             //zadavame che sme otvorili saobshtenieto, ako ne e bilo otvariano predi
             if(message.getOpened() == null) {
                 Calendar c = Calendar.getInstance();
