@@ -19,11 +19,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessCollection;
+import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
-import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleDays;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -39,6 +38,8 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
     int averageLengthOfMenstrualCycle;
     CheckBox sendSexyCalendarUpdateToPartners;
     Context context;
+
+    protected BackendlessUser mCurrentUser;
 
     final static long MILLIS_PER_DAY = 24 * 3600 * 1000;
 
@@ -56,7 +57,9 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
         sendSexyCalendarUpdateToPartners = (CheckBox) inflatedView.findViewById(R.id.sendSexyCalendarUpdateCheck);
         context = inflatedView.getContext();
         cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
-
+        if(Backendless.UserService.CurrentUser() != null) {
+            mCurrentUser = Backendless.UserService.CurrentUser();
+        }
 
         //sazdavame masiv s vazmoznostite za prodalzhitelnostta na cikala
         //stoinostite sa ot 21 do 35 dena
@@ -169,71 +172,34 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
             query.setWhereClause(whereClause);
 
 
-            //parvo namirame predishnata info za choveka, za da updatenem kalendara
-            Backendless.Persistence.of(CycleDays.class).find(query, new AsyncCallback<BackendlessCollection<CycleDays>>() {
-                @Override
-                public void handleResponse(BackendlessCollection<CycleDays> result) {
-                    CycleDays cycle;
-                    if(result.getData().size() > 0) { //ako veche ima info ot predshen pat samo updatevame
+            mCurrentUser.setProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,
+                    Integer.parseInt(spinnerCycle.getSelectedItem().toString()) );
+            mCurrentUser.setProperty(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle.getTime());
+        if(sendSexyCalendarUpdateToPartners.isChecked()) {
+            mCurrentUser.setProperty(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS, true);
+        } else {
+            mCurrentUser.setProperty(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS, false);
+        }
 
-                        cycle = result.getCurrentPage().get(0);
-                        cycle.setFirstDayOfCycle(firstDayOfCycle.getTime());
-                        //TODO: tr da se porvaboti ot kade da se vzima statusa
-                        cycle.setSatusText(cyclePhaseStatus.getText().toString());
-                        cycle.setAverageCycleLength(Integer.parseInt(spinnerCycle.getSelectedItem().toString()));
-                        if(sendSexyCalendarUpdateToPartners.isChecked()) {
-                            cycle.setSendCalendarUpdateToPartners(true);
-                        } else {
-                            cycle.setSendCalendarUpdateToPartners(false);
-                        }
-                    } else { //sazdavame nova tablica, ponezhe niama talava
-
-                        cycle = new CycleDays();
-
-                        cycle.setSender(Backendless.UserService.CurrentUser());
-                        cycle.setSenderEmail(Backendless.UserService.CurrentUser().getEmail());
-                        cycle.setFirstDayOfCycle(firstDayOfCycle.getTime());
-
-                        if(sendSexyCalendarUpdateToPartners.isChecked()) {
-                            cycle.setSendCalendarUpdateToPartners(true);
-                        } else {
-                            cycle.setSendCalendarUpdateToPartners(false);
-                        }
-
-                        //TODO: tr da se porvaboti ot kade da se vzima statusa
-                        cycle.setSatusText(cyclePhaseStatus.getText().toString());
-                        cycle.setAverageCycleLength(Integer.parseInt(spinnerCycle.getSelectedItem().toString()));
-                    }
-                    //updatvame, ili sazvame nov calendar calendar
-                    Backendless.Persistence.save(cycle, new AsyncCallback<CycleDays>() {
-                        @Override
-                        public void handleResponse(CycleDays cycleDays) {
-                            if(sendSexyCalendarUpdateToPartners.isChecked()) {
-                                //TODO: tr da se poraboti v/u check kolko partniora imame i da se smeni saobstehnieto na plular ili singular
-                                Toast.makeText(context,R.string.calendar_update_sent_plural, Toast.LENGTH_LONG).show();
-                            } else {
-                                Toast.makeText(context,R.string.calendar_saved, Toast.LENGTH_LONG).show();
-                            }
-
-
-                        }
-
-                        @Override
-                        public void handleFault(BackendlessFault backendlessFault) {
-                            Toast.makeText(context,R.string.error_sending_calendar_updates, Toast.LENGTH_LONG).show();
-
-                        }
-                    });
-
+        Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
+            @Override
+            public void handleResponse(BackendlessUser backendlessUser) {
+                if(sendSexyCalendarUpdateToPartners.isChecked()) {
+                    //TODO: tr da se poraboti v/u check kolko partniora imame i da se smeni saobstehnieto na plular ili singular
+                    //TODO: TR DA SE IZPRATI PUSH DO PARTNIORITE
+                    Toast.makeText(context,R.string.calendar_update_sent_plural, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context,R.string.calendar_saved, Toast.LENGTH_LONG).show();
                 }
+            }
 
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    //error pri find query
-                    Toast.makeText(context,R.string.error_sending_calendar_updates, Toast.LENGTH_LONG).show();
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                Toast.makeText(context,R.string.error_sending_calendar_updates, Toast.LENGTH_LONG).show();
 
-                }
-            });
+            }
+        });
+
 
 
 

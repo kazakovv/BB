@@ -32,6 +32,7 @@ public class Statics {
     public static final String CALENDAR_MONTH = "calendarMonth";
     public static final String CALENDAR_DAY = "calendarDay";
     public static final String AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE = "averageLengthOfCycle";
+    public static final String FIRST_DAY_OF_CYCLE = "firstDayOfCycle";
     public static final String SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS = "sendSexyCalendarUpdate";
 
     //keys za tarsene v Backendless table s cycle statusi i titles
@@ -41,6 +42,7 @@ public class Statics {
     public static final String KEY_LUTEAL = "Luteal";
 
     public static final String KEY_SEXY_STATUS = "sexyStatus";
+
 
     public static final String KEY_PARTNER_REQUEST = "partnerRequest";
     public static final String KEY_PARTNER_DELETE = "deletePartner";

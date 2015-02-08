@@ -8,8 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
-import android.support.v4.app.ListFragment;
-import android.support.v7.widget.RecyclerView;
+
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,16 +21,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
-import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleDays;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleTitles;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
 
@@ -148,6 +144,7 @@ public class FragmentLoveDays extends Fragment {
                 //Kato se izpere partner
                 // vikame helper metod, za da updatenem statusite, messages, etc.
                 updateMessagesForPartner(selectedPartner);
+
                 if(selectedPartner.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
                     String existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
                     Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
@@ -249,7 +246,7 @@ public class FragmentLoveDays extends Fragment {
                             String cyclePhase = cycle.getCyclePhase();
                             if (cyclePhase.equals(Statics.KEY_MENSTRUATION)) {
                                 cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
-                                cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
+                                //cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
                                 cycleExplainationText.setText(cycle.getCyclePhaseExplaination());
                             }
 
@@ -265,7 +262,7 @@ public class FragmentLoveDays extends Fragment {
                             String cyclePhase = cycle.getCyclePhase();
                             if (cyclePhase.equals(Statics.KEY_FOLLICULAR)) {
                                 cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
-                                cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
+                                //cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
                                 cycleExplainationText.setText(cycle.getCyclePhaseExplaination());
                             }
                         }
@@ -279,7 +276,7 @@ public class FragmentLoveDays extends Fragment {
                             String cyclePhase = cycle.getCyclePhase();
                             if (cyclePhase.equals(Statics.KEY_OVULATION)) {
                                 cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
-                                cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
+                               // cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
                                 cycleExplainationText.setText(cycle.getCyclePhaseExplaination());
                             }
                         }
@@ -292,7 +289,7 @@ public class FragmentLoveDays extends Fragment {
                             String cyclePhase = cycle.getCyclePhase();
                             if (cyclePhase.equals(Statics.KEY_LUTEAL)) {
                                 cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
-                                cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
+                               // cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
                                 cycleExplainationText.setText(cycle.getCyclePhaseExplaination());
                             }
                         }
@@ -367,86 +364,47 @@ public class FragmentLoveDays extends Fragment {
             cycleExplainationText.setText(" ");
         } else {
             //ako e zhena
-            String partnerEmail = partner.getEmail();
-            String whereClause = "senderEmail='" + partnerEmail +"'";
-            BackendlessDataQuery query = new BackendlessDataQuery();
-            query.setWhereClause(whereClause);
-            Backendless.Data.of(CycleDays.class).find(query, new AsyncCallback<BackendlessCollection<CycleDays>>() {
-                @Override
-                public void handleResponse(BackendlessCollection<CycleDays> cycleStatuses) {
-                    if(cycleStatuses.getData().size() > 0) {
-                        List<CycleDays> statuses = cycleStatuses.getData();
-                        //triabva da ima samo edno savpadenie poneze tarsim po email
-                        //zatova list triabva da e ot samo edin element
+            if(partner.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null) {
+                Calendar firstDayOfCycle = Calendar.getInstance();
+                firstDayOfCycle.setTime((Date) partner.getProperty(Statics.FIRST_DAY_OF_CYCLE));
+                int year = firstDayOfCycle.get(Calendar.YEAR);
+                int month = firstDayOfCycle.get(Calendar.MONTH);
+                int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
+                int averageCyclelength = (int) partner.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+                determineCyclePhase(year, month, day, averageCyclelength);
+                cyclePhaseStatus.setText((String) partner.getProperty(Statics.KEY_SEXY_STATUS));
+            } else {
+                //nishto ne e namereno, sledovatelno partnera ne si e updatenal kalendara
+                String message = partnerUsername + " " + getString(R.string.partner_hasnt_updated_calendar);
 
-                        Calendar firstDayOfCycle = Calendar.getInstance();
-                        firstDayOfCycle.setTime(statuses.get(0).getFirstDayOfCycle());
-                        int year = firstDayOfCycle.get(Calendar.YEAR);
-                        int month = firstDayOfCycle.get(Calendar.MONTH);
-                        int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
-                        int averageCyclelength = statuses.get(0).getAverageCycleLength();
+                cyclePhaseTitle.setText(" ");
+                cyclePhaseStatus.setText(message);
+                cycleExplainationText.setText(" ");
+            }
 
-                        //vikame helper metod, za da updatenem statusite
-                        determineCyclePhase(year,month,day,averageCyclelength);
-                        //zadavame personaliziranoto saobshtenie
-                        cyclePhaseStatus.setText(statuses.get(0).getSatusText());
 
-                    } else {
-                        //nishto ne e namereno, sledovatelno partnera ne si e updatenal kalendara
-                        String message = partnerUsername + " " + getString(R.string.partner_hasnt_updated_calendar);
-
-                        cyclePhaseTitle.setText(" ");
-                        cyclePhaseStatus.setText(message);
-                        cycleExplainationText.setText(" ");
-
-                        //po-dolu e drug variant za error message, no gornoto e po-personalizirano
-                        //determineCyclePhase(0,0,0,0);
-
-                    }
-                }
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    Toast.makeText(context,R.string.general_server_error,Toast.LENGTH_LONG).show();
-                }
-            });
         }//krai na if statement maz ili zhena
 
 
     }
 
     private void restoreValuesForLoggedInUser() {
-        BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-        String currentUserEmail = currentUser.getEmail();
-        String whereClause="senderEmail='" + currentUserEmail + "'";
-        BackendlessDataQuery query = new BackendlessDataQuery();
-        query.setWhereClause(whereClause);
+        if(mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) != null) {
+            mAverageLengthOfMenstrualCycle = (int) mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+            Date firstDayOfCycle = (Date) mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE);
+            Calendar firstDay = new GregorianCalendar();
+            firstDay.setTime(firstDayOfCycle);
+            mYear = firstDay.get(Calendar.YEAR);
+            mMonth = firstDay.get(Calendar.MONTH);
+            mDay = firstDay.get(Calendar.DAY_OF_MONTH);
 
-        Backendless.Data.of(CycleDays.class).find(query, new AsyncCallback<BackendlessCollection<CycleDays>>() {
-            @Override
-            public void handleResponse(BackendlessCollection<CycleDays> cycleDays) {
-                if(cycleDays.getData().size() > 0) { //proveriava dali ima data
-                    mAverageLengthOfMenstrualCycle = cycleDays.getCurrentPage().get(0).getAverageCycleLength();
-                    Date firstDayOfCycle = cycleDays.getCurrentPage().get(0).getFirstDayOfCycle();
-                    Calendar firstDay = new GregorianCalendar();
-                    firstDay.setTime(firstDayOfCycle);
-
-                    mYear = firstDay.get(Calendar.YEAR);
-                    mMonth = firstDay.get(Calendar.MONTH);
-                    mDay = firstDay.get(Calendar.DAY_OF_MONTH);
-                    //na baza na stoinostite opredelia fazata
-                    determineCyclePhase(mYear, mMonth, mDay, mAverageLengthOfMenstrualCycle);
-                }
+            if(mCurrentUser.getProperty(Statics.KEY_SEXY_STATUS) !=null) {
+            String sexyStatus = (String) mCurrentUser.getProperty(Statics.KEY_SEXY_STATUS);
+               cyclePhaseStatus.setText(sexyStatus);
             }
+            //na baza na stoinostite opredelia fazata
+            determineCyclePhase(mYear, mMonth, mDay, mAverageLengthOfMenstrualCycle);
+        }
 
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(R.string.general_error_title)
-                        .setMessage(R.string.load_settings_error)
-                        .setPositiveButton(R.string.ok, null);
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            }
-        });
     }
 }

@@ -31,11 +31,11 @@
             android:id="@+id/listOfPartners"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@+id/cyclePhase"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignRight="@+id/cyclePhase"
-            android:layout_below="@+id/showPrivateDaysDialog" />
+            android:layout_below="@+id/showPrivateDaysDialog"
+            android:layout_toLeftOf="@+id/profilePicture"
+            android:layout_toStartOf="@+id/profilePicture" />
 
         <ImageView
             android:id="@+id/profilePicture"
