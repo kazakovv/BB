@@ -36,7 +36,7 @@
     <string name="tab_love_box_title">Love Box</string>
     <string name="tab_friends_title">Friends</string>
     <string name="no_friends_added_message">Add friends to begin</string>
-    <string name="no_messages">You have no new messages</string>
+    <string name="no_messages">You have no messages</string>
     <string name="title_activity_edit_friends">EditFriendsActivity</string>
     <string name="error_title">Oops!</string>
     <string name="menu_camera">Camera</string>
@@ -135,6 +135,7 @@
     <string name="sending_message">Sending love message...</string>
     <string name="sexy_calendar_default_message_guys">is a guy</string>
     <string name="love_message_title">Today\'s love message from</string>
+    <string name="first_day_of_cycle_before_average_cycle_length">Select a date that does not exceed your average cycle length</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>

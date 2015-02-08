@@ -31,6 +31,7 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleDays;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleTitles;
+import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -89,10 +90,11 @@ public class FragmentLoveDays extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
         showPrivateDaysDialog = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
         cyclePhaseTitle = (TextView) getActivity().findViewById(R.id.cyclePhase);
         cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
-        cycleExplainationText = (TextView) getActivity().findViewById(R.id.explainationText);
+        cycleExplainationText = (TextView) getActivity().findViewById(R.id.explanationText);
         listOfPartnersSpinner = (Spinner) getActivity().findViewById(R.id.listOfPartners);
 
 

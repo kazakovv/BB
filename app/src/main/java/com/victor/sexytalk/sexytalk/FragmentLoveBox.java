@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +43,7 @@ public class FragmentLoveBox extends ListFragment {
    protected List<Messages> messagesToDisplay;
    protected View myView;
    protected SwipeRefreshLayout mSwipeRefreshLayout;
+   protected SwipeRefreshLayout mSwipeRefreshLayout_emptyView;
    protected BackendlessUser currentUser;
    protected ListView mListView;
    protected TextView mEmptyMessage;
@@ -49,8 +51,11 @@ public class FragmentLoveBox extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_love_box, container, false);
-        mEmptyMessage = (TextView) rootView.findViewById(R.id.empty_message);
+        mEmptyMessage = (TextView) rootView.findViewById(android.R.id.empty);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout_emptyView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout_emptyView);
+
+        mSwipeRefreshLayout_emptyView.setOnRefreshListener(mOnRefreshListener);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
         return rootView;
@@ -69,19 +74,22 @@ public class FragmentLoveBox extends ListFragment {
         super.onActivityCreated(savedInstanceState);
         myView = getListView();
         mListView = getListView();
-        mListView.setEmptyView(mEmptyMessage);//TODO ne pokazva praznoto saobstehnie
         mListView.setOnScrollListener(mOnScrollListener);
+
+
     }
     //on scroll listener za list view
     protected ListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
         @Override
         public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+
         }
 
         @Override
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             boolean enable = false;
+
             if(mListView != null && mListView.getChildCount() > 0){
                 // check if the first item of the list is visible
                 boolean firstItemVisible = mListView.getFirstVisiblePosition() == 0;
@@ -108,6 +116,7 @@ public class FragmentLoveBox extends ListFragment {
 
         if(Backendless.UserService.CurrentUser() != null) {
             currentUser = Backendless.UserService.CurrentUser();
+
             searchForMessages();
         }
     }
@@ -275,6 +284,11 @@ protected void searchForMessages(){
             if(mSwipeRefreshLayout.isRefreshing()){
             mSwipeRefreshLayout.setRefreshing(false);
             }
+            if(mSwipeRefreshLayout_emptyView.isRefreshing()){
+                mSwipeRefreshLayout_emptyView.setRefreshing(false);
+            }
+
+
             messagesToDisplay = new ArrayList<Messages>();
             if(messages.getData().size() > 0) {
                 messagesToDisplay = messages.getData();
@@ -304,6 +318,9 @@ protected void searchForMessages(){
             //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
             if(mSwipeRefreshLayout.isRefreshing()){
                 mSwipeRefreshLayout.setRefreshing(false);
+            }
+            if(mSwipeRefreshLayout_emptyView.isRefreshing()){
+                mSwipeRefreshLayout_emptyView.setRefreshing(false);
             }
 
             Toast.makeText(getListView().getContext(),R.string.general_server_error,Toast.LENGTH_LONG).show();

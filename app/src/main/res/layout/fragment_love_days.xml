@@ -1,75 +1,79 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="fragmentLoveDays"
     tools:context="com.victor.sexytalk.sexytalk.FragmentLoveDays">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <!--
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cardListLoveBox"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+      -->
+
+        <Button
+            android:id="@+id/showPrivateDaysDialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/show_private_days_dialog_button" />
+
+        <Spinner
+            android:id="@+id/listOfPartners"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/cyclePhase"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignRight="@+id/cyclePhase"
+            android:layout_below="@+id/showPrivateDaysDialog" />
+
+        <ImageView
+            android:id="@+id/profilePicture"
+            android:layout_width="@dimen/thumbnail_width"
+            android:layout_height="@dimen/thumbnail_height"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_action_person_black" />
 
 
+        <TextView
+            android:id="@+id/cyclePhase"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/listOfPartners"
+            android:layout_marginLeft="64dp"
+            android:layout_marginTop="30dp"
+            android:text="Title of cycle stage"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/show_private_days_dialog_button"
-        android:id="@+id/showPrivateDaysDialog"
-        android:layout_gravity="center_horizontal" />
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/listOfPartners"
-        android:layout_below="@+id/showPrivateDaysDialog"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/cyclePhase"
-        android:layout_alignEnd="@+id/cyclePhase" />
+        <TextView
+            android:id="@+id/sexyStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/cyclePhase"
+            android:layout_alignStart="@+id/cyclePhase"
+            android:layout_below="@+id/cyclePhase"
+            android:layout_marginTop="42dp"
+            android:text="Sexy status"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ImageView
-        android:layout_width="@dimen/thumbnail_width"
-        android:layout_height="@dimen/thumbnail_height"
-        android:id="@+id/profilePicture"
-        android:src="@drawable/ic_action_person_black"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Title of cycle stage"
-        android:id="@+id/cyclePhase"
-        android:layout_marginTop="30dp"
-        android:layout_below="@+id/listOfPartners"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="64dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Sexy status"
-        android:id="@+id/sexyStatus"
-        android:layout_marginTop="42dp"
-        android:layout_below="@+id/cyclePhase"
-        android:layout_alignLeft="@+id/cyclePhase"
-        android:layout_alignStart="@+id/cyclePhase" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/explainationText"
-        android:layout_marginTop="61dp"
-        android:layout_below="@+id/sexyStatus"
-        android:layout_alignLeft="@+id/sexyStatus"
-        android:layout_alignStart="@+id/sexyStatus" />
-
+        <TextView
+            android:id="@+id/explanationText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/sexyStatus"
+            android:layout_alignStart="@+id/sexyStatus"
+            android:layout_below="@+id/sexyStatus"
+            android:layout_marginTop="61dp"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
 
