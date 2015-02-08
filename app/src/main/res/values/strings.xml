@@ -136,16 +136,19 @@
     <string name="sexy_calendar_default_message_guys">is a guy</string>
     <string name="love_message_title">Today\'s love message from</string>
     <string name="first_day_of_cycle_before_average_cycle_length">Select a date that does not exceed your average cycle length</string>
+    <string name="change_sexy_status_hint">Tell everyone how you feel</string>
+    <string name="empty_sexy_status">Enter your status first</string>
+    <string name="error_updating_status">Error updating your status. Please try again.</string>
+    <string name="saving_message">Saving...</string>
+    <string name="sexy_status_saved_message">Your sexy status was saved</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
     </string-array>
-
     <string-array name="sex_options">
         <item>Male</item>
         <item>Female</item>
     </string-array>
-
     <string-array name="edit_profile_options">
         <item>Change your sex</item>
         <item>Change date of birth</item>
@@ -153,6 +156,6 @@
         <item>Change profile picture</item>
     </string-array>
 
-
+    <string name="title_activity_change_sexy_status">ChangeSexyStatus</string>
 
 </resources>

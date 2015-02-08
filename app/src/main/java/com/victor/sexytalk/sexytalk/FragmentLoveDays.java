@@ -50,6 +50,7 @@ public class FragmentLoveDays extends Fragment {
     protected Spinner listOfPartnersSpinner;
     protected BackendlessUser[] mPartners; //array s partnirite
     protected ImageView profilePic;
+
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
 
     private int mYear;
@@ -119,6 +120,13 @@ public class FragmentLoveDays extends Fragment {
                 listOfPartnersSpinner.setVisibility(View.INVISIBLE);
                 //ako e zhena vazstanoviavame kalendara: Year, month,day,cyclelength
                 restoreValuesForLoggedInUser();
+                cyclePhaseStatus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context,ActivityChangeSexyStatus.class);
+                        startActivity(intent);
+                    }
+                });
             }
         }
 

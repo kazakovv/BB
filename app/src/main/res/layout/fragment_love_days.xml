@@ -1,18 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:tag="fragmentLoveDays"
-    tools:context="com.victor.sexytalk.sexytalk.FragmentLoveDays">
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:tag="fragmentLoveDays"
+        tools:context="com.victor.sexytalk.sexytalk.FragmentLoveDays">
 
 
-    <!--
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/cardListLoveBox"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-      -->
+        <!--
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/cardListLoveBox"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+          -->
+
 
         <Button
             android:id="@+id/showPrivateDaysDialog"
@@ -48,7 +54,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/listOfPartners"
-            android:layout_marginLeft="64dp"
             android:layout_marginTop="30dp"
             android:text="Title of cycle stage"
             android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -57,12 +62,12 @@
             android:id="@+id/sexyStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/cyclePhase"
-            android:layout_alignStart="@+id/cyclePhase"
-            android:layout_below="@+id/cyclePhase"
-            android:layout_marginTop="42dp"
             android:text="Sexy status"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_below="@+id/cyclePhase"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="59dp" />
 
         <TextView
             android:id="@+id/explanationText"
@@ -76,5 +81,6 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
+    </RelativeLayout>
 
-</RelativeLayout>
+</android.support.v7.widget.CardView>

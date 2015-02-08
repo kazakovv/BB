@@ -40,6 +40,8 @@ public class Statics {
     public static final String KEY_FOLLICULAR = "Follicular";
     public static final String KEY_LUTEAL = "Luteal";
 
+    public static final String KEY_SEXY_STATUS = "sexyStatus";
+
     public static final String KEY_PARTNER_REQUEST = "partnerRequest";
     public static final String KEY_PARTNER_DELETE = "deletePartner";
 
