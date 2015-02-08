@@ -74,10 +74,11 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         } else {
 
            //TODO moze da gi varna obratno, ako ima nuzda
+            //TODO!!!!!
             //check za pending parner request
-            checkForPendingParnerRequests();
+            //checkForPendingParnerRequests();
             //check za pending delete requests
-            checkForDeletePartnerRequest();
+            //checkForDeletePartnerRequest();
 
             //proveriavame dali e maz ili zhena
             MaleOrFemale = (String) mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
@@ -125,7 +126,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
 
 
-            //TODO Sth is slowing it down a lot
             //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //Load all relations for users (partners, etc)
             /*
@@ -322,7 +322,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
                     }
                 });
-                //send push message
 
 
             } else if (resultCode != RESULT_CANCELED) {
