@@ -28,8 +28,6 @@ public class SignUpActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS); //vazmoznost da pokazva spinner dokato misli
-
         setContentView(R.layout.activity_sign_up);
 
 
@@ -77,21 +75,21 @@ public class SignUpActivity extends Activity {
                     newUser.setProperty(Statics.KEY_MALE_OR_FEMALE,spinner.getSelectedItem().toString());
 
 
+                    //TODO: Check dali email ne eveche zaet
 
-
-                    setProgressBarIndeterminateVisibility(true); //pokazva spiner che se sluchva neshto
-
-                    Backendless.UserService.register(newUser, new AsyncCallback<BackendlessUser>() {
+                    final String message = getResources().getString(R.string.signing_up_message);
+                    Backendless.UserService.register(newUser,
+                            new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {
 
                         @Override
                         public void handleResponse(BackendlessUser backendlessUser) {
-                            setProgressBarIndeterminateVisibility(false);
 
                             //tuk varzvame push!!!!!!!!!!!!!!!!!
                             //!!!!!!!!!!!!!!!!!!
                             //User successfully created!
                             //log in!
-                            Backendless.UserService.login(email, password, new AsyncCallback<BackendlessUser>() {
+                            Backendless.UserService.login(email, password,
+                                    new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {
                                 @Override
                                 public void handleResponse(BackendlessUser backendlessUser) {
                                     // Switch to main screen.
