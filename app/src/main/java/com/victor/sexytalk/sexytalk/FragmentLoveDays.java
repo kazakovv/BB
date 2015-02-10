@@ -175,8 +175,8 @@ public class FragmentLoveDays extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == UPDATE_STATUS) {
-            Bundle bundle = data.getExtras();
-            String status = bundle.getString(Statics.KEY_SET_STATUS);
+
+            String status = data.getStringExtra(Statics.KEY_SET_STATUS);
             cyclePhaseStatus.setText(status);
         }
 

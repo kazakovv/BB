@@ -68,10 +68,10 @@ protected BackendlessUser mCurrentUser;
                    @Override
                    public void handleResponse(BackendlessUser backendlessUser) {
                        super.handleResponse(backendlessUser);
-                       Intent i = new Intent();
-                       Bundle extras = new Bundle();
-                       extras.putString(Statics.KEY_SET_STATUS,mSexyStatus.getText().toString().trim());
-                       i.putExtras(extras);
+
+                       Intent data = new Intent();
+                       data.putExtra(Statics.KEY_SET_STATUS, mSexyStatus.getText().toString().trim());
+                       setResult(Activity.RESULT_OK, data);
                        finish();
                        Toast.makeText(ActivityChangeSexyStatus.this,R.string.sexy_status_saved_message,Toast.LENGTH_LONG).show();
                    }
