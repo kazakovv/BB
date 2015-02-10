@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.victor.sexytalk.sexytalk" >
+    package="com.victor.sexytalk.sexytalk">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,10 +23,10 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Main"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -67,17 +67,19 @@
         <activity
             android:name=".EditProfileActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".Main" >
-        </activity>
+            android:parentActivityName=".Main"></activity>
         <activity
             android:name=".ActivityChangeSexyStatus"
             android:label="@string/app_name"
-            android:parentActivityName=".Main">
-        </activity>
+            android:parentActivityName=".Main"></activity>
+        <activity
+            android:name=".ActivitySexyCalendar"
+            android:label="@string/app_name"
+            android:parentActivityName=".Main"></activity>
 
         <receiver
             android:name=".PushReceiver"
-            android:permission="com.google.android.c2dm.permission.SEND" >
+            android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />

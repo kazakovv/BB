@@ -1,6 +1,8 @@
 package com.victor.sexytalk.sexytalk;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -66,6 +68,10 @@ protected BackendlessUser mCurrentUser;
                    @Override
                    public void handleResponse(BackendlessUser backendlessUser) {
                        super.handleResponse(backendlessUser);
+                       Intent i = new Intent();
+                       Bundle extras = new Bundle();
+                       extras.putString(Statics.KEY_SET_STATUS,mSexyStatus.getText().toString().trim());
+                       i.putExtras(extras);
                        finish();
                        Toast.makeText(ActivityChangeSexyStatus.this,R.string.sexy_status_saved_message,Toast.LENGTH_LONG).show();
                    }

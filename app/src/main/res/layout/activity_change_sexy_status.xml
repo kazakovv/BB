@@ -17,6 +17,7 @@
         android:layout_below="@+id/app_toolbar"
         android:hint="@string/change_sexy_status_hint"
         android:maxLength="200"
-        android:maxLines="1" />
+        android:singleLine="true"
+         />
 
 </LinearLayout>

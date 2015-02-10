@@ -59,5 +59,7 @@ public class Statics {
     public static final int MESSAGE_TIME_TO_DISPLAY = 24; //24 chasa
     public static final int SHORT_SIDE_TARGET_THUMBNAIL = 100;
     public static final int SHORT_SIDE_TARGET_PIC = 500;
+
+    public static final String KEY_SET_STATUS = "setStatus";
 }
 

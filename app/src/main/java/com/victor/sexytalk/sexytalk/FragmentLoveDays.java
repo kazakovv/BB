@@ -46,8 +46,10 @@ public class FragmentLoveDays extends Fragment {
     protected Spinner listOfPartnersSpinner;
     protected BackendlessUser[] mPartners; //array s partnirite
     protected ImageView profilePic;
+    protected Button sexyCalendar;
 
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
+    private static final int UPDATE_STATUS = 22;
 
     private int mYear;
     private int mMonth;
@@ -77,6 +79,9 @@ public class FragmentLoveDays extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
         profilePic = (ImageView) inflatedView.findViewById(R.id.profilePicture);
+
+
+
         return inflatedView;
     }
 
@@ -95,7 +100,7 @@ public class FragmentLoveDays extends Fragment {
         cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
         cycleExplainationText = (TextView) getActivity().findViewById(R.id.explanationText);
         listOfPartnersSpinner = (Spinner) getActivity().findViewById(R.id.listOfPartners);
-
+        sexyCalendar = (Button) getActivity().findViewById(R.id.showSexyCalendar);
 
         //TODO: triabva da se optimizira, zashtoto taka se vrazva neprekasnato kam servera
 
@@ -120,7 +125,7 @@ public class FragmentLoveDays extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(context,ActivityChangeSexyStatus.class);
-                        startActivity(intent);
+                        startActivityForResult(intent, UPDATE_STATUS);
                     }
                 });
             }
@@ -157,11 +162,24 @@ public class FragmentLoveDays extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        sexyCalendar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ActivitySexyCalendar.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == UPDATE_STATUS) {
+            Bundle bundle = data.getExtras();
+            String status = bundle.getString(Statics.KEY_SET_STATUS);
+            cyclePhaseStatus.setText(status);
+        }
+
         if(requestCode == MENSTRUAL_CALENDAR_DIALOG) {
 
 

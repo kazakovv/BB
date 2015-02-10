@@ -1,12 +1,10 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +12,6 @@ import android.widget.Spinner;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
 
@@ -77,7 +74,7 @@ public class SignUpActivity extends Activity {
 
                     //TODO: Check dali email ne eveche zaet
 
-                    final String message = getResources().getString(R.string.signing_up_message);
+                    final String message = getResources().getString(R.string.signing_in_message);
                     Backendless.UserService.register(newUser,
                             new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {
 

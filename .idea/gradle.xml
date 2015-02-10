@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/backendless" />
             <option value="$PROJECT_DIR$/commons-io-2.4" />
             <option value="$PROJECT_DIR$/picasso-2.3.4" />
+            <option value="$PROJECT_DIR$/times-square" />
           </set>
         </option>
       </GradleProjectSettings>

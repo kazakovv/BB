@@ -141,7 +141,8 @@
     <string name="error_updating_status">Error updating your status. Please try again.</string>
     <string name="saving_message">Saving...</string>
     <string name="sexy_status_saved_message">Your sexy status was saved</string>
-    <string name="signing_up_message">Signing up...</string>
+    <string name="signing_in_message">Signing ip...</string>
+
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
@@ -158,5 +159,6 @@
     </string-array>
 
     <string name="title_activity_change_sexy_status">ChangeSexyStatus</string>
+    <string name="title_activity_activity_sexy_calendar">ActivitySexyCalendar</string>
 
 </resources>
