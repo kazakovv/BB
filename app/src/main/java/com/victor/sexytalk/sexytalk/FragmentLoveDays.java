@@ -120,6 +120,15 @@ public class FragmentLoveDays extends Fragment {
                 showPrivateDaysDialog.setVisibility(View.VISIBLE);
                 listOfPartnersSpinner.setVisibility(View.INVISIBLE);
                 //ako e zhena vazstanoviavame kalendara: Year, month,day,cyclelength
+
+                if(mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
+                    //zarezda profile pic ako ima takava
+                    String existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
+                    Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
+                } else {
+                    profilePic.setImageResource(R.drawable.ic_action_person_black);
+
+                }
                 restoreValuesForLoggedInUser();
                 cyclePhaseStatus.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -151,7 +160,7 @@ public class FragmentLoveDays extends Fragment {
                 updateMessagesForPartner(selectedPartner);
 
                 if(selectedPartner.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
-                    String existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
+                    String existingProfilePicPath = (String) selectedPartner.getProperty(Statics.KEY_PROFILE_PIC_PATH);
                     Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
                 } else {
                     profilePic.setImageResource(R.drawable.ic_action_person_black);
