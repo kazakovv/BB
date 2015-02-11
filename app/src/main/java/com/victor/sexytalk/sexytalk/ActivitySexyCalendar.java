@@ -112,6 +112,11 @@ protected int mAverageLengthOfCycle;
             // active energetic
             dateToBeAdded.add(Calendar.DAY_OF_MONTH, (firstDayOfOvulation -1));
             datesToBeSelected.add(dateToBeAdded.getTime());
+            //dobaviame vsichki dati m/u
+            for(int i = (days+1); i < firstDayOfOvulation; i++) {
+                dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
+                datesToBeSelected.add(dateToBeAdded.getTime());
+            }
         } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
             //ovulation
             //sexy
