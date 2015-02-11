@@ -175,7 +175,34 @@ public class FragmentLoveDays extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ActivitySexyCalendar.class);
-                startActivity(intent);
+
+                if(mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)) {
+                    //ako e zh
+                    Date firstDayOfCycle = (Date) mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE);
+                    int averageCycleLength = (int) mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+                    intent.putExtra(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE, averageCycleLength);
+                    intent.putExtra(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle);
+                    //proveriavame za greshka predi da startirame kalendara
+                    if(firstDayOfCycle == null || averageCycleLength == 0 ) {
+                        //display error message
+
+                    } else {
+                        startActivity(intent);
+                    }
+                }else {
+                    int position = listOfPartnersSpinner.getSelectedItemPosition();
+                    Date firstDayOfCycle = (Date) mPartners[position].getProperty(Statics.FIRST_DAY_OF_CYCLE);
+                    int averageCycleLength = (int) mPartners[position].getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+                    intent.putExtra(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE, averageCycleLength);
+                    intent.putExtra(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle);
+                    //proveriavame za greshka predi da startirame kalendara
+                    if(firstDayOfCycle == null || averageCycleLength == 0 ) {
+                        //display error message
+                    } else {
+                        startActivity(intent);
+                    }
+                }
+
             }
         });
     }
