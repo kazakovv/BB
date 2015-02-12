@@ -4,15 +4,14 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Range;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.squareup.timessquare.CalendarPickerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
 
 
@@ -20,7 +19,7 @@ public class ActivitySexyCalendar extends ActionBarActivity {
 protected Toolbar toolbar;
 protected Date mFirstDayOfCycle;
 protected int mAverageLengthOfCycle;
-
+protected TextView mCycleTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +29,7 @@ protected int mAverageLengthOfCycle;
         toolbar.setNavigationIcon(R.drawable.ic_action_back);
         setSupportActionBar(toolbar);
 
+        mCycleTitle = (TextView) findViewById(R.id.cycleTitle);
         //vzimame stoinostite, za zarezdane na kalendara
         Intent intent = getIntent();
         mFirstDayOfCycle = (Date) intent.getSerializableExtra(Statics.FIRST_DAY_OF_CYCLE);
@@ -52,27 +52,7 @@ protected int mAverageLengthOfCycle;
     }
 
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_activity_sexy_calendar, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     /*
     HELPER METODI
@@ -91,10 +71,10 @@ protected int mAverageLengthOfCycle;
         final int lastDayOfOvulation = averaceCycleLength -10;
 
         datesToBeSelected.add(now.getTime()); //dobaviame dnes
-        Calendar dateToBeAdded = Calendar.getInstance(); //poslednata data ot cikala
+        Calendar dateToBeAdded = Calendar.getInstance();
         if(days >= 0 && days <= 5 ) {
             //bleeding
-
+            mCycleTitle.setText(R.string.period_no_sex);
             int lastDay = 5 - days ;
 
             //dateToBeAdded.add(Calendar.DAY_OF_MONTH,lastDay);
@@ -110,8 +90,8 @@ protected int mAverageLengthOfCycle;
         } else if (days > 5 && days < firstDayOfOvulation ) {
             //folicurar phase
             // active energetic
-            dateToBeAdded.add(Calendar.DAY_OF_MONTH, (firstDayOfOvulation -1));
-            datesToBeSelected.add(dateToBeAdded.getTime());
+            mCycleTitle.setText(R.string.period_sexy_days);
+
             //dobaviame vsichki dati m/u
             for(int i = (days+1); i < firstDayOfOvulation; i++) {
                 dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
@@ -120,13 +100,23 @@ protected int mAverageLengthOfCycle;
         } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
             //ovulation
             //sexy
-            dateToBeAdded.add(Calendar.DAY_OF_MONTH, (lastDayOfOvulation -1));
-            datesToBeSelected.add(dateToBeAdded.getTime());
+            //dobaviame vsichki dati m/u
+            mCycleTitle.setText(R.string.period_baby_days);
+
+            for(int i = (days+1); i <= lastDayOfOvulation; i++) {
+                dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
+                datesToBeSelected.add(dateToBeAdded.getTime());
+            }
 
         } else if (days > lastDayOfOvulation && days <= averaceCycleLength) {
             //luteal
-            dateToBeAdded.add(Calendar.DAY_OF_MONTH, averaceCycleLength );
-            datesToBeSelected.add(dateToBeAdded.getTime());
+            //dobaviame vsichki dati m/u
+            mCycleTitle.setText(R.string.period_sexy_days);
+
+            for(int i = (days+1); i <= averaceCycleLength; i++) {
+                dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
+                datesToBeSelected.add(dateToBeAdded.getTime());
+            }
         }
 
 

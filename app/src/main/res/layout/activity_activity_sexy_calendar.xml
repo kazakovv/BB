@@ -9,6 +9,13 @@
         android:id="@+id/toolbar"
         layout="@layout/app_toolbar" />
 
+    <TextView
+        android:id="@+id/cycleTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/title_cycle_period"/>
+
     <com.squareup.timessquare.CalendarPickerView
         android:id="@+id/calendar_view"
         android:layout_width="match_parent"

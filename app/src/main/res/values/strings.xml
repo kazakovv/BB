@@ -141,7 +141,13 @@
     <string name="error_updating_status">Error updating your status. Please try again.</string>
     <string name="saving_message">Saving...</string>
     <string name="sexy_status_saved_message">Your sexy status was saved</string>
-    <string name="signing_in_message">Signing ip...</string>
+    <string name="signing_in_message">Signing in...</string>
+    <string name="choose_partner_label">Choose your partner</string>
+    <string name="sexy_status_default">Change your sexy status</string>
+
+    <string name="period_no_sex">Not Sexy Days</string>
+    <string name="period_sexy_days">Sexy Days</string>
+    <string name="period_baby_days">Baby Days</string>
 
     <string-array name="camera_choices">
         <item>Take Picture</item>

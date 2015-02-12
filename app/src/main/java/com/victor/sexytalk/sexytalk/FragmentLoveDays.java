@@ -1,7 +1,6 @@
 package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -47,6 +46,7 @@ public class FragmentLoveDays extends Fragment {
     protected BackendlessUser[] mPartners; //array s partnirite
     protected ImageView profilePic;
     protected Button sexyCalendar;
+    protected TextView mChoosePartnerLabel;
 
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
     private static final int UPDATE_STATUS = 22;
@@ -59,7 +59,6 @@ public class FragmentLoveDays extends Fragment {
 
     protected TextView cyclePhaseTitle;
     protected TextView cyclePhaseStatus;
-    protected TextView cycleExplainationText;
     protected List<CycleTitles> cycleTitles; //statusite, koito se svaliat ot backendless
     protected Calendar firstDayOfCycle;
 
@@ -79,7 +78,7 @@ public class FragmentLoveDays extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
         profilePic = (ImageView) inflatedView.findViewById(R.id.profilePicture);
-
+        mChoosePartnerLabel = (TextView) inflatedView.findViewById(R.id.chooseYourPartnerLabel);
 
 
         return inflatedView;
@@ -98,7 +97,6 @@ public class FragmentLoveDays extends Fragment {
         showPrivateDaysDialog = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
         cyclePhaseTitle = (TextView) getActivity().findViewById(R.id.cyclePhase);
         cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
-        cycleExplainationText = (TextView) getActivity().findViewById(R.id.explanationText);
         listOfPartnersSpinner = (Spinner) getActivity().findViewById(R.id.listOfPartners);
         sexyCalendar = (Button) getActivity().findViewById(R.id.showSexyCalendar);
 
@@ -108,7 +106,7 @@ public class FragmentLoveDays extends Fragment {
             if (mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
                 showPrivateDaysDialog.setVisibility(View.INVISIBLE);
                 listOfPartnersSpinner.setVisibility(View.VISIBLE);
-
+                mChoosePartnerLabel.setVisibility(View.VISIBLE);
                 //ako e maz samo zarezhdame partniorite v spinnera
                 mYear = 0;
                 mMonth = 0;
@@ -119,6 +117,8 @@ public class FragmentLoveDays extends Fragment {
             } else {
                 showPrivateDaysDialog.setVisibility(View.VISIBLE);
                 listOfPartnersSpinner.setVisibility(View.INVISIBLE);
+                mChoosePartnerLabel.setVisibility(View.INVISIBLE);
+
                 //ako e zhena vazstanoviavame kalendara: Year, month,day,cyclelength
 
                 if(mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
@@ -301,7 +301,6 @@ public class FragmentLoveDays extends Fragment {
                             if (cyclePhase.equals(Statics.KEY_MENSTRUATION)) {
                                 cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
                                 //cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
-                                cycleExplainationText.setText(cycle.getCyclePhaseExplaination());
                             }
 
                         }
@@ -317,7 +316,6 @@ public class FragmentLoveDays extends Fragment {
                             if (cyclePhase.equals(Statics.KEY_FOLLICULAR)) {
                                 cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
                                 //cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
-                                cycleExplainationText.setText(cycle.getCyclePhaseExplaination());
                             }
                         }
 
@@ -331,7 +329,6 @@ public class FragmentLoveDays extends Fragment {
                             if (cyclePhase.equals(Statics.KEY_OVULATION)) {
                                 cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
                                // cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
-                                cycleExplainationText.setText(cycle.getCyclePhaseExplaination());
                             }
                         }
 
@@ -344,7 +341,6 @@ public class FragmentLoveDays extends Fragment {
                             if (cyclePhase.equals(Statics.KEY_LUTEAL)) {
                                 cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
                                // cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
-                                cycleExplainationText.setText(cycle.getCyclePhaseExplaination());
                             }
                         }
 
@@ -370,7 +366,6 @@ public class FragmentLoveDays extends Fragment {
         //ako sa nuli znachi partniorat ne si e updatenal kalendara
             cyclePhaseTitle.setText(" ");
             cyclePhaseStatus.setText(R.string.general_calendar_error);
-            cycleExplainationText.setText(" ");
         }
     } //krai na determine cycle phase helper method
 
@@ -399,7 +394,6 @@ public class FragmentLoveDays extends Fragment {
             //niamame dobaveni partniori, izkarvame niakakvo saobshtenie
             cyclePhaseTitle.setText(" ");
             cyclePhaseStatus.setText(R.string.no_partners_message); //Add your partners to start using SexyTalk
-            cycleExplainationText.setText(" ");
         }
     }
 
@@ -415,7 +409,6 @@ public class FragmentLoveDays extends Fragment {
 
             cyclePhaseTitle.setText(" ");
             cyclePhaseStatus.setText(message);
-            cycleExplainationText.setText(" ");
         } else {
             //ako e zhena
             if(partner.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null) {
@@ -433,7 +426,6 @@ public class FragmentLoveDays extends Fragment {
 
                 cyclePhaseTitle.setText(" ");
                 cyclePhaseStatus.setText(message);
-                cycleExplainationText.setText(" ");
             }
 
 
