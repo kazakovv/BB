@@ -33,6 +33,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.xml.transform.sax.SAXTransformerFactory;
+
 /**
  * Created by Victor on 13/10/2014.
  */
@@ -147,6 +149,13 @@ public class FragmentLoveDays extends Fragment {
                 //Kato se izpere partner
                 // vikame helper metod, za da updatenem statusite, messages, etc.
                 updateMessagesForPartner(selectedPartner);
+                //skrivame SexyCalendar, ako selected partner e maz
+                if(selectedPartner.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
+                    sexyCalendar.setVisibility(View.INVISIBLE);
+                } else {
+                    //ako e zhena pokazvame sexy calendara
+                    sexyCalendar.setVisibility(View.VISIBLE);
+                }
 
                 if(selectedPartner.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
                     String existingProfilePicPath = (String) selectedPartner.getProperty(Statics.KEY_PROFILE_PIC_PATH);
@@ -276,8 +285,8 @@ public class FragmentLoveDays extends Fragment {
             //ako e maz
             String message = partnerUsername + " " + getString(R.string.sexy_calendar_default_message_guys);
 
-            cyclePhaseTitle.setText(" ");
-            cyclePhaseStatus.setText(message);
+            cyclePhaseTitle.setText(message);
+            cyclePhaseStatus.setText(" ");
         } else {
             //ako e zhena
             if(partner.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null) {
