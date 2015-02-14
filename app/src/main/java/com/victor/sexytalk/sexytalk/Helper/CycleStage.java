@@ -40,43 +40,32 @@ public class CycleStage {
             if (days >= 0 && days <= 4) {
                 //bleeding
                 cyclePhaseMassage = context.getResources().getString(R.string.period_no_sex);
-                //cyclePhaseTitle.setText(R.string.period_no_sex);
             } else if (days > 4 && days < firstDayOfOvulation) {
                 //folicurar phase
                 // active energetic
                 cyclePhaseMassage = context.getResources().getString(R.string.period_sexy_days);
-                //cyclePhaseTitle.setText(R.string.period_sexy_days);
             } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
                 //ovulation
                 //sexy
                 cyclePhaseMassage = context.getResources().getString(R.string.period_baby_days);
-                //cyclePhaseTitle.setText(R.string.period_baby_days);
             } else if (days > lastDayOfOvulation && days <= averageLengthOfCycle) {
                 //luteal
                 cyclePhaseMassage = context.getResources().getString(R.string.period_sexy_days);
-                //cyclePhaseTitle.setText(R.string.period_sexy_days);
 
                 //TODO:tr da se opravi
             } else if (days > averageLengthOfCycle) {
                 //tr da se updatene
                 cyclePhaseMassage = context.getResources().getString(R.string.sexyCalendar_needs_updating_message);
 
-                //cyclePhaseTitle.setText("Update " + days);
-                //cyclePhaseStatus.setText("Update me");
 
             } else if (days < 0) {
                 cyclePhaseMassage = context.getResources().getString(R.string.sexyCalendar_error_message);
 
-                //cyclePhaseTitle.setText("Error baby " + days);
-                //cyclePhaseStatus.setText("Error");
             }
 
         } else {
             //ako sa nuli znachi partniorat ne si e updatenal kalendara
             cyclePhaseMassage = context.getResources().getString(R.string.sexyCalendar_needs_updating_message);
-
-            //cyclePhaseTitle.setText(R.string.general_calendar_error);
-            //cyclePhaseStatus.setText("");
         }
         return cyclePhaseMassage;
     }//krai na determine cycle phase
