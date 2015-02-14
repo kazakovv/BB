@@ -15,6 +15,12 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:textSize="@dimen/title_cycle_period"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:textSize="@dimen/subtitle_cycle_period"
+        android:text="@string/sub_title_remaining_days"/>
 
     <com.squareup.timessquare.CalendarPickerView
         android:id="@+id/calendar_view"

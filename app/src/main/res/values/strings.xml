@@ -148,6 +148,7 @@
     <string name="period_no_sex">Not Sexy Days</string>
     <string name="period_sexy_days">Sexy Days</string>
     <string name="period_baby_days">Baby Days</string>
+    <string name="sub_title_remaining_days">Remaining days in this period</string>
 
     <string-array name="camera_choices">
         <item>Take Picture</item>

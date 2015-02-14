@@ -18,6 +18,7 @@
     <dimen name="image_rotation_arrow">30dp</dimen>
     <dimen name="message_title">30sp</dimen>
     <dimen name="title_cycle_period">50sp</dimen>
+    <dimen name="subtitle_cycle_period">20sp</dimen>
     <dimen name="text_size_sub_title">20sp</dimen>
     <dimen name="padding_sub_title">15dp</dimen>
     <dimen name="button_width">150dp</dimen>
