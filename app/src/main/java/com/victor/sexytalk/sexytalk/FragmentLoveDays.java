@@ -60,7 +60,6 @@ public class FragmentLoveDays extends Fragment {
 
     protected TextView cyclePhaseTitle;
     protected TextView cyclePhaseStatus;
-    protected List<CycleTitles> cycleTitles; //statusite, koito se svaliat ot backendless
     protected Calendar firstDayOfCycle;
 
     protected Toolbar toolbar;
@@ -234,10 +233,8 @@ public class FragmentLoveDays extends Fragment {
 
                 //izchisliavam v koi etap ot cikala e i updatevame statusite
 
-                mCurrentUser = Backendless.UserService.CurrentUser();
-                //determineCyclePhase(mCurrentUser);
-                cyclePhaseTitle.setText(determineCyclePhase(mCurrentUser));
-
+                String titleCycle = bundle.getString(Statics.TITLE_CYCLE);
+                cyclePhaseTitle.setText(titleCycle);
 
                 if(mSendSexyCalendarUpdateToPartners == true) {
                 //TODO: izprashtam update na partniorite
@@ -266,7 +263,7 @@ public class FragmentLoveDays extends Fragment {
         //izchisliava v koi etap ot cikala e i promenia saobshtenieto
         if (user.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null &&
                 user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) != null) {
-            int averageLengthOfMenstruation = (int) user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+            int averageLengthOfCycle = (int) user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
             firstDayOfCycle = Calendar.getInstance();
             firstDayOfCycle.setTime((Date) user.getProperty(Statics.FIRST_DAY_OF_CYCLE));
             Calendar now = Calendar.getInstance();
@@ -274,8 +271,8 @@ public class FragmentLoveDays extends Fragment {
             long difference = now.getTimeInMillis() - firstDayOfCycle.getTimeInMillis();
 
             final int days = (int) (difference / (24 * 60 * 60 * 1000));
-            final int firstDayOfOvulation = averageLengthOfMenstruation - 14;
-            final int lastDayOfOvulation = averageLengthOfMenstruation - 10;
+            final int firstDayOfOvulation = averageLengthOfCycle - 14;
+            final int lastDayOfOvulation = averageLengthOfCycle - 10;
 
             //Tova sa etapite ot cikala
             /*

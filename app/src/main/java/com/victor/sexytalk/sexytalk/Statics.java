@@ -32,6 +32,7 @@ public class Statics {
     public static final String CALENDAR_MONTH = "calendarMonth";
     public static final String CALENDAR_DAY = "calendarDay";
     public static final String AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE = "averageLengthOfCycle";
+    public static final String TITLE_CYCLE = "titleCycle";
     public static final String FIRST_DAY_OF_CYCLE = "firstDayOfCycle";
     public static final String SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS = "sendSexyCalendarUpdate";
 

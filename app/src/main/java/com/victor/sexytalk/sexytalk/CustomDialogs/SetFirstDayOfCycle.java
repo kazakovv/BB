@@ -23,9 +23,12 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.Helper.DetermineCycleStageHelper;
+import com.victor.sexytalk.sexytalk.Helper.FileHelper;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -108,7 +111,9 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String averageCycleLength = spinnerCycle.getSelectedItem().toString();
-
+                        updateCurrentUser();
+                        String titleCycle =
+                                DetermineCycleStageHelper.determineCyclePhase(mCurrentUser,context);
 
                         //vrashta infoto kam onActivityResult v FragmentDays
 
@@ -123,11 +128,15 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                                 Integer.parseInt(averageCycleLength));
                         extras.putBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS,
                                 sendSexyCalendarUpdateToPartners.isChecked());
+                        extras.putString(Statics.TITLE_CYCLE,titleCycle);
+
                         boolean test = sendSexyCalendarUpdateToPartners.isChecked();
+
                         i.putExtras(extras);
+
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
 
-                        updateCurrentUser();
+
                         dismiss();
                     }//krai na else statment
 
