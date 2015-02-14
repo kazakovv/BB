@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -234,8 +235,9 @@ public class FragmentLoveDays extends Fragment {
                 //izchisliavam v koi etap ot cikala e i updatevame statusite
 
                 mCurrentUser = Backendless.UserService.CurrentUser();
-                determineCyclePhase(mCurrentUser);
-                cyclePhaseTitle.setText("Not updated");
+                //determineCyclePhase(mCurrentUser);
+                cyclePhaseTitle.setText(determineCyclePhase(mCurrentUser));
+
 
                 if(mSendSexyCalendarUpdateToPartners == true) {
                 //TODO: izprashtam update na partniorite
@@ -259,7 +261,8 @@ public class FragmentLoveDays extends Fragment {
     */
 
     //Helper metod
-    protected void determineCyclePhase(BackendlessUser user) {
+    protected String determineCyclePhase(BackendlessUser user) {
+        String cyclePhaseMassage = "";
         //izchisliava v koi etap ot cikala e i promenia saobshtenieto
         if (user.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null &&
                 user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) != null) {
@@ -284,36 +287,46 @@ public class FragmentLoveDays extends Fragment {
 
             if (days >= 0 && days <= 5) {
                 //bleeding
-                cyclePhaseTitle.setText(R.string.period_no_sex);
+                cyclePhaseMassage = getActivity().getResources().getString(R.string.period_no_sex);
+                //cyclePhaseTitle.setText(R.string.period_no_sex);
             } else if (days > 5 && days < firstDayOfOvulation) {
                 //folicurar phase
                 // active energetic
-                cyclePhaseTitle.setText(R.string.period_sexy_days);
+                cyclePhaseMassage = getActivity().getResources().getString(R.string.period_sexy_days);
+                //cyclePhaseTitle.setText(R.string.period_sexy_days);
             } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
                 //ovulation
                 //sexy
-                cyclePhaseTitle.setText(R.string.period_baby_days);
+                cyclePhaseMassage = getActivity().getResources().getString(R.string.period_baby_days);
+                //cyclePhaseTitle.setText(R.string.period_baby_days);
             } else if (days > lastDayOfOvulation && days <= mAverageLengthOfMenstrualCycle) {
                 //luteal
-                cyclePhaseTitle.setText(R.string.period_sexy_days);
+                cyclePhaseMassage = getActivity().getResources().getString(R.string.period_sexy_days);
+                //cyclePhaseTitle.setText(R.string.period_sexy_days);
 
                 //TODO:tr da se opravi
             } else if (days > mAverageLengthOfMenstrualCycle) {
                 //tr da se updatene
-                cyclePhaseTitle.setText("Update " + days);
-                cyclePhaseStatus.setText("Update me");
+                cyclePhaseMassage = getActivity().getResources().getString(R.string.sexyCalendar_needs_updating_message);
+
+                //cyclePhaseTitle.setText("Update " + days);
+                //cyclePhaseStatus.setText("Update me");
 
             } else if (days < 0) {
-                cyclePhaseTitle.setText("Error baby " + days);
-                cyclePhaseStatus.setText("Error");
+                cyclePhaseMassage = getActivity().getResources().getString(R.string.sexyCalendar_error_message);
+
+                //cyclePhaseTitle.setText("Error baby " + days);
+                //cyclePhaseStatus.setText("Error");
             }
 
         } else {
             //ako sa nuli znachi partniorat ne si e updatenal kalendara
-            cyclePhaseTitle.setText(R.string.general_calendar_error);
-            cyclePhaseStatus.setText("");
-        }
+            cyclePhaseMassage = getActivity().getResources().getString(R.string.sexyCalendar_needs_updating_message);
 
+            //cyclePhaseTitle.setText(R.string.general_calendar_error);
+            //cyclePhaseStatus.setText("");
+        }
+        return cyclePhaseMassage;
     }//krai na determine cycle phase
 
 
@@ -363,7 +376,8 @@ public class FragmentLoveDays extends Fragment {
                 int month = firstDayOfCycle.get(Calendar.MONTH);
                 int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
                 int averageCyclelength = (int) partner.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
-                determineCyclePhase(partner);
+                cyclePhaseTitle.setText(determineCyclePhase(partner));
+                //determineCyclePhase(partner);
                 cyclePhaseStatus.setText((String) partner.getProperty(Statics.KEY_SEXY_STATUS));
             } else {
                 //nishto ne e namereno, sledovatelno partnera ne si e updatenal kalendara
@@ -394,7 +408,8 @@ public class FragmentLoveDays extends Fragment {
                cyclePhaseStatus.setText(sexyStatus);
             }
             //na baza na stoinostite opredelia fazata
-            determineCyclePhase(mCurrentUser);
+            cyclePhaseTitle.setText(determineCyclePhase(mCurrentUser));
+            //determineCyclePhase(mCurrentUser);
         }
 
     }
