@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,13 +22,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 import com.squareup.picasso.Picasso;
-import com.victor.sexytalk.sexytalk.BackendlessClasses.CycleTitles;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
+import com.victor.sexytalk.sexytalk.Helper.CycleStage;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,13 +60,13 @@ public class FragmentLoveDays extends Fragment {
 
     protected Toolbar toolbar;
 
-    protected Context context;
+    protected Context mContext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mCurrentUser = Backendless.UserService.CurrentUser();
-        context = getActivity();
+        mContext = getActivity();
 
     }
 
@@ -133,7 +129,7 @@ public class FragmentLoveDays extends Fragment {
                 cyclePhaseStatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(context,ActivityChangeSexyStatus.class);
+                        Intent intent = new Intent(mContext,ActivityChangeSexyStatus.class);
                         startActivityForResult(intent, UPDATE_STATUS);
                     }
                 });
@@ -174,7 +170,7 @@ public class FragmentLoveDays extends Fragment {
         sexyCalendar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, ActivitySexyCalendar.class);
+                Intent intent = new Intent(mContext, ActivitySexyCalendar.class);
 
                 if(mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)) {
                     //ako e zhena
@@ -257,74 +253,6 @@ public class FragmentLoveDays extends Fragment {
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     */
 
-    //Helper metod
-    protected String determineCyclePhase(BackendlessUser user) {
-        String cyclePhaseMassage = "";
-        //izchisliava v koi etap ot cikala e i promenia saobshtenieto
-        if (user.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null &&
-                user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) != null) {
-            int averageLengthOfCycle = (int) user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
-            firstDayOfCycle = Calendar.getInstance();
-            firstDayOfCycle.setTime((Date) user.getProperty(Statics.FIRST_DAY_OF_CYCLE));
-            Calendar now = Calendar.getInstance();
-
-            long difference = now.getTimeInMillis() - firstDayOfCycle.getTimeInMillis();
-
-            final int days = (int) (difference / (24 * 60 * 60 * 1000));
-            final int firstDayOfOvulation = averageLengthOfCycle - 14;
-            final int lastDayOfOvulation = averageLengthOfCycle - 10;
-
-            //Tova sa etapite ot cikala
-            /*
-            Follicular: right after bleeding stops, for about 7 days
-            Ovulation: 3 or 4 days of the most fertile time, midway through the cycle
-            Luteal: the 10 days or so after ovulation and before menstruation
-            Menstruation: the 2-7 days of bleeding
-            */
-
-            if (days >= 0 && days <= 5) {
-                //bleeding
-                cyclePhaseMassage = getActivity().getResources().getString(R.string.period_no_sex);
-                //cyclePhaseTitle.setText(R.string.period_no_sex);
-            } else if (days > 5 && days < firstDayOfOvulation) {
-                //folicurar phase
-                // active energetic
-                cyclePhaseMassage = getActivity().getResources().getString(R.string.period_sexy_days);
-                //cyclePhaseTitle.setText(R.string.period_sexy_days);
-            } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
-                //ovulation
-                //sexy
-                cyclePhaseMassage = getActivity().getResources().getString(R.string.period_baby_days);
-                //cyclePhaseTitle.setText(R.string.period_baby_days);
-            } else if (days > lastDayOfOvulation && days <= mAverageLengthOfMenstrualCycle) {
-                //luteal
-                cyclePhaseMassage = getActivity().getResources().getString(R.string.period_sexy_days);
-                //cyclePhaseTitle.setText(R.string.period_sexy_days);
-
-                //TODO:tr da se opravi
-            } else if (days > mAverageLengthOfMenstrualCycle) {
-                //tr da se updatene
-                cyclePhaseMassage = getActivity().getResources().getString(R.string.sexyCalendar_needs_updating_message);
-
-                //cyclePhaseTitle.setText("Update " + days);
-                //cyclePhaseStatus.setText("Update me");
-
-            } else if (days < 0) {
-                cyclePhaseMassage = getActivity().getResources().getString(R.string.sexyCalendar_error_message);
-
-                //cyclePhaseTitle.setText("Error baby " + days);
-                //cyclePhaseStatus.setText("Error");
-            }
-
-        } else {
-            //ako sa nuli znachi partniorat ne si e updatenal kalendara
-            cyclePhaseMassage = getActivity().getResources().getString(R.string.sexyCalendar_needs_updating_message);
-
-            //cyclePhaseTitle.setText(R.string.general_calendar_error);
-            //cyclePhaseStatus.setText("");
-        }
-        return cyclePhaseMassage;
-    }//krai na determine cycle phase
 
 
     //Helper metod namira spisak s partniorite i dobavia imenata im v spinnera
@@ -373,7 +301,8 @@ public class FragmentLoveDays extends Fragment {
                 int month = firstDayOfCycle.get(Calendar.MONTH);
                 int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
                 int averageCyclelength = (int) partner.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
-                cyclePhaseTitle.setText(determineCyclePhase(partner));
+                String cycleTitle = CycleStage.determineCyclePhase(partner, mContext);
+                cyclePhaseTitle.setText(cycleTitle);
                 //determineCyclePhase(partner);
                 cyclePhaseStatus.setText((String) partner.getProperty(Statics.KEY_SEXY_STATUS));
             } else {
@@ -405,7 +334,8 @@ public class FragmentLoveDays extends Fragment {
                cyclePhaseStatus.setText(sexyStatus);
             }
             //na baza na stoinostite opredelia fazata
-            cyclePhaseTitle.setText(determineCyclePhase(mCurrentUser));
+            String cycleTitle = CycleStage.determineCyclePhase(mCurrentUser, mContext);
+            cyclePhaseTitle.setText(cycleTitle);
             //determineCyclePhase(mCurrentUser);
         }
 

@@ -567,7 +567,7 @@ public class SendMessage extends ActionBarActivity  {
                                 super.handleFault(backendlessFault);
                                 Log.d("Vic", "error sending message " + backendlessFault.toString());
                                 //TODO izkarva greshka:
-                                //TODO tr da se misli kak da se vzeme context za async tasks
+                                //TODO tr da se misli kak da se vzeme mContext za async tasks
                                 //android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@52a6d994 is not valid; is your activity running?
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);

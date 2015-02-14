@@ -12,7 +12,7 @@ import java.util.Date;
 /**
  * Created by Victor on 14/02/2015.
  */
-public class DetermineCycleStageHelper {
+public class CycleStage {
     public static String determineCyclePhase(BackendlessUser user, Context context) {
         String cyclePhaseMassage = "";
         //izchisliava v koi etap ot cikala e i promenia saobshtenieto
@@ -37,11 +37,11 @@ public class DetermineCycleStageHelper {
             Menstruation: the 2-7 days of bleeding
             */
 
-            if (days >= 0 && days <= 5) {
+            if (days >= 0 && days <= 4) {
                 //bleeding
                 cyclePhaseMassage = context.getResources().getString(R.string.period_no_sex);
                 //cyclePhaseTitle.setText(R.string.period_no_sex);
-            } else if (days > 5 && days < firstDayOfOvulation) {
+            } else if (days > 4 && days < firstDayOfOvulation) {
                 //folicurar phase
                 // active energetic
                 cyclePhaseMassage = context.getResources().getString(R.string.period_sexy_days);
