@@ -126,7 +126,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                         i.putExtras(extras);
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
 
-                        sendSendSexyCalendarUpdateToPartners(); //helper metod po-dolu
+                        updateCurrentUser();
                         dismiss();
                     }//krai na else statment
 
@@ -159,7 +159,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
      */
 
 
-    public void sendSendSexyCalendarUpdateToPartners() {
+    public void updateCurrentUser() {
 
             final Calendar firstDayOfCycle = Calendar.getInstance();
             firstDayOfCycle.set(Calendar.YEAR,datePicker.getYear());

@@ -177,7 +177,7 @@ public class FragmentLoveDays extends Fragment {
                 Intent intent = new Intent(context, ActivitySexyCalendar.class);
 
                 if(mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)) {
-                    //ako e zh
+                    //ako e zhena
                     Date firstDayOfCycle = (Date) mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE);
                     int averageCycleLength = (int) mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
                     intent.putExtra(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE, averageCycleLength);
@@ -258,7 +258,7 @@ public class FragmentLoveDays extends Fragment {
     //Helper metod
     protected void determineCyclePhase(BackendlessUser user) {
         //izchisliava v koi etap ot cikala e i promenia saobshtenieto
-        if(user.getProperty(Statics.FIRST_DAY_OF_CYCLE) !=null &&
+        if (user.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null &&
                 user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) != null) {
             int averageLengthOfMenstruation = (int) user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
             firstDayOfCycle = Calendar.getInstance();
@@ -267,9 +267,9 @@ public class FragmentLoveDays extends Fragment {
 
             long difference = now.getTimeInMillis() - firstDayOfCycle.getTimeInMillis();
 
-            final int days = (int) (difference /(24 * 60 * 60 * 1000));
+            final int days = (int) (difference / (24 * 60 * 60 * 1000));
             final int firstDayOfOvulation = averageLengthOfMenstruation - 14;
-            final int lastDayOfOvulation = averageLengthOfMenstruation -10;
+            final int lastDayOfOvulation = averageLengthOfMenstruation - 10;
 
             //Tova sa etapite ot cikala
             /*
@@ -279,96 +279,39 @@ public class FragmentLoveDays extends Fragment {
             Menstruation: the 2-7 days of bleeding
             */
 
+            if (days >= 0 && days <= 5) {
+                //bleeding
+                cyclePhaseTitle.setText(R.string.period_no_sex);
+            } else if (days > 5 && days < firstDayOfOvulation) {
+                //folicurar phase
+                // active energetic
+                cyclePhaseTitle.setText(R.string.period_sexy_days);
+            } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
+                //ovulation
+                //sexy
+                cyclePhaseTitle.setText(R.string.period_baby_days);
+            } else if (days > lastDayOfOvulation && days <= mAverageLengthOfMenstrualCycle) {
+                //luteal
+                cyclePhaseTitle.setText(R.string.period_sexy_days);
 
+                //TODO:tr da se opravi
+            } else if (days > mAverageLengthOfMenstrualCycle) {
+                //tr da se updatene
+                cyclePhaseTitle.setText("Update " + days);
+                cyclePhaseStatus.setText("Update me");
 
-            //svaliame statusite ot Backendless i updatevame statusite na ekrana
+            } else if (days < 0) {
+                cyclePhaseTitle.setText("Error baby " + days);
+                cyclePhaseStatus.setText("Error");
+            }
 
-            Backendless.Data.of(CycleTitles.class).find(new AsyncCallback<BackendlessCollection<CycleTitles>>() {
-                @Override
-                public void handleResponse(BackendlessCollection<CycleTitles> cycleTitlesBackendlessCollection) {
-                    cycleTitles = cycleTitlesBackendlessCollection.getData();
-
-                    //razpredeliame dnite
-
-
-                    if(days >= 0 && days <= 5 ) {
-                        //bleeding
-
-                        //pretarsvame spisaka za saotvetnia cycle stage i zadavame poletata
-                        for (CycleTitles cycle : cycleTitles) {
-                            String cyclePhase = cycle.getCyclePhase();
-                            if (cyclePhase.equals(Statics.KEY_MENSTRUATION)) {
-                                cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
-                                //cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
-                            }
-
-                        }
-
-
-                    } else if (days > 5 && days < firstDayOfOvulation ) {
-                        //folicurar phase
-                        // active energetic
-
-                        //pretarsvame spisaka za saotvetnia cycle stage i zadavame poletata
-                        for (CycleTitles cycle : cycleTitles) {
-                            String cyclePhase = cycle.getCyclePhase();
-                            if (cyclePhase.equals(Statics.KEY_FOLLICULAR)) {
-                                cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
-                                //cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
-                            }
-                        }
-
-
-                    } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
-                        //ovulation
-                        //sexy
-                        //pretarsvame spisaka za saotvetnia cycle stage i zadavame poletata
-                        for (CycleTitles cycle : cycleTitles) {
-                            String cyclePhase = cycle.getCyclePhase();
-                            if (cyclePhase.equals(Statics.KEY_OVULATION)) {
-                                cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
-                               // cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
-                            }
-                        }
-
-                    } else if (days > lastDayOfOvulation && days <= mAverageLengthOfMenstrualCycle) {
-                        //luteal
-
-                        //pretarsvame spisaka za saotvetnia cycle stage i zadavame poletata
-                        for (CycleTitles cycle : cycleTitles) {
-                            String cyclePhase = cycle.getCyclePhase();
-                            if (cyclePhase.equals(Statics.KEY_LUTEAL)) {
-                                cyclePhaseTitle.setText(cycle.getCyclePhaseTitle());
-                               // cyclePhaseStatus.setText(cycle.getCyclePhaseStatus());
-                            }
-                        }
-
-                        //handles errors
-                        //TODO:tr da se opravi
-                    } else if (days > mAverageLengthOfMenstrualCycle) {
-                        //tr da se updatene
-                        cyclePhaseTitle.setText("Update " + days);
-                        cyclePhaseStatus.setText("Update me");
-
-                    } else if (days < 0) {
-                        cyclePhaseTitle.setText("Error baby " + days);
-                        cyclePhaseStatus.setText("Error");
-                    }
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    //TODO: kakvo pravim, ako ima greshka
-                }
-            }); //krai na svalianeto na statusite
         } else {
-        //ako sa nuli znachi partniorat ne si e updatenal kalendara
+            //ako sa nuli znachi partniorat ne si e updatenal kalendara
             cyclePhaseTitle.setText(" ");
             cyclePhaseStatus.setText(R.string.general_calendar_error);
         }
-    } //krai na determine cycle phase helper method
 
-
+    }//krai na determine cycle phase
 
 
     //Helper metod namira spisak s partniorite i dobavia imenata im v spinnera
