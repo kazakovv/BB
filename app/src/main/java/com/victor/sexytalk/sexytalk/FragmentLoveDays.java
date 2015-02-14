@@ -248,8 +248,6 @@ public class FragmentLoveDays extends Fragment {
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     */
 
-
-
     //Helper metod namira spisak s partniorite i dobavia imenata im v spinnera
 
     protected void findPartnersAndPopulateSpinner() {
