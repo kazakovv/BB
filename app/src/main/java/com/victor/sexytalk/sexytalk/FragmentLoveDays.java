@@ -231,7 +231,7 @@ public class FragmentLoveDays extends Fragment {
                         bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
 
                 //izchisliavam v koi etap ot cikala e i updatevame statusite
-                determineCyclePhase(mYear, mMonth, mDay, mAverageLengthOfMenstrualCycle);
+                determineCyclePhase(mCurrentUser);
 
 
                 if(mSendSexyCalendarUpdateToPartners == true) {
@@ -256,14 +256,13 @@ public class FragmentLoveDays extends Fragment {
     */
 
     //Helper metod
-    protected void determineCyclePhase(int year, int month, int day, int averageLengthOfMenstruation) {
+    protected void determineCyclePhase(BackendlessUser user) {
         //izchisliava v koi etap ot cikala e i promenia saobshtenieto
-        if(year != 0 && day != 0 && averageLengthOfMenstruation != 0) {
-            //firstDayOfCycle = new GregorianCalendar(mYear, mMonth, mDay);
+        if(user.getProperty(Statics.FIRST_DAY_OF_CYCLE) !=null &&
+                user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) != null) {
+            int averageLengthOfMenstruation = (int) user.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
             firstDayOfCycle = Calendar.getInstance();
-            firstDayOfCycle.set(Calendar.YEAR, year);
-            firstDayOfCycle.set(Calendar.MONTH, month);
-            firstDayOfCycle.set(Calendar.DAY_OF_MONTH, day);
+            firstDayOfCycle.setTime((Date) user.getProperty(Statics.FIRST_DAY_OF_CYCLE));
             Calendar now = Calendar.getInstance();
 
             long difference = now.getTimeInMillis() - firstDayOfCycle.getTimeInMillis();
@@ -361,7 +360,7 @@ public class FragmentLoveDays extends Fragment {
                 public void handleFault(BackendlessFault backendlessFault) {
                     //TODO: kakvo pravim, ako ima greshka
                 }
-            });
+            }); //krai na svalianeto na statusite
         } else {
         //ako sa nuli znachi partniorat ne si e updatenal kalendara
             cyclePhaseTitle.setText(" ");
@@ -418,7 +417,7 @@ public class FragmentLoveDays extends Fragment {
                 int month = firstDayOfCycle.get(Calendar.MONTH);
                 int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
                 int averageCyclelength = (int) partner.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
-                determineCyclePhase(year, month, day, averageCyclelength);
+                determineCyclePhase(partner);
                 cyclePhaseStatus.setText((String) partner.getProperty(Statics.KEY_SEXY_STATUS));
             } else {
                 //nishto ne e namereno, sledovatelno partnera ne si e updatenal kalendara
@@ -449,7 +448,7 @@ public class FragmentLoveDays extends Fragment {
                cyclePhaseStatus.setText(sexyStatus);
             }
             //na baza na stoinostite opredelia fazata
-            determineCyclePhase(mYear, mMonth, mDay, mAverageLengthOfMenstrualCycle);
+            determineCyclePhase(mCurrentUser);
         }
 
     }
