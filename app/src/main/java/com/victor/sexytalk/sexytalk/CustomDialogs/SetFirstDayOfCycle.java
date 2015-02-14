@@ -112,6 +112,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
 
                         //vrashta infoto kam onActivityResult v FragmentDays
 
+
                         Intent i = new Intent();
                         Bundle extras = new Bundle();
 
@@ -166,6 +167,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
             firstDayOfCycle.set(Calendar.MONTH, datePicker.getMonth());
             firstDayOfCycle.set(Calendar.DAY_OF_MONTH, datePicker.getDayOfMonth());
 
+            Date test  = firstDayOfCycle.getTime();
 
             String whereClause = "senderEmail='" + Backendless.UserService.CurrentUser().getEmail() + "'";
             BackendlessDataQuery query = new BackendlessDataQuery();

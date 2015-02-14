@@ -220,6 +220,7 @@ public class FragmentLoveDays extends Fragment {
 
 
             if (resultCode == Activity.RESULT_OK) {
+
                 Bundle bundle = data.getExtras();
 
                 mYear   =      bundle.getInt(Statics.CALENDAR_YEAR);
@@ -231,8 +232,10 @@ public class FragmentLoveDays extends Fragment {
                         bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
 
                 //izchisliavam v koi etap ot cikala e i updatevame statusite
-                determineCyclePhase(mCurrentUser);
 
+                mCurrentUser = Backendless.UserService.CurrentUser();
+                determineCyclePhase(mCurrentUser);
+                cyclePhaseTitle.setText("Not updated");
 
                 if(mSendSexyCalendarUpdateToPartners == true) {
                 //TODO: izprashtam update na partniorite
@@ -307,8 +310,8 @@ public class FragmentLoveDays extends Fragment {
 
         } else {
             //ako sa nuli znachi partniorat ne si e updatenal kalendara
-            cyclePhaseTitle.setText(" ");
-            cyclePhaseStatus.setText(R.string.general_calendar_error);
+            cyclePhaseTitle.setText(R.string.general_calendar_error);
+            cyclePhaseStatus.setText("");
         }
 
     }//krai na determine cycle phase
