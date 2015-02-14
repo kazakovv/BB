@@ -48,11 +48,7 @@ public class FragmentLoveDays extends Fragment {
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
     private static final int UPDATE_STATUS = 22;
 
-    private int mYear;
-    private int mMonth;
-    private int mDay;
-    private int mAverageLengthOfMenstrualCycle;
-    private boolean mSendSexyCalendarUpdateToPartners;
+
 
     protected TextView cyclePhaseTitle;
     protected TextView cyclePhaseStatus;
@@ -104,10 +100,7 @@ public class FragmentLoveDays extends Fragment {
                 listOfPartnersSpinner.setVisibility(View.VISIBLE);
                 mChoosePartnerLabel.setVisibility(View.VISIBLE);
                 //ako e maz samo zarezhdame partniorite v spinnera
-                mYear = 0;
-                mMonth = 0;
-                mDay = 0;
-                mAverageLengthOfMenstrualCycle=0;
+
                 findPartnersAndPopulateSpinner();
 
             } else {
@@ -218,21 +211,14 @@ public class FragmentLoveDays extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
 
                 Bundle bundle = data.getExtras();
-
-                mYear   =      bundle.getInt(Statics.CALENDAR_YEAR);
-                mMonth  =      bundle.getInt(Statics.CALENDAR_MONTH); //mesec -1, Jan e 0, Dec e 11
-                mDay    =      bundle.getInt(Statics.CALENDAR_DAY);
-                mAverageLengthOfMenstrualCycle =
-                        bundle.getInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
-                mSendSexyCalendarUpdateToPartners =
+                Boolean sendSexyCalendarUpdateToPartners =
                         bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
-
-                //izchisliavam v koi etap ot cikala e i updatevame statusite
+               //izchisliavam v koi etap ot cikala e i updatevame statusite
 
                 String titleCycle = bundle.getString(Statics.TITLE_CYCLE);
                 cyclePhaseTitle.setText(titleCycle);
 
-                if(mSendSexyCalendarUpdateToPartners == true) {
+                if(sendSexyCalendarUpdateToPartners == true) {
                 //TODO: izprashtam update na partniorite
                 }
             }
@@ -297,10 +283,7 @@ public class FragmentLoveDays extends Fragment {
             if(partner.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null) {
                 Calendar firstDayOfCycle = Calendar.getInstance();
                 firstDayOfCycle.setTime((Date) partner.getProperty(Statics.FIRST_DAY_OF_CYCLE));
-                int year = firstDayOfCycle.get(Calendar.YEAR);
-                int month = firstDayOfCycle.get(Calendar.MONTH);
-                int day = firstDayOfCycle.get(Calendar.DAY_OF_MONTH);
-                int averageCyclelength = (int) partner.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+
                 String cycleTitle = CycleStage.determineCyclePhase(partner, mContext);
                 cyclePhaseTitle.setText(cycleTitle);
                 //determineCyclePhase(partner);
@@ -320,14 +303,12 @@ public class FragmentLoveDays extends Fragment {
     }
 
     private void restoreValuesForLoggedInUser() {
-        if(mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) != null) {
-            mAverageLengthOfMenstrualCycle = (int) mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+        if(mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) != null &&
+                mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null) {
             Date firstDayOfCycle = (Date) mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE);
             Calendar firstDay = new GregorianCalendar();
             firstDay.setTime(firstDayOfCycle);
-            mYear = firstDay.get(Calendar.YEAR);
-            mMonth = firstDay.get(Calendar.MONTH);
-            mDay = firstDay.get(Calendar.DAY_OF_MONTH);
+
 
             if(mCurrentUser.getProperty(Statics.KEY_SEXY_STATUS) !=null) {
             String sexyStatus = (String) mCurrentUser.getProperty(Statics.KEY_SEXY_STATUS);

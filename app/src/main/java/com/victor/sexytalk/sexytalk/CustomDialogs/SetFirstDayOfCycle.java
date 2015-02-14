@@ -114,26 +114,12 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                                 CycleStage.determineCyclePhase(mCurrentUser, context);
 
                         //vrashta infoto kam onActivityResult v FragmentDays
-
-
                         Intent i = new Intent();
                         Bundle extras = new Bundle();
-
-                        extras.putInt(Statics.CALENDAR_YEAR, datePicker.getYear());
-                        extras.putInt(Statics.CALENDAR_MONTH, datePicker.getMonth());
-                        extras.putInt(Statics.CALENDAR_DAY, datePicker.getDayOfMonth());
-                        extras.putInt(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,
-                                Integer.parseInt(averageCycleLength));
-                        extras.putBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS,
-                                sendSexyCalendarUpdateToPartners.isChecked());
                         extras.putString(Statics.TITLE_CYCLE,titleCycle);
-
-                        boolean test = sendSexyCalendarUpdateToPartners.isChecked();
-
+                        extras.putBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS,sendSexyCalendarUpdateToPartners.isChecked());
                         i.putExtras(extras);
-
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
-
 
                         dismiss();
                     }//krai na else statment
