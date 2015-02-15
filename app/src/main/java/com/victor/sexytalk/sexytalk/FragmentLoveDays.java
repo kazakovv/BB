@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -176,29 +177,43 @@ public class FragmentLoveDays extends Fragment {
 
                 if(mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)) {
                     //ako e zhena
-                    Date firstDayOfCycle = (Date) mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE);
-                    int averageCycleLength = (int) mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
-                    intent.putExtra(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE, averageCycleLength);
-                    intent.putExtra(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle);
-                    //proveriavame za greshka predi da startirame kalendara
-                    if(firstDayOfCycle == null || averageCycleLength == 0 ) {
-                        //display error message
 
-                    } else {
-                        startActivity(intent);
+                    //proveriavame za greshka predi da startirame kalendara
+                    if(mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE) == null ||
+                            mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) == null ) {
+                        //display error message
+                        Toast.makeText(mContext,R.string.general_calendar_error,Toast.LENGTH_LONG).show();
+                        return;
                     }
+                        Date firstDayOfCycle = (Date) mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE);
+                        int averageCycleLength = (int) mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+                        intent.putExtra(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE, averageCycleLength);
+                        intent.putExtra(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle);
+                        startActivity(intent);
+
                 }else {
                     int position = listOfPartnersSpinner.getSelectedItemPosition();
-                    Date firstDayOfCycle = (Date) mPartners[position].getProperty(Statics.FIRST_DAY_OF_CYCLE);
-                    int averageCycleLength = (int) mPartners[position].getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
-                    intent.putExtra(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE, averageCycleLength);
-                    intent.putExtra(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle);
+
                     //proveriavame za greshka predi da startirame kalendara
-                    if(firstDayOfCycle == null || averageCycleLength == 0 ) {
-                        //display error message
-                    } else {
-                        startActivity(intent);
+                    if(mPartners == null) {
+                        Toast.makeText(mContext,R.string.no_partners_error,Toast.LENGTH_LONG).show();
+                        return;
                     }
+
+                    if(mPartners[position].getProperty(Statics.FIRST_DAY_OF_CYCLE) == null ||
+                       mPartners[position].getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE) == null ) {
+                        //display error message
+                        String error = mPartners[position].getProperty(Statics.KEY_USERNAME) + " " +
+                                getResources().getString(R.string.partner_hasnt_updated_calendar);
+                        Toast.makeText(mContext,error,Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                        Date firstDayOfCycle = (Date) mPartners[position].getProperty(Statics.FIRST_DAY_OF_CYCLE);
+                        int averageCycleLength = (int) mPartners[position].getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+                        intent.putExtra(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE, averageCycleLength);
+                        intent.putExtra(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle);
+                        startActivity(intent);
+
                 }
 
             }

@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/listOfPartners"
-            android:text="Title of cycle stage"
+            android:text="@string/fragment_love_days_generic_title"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_gravity="center_horizontal" />
         <TextView

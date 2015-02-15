@@ -13,8 +13,6 @@ import android.widget.Spinner;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.UserService;
-import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 
@@ -75,98 +73,96 @@ public class SignUpActivity extends Activity {
                     String checkEmailMessage = getResources().getString(R.string.check_email_sign_up_message);
                     Backendless.Data.of(BackendlessUser.class).find(dataQuery,
                             new DefaultCallback<BackendlessCollection<BackendlessUser>>(SignUpActivity.this, checkEmailMessage) {
-                        @Override
-                        public void handleResponse(BackendlessCollection<BackendlessUser> user) {
-                            super.handleResponse(user);
-                            if (user.getCurrentPage().size() > 0) {
-                                //veche ima user registriran s toya email
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                                builder.setTitle(R.string.sign_up_error_title)
-                                        .setMessage(R.string.email_in_use)
-                                        .setPositiveButton(R.string.ok, null);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                            } else {
-                                //niama takav registriran user. Prodalzhavame natatak
+                                @Override
+                                public void handleResponse(BackendlessCollection<BackendlessUser> user) {
+                                    super.handleResponse(user);
+                                    if (user.getCurrentPage().size() > 0) {
+                                        //veche ima user registriran s toya email
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                                        builder.setTitle(R.string.sign_up_error_title)
+                                                .setMessage(R.string.email_in_use)
+                                                .setPositiveButton(R.string.ok, null);
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    } else {
+                                        //niama takav registriran user. Prodalzhavame natatak
 
-                                BackendlessUser newUser = new BackendlessUser();
-                                newUser.setEmail(email);
-                                newUser.setPassword(password);
-                                newUser.setProperty(Statics.KEY_USERNAME, userName);
-                                newUser.setProperty(Statics.KEY_MALE_OR_FEMALE, spinner.getSelectedItem().toString());
-
-
-                                final String message = getResources().getString(R.string.signing_in_message);
-                                Backendless.UserService.register(newUser,
-                                        new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {
-
-                                            @Override
-                                            public void handleResponse(BackendlessUser backendlessUser) {
-
-                                                //tuk varzvame push!!!!!!!!!!!!!!!!!
-                                                //!!!!!!!!!!!!!!!!!!
-                                                //User successfully created!
-                                                //log in!
-                                                Backendless.UserService.login(email, password,
-                                                        new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {
-                                                            @Override
-                                                            public void handleResponse(BackendlessUser backendlessUser) {
-                                                                super.handleResponse(backendlessUser);
-                                                                // Switch to main screen.
-                                                                Intent intent = new Intent(SignUpActivity.this, Main.class);
-                                                                //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
-                                                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                                startActivity(intent);
-                                                            }
-
-                                                            @Override
-                                                            public void handleFault(BackendlessFault backendlessFault) {
-                                                                super.handleFault(backendlessFault);
-                                                                setProgressBarIndeterminateVisibility(false);
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                                                                builder.setTitle(R.string.sign_up_error_title)
-                                                                        .setMessage(R.string.error_user_registered_but_unable_to_log_in)
-                                                                        .setPositiveButton(R.string.ok, null);
-                                                                AlertDialog dialog = builder.create();
-                                                                dialog.show();
-                                                            }
-                                                        });
+                                        BackendlessUser newUser = new BackendlessUser();
+                                        newUser.setEmail(email);
+                                        newUser.setPassword(password);
+                                        newUser.setProperty(Statics.KEY_USERNAME, userName);
+                                        newUser.setProperty(Statics.KEY_MALE_OR_FEMALE, spinner.getSelectedItem().toString());
 
 
-                                            }
+                                        final String message = getResources().getString(R.string.signing_in_message);
+                                        Backendless.UserService.register(newUser,
+                                                new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {
 
-                                            @Override
-                                            public void handleFault(BackendlessFault backendlessFault) {
-                                                super.handleFault(backendlessFault);
-                                                setProgressBarIndeterminateVisibility(false);
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                                                builder.setTitle(R.string.sign_up_error_title)
-                                                        .setMessage(R.string.error_unable_to_sign_in)
-                                                        .setPositiveButton(R.string.ok, null);
-                                                AlertDialog dialog = builder.create();
-                                                dialog.show();
-                                            }
-                                        });
+                                                    @Override
+                                                    public void handleResponse(BackendlessUser backendlessUser) {
+
+                                                        //tuk varzvame push!!!!!!!!!!!!!!!!!
+                                                        //!!!!!!!!!!!!!!!!!!
+                                                        //User successfully created!
+                                                        //log in!
+                                                        Backendless.UserService.login(email, password,
+                                                                new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {
+                                                                    @Override
+                                                                    public void handleResponse(BackendlessUser backendlessUser) {
+                                                                        super.handleResponse(backendlessUser);
+                                                                        // Switch to main screen.
+                                                                        Intent intent = new Intent(SignUpActivity.this, Main.class);
+                                                                        //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
+                                                                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                        startActivity(intent);
+                                                                    }
+
+                                                                    @Override
+                                                                    public void handleFault(BackendlessFault backendlessFault) {
+                                                                        super.handleFault(backendlessFault);
+                                                                        setProgressBarIndeterminateVisibility(false);
+                                                                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                                                                        builder.setTitle(R.string.sign_up_error_title)
+                                                                                .setMessage(R.string.error_user_registered_but_unable_to_log_in)
+                                                                                .setPositiveButton(R.string.ok, null);
+                                                                        AlertDialog dialog = builder.create();
+                                                                        dialog.show();
+                                                                    }
+                                                                });
 
 
-                            }
-                        }//krai na uspeshna parva query
+                                                    }
 
-                        @Override
-                        public void handleFault(BackendlessFault backendlessFault) {
-                            super.handleFault(backendlessFault);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
-                            builder.setTitle(R.string.sign_up_error_title)
-                                    .setMessage(R.string.error_unable_to_sign_in)
-                                    .setPositiveButton(R.string.ok, null);
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
-                        }
-                    });
+                                                    @Override
+                                                    public void handleFault(BackendlessFault backendlessFault) {
+                                                        super.handleFault(backendlessFault);
+                                                        setProgressBarIndeterminateVisibility(false);
+                                                        AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                                                        builder.setTitle(R.string.sign_up_error_title)
+                                                                .setMessage(R.string.error_unable_to_sign_in)
+                                                                .setPositiveButton(R.string.ok, null);
+                                                        AlertDialog dialog = builder.create();
+                                                        dialog.show();
+                                                    }
+                                                });
 
 
+                                    }
+                                }//krai na uspeshna parva query dali ima veche registriran takav email
 
+                                @Override
+                                public void handleFault(BackendlessFault backendlessFault) {
+                                    //greshka na parvata query dali ima takav email
+                                    super.handleFault(backendlessFault);
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
+                                    builder.setTitle(R.string.sign_up_error_title)
+                                            .setMessage(R.string.error_unable_to_sign_in)
+                                            .setPositiveButton(R.string.ok, null);
+                                    AlertDialog dialog = builder.create();
+                                    dialog.show();
+                                }
+                            });
 
                 }//krai na zapisvane v backendless
             }

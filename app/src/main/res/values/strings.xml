@@ -95,7 +95,8 @@
     <string name="empty_search_field_message">Please enter a valid email address</string>
     <string name="general_server_error">Sorry, there was a server error</string>
     <string name="partner_hasnt_updated_calendar">has not updated her calendar</string>
-    <string name="general_calendar_error">Please update your calendar</string>
+    <string name="general_calendar_error">Please update your Private Days calendar</string>
+    <string name="fragment_love_days_generic_title">Private Days calendar needs to be updated</string>
     <string name="no_partners_message">Add your partners to start using SexyTalk</string>
     <string name="no_partners_found">No partners were found</string>
     <string name="edit_partners_search_button">Search</string>
@@ -156,6 +157,7 @@
     <string name="sexyCalendar_error_message">Sorry, there is a Sexy Calendar error</string>
     <string name="love_message_more_than_1_recipient">You can send your love message to only one partner at a time</string>
     <string name="sending_sexy_calendar_update_to_partners_dialog_message">Sending Sexy Calendar update</string>
+    <string name="no_partners_error">You do not have any partners</string>
 
     <string-array name="camera_choices">
         <item>Take Picture</item>
