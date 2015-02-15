@@ -29,11 +29,11 @@ import com.backendless.messaging.MessageStatus;
 import com.backendless.messaging.PublishOptions;
 import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
-import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
+import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
 
 import org.w3c.dom.Text;
 
@@ -44,7 +44,7 @@ import it.neokree.materialtabs.MaterialTabListener;
 
 public class Main extends ActionBarActivity implements MaterialTabListener {
     protected ViewPager pager;
-    static Context context;
+    static Context mContext;
     protected BackendlessUser mCurrentUser;
     protected static Boolean pendingPartnerRequest;
     protected Toolbar toolbar;
@@ -61,9 +61,8 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //toolbar.setLogo(R.drawable.launch_icon);
         setSupportActionBar(toolbar);
-        
+        mContext = this;
         //vrazvame osnovnotosaobshtenie
         mCurrentUser = Backendless.UserService.CurrentUser();
         //ako niama lognat potrebitel preprashta kam log-in ekrana
@@ -307,7 +306,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         int i = 0;
                         for(String device : deviceIds) {
                             String channel = recepientEmails.get(i); //kanalat e email na poluchatelia
-                            sendPushMessage(device, channel);
+                            SendPushMessage.sendPush(device, channel,mContext,Statics.TYPE_KISS);
                             i++;
                         }
 
@@ -330,32 +329,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         }
     }
 
-    protected void sendPushMessage(String deviceId, String channel) {
 
-        String message = getResources().getString(R.string.push_message_kiss);
-
-        PublishOptions publishOptions = new PublishOptions();
-        publishOptions.putHeader( PublishOptions.ANDROID_TICKER_TEXT_TAG, message );
-        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, getResources().getString(R.string.app_name));
-        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, message);
-        DeliveryOptions deliveryOptions = new DeliveryOptions();
-        deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
-        deliveryOptions.addPushSinglecast(deviceId);
-
-
-        Backendless.Messaging.publish(channel,"Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
-            @Override
-            public void handleResponse(MessageStatus messageStatus) {
-
-            }
-
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                String error = backendlessFault.getMessage();
-            }
-        });
-
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

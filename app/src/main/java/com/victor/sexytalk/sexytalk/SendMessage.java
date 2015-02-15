@@ -35,6 +35,7 @@ import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
+import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
 
 import java.io.File;
 import java.io.IOException;
@@ -495,8 +496,7 @@ public class SendMessage extends ActionBarActivity {
                                                     String channel = recepient.getEmail();
                                                     if (deviceId != null && channel != null) {
                                                         //ako ne sa prazni izprashtame push message
-                                                        sendPushMessage(deviceId, channel);
-
+                                                        SendPushMessage.sendPush(deviceId,channel,mContext,Statics.TYPE_TEXTMESSAGE);
                                                         switchToMainScreen();
                                                     }
 
@@ -549,8 +549,7 @@ public class SendMessage extends ActionBarActivity {
                                             String channel = recepient.getEmail();
                                             if (deviceId != null && channel != null) {
                                                 //ako ne sa prazni izprashtame push message
-                                                sendPushMessage(deviceId, channel);
-
+                                                SendPushMessage.sendPush(deviceId,channel,mContext,Statics.TYPE_TEXTMESSAGE);
                                                 switchToMainScreen();
                                             }
 
@@ -603,33 +602,7 @@ public class SendMessage extends ActionBarActivity {
             Helper metodi
      */
 
-    //TODO da go smenia s drugia static metod
-    protected void sendPushMessage(String deviceId, String channel) {
 
-        String message = getResources().getString(R.string.push_message_love_message);
-
-        PublishOptions publishOptions = new PublishOptions();
-        publishOptions.putHeader(PublishOptions.ANDROID_TICKER_TEXT_TAG, message);
-        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, getResources().getString(R.string.app_name));
-        publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, message);
-        DeliveryOptions deliveryOptions = new DeliveryOptions();
-        deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
-        deliveryOptions.addPushSinglecast(deviceId);
-
-
-        Backendless.Messaging.publish(channel, "Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
-            @Override
-            public void handleResponse(MessageStatus messageStatus) {
-
-            }
-
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                String error = backendlessFault.getMessage();
-            }
-        });
-
-    }
 
     protected String constructWhereClause() {
         String whereClause = "";
