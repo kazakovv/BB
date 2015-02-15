@@ -1,6 +1,7 @@
 package com.victor.sexytalk.sexytalk;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -21,7 +22,11 @@ import android.widget.Toast;
 
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
 
 
@@ -32,7 +37,9 @@ public class SendTo extends ActionBarActivity {
 
     protected Toolbar toolbar;
     protected FragmentSendTo fragment;
-
+    protected ListView mListView;
+    protected BackendlessUser mCurrentUser;
+    protected Context mContext;
     //izpolzva se za check dali e message, a ne kiss. Ako e message, mozhe da se izbere samo 1 poluchatel
     protected static boolean isTextMessage;
 
@@ -52,6 +59,11 @@ public class SendTo extends ActionBarActivity {
         if (extras != null) {
             isTextMessage = extras.getBoolean(Statics.TYPE_TEXTMESSAGE);
         }
+
+        if(Backendless.UserService.CurrentUser() != null) {
+            mCurrentUser = Backendless.UserService.CurrentUser();
+        }
+        mContext = SendTo.this;
     }
 
     @Override
@@ -80,6 +92,41 @@ public class SendTo extends ActionBarActivity {
                 finish();
 
                 return true;
+            case R.id.action_refresh:
+                //tarsim dali ima dobaveni partniori, koito ne izlizat v spisaka
+                mListView = fragment.getListView();
+                final TextView emptyMessage = fragment.mEmptyMessage;
+                String whereClause = "email='" + mCurrentUser.getEmail() + "'";
+                BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+                dataQuery.setWhereClause(whereClause);
+                //
+                String message = mContext.getResources().getString(R.string.searching);
+                Backendless.Data.of(BackendlessUser.class).find(dataQuery,
+                        new DefaultCallback<BackendlessCollection<BackendlessUser>>(mContext,message) {
+                    @Override
+                    public void handleResponse(BackendlessCollection<BackendlessUser> partners) {
+                        super.handleResponse(partners);
+                      if  (partners.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                          //updatevame adaptora s partniorite
+                            BackendlessUser[] newPartners = (BackendlessUser[]) partners.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
+                          AdapterSendTo adapter = new AdapterSendTo(mContext, newPartners, mCurrentUser);
+                          mListView.setEmptyView(emptyMessage);
+                          fragment.mPartners = newPartners;
+                          mListView.setOnItemClickListener(fragment.onItemClickList);
+                          mListView.setAdapter(adapter);
+                      } else {
+                        //niama namereni partniori
+                          Toast.makeText(mContext,R.string.no_partners_found,Toast.LENGTH_LONG).show();
+                      }
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        super.handleFault(backendlessFault);
+                        Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                    }
+                });
+                return true;
 
             case R.id.action_settings:
                 Intent intentSendMessage = new Intent(this, ManagePartnersMain.class);
@@ -90,7 +137,7 @@ public class SendTo extends ActionBarActivity {
 
     }
 
-    /*
+        /*
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         NACHALO NA FRAGMENTA S LIST
         !!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -194,7 +241,6 @@ public class SendTo extends ActionBarActivity {
                     } else {
                         sendOk.setVisible(true);
                     }
-
                 }
 
             }

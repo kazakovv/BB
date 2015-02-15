@@ -25,17 +25,13 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.Message;
-import com.backendless.messaging.MessageStatus;
-import com.backendless.messaging.PublishOptions;
-import com.backendless.messaging.PushPolicyEnum;
+
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
-import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
 import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
 
-import org.w3c.dom.Text;
 
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;

@@ -10,12 +10,17 @@
         android:showAsAction="always"
         app:showAsAction="always"
         android:visible="false"/>
-
+    <item android:id="@+id/action_refresh"
+        android:title="Refresh list"
+        android:icon="@drawable/ic_action_refresh"
+        android:orderInCategory="102"
+        app:showAsAction="always"
+        android:showAsAction="always"/>
     <item
         android:id="@+id/main_menu"
         android:title="menu"
         android:icon="@drawable/ic_action_overflow"
-        android:orderInCategory="101"
+        android:orderInCategory="103"
         app:showAsAction="always"
         android:showAsAction="always">
         <menu>
