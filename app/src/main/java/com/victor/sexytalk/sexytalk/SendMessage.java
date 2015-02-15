@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -476,19 +475,22 @@ public class SendMessage extends ActionBarActivity {
 
 
                                 //kachvame file na servera
+                                final String finalPath = path;//kopirame path kam image
                                 Backendless.Files.saveFile(path, fileBytes, true, new DefaultCallback<String>(mContext, sendingMessage) {
                                     @Override
                                     public void handleResponse(String s) {
                                         super.handleResponse(s);
                                         message.setMediaUrl(s);
+                                        message.setBackendlessFilePath(finalPath);
                                         //filat e kachen na servera. izprashtame saobshtenieto
 
                                         Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext, sendingMessage) {
                                             @Override
                                             public void handleResponse(Messages messages) {
                                                 super.handleResponse(messages);
-                                                Toast.makeText(SendMessage.this,
-                                                        R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
+                                                //Toast se pokazva ot helper metoda SendPushMessage
+                                                //Toast.makeText(SendMessage.this,
+                                                  //      R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
 
                                                 //izprashtame push message
                                                 for (BackendlessUser recepient : recepients) {
@@ -540,7 +542,8 @@ public class SendMessage extends ActionBarActivity {
                                     @Override
                                     public void handleResponse(Messages messages) {
                                         super.handleResponse(messages);
-                                        Toast.makeText(mContext, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
+                                        //Toast se pokazva ot helper metoda send push message
+                                        //Toast.makeText(mContext, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
 
 
                                         //izprashtame push message

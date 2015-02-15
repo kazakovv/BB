@@ -337,7 +337,7 @@ protected void searchForMessages(){
 
 
         for(int i = 0; i< messagesToDisplay.size();i++) {
-           Messages message = messagesToDisplay.get(i);
+           final Messages message = messagesToDisplay.get(i);
             if(message.getOpened() != null) { //ako ne e null, znachi veche e otvariano
                 Date firstOpened = message.getOpened();
                 long diff = (now.getTime() - firstOpened.getTime());
@@ -352,6 +352,28 @@ protected void searchForMessages(){
                         @Override
                         public void handleResponse(Long aLong) {
                             //niama nuzda da pravim nishto, nai-mnogo da go vodim pak
+
+                            //ako message sadarzha image, iztrivame i nego
+                            if(message.getMessageType().equals(Statics.TYPE_IMAGE))  {
+                                //iztrivame image
+                                if(message.getBackendlessFilePath() != null) {
+                                    String backenlessPath = message.getBackendlessFilePath();
+                                    Backendless.Files.remove(backenlessPath, new AsyncCallback<Void>() {
+                                        @Override
+                                        public void handleResponse(Void aVoid) {
+                                            //image iztrito. Niama nuzda da pravim nishto.
+                                        }
+
+                                        @Override
+                                        public void handleFault(BackendlessFault backendlessFault) {
+                                            //ako ima error niama kakvo da napravim. Image ostava na servera
+                                            String error = backendlessFault.getMessage();
+                                            Log.d("Vic", "error");
+                                        }
+                                    });//iztrivame image
+                                }//krai na check dali ima backendless file path
+                            }
+
                         }
 
                         @Override

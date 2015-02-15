@@ -19,6 +19,7 @@ public class Messages {
     private String messageType;
     private String loveMessage;
     private String mediaUrl;
+    private String backendlessFilePath;
     private String senderUsername;
     private String recepientEmails;
     private String objectId;
@@ -64,6 +65,14 @@ public class Messages {
 
     public void setMediaUrl(String mMediaUrl) {
         this.mediaUrl = mMediaUrl;
+    }
+
+    public String getBackendlessFilePath() {
+        return backendlessFilePath;
+    }
+
+    public void setBackendlessFilePath(String backendlessFilePath) {
+        this.backendlessFilePath = backendlessFilePath;
     }
 
     public void setSederUsername(String senderUsername) {
