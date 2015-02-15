@@ -9,7 +9,7 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         app:showAsAction="always"
-        android:visible="true"/>
+        android:visible="false"/>
 
     <item
         android:id="@+id/main_menu"

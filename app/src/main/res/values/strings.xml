@@ -78,7 +78,7 @@
     <string name="show_private_days_dialog_button">Private Days</string>
     <string name="error_sending_calendar_updates">Sorry, there was an error sending the Sexy Calendar update</string>
     <string name="calendar_update_sent_singular">You sent Sexy Calendar update to your partner</string>
-    <string name="calendar_update_sent_plural">You sent Sexy Calendar update to your partners</string>
+    <string name="calendar_update_sent">You sent Sexy Calendar update</string>
     <string name="calendar_saved">Your Sexy Calendar update was saved</string>
     <string name="send_sexy_calendar_update_checkbox">Send Sexy Calendar update</string>
     <string name="push_notification_message_update_sexy_calendar">updated her Sexy Calendar</string>
@@ -120,6 +120,7 @@
     <string name="toast_no_recepients">To who should I send the message to?</string>
     <string name="dialog_box_deleting_partner">Are you breaking up?</string>
     <string name="push_message_kiss">You received a kiss</string>
+    <string name="push_calendar_update">You received a Sexy Calendar update</string>
     <string name="push_message_love_message">You received a love message</string>
     <string name="progress_sign_in_message">Signing in, please wait.</string>
     <string name="logout_message">Logging out</string>
@@ -151,6 +152,8 @@
     <string name="sub_title_remaining_days">Remaining days in this period</string>
     <string name="sexyCalendar_needs_updating_message">Sexy Calendar needs to be updated</string>
     <string name="sexyCalendar_error_message">Sorry, there is a Sexy Calendar error</string>
+    <string name="love_message_more_than_1_recipient">You can send your love message to only one partner at a time</string>
+    <string name="sending_sexy_calendar_update_to_partners_dialog_message">Sending Sexy Calendar update</string>
 
     <string-array name="camera_choices">
         <item>Take Picture</item>

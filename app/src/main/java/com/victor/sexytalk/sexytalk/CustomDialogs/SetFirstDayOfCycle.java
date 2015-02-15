@@ -19,11 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.DefaultCallback;
 import com.victor.sexytalk.sexytalk.Helper.CycleStage;
+import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -180,9 +183,9 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
             @Override
             public void handleResponse(BackendlessUser backendlessUser) {
                 if(sendSexyCalendarUpdateToPartners.isChecked()) {
-                    //TODO: tr da se poraboti v/u check kolko partniora imame i da se smeni saobstehnieto na plular ili singular
-                    //TODO: TR DA SE IZPRATI PUSH DO PARTNIORITE
-                    Toast.makeText(context,R.string.calendar_update_sent_plural, Toast.LENGTH_LONG).show();
+
+                    sendPushUpdateToAllPartners(context,mCurrentUser);
+                    //Toast.makeText(context,R.string.calendar_update_sent, Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(context,R.string.calendar_saved, Toast.LENGTH_LONG).show();
                 }
@@ -199,6 +202,48 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
 
 
 
+
+    }
+
+    /*
+    HELPER METODI
+     */
+
+    protected void sendPushUpdateToAllPartners(final Context context, BackendlessUser currentUser){
+        //namirame partniorite
+        //moze da se napravi i directno
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        String whereClause = "email='" + currentUser.getEmail() + "'";
+        dataQuery.setWhereClause(whereClause);
+        String message = context.getResources().getString(R.string.sending_sexy_calendar_update_to_partners_dialog_message);
+        Backendless.Data.of(BackendlessUser.class).find(dataQuery,
+                new DefaultCallback<BackendlessCollection<BackendlessUser>>(context, message) {
+            @Override
+            public void handleResponse(BackendlessCollection<BackendlessUser> user) {
+                super.handleResponse(user);
+                //Sazdavame masiv s partniorite
+               if( user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[] ) {
+                    BackendlessUser[] parters = (BackendlessUser[]) user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
+                    //send push
+                   for (BackendlessUser partner : parters) {
+                       String deviceId = (String) partner.getProperty(Statics.KEY_DEVICE_ID);
+                       String channel = partner.getEmail();
+                       if (deviceId != null && channel != null) {
+                           //ako ne sa prazni izprashtame push message
+                           SendPushMessage.sendPush(deviceId,channel,context,Statics.TYPE_CALENDAR_UPDATE);
+
+                       }
+
+                   }//krai na send push
+               }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                super.handleFault(backendlessFault);
+                Toast.makeText(context,R.string.general_server_error,Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 

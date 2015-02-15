@@ -33,7 +33,6 @@ import com.backendless.messaging.MessageStatus;
 import com.backendless.messaging.PublishOptions;
 import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
-import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
 
@@ -46,7 +45,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class SendMessage extends ActionBarActivity  {
+public class SendMessage extends ActionBarActivity {
     protected BackendlessUser mCurrentUser;
     protected Context mContext;
 
@@ -57,7 +56,7 @@ public class SendMessage extends ActionBarActivity  {
 
     protected ArrayList<String> backendlessUserNames; //spisak s Usernames na poluchatelite na saobshtenieto
     protected ArrayList<String> backendlessRecepientEmails; //spisak s emails na poluchatelite na saobshtenieto
-    protected String recepientEmails="";
+    protected String recepientEmails = "";
 
     public static final int TAKE_PHOTO_REQUEST = 0;
     public static final int CHOOSE_PHOTO_REQUEST = 2;
@@ -66,7 +65,7 @@ public class SendMessage extends ActionBarActivity  {
 
     protected Uri mMediaUri;
 
-    public static final int FILE_SIZE_LIMIT = 1024*1024*10; //1024*1024 = 1MB
+    public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; //1024*1024 = 1MB
 
     public static final String TAG = SendMessage.class.getSimpleName();
     protected MenuItem mRotateLeft;
@@ -93,7 +92,7 @@ public class SendMessage extends ActionBarActivity  {
                             mMessageType = Statics.TYPE_IMAGE;
                             Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                             choosePhotoIntent.setType("image/*");
-                            startActivityForResult(choosePhotoIntent,CHOOSE_PHOTO_REQUEST);
+                            startActivityForResult(choosePhotoIntent, CHOOSE_PHOTO_REQUEST);
                             break;
 
                     }
@@ -119,7 +118,7 @@ public class SendMessage extends ActionBarActivity  {
                                 appName);
 
                         //2.Create subdirectory if it does not exist
-                        if (! mediaStorageDirectory.exists()) {
+                        if (!mediaStorageDirectory.exists()) {
                             if (!mediaStorageDirectory.mkdirs()) {
                                 Log.e(TAG, "failed to create directory");
                                 return null;
@@ -138,7 +137,7 @@ public class SendMessage extends ActionBarActivity  {
                         return Uri.fromFile(mediaFile);
 
                     } else //ako niama external storage
-                        Log.d("Vic","no external strogage, mediaUri si null");
+                        Log.d("Vic", "no external strogage, mediaUri si null");
                     return null;
 
                 }
@@ -152,6 +151,7 @@ public class SendMessage extends ActionBarActivity  {
                         return false;
                     }
                 }
+
                 private void takePicture() {
                     Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
@@ -160,7 +160,6 @@ public class SendMessage extends ActionBarActivity  {
 
 
             };
-
 
 
     @Override
@@ -186,7 +185,7 @@ public class SendMessage extends ActionBarActivity  {
 
 
             //tova obrabotva rezultata ot snimane ili kachvane na file
-            if (requestCode == CHOOSE_PHOTO_REQUEST ) {
+            if (requestCode == CHOOSE_PHOTO_REQUEST) {
                 //pokazvame dvete vratki za snimkite
                 mRotateRight.setVisible(true);
                 mRotateLeft.setVisible(true);
@@ -226,7 +225,7 @@ public class SendMessage extends ActionBarActivity  {
 
             createThumbnail(requestCode);
         } else if (resultCode != RESULT_CANCELED) {
-            Toast.makeText(this,R.string.general_error_message,Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.general_error_message, Toast.LENGTH_LONG).show();
         }
 
     }
@@ -269,14 +268,14 @@ public class SendMessage extends ActionBarActivity  {
 
         Bitmap bitmap = null;
         Bitmap thumbnail;
-        if(requestCode == CHOOSE_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
+        if (requestCode == CHOOSE_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST) {
 
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mMediaUri);
             } catch (Exception e) {
                 //handle exception here
-                Toast.makeText(SendMessage.this,R.string.error_loading_thumbnail, Toast.LENGTH_LONG).show();
-                Log.d("Vic","Error loading thumbnail" + e.toString());
+                Toast.makeText(SendMessage.this, R.string.error_loading_thumbnail, Toast.LENGTH_LONG).show();
+                Log.d("Vic", "Error loading thumbnail" + e.toString());
             }
             int initialWidth = bitmap.getWidth();
             int initalHeight = bitmap.getHeight();
@@ -284,9 +283,9 @@ public class SendMessage extends ActionBarActivity  {
             int newHeight = 0;
 
             //izchisliavame novite proporcii
-            float ratio =(float) initialWidth  / initalHeight;
-            newWidth = 800 ;
-            newHeight = (int) (800 * ratio) ;
+            float ratio = (float) initialWidth / initalHeight;
+            newWidth = 800;
+            newHeight = (int) (800 * ratio);
 
             thumbnail = ThumbnailUtils.extractThumbnail(bitmap, newWidth, newHeight);
 
@@ -296,11 +295,11 @@ public class SendMessage extends ActionBarActivity  {
                     mMediaUri.getPath(), MediaStore.Images.Thumbnails.MINI_KIND), 800, 500);
         }
 
-         imageViewForThumbnailPreview = (ImageView) findViewById(R.id.thumbnailPreview);
+        imageViewForThumbnailPreview = (ImageView) findViewById(R.id.thumbnailPreview);
 
 
         imageViewForThumbnailPreview.setImageBitmap(thumbnail);
-        if(thumbnail ==null) {
+        if (thumbnail == null) {
             //ako thumbnail e null zadavame default kartinka
             imageViewForThumbnailPreview.setImageResource(R.drawable.ic_action_picture);
         }
@@ -311,7 +310,7 @@ public class SendMessage extends ActionBarActivity  {
         String listOfUsers = "";
 
         int size = users.size();
-        if(size == 0) {
+        if (size == 0) {
             message = getString(R.string.send_message_to);
         } else {
 
@@ -339,7 +338,7 @@ public class SendMessage extends ActionBarActivity  {
         //toolbar.setLogo(R.drawable.launch_icon);
         setSupportActionBar(toolbar);
         mContext = SendMessage.this;
-        if(Backendless.UserService.CurrentUser() != null) {
+        if (Backendless.UserService.CurrentUser() != null) {
             mCurrentUser = Backendless.UserService.CurrentUser();
         }
 
@@ -351,7 +350,8 @@ public class SendMessage extends ActionBarActivity  {
             public void onClick(View v) {
 
                 Intent intent = new Intent(SendMessage.this, SendTo.class);
-                startActivityForResult(intent,ACTIVITY_SEND_TO);
+                intent.putExtra(Statics.TYPE_TEXTMESSAGE, true);
+                startActivityForResult(intent, ACTIVITY_SEND_TO);
             }
         });
 
@@ -370,8 +370,6 @@ public class SendMessage extends ActionBarActivity  {
     }
 
 
-
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -380,17 +378,17 @@ public class SendMessage extends ActionBarActivity  {
         int id = item.getItemId();
 
         int rotationAngle;
-        if(id==R.id.action_rotate_left) {
+        if (id == R.id.action_rotate_left) {
             rotationAngle = (int) imageViewForThumbnailPreview.getRotation();
-            imageViewForThumbnailPreview.setRotation(rotationAngle -90);
+            imageViewForThumbnailPreview.setRotation(rotationAngle - 90);
         }
-        if(id==R.id.action_rotate_right) {
+        if (id == R.id.action_rotate_right) {
             rotationAngle = (int) imageViewForThumbnailPreview.getRotation();
             imageViewForThumbnailPreview.setRotation(rotationAngle + 90);
         }
 
 
-        if(id == R.id.photoMenu) {
+        if (id == R.id.photoMenu) {
             AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
             builder.setTitle(R.string.menu_camera_alertdialog_title);
             builder.setItems(R.array.camera_choices, mUploadPicture);
@@ -399,19 +397,19 @@ public class SendMessage extends ActionBarActivity  {
         }
 
 
-        if(id == R.id.action_send) {
+        if (id == R.id.action_send) {
             //proverka dali ima recepients i dali ima text
-            if(messageToSend.getText().toString().equals("")){
-                Toast.makeText(this,R.string.toast_no_love_message,Toast.LENGTH_LONG).show();
+            if (messageToSend.getText().toString().equals("")) {
+                Toast.makeText(this, R.string.toast_no_love_message, Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
             }
 
             //proveriavame dali poleto za tova do kogo da izpratim saobsthenieto e prazno
             //Ako e ravno na parvonachalnata stoinost To:___, znachi ne sa izprani poluchateli
-            String toMessage= mSendMessageTo.getText().toString();
+            String toMessage = mSendMessageTo.getText().toString();
             String test = getResources().getString(R.string.send_message_to);
-            if( toMessage.equals(test) ) {
-                Toast.makeText(this,R.string.toast_no_recepients,Toast.LENGTH_LONG).show();
+            if (toMessage.equals(test)) {
+                Toast.makeText(this, R.string.toast_no_recepients, Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
             }
 
@@ -422,97 +420,109 @@ public class SendMessage extends ActionBarActivity  {
             final List<BackendlessUser> recepients = new ArrayList<BackendlessUser>();
 
 
-
             //TODO: mozem da gi namerim direkto bez query
             //namirame backendless users po emails
             //kato namerim poluchatelite i zapalnim List<BackendlessUser> recepients izprashtame
 
             final String sendingMessage = mContext.getResources().getString(R.string.sending_message);
             Backendless.Data.of(BackendlessUser.class).find(dataQuery,
-                    new DefaultCallback<BackendlessCollection<BackendlessUser>>(mContext,sendingMessage) {
-                @Override
-                public void handleResponse(BackendlessCollection<BackendlessUser> collection) {
-                    super.handleResponse(collection);
-                    //uspeshno namirame poluchatelite po emailite im
+                    new DefaultCallback<BackendlessCollection<BackendlessUser>>(mContext, sendingMessage) {
+                        @Override
+                        public void handleResponse(BackendlessCollection<BackendlessUser> collection) {
+                            super.handleResponse(collection);
+                            //uspeshno namirame poluchatelite po emailite im
 
-                    //sazdavame List<BackendlessUser> s poluchatelite
-                    int numberOfUsers = collection.getCurrentPage().size();
+                            //sazdavame List<BackendlessUser> s poluchatelite
+                            int numberOfUsers = collection.getCurrentPage().size();
 
-                    for (int i = 0; i < numberOfUsers ; i++) {
-                        recepients.add(collection.getCurrentPage().get(i));
+                            for (int i = 0; i < numberOfUsers; i++) {
+                                recepients.add(collection.getCurrentPage().get(i));
 
-                        recepientEmails += collection.getCurrentPage().get(i).getEmail();
-                        if(i < numberOfUsers -1) {
-                        recepientEmails += ","; //dobaviame zapetaia ako ima oshte recepients
-                        }
-                    }
+                                recepientEmails += collection.getCurrentPage().get(i).getEmail();
+                                if (i < numberOfUsers - 1) {
+                                    recepientEmails += ","; //dobaviame zapetaia ako ima oshte recepients
+                                }
+                            }
 
-                    final Messages message = new Messages();
-                    message.setSender(Backendless.UserService.CurrentUser());
-                    message.setLoveMessage(messageToSend.getText().toString());
-                    message.setRecepients(recepients);
-                    message.setSederUsername((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
-                    message.setRecepientEmails(recepientEmails);
-                    //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
-                    if(mMessageType == null) {
-                        mMessageType = Statics.TYPE_TEXTMESSAGE;
-                    }
-                    message.setMessageType(mMessageType);
+                            final Messages message = new Messages();
+                            message.setSender(Backendless.UserService.CurrentUser());
+                            message.setLoveMessage(messageToSend.getText().toString());
+                            message.setRecepients(recepients);
+                            message.setSederUsername((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
+                            message.setRecepientEmails(recepientEmails);
+                            //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
+                            if (mMessageType == null) {
+                                mMessageType = Statics.TYPE_TEXTMESSAGE;
+                            }
+                            message.setMessageType(mMessageType);
 
-                    //ako saobshtenieto e Image ili Video, go izprashtame
-                    //Parvo uploadvame file, posle izprashteme i saboshtenieto
-                    //uploadvame file, ako ima takav
-                    if(mMessageType.equals(Statics.TYPE_IMAGE)  ) {
-                        //ako image uploadvame file na servera
-                        //razbiva fila na array ot bitove, za da go smalim i kachim na servera
+                            //ako saobshtenieto e Image ili Video, go izprashtame
+                            //Parvo uploadvame file, posle izprashteme i saboshtenieto
+                            //uploadvame file, ako ima takav
+                            if (mMessageType.equals(Statics.TYPE_IMAGE)) {
+                                //ako image uploadvame file na servera
+                                //razbiva fila na array ot bitove, za da go smalim i kachim na servera
 
-                        byte[] fileBytes = FileHelper.getByteArrayFromFile(SendMessage.this, mMediaUri);
-                        String path = "";
+                                byte[] fileBytes = FileHelper.getByteArrayFromFile(SendMessage.this, mMediaUri);
+                                String path = "";
 
-                        //ako e image go smaliavame
-                        if (fileBytes != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
-                             fileBytes = FileHelper.reduceImageForUpload(fileBytes,Statics.SHORT_SIDE_TARGET_PIC);
-                            path = "/pics/" +
-                                    FileHelper.getFileName(SendMessage.this,mMediaUri,Statics.TYPE_IMAGE);
-                        }
+                                //ako e image go smaliavame
+                                if (fileBytes != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
+                                    fileBytes = FileHelper.reduceImageForUpload(fileBytes, Statics.SHORT_SIDE_TARGET_PIC);
+                                    path = "/pics/" +
+                                            FileHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_IMAGE);
+                                }
 
 
-
-                        //kachvame file na servera
-                        Backendless.Files.saveFile(path, fileBytes, true, new DefaultCallback<String>(mContext,sendingMessage) {
-                            @Override
-                            public void handleResponse(String s) {
-                                super.handleResponse(s);
-                                message.setMediaUrl(s);
-                                //filat e kachen na servera. izprashtame saobshtenieto
-
-                                Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext,sendingMessage) {
+                                //kachvame file na servera
+                                Backendless.Files.saveFile(path, fileBytes, true, new DefaultCallback<String>(mContext, sendingMessage) {
                                     @Override
-                                    public void handleResponse(Messages messages) {
-                                        super.handleResponse(messages);
-                                        Toast.makeText(SendMessage.this,
-                                                R.string.message_successfully_sent,Toast.LENGTH_LONG).show();
+                                    public void handleResponse(String s) {
+                                        super.handleResponse(s);
+                                        message.setMediaUrl(s);
+                                        //filat e kachen na servera. izprashtame saobshtenieto
 
-                                            //izprashtame push message
-                                            for(BackendlessUser recepient : recepients) {
-                                                String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
-                                                String channel = recepient.getEmail();
-                                                if(deviceId != null && channel != null ) {
-                                                    //ako ne sa prazni izprashtame push message
-                                                    sendPushMessage(deviceId,channel);
+                                        Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext, sendingMessage) {
+                                            @Override
+                                            public void handleResponse(Messages messages) {
+                                                super.handleResponse(messages);
+                                                Toast.makeText(SendMessage.this,
+                                                        R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
 
-                                                    switchToMainScreen();
-                                                }
+                                                //izprashtame push message
+                                                for (BackendlessUser recepient : recepients) {
+                                                    String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
+                                                    String channel = recepient.getEmail();
+                                                    if (deviceId != null && channel != null) {
+                                                        //ako ne sa prazni izprashtame push message
+                                                        sendPushMessage(deviceId, channel);
+
+                                                        switchToMainScreen();
+                                                    }
+
+                                                }//krai na send push
+
 
                                             }
 
-
+                                            @Override
+                                            public void handleFault(BackendlessFault backendlessFault) {
+                                                super.handleFault(backendlessFault);
+                                                Log.d("Vic", "error sending message " + backendlessFault.toString());
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
+                                                builder.setMessage(R.string.error_sending_message)
+                                                        .setTitle(R.string.error_title)
+                                                        .setPositiveButton(android.R.string.ok, null);
+                                                AlertDialog dialog = builder.create();
+                                                dialog.show();
+                                            }
+                                        });
                                     }
 
                                     @Override
                                     public void handleFault(BackendlessFault backendlessFault) {
                                         super.handleFault(backendlessFault);
-                                        Log.d("Vic","error sending message " + backendlessFault.toString());
+                                        Log.d("Vic", "error sending message " + backendlessFault.toString());
                                         AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
                                         builder.setMessage(R.string.error_sending_message)
                                                 .setTitle(R.string.error_title)
@@ -521,87 +531,69 @@ public class SendMessage extends ActionBarActivity  {
                                         dialog.show();
                                     }
                                 });
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault backendlessFault) {
-                                super.handleFault(backendlessFault);
-                                Log.d("Vic","error sending message " + backendlessFault.toString());
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
-                                builder.setMessage(R.string.error_sending_message)
-                                        .setTitle(R.string.error_title)
-                                        .setPositiveButton(android.R.string.ok, null);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                            }
-                        });
-                    } //krai na send image message
+                            } //krai na send image message
 
 
-                    //izprashtame saobshtenieto
-                    if( mMessageType.equals(Statics.TYPE_TEXTMESSAGE)) {
-                        Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext,sendingMessage) {
-                            @Override
-                            public void handleResponse(Messages messages) {
-                                super.handleResponse(messages);
-                                Toast.makeText(mContext, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
+                            //izprashtame saobshtenieto
+                            if (mMessageType.equals(Statics.TYPE_TEXTMESSAGE)) {
+                                Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext, sendingMessage) {
+                                    @Override
+                                    public void handleResponse(Messages messages) {
+                                        super.handleResponse(messages);
+                                        Toast.makeText(mContext, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
 
 
-                                //izprashtame push message
-                                for(BackendlessUser recepient : recepients) {
-                                    String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
-                                    String channel = recepient.getEmail();
-                                    if(  deviceId != null &&  channel != null )
-                                             {
-                                        //ako ne sa prazni izprashtame push message
-                                        sendPushMessage(deviceId,channel);
+                                        //izprashtame push message
+                                        for (BackendlessUser recepient : recepients) {
+                                            String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
+                                            String channel = recepient.getEmail();
+                                            if (deviceId != null && channel != null) {
+                                                //ako ne sa prazni izprashtame push message
+                                                sendPushMessage(deviceId, channel);
 
-                                        switchToMainScreen();
+                                                switchToMainScreen();
+                                            }
+
+                                        }
                                     }
 
-                                }
-                            }
+                                    @Override
+                                    public void handleFault(BackendlessFault backendlessFault) {
+                                        super.handleFault(backendlessFault);
+                                        Log.d("Vic", "error sending message " + backendlessFault.toString());
+                                        //TODO izkarva greshka:
+                                        //TODO tr da se misli kak da se vzeme mContext za async tasks
+                                        //android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@52a6d994 is not valid; is your activity running?
 
-                            @Override
-                            public void handleFault(BackendlessFault backendlessFault) {
-                                super.handleFault(backendlessFault);
-                                Log.d("Vic", "error sending message " + backendlessFault.toString());
-                                //TODO izkarva greshka:
-                                //TODO tr da se misli kak da se vzeme mContext za async tasks
-                                //android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@52a6d994 is not valid; is your activity running?
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
+                                        //builder.setMessage(R.string.error_sending_file)
+                                        builder.setMessage(R.string.error_sending_message)
+                                                .setTitle(R.string.error_title)
+                                                .setPositiveButton(android.R.string.ok, null);
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+                                    }
+                                });
+                            }//krai na send text message
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
-                                //builder.setMessage(R.string.error_sending_file)
-                                builder.setMessage(R.string.error_sending_message)
-                                        .setTitle(R.string.error_title)
-                                        .setPositiveButton(android.R.string.ok, null);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                            }
-                        });
-                    }//krai na send text message
+                        }
 
-                }
-
-                //tova e fault na osnovata query, koiato tarsi poluchatelite
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    super.handleFault(backendlessFault);
-                    Log.d("Vic","error sending message " + backendlessFault.toString());
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
-                    builder.setMessage(R.string.error_sending_message)
-                            .setTitle(R.string.error_title)
-                            .setPositiveButton(android.R.string.ok, null);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();                }
-            });//Krai na query koiato tarsi poluchatelite na saobshtenieto po emailite im
-
-
-
+                        //tova e fault na osnovata query, koiato tarsi poluchatelite
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            super.handleFault(backendlessFault);
+                            Log.d("Vic", "error sending message " + backendlessFault.toString());
+                            AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                            builder.setMessage(R.string.error_sending_message)
+                                    .setTitle(R.string.error_title)
+                                    .setPositiveButton(android.R.string.ok, null);
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+                        }
+                    });//Krai na query koiato tarsi poluchatelite na saobshtenieto po emailite im
 
 
         }//krai na send koda
-
 
 
         return super.onOptionsItemSelected(item);
@@ -610,12 +602,14 @@ public class SendMessage extends ActionBarActivity  {
     /*
             Helper metodi
      */
+
+    //TODO da go smenia s drugia static metod
     protected void sendPushMessage(String deviceId, String channel) {
 
         String message = getResources().getString(R.string.push_message_love_message);
 
         PublishOptions publishOptions = new PublishOptions();
-        publishOptions.putHeader( PublishOptions.ANDROID_TICKER_TEXT_TAG, message );
+        publishOptions.putHeader(PublishOptions.ANDROID_TICKER_TEXT_TAG, message);
         publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, getResources().getString(R.string.app_name));
         publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, message);
         DeliveryOptions deliveryOptions = new DeliveryOptions();
@@ -623,7 +617,7 @@ public class SendMessage extends ActionBarActivity  {
         deliveryOptions.addPushSinglecast(deviceId);
 
 
-        Backendless.Messaging.publish(channel,"Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+        Backendless.Messaging.publish(channel, "Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
             @Override
             public void handleResponse(MessageStatus messageStatus) {
 
@@ -638,14 +632,14 @@ public class SendMessage extends ActionBarActivity  {
     }
 
     protected String constructWhereClause() {
-    String whereClause  = "";
+        String whereClause = "";
         int numberOfRecepients = backendlessRecepientEmails.size();
-        for(int i=0; i < numberOfRecepients; i++) {
+        for (int i = 0; i < numberOfRecepients; i++) {
             whereClause = whereClause + "email=";
             whereClause = whereClause + "'" + backendlessRecepientEmails.get(i) + "'";
 
-            if(i < numberOfRecepients -1) {
-            whereClause = whereClause + " OR ";
+            if (i < numberOfRecepients - 1) {
+                whereClause = whereClause + " OR ";
             }
         }
 
@@ -656,7 +650,7 @@ public class SendMessage extends ActionBarActivity  {
         Bitmap bitmap = null;
 
         try {
-             bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mMediaUri);
+            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mMediaUri);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -666,7 +660,7 @@ public class SendMessage extends ActionBarActivity  {
 
     protected void switchToMainScreen() {
         //Switch to main screen while waiting for the message to be sent.
-        Intent intent = new Intent(SendMessage.this,Main.class);
+        Intent intent = new Intent(SendMessage.this, Main.class);
         //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

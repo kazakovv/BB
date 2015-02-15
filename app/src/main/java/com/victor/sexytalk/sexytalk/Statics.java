@@ -17,9 +17,9 @@ public class Statics {
 
 
     public static final String TYPE_IMAGE = "image";
-    public static final String TYPE_VIDEO = "video";
     public static final String TYPE_TEXTMESSAGE = "textMessage";
     public static final String TYPE_KISS = "messageKiss";
+    public static final String TYPE_CALENDAR_UPDATE = "calendarUpdate";
 
     public static final String SEX_MALE = "Male";
     public static final String SEX_FEMALE = "Female";
@@ -35,6 +35,7 @@ public class Statics {
     public static final String TITLE_CYCLE = "titleCycle";
     public static final String FIRST_DAY_OF_CYCLE = "firstDayOfCycle";
     public static final String SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS = "sendSexyCalendarUpdate";
+
 
     //keys za tarsene v Backendless table s cycle statusi i titles
     public static final String KEY_MENSTRUATION = "Menstruation";
@@ -62,5 +63,6 @@ public class Statics {
     public static final int SHORT_SIDE_TARGET_PIC = 500;
 
     public static final String KEY_SET_STATUS = "setStatus";
+
 }
 

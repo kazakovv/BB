@@ -28,12 +28,15 @@ import com.victor.sexytalk.sexytalk.Adaptors.AdapterSendTo;
 import java.util.ArrayList;
 
 
-
-public class SendTo extends ActionBarActivity  {
+public class SendTo extends ActionBarActivity {
 
     protected Toolbar toolbar;
     protected FragmentSendTo fragment;
 
+    //izpolzva se za check dali e message, a ne kiss. Ako e message, mozhe da se izbere samo 1 poluchatel
+    protected static boolean isTextMessage;
+
+    protected static MenuItem sendOk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +45,19 @@ public class SendTo extends ActionBarActivity  {
         fragment = new FragmentSendTo();
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
 
+        //Promenliva dali e izvikano ot text message.
+        //Ako izprashtame text message tr da ima samo 1 poluchatel, inache ne raboti otbroiavaneto za 24h ot otvariane
+        isTextMessage = false;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            isTextMessage = extras.getBoolean(Statics.TYPE_TEXTMESSAGE);
+        }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_send_to, menu);
+        sendOk = menu.findItem(R.id.action_ok);
         return super.onCreateOptionsMenu(menu);
 
     }
@@ -57,13 +68,13 @@ public class SendTo extends ActionBarActivity  {
 
 
         int id = item.getItemId();
-        switch(item.getItemId()) {
+        switch (item.getItemId()) {
             case R.id.action_ok:
 
                 Intent intent = new Intent(SendTo.this, SendMessage.class);
 
                 intent.putStringArrayListExtra(Statics.KEY_USERNAME, fragment.mRecepientUserNames);
-                intent.putStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS,fragment.mRecepientEmails);
+                intent.putStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS, fragment.mRecepientEmails);
                 intent.putStringArrayListExtra(Statics.KEY_DEVICE_ID, fragment.mDeviceIds);
                 setResult(RESULT_OK, intent);
                 finish();
@@ -79,91 +90,116 @@ public class SendTo extends ActionBarActivity  {
 
     }
 
-/*
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    NACHALO NA FRAGMENTA S LIST
-    !!!!!!!!!!!!!!!!!!!!!!!!!!!
-     */
+    /*
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        NACHALO NA FRAGMENTA S LIST
+        !!!!!!!!!!!!!!!!!!!!!!!!!!!
+         */
     public static class FragmentSendTo extends ListFragment {
-    protected BackendlessUser[] mPartners;
-    protected BackendlessUser mCurrentUser;
-    protected ArrayList<Integer> mSendTo;
-    protected ArrayList<String> mRecepientUserNames;
-    protected ArrayList<String> mRecepientEmails;
-    protected ArrayList<String> mDeviceIds;
-    protected TextView mEmptyMessage;
-    protected Toolbar toolbar;
+        protected BackendlessUser[] mPartners;
+        protected BackendlessUser mCurrentUser;
+        protected ArrayList<Integer> mSendTo;
+        protected ArrayList<String> mRecepientUserNames;
+        protected ArrayList<String> mRecepientEmails;
+        protected ArrayList<String> mDeviceIds;
+        protected TextView mEmptyMessage;
+        protected Toolbar toolbar;
 
-    protected ListView mSendToList;
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View inflatedView = inflater.inflate(R.layout.activity_send_to, container, false);
-        toolbar = (Toolbar) inflatedView.findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_action_back);
-        mEmptyMessage = (TextView) inflatedView.findViewById(R.id.emptyMessageSendTo);
-
-        ((SendTo) getActivity()).setSupportActionBar(toolbar);
-
-        return inflatedView;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        mSendToList = getListView();
-
-        //vrazvam mCurrentUser i list
-        if (Backendless.UserService.CurrentUser() != null) {
-            mCurrentUser = Backendless.UserService.CurrentUser();
+        protected ListView mSendToList;
 
 
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View inflatedView = inflater.inflate(R.layout.activity_send_to, container, false);
+            toolbar = (Toolbar) inflatedView.findViewById(R.id.toolbar);
+            toolbar.setNavigationIcon(R.drawable.ic_action_back);
+            mEmptyMessage = (TextView) inflatedView.findViewById(R.id.emptyMessageSendTo);
 
-            // specify an adapter (see also next example)
-            //samo ako ima partniori
-            if( mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-                mEmptyMessage.setVisibility(View.INVISIBLE);
-                mPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
-                AdapterSendTo adapter = new AdapterSendTo(getActivity(),mPartners, mCurrentUser);
-                mSendToList.setEmptyView(mEmptyMessage);
+            ((SendTo) getActivity()).setSupportActionBar(toolbar);
 
-                mSendToList.setOnItemClickListener(onItemClickList);
-                mSendToList.setAdapter(adapter);
+            return inflatedView;
+        }
+
+        @Override
+        public void onViewCreated(View view, Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            mSendToList = getListView();
+
+            //vrazvam mCurrentUser i list
+            if (Backendless.UserService.CurrentUser() != null) {
+                mCurrentUser = Backendless.UserService.CurrentUser();
+
+
+                // specify an adapter (see also next example)
+                //samo ako ima partniori
+                if (mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                    mEmptyMessage.setVisibility(View.INVISIBLE);
+                    mPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+                    AdapterSendTo adapter = new AdapterSendTo(getActivity(), mPartners, mCurrentUser);
+                    mSendToList.setEmptyView(mEmptyMessage);
+
+                    mSendToList.setOnItemClickListener(onItemClickList);
+                    mSendToList.setAdapter(adapter);
+                }
             }
+
+            //inicializirame arraylists, za da mozem da dobaviame info kam tiah
+            mRecepientEmails = new ArrayList<String>();
+            mSendTo = new ArrayList<Integer>();
+            mRecepientUserNames = new ArrayList<String>();
+            mDeviceIds = new ArrayList<String>();
         }
 
-        //inicializirame arraylists, za da mozem da dobaviame info kam tiah
-        mRecepientEmails = new ArrayList<String>();
-        mSendTo = new ArrayList<Integer>();
-        mRecepientUserNames = new ArrayList<String>();
-        mDeviceIds = new ArrayList<String>();
-    }
+        //onItem click listener za list
+        protected AdapterView.OnItemClickListener onItemClickList = new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                CheckBox sendYesNoCheckBox = (CheckBox) view.findViewById(R.id.sendYesNo);
 
-    //onItem click listener za list
-    protected AdapterView.OnItemClickListener onItemClickList = new AdapterView.OnItemClickListener() {
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-       CheckBox sendYesNoCheckBox = (CheckBox) view.findViewById(R.id.sendYesNo);
+                if (sendYesNoCheckBox.isChecked()) {
+                    //cakane v/u ceche izbran partior
+                    sendYesNoCheckBox.setChecked(false);
+                    int positionToRemove = mSendTo.indexOf(position);
+                    mSendTo.remove(positionToRemove);
+                    mRecepientEmails.remove(positionToRemove);
+                    mRecepientUserNames.remove(positionToRemove);
+                    mDeviceIds.remove(positionToRemove);
+                    //pokazvame ili skrivame ok check, v zavisimost dali ima izbrani partniori
+                    if (mSendTo.size() == 0) {
+                        sendOk.setVisible(false);
+                    } else {
+                        sendOk.setVisible(true);
+                    }
+                } else {
+                    //cakame v/u partior, koito ne e izbran oshte
 
-        if(sendYesNoCheckBox.isChecked()) {
-            sendYesNoCheckBox.setChecked(false);
-            int positionToRemove = mSendTo.indexOf(position);
-            mSendTo.remove(positionToRemove);
-            mRecepientEmails.remove(positionToRemove);
-            mRecepientUserNames.remove(positionToRemove);
-            mDeviceIds.remove(positionToRemove);
-        } else {
-            sendYesNoCheckBox.setChecked(true);
-            mSendTo.add(position);
-            mRecepientEmails.add(mPartners[position].getEmail());
-            mRecepientUserNames.add((String) mPartners[position].getProperty(Statics.KEY_USERNAME));
-            mDeviceIds.add((String) mPartners[position].getProperty(Statics.KEY_DEVICE_ID));
-        }
+                    //check kolko partionri sme izbrali. Ako e izbran poveche ot 1 partnior, otbroiavaneto za 24chasa ne raboti
+                    //parviat, koito otvori sabshtenieto startira broiacha
+                    if (isTextMessage == true) {
+                        if (mSendTo.size() > 0) {
+                            Toast.makeText(getActivity(), R.string.love_message_more_than_1_recipient, Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
 
-    }
-    };//krai on onItemClickListener
+                    sendYesNoCheckBox.setChecked(true);
+                    mSendTo.add(position);
+                    mRecepientEmails.add(mPartners[position].getEmail());
+                    mRecepientUserNames.add((String) mPartners[position].getProperty(Statics.KEY_USERNAME));
+                    mDeviceIds.add((String) mPartners[position].getProperty(Statics.KEY_DEVICE_ID));
 
-} //Krai na fragment
+                    //pokazvame ili skrivame ok check, v zavisimost dali ima izbrani partniori
+                    if (mSendTo.size() == 0) {
+                        sendOk.setVisible(false);
+                    } else {
+                        sendOk.setVisible(true);
+                    }
+
+                }
+
+            }
+        };//krai on onItemClickListener
+
+    } //Krai na fragment
 
 }//krai na actionba activity
