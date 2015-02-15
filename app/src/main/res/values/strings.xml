@@ -145,6 +145,8 @@
     <string name="signing_in_message">Signing in...</string>
     <string name="choose_partner_label">Choose your partner</string>
     <string name="sexy_status_default">Change your sexy status</string>
+    <string name="check_email_sign_up_message">Checking if the email address is already in use</string>
+    <string name="email_in_use">This email is already in use</string>
 
     <string name="period_no_sex">Not Sexy Days</string>
     <string name="period_sexy_days">Sexy Days</string>
