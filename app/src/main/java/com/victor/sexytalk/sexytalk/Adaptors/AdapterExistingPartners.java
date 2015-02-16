@@ -22,6 +22,7 @@ import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,20 +82,29 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                 builder.setPositiveButton(R.string.dialog_delete_partner_yes_button,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //sazdavame nov spisak s partniori za tekushtia potrebitel
-                                BackendlessUser[] newListWithPartnersForCurrentUser =
-                                        new BackendlessUser[(mPartners.size() - 1)];
+
                                 BackendlessUser[] currentListWithPartners =
                                         (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
-                                int i =0;
+
+                                List<BackendlessUser> temp = new ArrayList<BackendlessUser>();
+                                //kopirame vskichki v temp spisak
                                 for(BackendlessUser partner : currentListWithPartners) {
-                                    //kopirame vsichki partniori osven toya koito iskame da iztriem
-                                    if(! partner.getEmail().equals(mPartners.get(position).getEmail()))
-                                        //TODO: zabiva na toya red, ako iztriem partnior vednaga, sled kato sme go dobavili
-                                        //TODO Zapiba tuk pri triene na partniori
-                                        newListWithPartnersForCurrentUser[i] = partner;
-                                        i++;
+                                    temp.add(partner);
                                 }
+                                //iztrivame nezhelania
+                                temp.remove(position);
+
+                                //kopirame novia spisak
+                                //1.sazdavame nov spisak s partniori za tekushtia potrebitel
+                                BackendlessUser[] newListWithPartnersForCurrentUser =
+                                        new BackendlessUser[temp.size()];
+                                //2.kopirame
+                                int i = 0;
+                                for(BackendlessUser partner : temp) {
+                                    newListWithPartnersForCurrentUser[i] = partner;
+                                    i++;
+                                }
+
                                 //updatevame spisaka s partniori za tekushtia potrebitel
                                 mCurrentUser.setProperty(Statics.KEY_PARTNERS,newListWithPartnersForCurrentUser);
                                 //kachvame novia spisak s partniori v backendless
