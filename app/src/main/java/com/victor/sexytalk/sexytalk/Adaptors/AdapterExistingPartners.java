@@ -91,7 +91,7 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                                     //kopirame vsichki partniori osven toya koito iskame da iztriem
                                     if(! partner.getEmail().equals(mPartners.get(position).getEmail()))
                                         //TODO: zabiva na toya red, ako iztriem partnior vednaga, sled kato sme go dobavili
-
+                                        //TODO Zapiba tuk pri triene na partniori
                                         newListWithPartnersForCurrentUser[i] = partner;
                                         i++;
                                 }

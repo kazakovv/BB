@@ -64,6 +64,6 @@ public class Statics {
 
     public static final String KEY_SET_STATUS = "setStatus";
 
-
+    public static final String KEY_USER_REQUESTING_TO_UPDATE_PARTNERS = "userRequestingToUpdatePartners";
 }
 

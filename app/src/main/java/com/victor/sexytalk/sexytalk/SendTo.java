@@ -109,6 +109,8 @@ public class SendTo extends ActionBarActivity {
                       if  (partners.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
                           //updatevame adaptora s partniorite
                             BackendlessUser[] newPartners = (BackendlessUser[]) partners.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
+                         //dobaviame lokalno
+                          mCurrentUser.setProperty(Statics.KEY_PARTNERS, newPartners);
                           AdapterSendTo adapter = new AdapterSendTo(mContext, newPartners, mCurrentUser);
                           mListView.setEmptyView(emptyMessage);
                           fragment.mPartners = newPartners;
@@ -195,6 +197,32 @@ public class SendTo extends ActionBarActivity {
             mSendTo = new ArrayList<Integer>();
             mRecepientUserNames = new ArrayList<String>();
             mDeviceIds = new ArrayList<String>();
+
+            //puskame da updatene parniorite v background
+            String whereClause = "email='" + mCurrentUser.getEmail() + "'";
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause);
+            Backendless.Data.of(BackendlessUser.class).find(dataQuery, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
+                @Override
+                public void handleResponse(BackendlessCollection<BackendlessUser> user) {
+                      if(user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                        //namereni sa partniori. Updatvame spisaka
+                          mEmptyMessage.setVisibility(View.INVISIBLE);
+                          BackendlessUser[] newPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+                          AdapterSendTo adapter = new AdapterSendTo(getActivity(), newPartners, mCurrentUser);
+                          mSendToList.setEmptyView(mEmptyMessage);
+                          mSendToList.setOnItemClickListener(onItemClickList);
+                          mSendToList.setAdapter(adapter);
+
+                          mCurrentUser.setProperty(Statics.KEY_PARTNERS,newPartners);
+                      }
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    //niama kakvo da napravim, ako varne greshka
+                }
+            });
         }
 
         //onItem click listener za list

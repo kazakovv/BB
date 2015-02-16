@@ -8,7 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterExistingPartners;
 
 import java.util.ArrayList;
@@ -53,6 +57,37 @@ public class FragmentExistingPartners extends ListFragment {
             AdapterExistingPartners adapter =
                     new AdapterExistingPartners(getListView().getContext(),mExistingPartners, mCurrentUser);
             getListView().setAdapter(adapter);
+
+            //updatevame list s partniori za vzeki sluchai. Tova se izkarva sled kato veche sme zaredili parvonachalnia spisak
+            String whereClause = "email='" + mCurrentUser.getEmail() + "'";
+            BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+            dataQuery.setWhereClause(whereClause);
+            Backendless.Data.of(BackendlessUser.class).find(dataQuery, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
+                @Override
+                public void handleResponse(BackendlessCollection<BackendlessUser> user) {
+                    //namira niakakvi partniori
+                    if (user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                        BackendlessUser[] newListWithPartners =
+                                (BackendlessUser[]) user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
+                        List<BackendlessUser> newPartners = new ArrayList<BackendlessUser>();
+                        for(BackendlessUser partner : newListWithPartners) {
+                            newPartners.add(partner);
+                        }
+                        //dobaviame i lokalno
+                        mCurrentUser.setProperty(Statics.KEY_PARTNERS,newListWithPartners);
+                        //zarezdame spisakat nanovo
+                        AdapterExistingPartners adapter =
+                                new AdapterExistingPartners(getListView().getContext(),newPartners, mCurrentUser);
+                        getListView().setAdapter(adapter);
+
+                    }
+                }
+
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
+                    //niama kakvo da napravim
+                }
+            });
         }
     }
 }

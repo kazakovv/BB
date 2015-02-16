@@ -1,6 +1,5 @@
 package com.victor.sexytalk.sexytalk;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import com.backendless.BackendlessUser;
 import com.backendless.Subscription;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.messaging.DeliveryOptions;
 import com.backendless.messaging.Message;
 
 import com.backendless.persistence.BackendlessDataQuery;
@@ -68,12 +66,15 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             navigateToLogin();
         } else {
 
-           //TODO moze da gi varna obratno, ako ima nuzda
             //TODO!!!!!
+
+            //TODO TR da se optimizira ot kam backendless api requests
+            //todo tr da se vidi neshto na servera
+
             //check za pending parner request
-            //checkForPendingParnerRequests();
+            checkForPendingParnerRequests();
             //check za pending delete requests
-            //checkForDeletePartnerRequest();
+            checkForDeletePartnerRequest();
 
             //proveriavame dali e maz ili zhena
             MaleOrFemale = (String) mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
@@ -92,7 +93,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                                 !!!!tuk se obrabotvat pristignalite saobshtenia!!!!
                                 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                  */
-                                Log.d("Vic","I received sth");
                                 String publisherId = message.getPublisherId();
                                 if (message.getData().equals(Statics.KEY_PARTNER_REQUEST)) {
                                     //pokazvame butona za dobaviane na nov partnior

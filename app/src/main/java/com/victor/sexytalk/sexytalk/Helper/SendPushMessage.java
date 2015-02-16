@@ -41,18 +41,15 @@ public class SendPushMessage {
         deliveryOptions.addPushSinglecast(deviceId);
 
 
-        final String finalMessageToast = messageToast;
         Backendless.Messaging.publish(channel, "Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
             @Override
             public void handleResponse(MessageStatus messageStatus) {
 
-                Toast.makeText(context, finalMessageToast,Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                Toast.makeText(context,context.getResources().
-                        getString(R.string.general_server_error),Toast.LENGTH_LONG).show();
+
             }
         });
 

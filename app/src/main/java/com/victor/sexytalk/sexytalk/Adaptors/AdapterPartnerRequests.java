@@ -16,6 +16,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.messaging.MessageStatus;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.R;
@@ -156,7 +157,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                                     mPendingPartnerRequests.remove(position);
                                                     notifyDataSetChanged();
                                                     Toast.makeText(mContext,R.string.new_partner_added_successfully,Toast.LENGTH_LONG).show();
-                                                    //TODO:tr da izpratim push na drugia chvek da si updatene spikat s partniorite
+
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
                                                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
