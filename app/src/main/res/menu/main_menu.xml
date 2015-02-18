@@ -25,6 +25,14 @@
         android:showAsAction="always"
         android:visible="false"
         />
+    <item
+        android:id="@+id/refresh_partner"
+        android:title="@string/refresh_partner"
+        android:icon="@drawable/ic_action_refresh"
+        app:showAsAction="always"
+        android:showAsAction="always"
+        android:visible="true"
+        />
 
         <item
             android:id="@+id/main_menu"

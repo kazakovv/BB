@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.MenuItem;
 
 import com.victor.sexytalk.sexytalk.FragmentLoveBox;
 import com.victor.sexytalk.sexytalk.FragmentLoveDays;
@@ -19,6 +20,7 @@ public class PagerAdapterMain extends FragmentPagerAdapter {
 
         super(fm);
         this.mContext = context;
+
     }
 
     @Override
@@ -27,7 +29,6 @@ public class PagerAdapterMain extends FragmentPagerAdapter {
             case 0:
                 return new FragmentLoveBox();
             case 1:
-
                 return new FragmentLoveDays();
             default:
                 break;

@@ -159,7 +159,7 @@
     <string name="love_message_more_than_1_recipient">You can send your love message to only one partner at a time</string>
     <string name="sending_sexy_calendar_update_to_partners_dialog_message">Sending Sexy Calendar update</string>
     <string name="no_partners_error">You do not have any partners</string>
-
+    <string name="refresh_partner">Refresh partner</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>

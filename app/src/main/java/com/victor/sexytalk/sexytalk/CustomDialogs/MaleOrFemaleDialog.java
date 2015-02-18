@@ -67,6 +67,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
                                 super.handleFault(backendlessFault);
+                                String error = backendlessFault.getMessage();
                                 Toast.makeText(context,
                                         R.string.selection_not_saved, Toast.LENGTH_LONG).show();
                             }
@@ -90,6 +91,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
                                 super.handleFault(backendlessFault);
+                                String error = backendlessFault.getMessage();
                                 Toast.makeText(context,
                                         R.string.selection_not_saved,Toast.LENGTH_LONG).show();
                             }
