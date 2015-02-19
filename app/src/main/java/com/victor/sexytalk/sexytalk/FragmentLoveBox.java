@@ -51,8 +51,9 @@ public class FragmentLoveBox extends ListFragment {
    protected BackendlessUser currentUser;
    protected ListView mListView;
    protected TextView mEmptyMessage;
-    protected ProgressBar mProgressBar;
-    protected FrameLayout mFragmentLoveBoxLayout;
+   protected ProgressBar mProgressBar;
+   protected FrameLayout mFragmentLoveBoxLayout;
+   protected MenuItem mRefreshButton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -120,10 +121,12 @@ public class FragmentLoveBox extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
-
-                //pokazvame spinnera
+                //vrazvame refresh butona
+                mRefreshButton = item;
+                //pokazvame spinnera i skrivame vsichko drugo
                 mProgressBar.setVisibility(View.VISIBLE);
                 mFragmentLoveBoxLayout.setVisibility(View.GONE);
+                mRefreshButton.setEnabled(false);
 
                 searchForMessages();
                 return true;
@@ -305,6 +308,10 @@ protected void searchForMessages(){
 
         @Override
         public void handleResponse(BackendlessCollection<Messages> messages) {
+            //pokazvame view i skrivame butonite
+            if(mRefreshButton !=null) {
+                mRefreshButton.setEnabled(true);
+            }
             mProgressBar.setVisibility(View.GONE);
             mFragmentLoveBoxLayout.setVisibility(View.VISIBLE);
             //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
@@ -342,6 +349,9 @@ protected void searchForMessages(){
 
         @Override
         public void handleFault(BackendlessFault backendlessFault) {
+            if(mRefreshButton !=null) {
+                mRefreshButton.setEnabled(true);
+            }
             mProgressBar.setVisibility(View.GONE);
             mFragmentLoveBoxLayout.setVisibility(View.VISIBLE);
 

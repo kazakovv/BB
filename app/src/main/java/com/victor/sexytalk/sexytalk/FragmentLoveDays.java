@@ -52,6 +52,7 @@ public class FragmentLoveDays extends Fragment {
     protected TextView mChoosePartnerLabel;
     protected ProgressBar mProgressBar;
     protected RelativeLayout mFragmentLoveDaysLayout;
+    protected MenuItem mRefreshButton;
 
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
     private static final int UPDATE_STATUS = 22;
@@ -96,6 +97,7 @@ public class FragmentLoveDays extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        mProgressBar.setVisibility(View.GONE);
 
         showPrivateDaysDialog = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
         cyclePhaseTitle = (TextView) getActivity().findViewById(R.id.cyclePhase);
@@ -262,6 +264,8 @@ public class FragmentLoveDays extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
+                //vrazvam butona za refresh, za da moga da go enable/disable
+                mRefreshButton = item;
                 refreshPartnersList();
                 return true;
         }
@@ -278,6 +282,7 @@ public class FragmentLoveDays extends Fragment {
 
     protected void refreshPartnersList(){
 
+        mRefreshButton.setEnabled(false);
         mProgressBar.setVisibility(View.VISIBLE);
         mFragmentLoveDaysLayout.setVisibility(View.GONE);
 
@@ -292,6 +297,7 @@ public class FragmentLoveDays extends Fragment {
             @Override
             public void handleResponse(BackendlessCollection<BackendlessUser> users) {
                 if(users.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                    mRefreshButton.setEnabled(true);
                     mProgressBar.setVisibility(View.GONE);
                     mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
 
@@ -309,6 +315,7 @@ public class FragmentLoveDays extends Fragment {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
+                mRefreshButton.setEnabled(true);
                 mProgressBar.setVisibility(View.GONE);
                 mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
                 //niama kakvo da napravim

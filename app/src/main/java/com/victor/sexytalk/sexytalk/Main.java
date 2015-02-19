@@ -337,7 +337,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-
         //vrazvame butona za dobaviane na novi partniori
         addPartner = menu.findItem(R.id.partner_request);
         //po podrazbirane partner request butona e nevidim,
