@@ -26,7 +26,7 @@
         android:visible="false"
         />
     <item
-        android:id="@+id/refresh_partner"
+        android:id="@+id/refresh"
         android:title="@string/refresh_partner"
         android:icon="@drawable/ic_action_refresh"
         app:showAsAction="always"

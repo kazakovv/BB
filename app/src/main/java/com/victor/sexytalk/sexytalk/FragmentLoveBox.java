@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -58,6 +59,8 @@ public class FragmentLoveBox extends ListFragment {
         mSwipeRefreshLayout_emptyView.setOnRefreshListener(mOnRefreshListener);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
 
+        setHasOptionsMenu(true);
+
         return rootView;
     }
     //refresh listener za updatevane na tova dali ima novi saobstehnia
@@ -75,8 +78,6 @@ public class FragmentLoveBox extends ListFragment {
         myView = getListView();
         mListView = getListView();
         mListView.setOnScrollListener(mOnScrollListener);
-
-
     }
     //on scroll listener za list view
     protected ListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
@@ -107,6 +108,15 @@ public class FragmentLoveBox extends ListFragment {
 
     };
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                searchForMessages();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -120,6 +130,8 @@ public class FragmentLoveBox extends ListFragment {
             searchForMessages();
         }
     }
+
+
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {

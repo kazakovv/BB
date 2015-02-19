@@ -209,9 +209,11 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 Intent intent = new Intent(this, SendMessage.class);
                 startActivity(intent);
                 return true;
-            case R.id.refresh_partner:
-                refreshPartnersList();
-                return true;
+
+            case R.id.refresh:
+                //refresh se sluchva v saotvetnia fragment
+                return false;
+
             case R.id.partner_request:
                 Intent partnerRequest = new Intent(this, ManagePartnersMain.class);
                 //slagame toya KEY, za da prevkluchim na pravilia tab ot drugata strana kato otvorim ekrana
@@ -337,39 +339,12 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             addPartner.setVisible(true);
         }
 
-
         return super.onCreateOptionsMenu(menu);
     }
             /*
             HELPER METODI
              */
-    protected void refreshPartnersList(){
-        String whereClause = "email='" + mCurrentUser.getEmail() +"'";
-        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-        dataQuery.setWhereClause(whereClause);
-        Backendless.Data.of(BackendlessUser.class).find(dataQuery, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
-            @Override
-            public void handleResponse(BackendlessCollection<BackendlessUser> users) {
-                if(users.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-                   BackendlessUser[] partners = (BackendlessUser[]) users.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
-                    //updatevame lokalno
-                    mCurrentUser.setProperty(Statics.KEY_PARTNERS, partners);
-                    //updatevame fragmentite
-                    PagerAdapter pAdapter = pager.getAdapter();
-                    pager.setAdapter(pAdapter);
-                    Toast.makeText(mContext,"Refreshed",Toast.LENGTH_LONG).show();
-                }
-            }
 
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                //niama kakvo da napravim
-                Toast.makeText(mContext,"not refreshed...",Toast.LENGTH_LONG).show();
-
-            }
-        });
-
-    }
 
     protected void checkForPendingParnerRequests() {
 

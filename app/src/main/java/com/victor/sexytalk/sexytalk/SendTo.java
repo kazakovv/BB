@@ -42,7 +42,7 @@ public class SendTo extends ActionBarActivity {
     protected Context mContext;
     //izpolzva se za check dali e message, a ne kiss. Ako e message, mozhe da se izbere samo 1 poluchatel
     protected static boolean isTextMessage;
-
+    protected MenuItem mRefreshPartners;
     protected static MenuItem sendOk;
 
     @Override
@@ -208,13 +208,13 @@ public class SendTo extends ActionBarActivity {
                       if(user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
                         //namereni sa partniori. Updatvame spisaka
                           mEmptyMessage.setVisibility(View.INVISIBLE);
-                          BackendlessUser[] newPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+                          BackendlessUser[] newPartners = (BackendlessUser[]) user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
+                          mCurrentUser.setProperty(Statics.KEY_PARTNERS, newPartners);
                           AdapterSendTo adapter = new AdapterSendTo(getActivity(), newPartners, mCurrentUser);
                           mSendToList.setEmptyView(mEmptyMessage);
                           mSendToList.setOnItemClickListener(onItemClickList);
                           mSendToList.setAdapter(adapter);
 
-                          mCurrentUser.setProperty(Statics.KEY_PARTNERS,newPartners);
                       }
                 }
 

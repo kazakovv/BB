@@ -149,7 +149,6 @@
     <string name="check_email_sign_up_message">Checking if the email address is already in use</string>
     <string name="email_in_use">This email is already in use</string>
     <string name="searching">Searching</string>
-
     <string name="period_no_sex">Not Sexy Days</string>
     <string name="period_sexy_days">Sexy Days</string>
     <string name="period_baby_days">Baby Days</string>
@@ -160,6 +159,8 @@
     <string name="sending_sexy_calendar_update_to_partners_dialog_message">Sending Sexy Calendar update</string>
     <string name="no_partners_error">You do not have any partners</string>
     <string name="refresh_partner">Refresh partner</string>
+    <string name="toast_update_partners">Your partners were updated</string>
+    <string name="toast_update_partners_no_partners_found">You have no partners</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>

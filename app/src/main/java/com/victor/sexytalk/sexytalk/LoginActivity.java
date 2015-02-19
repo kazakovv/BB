@@ -92,6 +92,7 @@ public class LoginActivity extends Activity {
                             //neuspeshen login
                             //ako ne se izvka dolniat red dialog box varti nerestanno
                             super.handleFault(backendlessFault);
+                            String error = backendlessFault.getMessage();
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setTitle(R.string.login_error_title)
                                     .setMessage(R.string.general_login_error_message)

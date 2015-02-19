@@ -8,11 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
+import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +23,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
 import com.victor.sexytalk.sexytalk.Helper.CycleStage;
@@ -35,8 +37,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import javax.xml.transform.sax.SAXTransformerFactory;
 
 /**
  * Created by Victor on 13/10/2014.
@@ -68,6 +68,7 @@ public class FragmentLoveDays extends Fragment {
         super.onCreate(savedInstanceState);
         mCurrentUser = Backendless.UserService.CurrentUser();
         mContext = getActivity();
+        setHasOptionsMenu(true);
 
     }
 
@@ -254,18 +255,54 @@ public class FragmentLoveDays extends Fragment {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Log.d("Vic", "selected" + item.getItemId());
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                refreshPartnersList();
+                return true;
+        }
         return super.onOptionsItemSelected(item);
+
     }
+
 
     /*
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!     NACHALO NA HELPER METODITE     !!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     */
+
+    protected void refreshPartnersList(){
+
+        String whereClause = "email='" + mCurrentUser.getEmail() +"'";
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+        Backendless.Data.of(BackendlessUser.class).find(dataQuery, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<BackendlessUser> users) {
+                if(users.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                    BackendlessUser[] partners = (BackendlessUser[]) users.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
+                    //updatevame lokalno
+                    mCurrentUser.setProperty(Statics.KEY_PARTNERS, partners);
+
+                    Toast.makeText(mContext,R.string.toast_update_partners,Toast.LENGTH_LONG).show();
+
+                } else {
+                    //niama namereni partniori
+                    Toast.makeText(mContext,R.string.toast_update_partners_no_partners_found,Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                //niama kakvo da napravim
+                Toast.makeText(mContext,"not refreshed...",Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
 
     //Helper metod namira spisak s partniorite i dobavia imenata im v spinnera
 
