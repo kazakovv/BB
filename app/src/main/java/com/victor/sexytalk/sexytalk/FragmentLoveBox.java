@@ -14,7 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +51,8 @@ public class FragmentLoveBox extends ListFragment {
    protected BackendlessUser currentUser;
    protected ListView mListView;
    protected TextView mEmptyMessage;
+    protected ProgressBar mProgressBar;
+    protected FrameLayout mFragmentLoveBoxLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,6 +63,9 @@ public class FragmentLoveBox extends ListFragment {
 
         mSwipeRefreshLayout_emptyView.setOnRefreshListener(mOnRefreshListener);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        mFragmentLoveBoxLayout = (FrameLayout) rootView.findViewById(R.id.loveBoxLayout);
 
         setHasOptionsMenu(true);
 
@@ -112,6 +120,11 @@ public class FragmentLoveBox extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.refresh:
+
+                //pokazvame spinnera
+                mProgressBar.setVisibility(View.VISIBLE);
+                mFragmentLoveBoxLayout.setVisibility(View.GONE);
+
                 searchForMessages();
                 return true;
         }
@@ -278,6 +291,7 @@ public class FragmentLoveBox extends ListFragment {
    //Tozi metod se vrazva kam backendless da vidi dali imame saobsthenia
 protected void searchForMessages(){
 
+
     String whereClause = "recepientEmails LIKE '%" + currentUser.getEmail() + "%'";
 
     BackendlessDataQuery query = new BackendlessDataQuery();
@@ -291,7 +305,8 @@ protected void searchForMessages(){
 
         @Override
         public void handleResponse(BackendlessCollection<Messages> messages) {
-
+            mProgressBar.setVisibility(View.GONE);
+            mFragmentLoveBoxLayout.setVisibility(View.VISIBLE);
             //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
             if(mSwipeRefreshLayout.isRefreshing()){
             mSwipeRefreshLayout.setRefreshing(false);
@@ -327,6 +342,9 @@ protected void searchForMessages(){
 
         @Override
         public void handleFault(BackendlessFault backendlessFault) {
+            mProgressBar.setVisibility(View.GONE);
+            mFragmentLoveBoxLayout.setVisibility(View.VISIBLE);
+
             //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
             if(mSwipeRefreshLayout.isRefreshing()){
                 mSwipeRefreshLayout.setRefreshing(false);
