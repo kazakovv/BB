@@ -11,6 +11,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -52,13 +55,17 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mContext = this;
         //vrazvame osnovnotosaobshtenie
         mCurrentUser = Backendless.UserService.CurrentUser();
         //ako niama lognat potrebitel preprashta kam log-in ekrana
+
+
 
         if (mCurrentUser == null) {
             //prashta ni kam login screen
@@ -344,6 +351,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             /*
             HELPER METODI
              */
+
 
 
     protected void checkForPendingParnerRequests() {

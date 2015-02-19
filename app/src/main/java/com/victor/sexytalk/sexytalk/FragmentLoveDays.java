@@ -14,10 +14,13 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,6 +52,8 @@ public class FragmentLoveDays extends Fragment {
     protected ImageView profilePic;
     protected Button sexyCalendar;
     protected TextView mChoosePartnerLabel;
+    protected ProgressBar mProgressBar;
+    protected RelativeLayout mRelativeLayout;
 
     private static final int MENSTRUAL_CALENDAR_DIALOG = 11;
     private static final int UPDATE_STATUS = 22;
@@ -79,8 +84,8 @@ public class FragmentLoveDays extends Fragment {
         final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
         profilePic = (ImageView) inflatedView.findViewById(R.id.profilePicture);
         mChoosePartnerLabel = (TextView) inflatedView.findViewById(R.id.chooseYourPartnerLabel);
-
-
+        mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
+        mRelativeLayout = (RelativeLayout) inflatedView.findViewById(R.id.layoutFragmentLoveDays);
         return inflatedView;
     }
 
@@ -275,13 +280,23 @@ public class FragmentLoveDays extends Fragment {
 
     protected void refreshPartnersList(){
 
+        mProgressBar.setVisibility(View.VISIBLE);
+        mRelativeLayout.setVisibility(View.GONE);
+
+        getActivity().setProgressBarIndeterminateVisibility(true);
+
         String whereClause = "email='" + mCurrentUser.getEmail() +"'";
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
         dataQuery.setWhereClause(whereClause);
         Backendless.Data.of(BackendlessUser.class).find(dataQuery, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
+
+
             @Override
             public void handleResponse(BackendlessCollection<BackendlessUser> users) {
                 if(users.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                    mProgressBar.setVisibility(View.GONE);
+                    mRelativeLayout.setVisibility(View.VISIBLE);
+
                     BackendlessUser[] partners = (BackendlessUser[]) users.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
                     //updatevame lokalno
                     mCurrentUser.setProperty(Statics.KEY_PARTNERS, partners);
@@ -296,6 +311,8 @@ public class FragmentLoveDays extends Fragment {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
+                mProgressBar.setVisibility(View.GONE);
+                mRelativeLayout.setVisibility(View.VISIBLE);
                 //niama kakvo da napravim
                 Toast.makeText(mContext,"not refreshed...",Toast.LENGTH_LONG).show();
 

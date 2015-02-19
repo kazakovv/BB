@@ -1,94 +1,103 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:tag="fragmentLoveDays"
-    tools:context="com.victor.sexytalk.sexytalk.FragmentLoveDays">
+    android:layout_height="match_parent">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/chooseYourPartnerLabel"
-        android:paddingTop="@dimen/padding_sub_title"
-        android:text="@string/choose_partner_label"
-        android:textSize="@dimen/text_size_sub_title"/>
-    <Spinner
-        android:id="@+id/listOfPartners"
+    <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chooseYourPartnerLabel"
-        android:layout_toLeftOf="@+id/profilePicture"
-        android:layout_toStartOf="@+id/profilePicture" />
+        android:layout_centerInParent="true"/>
 
-    <ImageView
-        android:id="@+id/profilePicture"
-        android:layout_width="@dimen/thumbnail_width"
-        android:layout_height="@dimen/thumbnail_height"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:src="@drawable/ic_action_person_black" />
-
-    <LinearLayout
-        android:id="@+id/linerLayoutFields"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/layoutFragmentLoveDays"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/listOfPartners"
-        android:paddingTop="@dimen/padding_top_Love_days_Title"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        tools:context="com.victor.sexytalk.sexytalk.FragmentLoveDays">
+
 
         <TextView
-            android:id="@+id/cyclePhase"
+            android:id="@+id/chooseYourPartnerLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/padding_sub_title"
+            android:text="@string/choose_partner_label"
+            android:textSize="@dimen/text_size_sub_title" />
+
+        <Spinner
+            android:id="@+id/listOfPartners"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/chooseYourPartnerLabel"
+            android:layout_toLeftOf="@+id/profilePicture"
+            android:layout_toStartOf="@+id/profilePicture" />
+
+        <ImageView
+            android:id="@+id/profilePicture"
+            android:layout_width="@dimen/thumbnail_width"
+            android:layout_height="@dimen/thumbnail_height"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/ic_action_person_black" />
+
+        <LinearLayout
+            android:id="@+id/linerLayoutFields"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/listOfPartners"
-            android:text="@string/fragment_love_days_generic_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:layout_gravity="center_horizontal" />
-        <TextView
-            android:id="@+id/sexyStatus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/sexy_status_default"
-            android:paddingTop="@dimen/default_padding"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:layout_gravity="center_horizontal"
-            />
-        <Button
-            android:id="@+id/showSexyCalendar"
-            android:textColor="@color/color_white"
-            android:background="@drawable/button_custom"
-            android:layout_marginTop="@dimen/margin_top_button"
-            android:layout_width="@dimen/button_width"
-            android:layout_height="@dimen/button_height"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/title_activity_sexy_calendar"
-            android:gravity="center"
-            />
-        <Button
-            android:id="@+id/showPrivateDaysDialog"
-            android:layout_width="@dimen/button_width"
-            android:layout_height="@dimen/button_height"
-            android:layout_marginTop="@dimen/margin_between_buttons"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/color_white"
-            android:background="@drawable/button_custom"
-            android:text="@string/show_private_days_dialog_button"
-            android:gravity="center"
-            android:layout_alignParentBottom="true"
-             />
+            android:layout_centerHorizontal="true"
+            android:orientation="vertical"
+            android:paddingTop="@dimen/padding_top_Love_days_Title">
+
+            <TextView
+                android:id="@+id/cyclePhase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/listOfPartners"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/fragment_love_days_generic_title"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            <TextView
+                android:id="@+id/sexyStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingTop="@dimen/default_padding"
+                android:text="@string/sexy_status_default"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
+
+            <Button
+                android:id="@+id/showSexyCalendar"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_top_button"
+                android:background="@drawable/button_custom"
+                android:gravity="center"
+                android:text="@string/title_activity_sexy_calendar"
+                android:textColor="@color/color_white" />
+
+            <Button
+                android:id="@+id/showPrivateDaysDialog"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="@dimen/button_height"
+                android:layout_alignParentBottom="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/margin_between_buttons"
+                android:background="@drawable/button_custom"
+                android:gravity="center"
+                android:text="@string/show_private_days_dialog_button"
+                android:textColor="@color/color_white" />
 
 
-    </LinearLayout>
+        </LinearLayout>
 
 
-
-
-
+    </RelativeLayout>
 
 </RelativeLayout>
-
