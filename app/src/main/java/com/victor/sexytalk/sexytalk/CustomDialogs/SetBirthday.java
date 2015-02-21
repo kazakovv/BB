@@ -46,7 +46,6 @@ protected Context mContext;
         mContext = inflatedView.getContext();
         mBirthday = (DatePicker) inflatedView.findViewById(R.id.birthDate);
         mBirthday.setMaxDate(new Date().getTime());
-
         builder.setView(inflatedView)
                 // Add action buttons
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {

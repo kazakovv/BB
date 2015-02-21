@@ -94,6 +94,10 @@
             android:name=".CustomDialogs.SetBirthday"
             android:label="@string/title_activity_set_birthday" >
         </activity>
+        <activity
+            android:name=".CustomDialogs.ChangePassword"
+            android:label="@string/title_activity_change_password" >
+        </activity>
     </application>
 
 </manifest>

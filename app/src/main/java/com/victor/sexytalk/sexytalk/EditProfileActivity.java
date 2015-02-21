@@ -29,6 +29,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.files.BackendlessFile;
 import com.squareup.picasso.Picasso;
+import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
 import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
@@ -62,6 +63,7 @@ public class EditProfileActivity extends ActionBarActivity {
         public static int CHOOSE_PHOTO_REQUEST = 222;
         public static int TAKE_PHOTO_REQUEST = 333;
         public static int SET_BIRTHDAY = 444;
+        public static int CHANGE_PASSWORD = 555;
         protected String mMessageType;
         protected Uri mMediaUri;
         public static final int FILE_SIZE_LIMIT = 1024*1024*10;
@@ -158,6 +160,11 @@ public class EditProfileActivity extends ActionBarActivity {
                     setBirthday.show(getFragmentManager(),"Welcome");
                     return;
                 case 2:
+                    //change password
+
+                    ChangePassword changePassword = new ChangePassword();
+                    changePassword.setTargetFragment(FragmentEditProfileActivity.this, CHANGE_PASSWORD);
+                    changePassword.show(getFragmentManager(),"Welcome");
                     return;
                 case 3:
                     //change profile picture
