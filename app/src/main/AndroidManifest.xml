@@ -98,6 +98,10 @@
             android:name=".CustomDialogs.ChangePassword"
             android:label="@string/title_activity_change_password" >
         </activity>
+        <activity
+            android:name=".CustomDialogs.ForgotPassword"
+            android:label="@string/title_activity_forgot_password" >
+        </activity>
     </application>
 
 </manifest>

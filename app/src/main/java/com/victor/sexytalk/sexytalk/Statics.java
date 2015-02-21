@@ -65,6 +65,9 @@ public class Statics {
 
     public static final String KEY_SET_STATUS = "setStatus";
 
+    public static final String BACKENDLESS_INVALID_LOGIN_OR_PASS_MESSAGE = "3003";
+    public static final String BACKENDLESS_INVALID_EMAIL_PASSWORD_RECOVERY = "3020";
+
     public static final String KEY_USER_REQUESTING_TO_UPDATE_PARTNERS = "userRequestingToUpdatePartners";
 }
 

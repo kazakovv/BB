@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,8 @@ import com.backendless.BackendlessUser;
 import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
+import com.victor.sexytalk.sexytalk.CustomDialogs.ForgotPassword;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,6 +37,16 @@ public class LoginActivity extends Activity {
     protected EditText mEmail;
     protected EditText mPassword;
     protected Button mLoginButton;
+    protected static int FORGOT_PASSWORD = 111;
+
+    //onClick Listener za recover password
+    protected DialogInterface.OnClickListener recoverPasswordOnClickListener = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            ForgotPassword forgotPassword = new ForgotPassword();
+            forgotPassword.show(getFragmentManager(),"Welcome");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +105,26 @@ public class LoginActivity extends Activity {
                             //neuspeshen login
                             //ako ne se izvka dolniat red dialog box varti nerestanno
                             super.handleFault(backendlessFault);
-                            String error = backendlessFault.getMessage();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                            builder.setTitle(R.string.login_error_title)
-                                    .setMessage(R.string.general_login_error_message)
-                                    .setPositiveButton(R.string.ok, null);
-                            AlertDialog dialog = builder.create();
-                            dialog.show();
+                            String error = backendlessFault.getCode();
+                            if(error.equals(Statics.BACKENDLESS_INVALID_LOGIN_OR_PASS_MESSAGE)) {
+                                //greshno portrebitelsko ime ili parola
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                builder.setTitle(R.string.login_error_title)
+                                        .setMessage(R.string.invalid_login_details_dialog)
+                                        .setNeutralButton(R.string.forgot_your_password,recoverPasswordOnClickListener)
+                                        .setPositiveButton(R.string.try_again_enter_correct_password, null);
 
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            } else {
+                                //niakakva greshka sas servera
+                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                                builder.setTitle(R.string.login_error_title)
+                                        .setMessage(R.string.general_login_error_message)
+                                        .setPositiveButton(R.string.ok, null);
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+                            }
                         }
                     });
 
@@ -111,6 +136,8 @@ public class LoginActivity extends Activity {
                 }
             }
         });
+
+
 
         //onClickListener za signup Activity
 

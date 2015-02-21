@@ -169,6 +169,13 @@
     <string name="password_not_changed_error_toast">Your password was not changed due to a server error</string>
     <string name="password_empty">Your password can\'t be empty</string>
     <string name="passwords_dont_match">The passwords you entered don\'t match</string>
+    <string name="invalid_login_details_dialog">The email or password you entered was invalid.</string>
+    <string name="forgot_your_password">Forgot my password</string>
+    <string name="try_again_enter_correct_password">Try again</string>
+    <string name="email_for_password_recovery_message">Enter your email and we will send you instructions how to recover your password</string>
+    <string name="recovery_email_sent_dialog">We sent you an email with instructions how to recover your password</string>
+    <string name="title_recovery_password_dialog">Email sent</string>
+    <string name="email_not_found">User with this email address does not exist</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
@@ -188,5 +195,6 @@
     <string name="title_activity_activity_sexy_calendar">ActivitySexyCalendar</string>
     <string name="title_activity_set_birthday">SetBirthday</string>
     <string name="title_activity_change_password">ChangePassword</string>
+    <string name="title_activity_forgot_password">ForgotPassword</string>
 
 </resources>
