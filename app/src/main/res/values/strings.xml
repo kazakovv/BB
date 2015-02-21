@@ -161,6 +161,8 @@
     <string name="refresh_partner">Refresh partner</string>
     <string name="toast_update_partners">Your partners were updated</string>
     <string name="toast_update_partners_no_partners_found">You have no partners</string>
+    <string name="choose_date_of_birth">Choose your date of birth</string>
+
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
@@ -178,5 +180,6 @@
 
     <string name="title_activity_change_sexy_status">ChangeSexyStatus</string>
     <string name="title_activity_activity_sexy_calendar">ActivitySexyCalendar</string>
+    <string name="title_activity_set_birthday">SetBirthday</string>
 
 </resources>

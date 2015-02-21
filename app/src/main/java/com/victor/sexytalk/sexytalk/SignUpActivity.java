@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -16,13 +17,17 @@ import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 
+import java.util.Calendar;
+import java.util.Date;
+
 
 public class SignUpActivity extends Activity {
     protected EditText mUserName;
     protected EditText mPassword;
     protected EditText mEmail;
     protected Button mSignUpButton;
-    Spinner spinner;
+    protected Spinner spinner;
+    protected DatePicker mDateOfBirth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +50,9 @@ public class SignUpActivity extends Activity {
         mPassword = (EditText) findViewById(R.id.sign_up_password);
         mEmail = (EditText) findViewById(R.id.sign_up_email);
         mSignUpButton = (Button) findViewById(R.id.sign_up_button);
-
+        mDateOfBirth = (DatePicker) findViewById(R.id.dateOfBirth);
+        //zadavame max date dnes
+        mDateOfBirth.setMaxDate(new Date().getTime());
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +99,10 @@ public class SignUpActivity extends Activity {
                                         newUser.setPassword(password);
                                         newUser.setProperty(Statics.KEY_USERNAME, userName);
                                         newUser.setProperty(Statics.KEY_MALE_OR_FEMALE, spinner.getSelectedItem().toString());
-
+                                        //zadavame rozdenia den
+                                        Calendar dateOfBirth = Calendar.getInstance();
+                                        dateOfBirth.set(mDateOfBirth.getYear(), mDateOfBirth.getMonth(), mDateOfBirth.getDayOfMonth());
+                                        newUser.setProperty(Statics.KEY_DATE_OF_BIRTH,dateOfBirth.getTime());
 
                                         final String message = getResources().getString(R.string.signing_in_message);
                                         Backendless.UserService.register(newUser,

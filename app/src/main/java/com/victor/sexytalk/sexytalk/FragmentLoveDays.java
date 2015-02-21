@@ -308,6 +308,9 @@ public class FragmentLoveDays extends Fragment {
                     Toast.makeText(mContext,R.string.toast_update_partners,Toast.LENGTH_LONG).show();
 
                 } else {
+                    mRefreshButton.setEnabled(true);
+                    mProgressBar.setVisibility(View.GONE);
+                    mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
                     //niama namereni partniori
                     Toast.makeText(mContext,R.string.toast_update_partners_no_partners_found,Toast.LENGTH_LONG).show();
                 }

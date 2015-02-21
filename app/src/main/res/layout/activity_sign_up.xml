@@ -43,6 +43,20 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/choose_date_of_birth"
+        android:id="@+id/dateOfBirthMessage" />
+
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateOfBirth"
+        android:calendarViewShown="false"
+        />
+
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

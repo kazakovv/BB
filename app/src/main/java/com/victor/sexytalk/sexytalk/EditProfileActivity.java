@@ -1,7 +1,9 @@
 package com.victor.sexytalk.sexytalk;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.DialogFragment;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,13 +30,18 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.files.BackendlessFile;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
+import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
+import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
 import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
+
+import java.util.Calendar;
 
 
 public class EditProfileActivity extends ActionBarActivity {
     protected Toolbar toolbar;
     protected FragmentEditProfileActivity fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +50,6 @@ public class EditProfileActivity extends ActionBarActivity {
         fragment = new FragmentEditProfileActivity();
         getSupportFragmentManager().beginTransaction().replace(android.R.id.content, fragment).commit();
 
-
     }
 
     /*
@@ -50,10 +57,11 @@ public class EditProfileActivity extends ActionBarActivity {
     NACHALO NA FRAGMENTA S LIST
     !!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
-    public static class FragmentEditProfileActivity extends ListFragment {
+    public static class FragmentEditProfileActivity extends ListFragment  implements  DatePickerDialog.OnDateSetListener{
         public static int MEDIA_TYPE_IMAGE = 111;
         public static int CHOOSE_PHOTO_REQUEST = 222;
         public static int TAKE_PHOTO_REQUEST = 333;
+        public static int SET_BIRTHDAY = 444;
         protected String mMessageType;
         protected Uri mMediaUri;
         public static final int FILE_SIZE_LIMIT = 1024*1024*10;
@@ -65,6 +73,8 @@ public class EditProfileActivity extends ActionBarActivity {
         protected Toolbar toolbar;
         protected ImageView profilePicture;
         protected BackendlessUser mCurrentUser;
+        protected Context mContext;
+
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,7 +83,7 @@ public class EditProfileActivity extends ActionBarActivity {
             toolbar = (Toolbar) inflatedView.findViewById(R.id.toolbar);
             toolbar.setNavigationIcon(R.drawable.ic_action_back);
             ((EditProfileActivity) getActivity()).setSupportActionBar(toolbar);
-
+            mContext = getActivity();
             return inflatedView;
         }
 
@@ -139,9 +149,13 @@ public class EditProfileActivity extends ActionBarActivity {
                     //change sex
                     DialogFragment sexDialog = new MaleOrFemaleDialog();
                     sexDialog.show(getActivity().getFragmentManager(), "Welcome");
-
                     return;
                 case 1:
+                    //change date of birth
+
+                    SetBirthday setBirthday = new SetBirthday();
+                    setBirthday.setTargetFragment(FragmentEditProfileActivity.this,SET_BIRTHDAY);
+                    setBirthday.show(getFragmentManager(),"Welcome");
                     return;
                 case 2:
                     return;
@@ -163,6 +177,8 @@ public class EditProfileActivity extends ActionBarActivity {
         HELPER METODI
         !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
          */
+
+
 
         //uploadvane na profile pic v Backendless i updatevane na profila na protrebitelia
         // s patia kam profile kartinkata
@@ -291,7 +307,10 @@ public class EditProfileActivity extends ActionBarActivity {
         }
 
 
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
+        }
     }//Krai na internal list fragment
 
 }//krai celia klas

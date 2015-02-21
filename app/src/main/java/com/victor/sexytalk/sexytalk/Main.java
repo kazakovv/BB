@@ -127,7 +127,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
             //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //Load all relations for users (partners, etc)
-            /*
+/*
             List<String> rels = new ArrayList<String>();
             rels.add("*");
 
@@ -145,8 +145,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     }
                 });
 */
-
-
         }
 
         pager = (ViewPager) findViewById(R.id.pager);

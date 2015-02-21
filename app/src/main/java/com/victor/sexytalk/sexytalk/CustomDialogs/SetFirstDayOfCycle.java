@@ -53,7 +53,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View inflatedView = inflater.inflate(R.layout.set_first_day_of_cycle,null);
+        View inflatedView = inflater.inflate(R.layout.dialog_set_first_day_of_cycle,null);
 
         //vrazvam promenlivite
         datePicker = (DatePicker) inflatedView.findViewById(R.id.datePicker);
