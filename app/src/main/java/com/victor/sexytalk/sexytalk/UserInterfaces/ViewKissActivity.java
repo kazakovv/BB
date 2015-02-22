@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,6 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 
 public class ViewKissActivity extends ActionBarActivity {

@@ -1,17 +1,12 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -22,8 +17,10 @@ import com.backendless.BackendlessUser;
 import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ForgotPassword;
+import com.victor.sexytalk.sexytalk.Main;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.Helper;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

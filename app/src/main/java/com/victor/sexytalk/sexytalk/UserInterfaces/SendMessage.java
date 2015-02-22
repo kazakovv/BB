@@ -1,11 +1,10 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,16 +24,14 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.messaging.DeliveryOptions;
-import com.backendless.messaging.MessageStatus;
-import com.backendless.messaging.PublishOptions;
-import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
 import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
+import com.victor.sexytalk.sexytalk.Main;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.io.File;
 import java.io.IOException;

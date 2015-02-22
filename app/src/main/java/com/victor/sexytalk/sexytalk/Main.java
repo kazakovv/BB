@@ -3,7 +3,6 @@ package com.victor.sexytalk.sexytalk;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,9 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,6 +29,12 @@ import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
+import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
+import com.victor.sexytalk.sexytalk.UserInterfaces.EditProfileActivity;
+import com.victor.sexytalk.sexytalk.UserInterfaces.LoginActivity;
+import com.victor.sexytalk.sexytalk.UserInterfaces.SendMessage;
+import com.victor.sexytalk.sexytalk.UserInterfaces.SendTo;
+import com.victor.sexytalk.sexytalk.UserInterfacesSupport.PagerAdapterMain;
 
 
 import it.neokree.materialtabs.MaterialTab;

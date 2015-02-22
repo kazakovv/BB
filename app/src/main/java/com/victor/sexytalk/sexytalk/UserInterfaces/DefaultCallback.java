@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;

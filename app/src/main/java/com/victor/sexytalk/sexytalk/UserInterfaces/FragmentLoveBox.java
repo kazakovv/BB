@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 
 
@@ -13,11 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,8 +28,9 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterMessage;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
-
-import org.w3c.dom.Text;
+import com.victor.sexytalk.sexytalk.Main;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.ArrayList;
 import java.util.Calendar;

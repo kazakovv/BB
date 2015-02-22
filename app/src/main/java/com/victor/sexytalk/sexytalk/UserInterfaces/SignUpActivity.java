@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -16,6 +16,9 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.Main;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.Calendar;
 import java.util.Date;

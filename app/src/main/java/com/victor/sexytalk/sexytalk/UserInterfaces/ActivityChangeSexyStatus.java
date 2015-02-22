@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -14,7 +14,8 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 
 public class ActivityChangeSexyStatus extends ActionBarActivity {

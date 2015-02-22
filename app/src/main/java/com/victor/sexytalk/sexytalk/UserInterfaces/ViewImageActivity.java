@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterViewImage;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 
 public class ViewImageActivity extends ActionBarActivity {

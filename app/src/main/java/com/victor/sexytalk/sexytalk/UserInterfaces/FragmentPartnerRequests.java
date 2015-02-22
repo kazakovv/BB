@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterPartnerRequests;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.R;
 
 import java.util.List;
 

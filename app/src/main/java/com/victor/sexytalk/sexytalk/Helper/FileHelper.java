@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 
-import com.victor.sexytalk.sexytalk.ImageResizer;
 import com.victor.sexytalk.sexytalk.Statics;
 
 import org.apache.commons.io.IOUtils;

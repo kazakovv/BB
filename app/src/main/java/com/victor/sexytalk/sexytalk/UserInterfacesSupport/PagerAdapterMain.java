@@ -1,15 +1,13 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfacesSupport;
 
 import android.content.Context;
-import android.opengl.Visibility;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.MenuItem;
 
-import com.victor.sexytalk.sexytalk.FragmentLoveBox;
-import com.victor.sexytalk.sexytalk.FragmentLoveDays;
 import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.UserInterfaces.FragmentLoveBox;
+import com.victor.sexytalk.sexytalk.UserInterfaces.FragmentLoveDays;
 
 
 /**

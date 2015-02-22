@@ -14,7 +14,7 @@
         android:id="@+id/layoutFragmentLoveDays"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.victor.sexytalk.sexytalk.FragmentLoveDays">
+        tools:context="com.victor.sexytalk.sexytalk.UserInterfaces.FragmentLoveDays">
 
 
         <TextView
@@ -78,10 +78,9 @@
                 android:layout_height="@dimen/button_height"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_top_button"
-                android:background="@drawable/button_custom"
                 android:gravity="center"
                 android:text="@string/title_activity_sexy_calendar"
-                android:textColor="@color/color_white" />
+                style="@style/DefaultButton.SmallText" />
 
             <Button
                 android:id="@+id/showPrivateDaysDialog"
@@ -90,10 +89,9 @@
                 android:layout_alignParentBottom="true"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/margin_between_buttons"
-                android:background="@drawable/button_custom"
                 android:gravity="center"
                 android:text="@string/show_private_days_dialog_button"
-                android:textColor="@color/color_white" />
+                style="@style/DefaultButton.SmallText" />
 
 
         </LinearLayout>

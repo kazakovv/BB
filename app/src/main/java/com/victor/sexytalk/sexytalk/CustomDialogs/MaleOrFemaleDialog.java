@@ -6,19 +6,12 @@ import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.view.View;
-import android.widget.Button;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.victor.sexytalk.sexytalk.DefaultCallback;
-import com.victor.sexytalk.sexytalk.PagerAdapterMain;
+import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 

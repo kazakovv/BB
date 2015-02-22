@@ -10,14 +10,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.backendless.Backendless;
-import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
-import com.backendless.files.BackendlessFile;
-import com.victor.sexytalk.sexytalk.DefaultCallback;
 import com.victor.sexytalk.sexytalk.R;
-import com.victor.sexytalk.sexytalk.Statics;
 
 import java.io.File;
 import java.io.IOException;

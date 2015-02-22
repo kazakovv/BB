@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.squareup.timessquare.CalendarPickerView;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.ArrayList;
 import java.util.Calendar;

@@ -24,7 +24,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
-import com.victor.sexytalk.sexytalk.DefaultCallback;
+import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 import com.victor.sexytalk.sexytalk.Helper.CycleStage;
 import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
 import com.victor.sexytalk.sexytalk.R;

@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.victor.sexytalk.sexytalk.ViewKissActivity">
+    tools:context="com.victor.sexytalk.sexytalk.UserInterfaces.ViewKissActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

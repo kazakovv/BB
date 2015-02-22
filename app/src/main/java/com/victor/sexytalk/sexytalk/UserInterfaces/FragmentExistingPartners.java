@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -14,6 +14,8 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterExistingPartners;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.ArrayList;
 import java.util.List;

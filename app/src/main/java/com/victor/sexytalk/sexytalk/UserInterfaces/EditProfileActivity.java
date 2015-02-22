@@ -1,4 +1,4 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -32,11 +32,10 @@ import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
 import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
-import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
 import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
-
-import java.util.Calendar;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 
 public class EditProfileActivity extends ActionBarActivity {

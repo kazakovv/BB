@@ -1,7 +1,6 @@
-package com.victor.sexytalk.sexytalk;
+package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,6 +32,8 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
 import com.victor.sexytalk.sexytalk.Helper.CycleStage;
+import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.ArrayList;
 import java.util.Calendar;
