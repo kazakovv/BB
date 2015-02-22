@@ -39,18 +39,18 @@ public class CycleStage {
 
             if (days >= 0 && days <= 4) {
                 //bleeding
-                cyclePhaseMassage = context.getResources().getString(R.string.period_no_sex);
+                cyclePhaseMassage = context.getResources().getString(R.string.period_no_love_days);
             } else if (days > 4 && days < firstDayOfOvulation) {
                 //folicurar phase
                 // active energetic
-                cyclePhaseMassage = context.getResources().getString(R.string.period_sexy_days);
+                cyclePhaseMassage = context.getResources().getString(R.string.period_love_days);
             } else if (days >= firstDayOfOvulation && days <= lastDayOfOvulation) {
                 //ovulation
                 //sexy
                 cyclePhaseMassage = context.getResources().getString(R.string.period_baby_days);
             } else if (days > lastDayOfOvulation && days <= averageLengthOfCycle) {
                 //luteal
-                cyclePhaseMassage = context.getResources().getString(R.string.period_sexy_days);
+                cyclePhaseMassage = context.getResources().getString(R.string.period_love_days);
 
                 //TODO:tr da se opravi
             } else if (days > averageLengthOfCycle) {

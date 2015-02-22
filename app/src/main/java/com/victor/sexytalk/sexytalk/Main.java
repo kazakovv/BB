@@ -155,7 +155,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         pager.setAdapter(pAdapter);
 
         tabHost = (MaterialTabHost) this.findViewById(R.id.materialTabHost);
-
+        tabHost.setTextColor(mContext.getResources().getColor(R.color.tab_text_color));
 
         pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -175,6 +175,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
             }
         });
+
 
         // insert all tabs from pagerAdapter data
         for (int i = 0; i < pAdapter.getCount(); i++) {

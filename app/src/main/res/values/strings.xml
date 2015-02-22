@@ -149,8 +149,8 @@
     <string name="check_email_sign_up_message">Checking if the email address is already in use</string>
     <string name="email_in_use">This email is already in use</string>
     <string name="searching">Searching</string>
-    <string name="period_no_sex">Not Sexy Days</string>
-    <string name="period_sexy_days">Sexy Days</string>
+    <string name="period_no_love_days">No Love Days</string>
+    <string name="period_love_days">Love Days</string>
     <string name="period_baby_days">Baby Days</string>
     <string name="sub_title_remaining_days">Remaining days in this period</string>
     <string name="sexyCalendar_needs_updating_message">Sexy Calendar needs to be updated</string>

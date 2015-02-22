@@ -75,7 +75,7 @@ protected TextView mCycleTitle;
         if(days >= 0 && days <= 4 ) { //obshto 5 dena of bleeding
             //bleeding
             //bleeding trae 5 dena! broi se i day 0 do 4
-            mCycleTitle.setText(R.string.period_no_sex);
+            mCycleTitle.setText(R.string.period_no_love_days);
             int lastDay = 4 - days ;
 
             //dateToBeAdded.add(Calendar.DAY_OF_MONTH,lastDay);
@@ -91,7 +91,7 @@ protected TextView mCycleTitle;
         } else if (days > 4 && days < firstDayOfOvulation ) {
             //folicurar phase
             // active energetic
-            mCycleTitle.setText(R.string.period_sexy_days);
+            mCycleTitle.setText(R.string.period_love_days);
 
             //dobaviame vsichki dati m/u
             for(int i = (days+1); i < firstDayOfOvulation; i++) {
@@ -112,7 +112,7 @@ protected TextView mCycleTitle;
         } else if (days >= lastDayOfOvulation && days <= averageCycleLength) {
             //luteal
             //dobaviame vsichki dati m/u
-            mCycleTitle.setText(R.string.period_sexy_days);
+            mCycleTitle.setText(R.string.period_love_days);
 
             for(int i = (days+1); i <= averageCycleLength; i++) {
                 dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
