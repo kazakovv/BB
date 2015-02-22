@@ -55,6 +55,7 @@ public class CycleStage {
                 //TODO:tr da se opravi
             } else if (days > averageLengthOfCycle) {
                 //tr da se updatene
+
                 cyclePhaseMassage = context.getResources().getString(R.string.sexyCalendar_needs_updating_message);
 
 

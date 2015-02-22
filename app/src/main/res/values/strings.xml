@@ -96,7 +96,7 @@
     <string name="general_server_error">Sorry, there was a server error</string>
     <string name="partner_hasnt_updated_calendar">has not updated her calendar</string>
     <string name="general_calendar_error">Please update your Private Days calendar</string>
-    <string name="fragment_love_days_generic_title">Private Days calendar needs to be updated</string>
+    <string name="fragment_love_days_generic_title">Please update your private days to start using all of SexyTalk\'s functions</string>
     <string name="no_partners_message">Add your partners to start using SexyTalk</string>
     <string name="no_partners_found">No partners were found</string>
     <string name="edit_partners_search_button">Search</string>
@@ -138,7 +138,7 @@
     <string name="sexy_calendar_default_message_guys">is a guy</string>
     <string name="love_message_title">Today\'s love message from</string>
     <string name="first_day_of_cycle_before_average_cycle_length">Select a date that does not exceed your average cycle length</string>
-    <string name="change_sexy_status_hint">Tell everyone how you feel</string>
+    <string name="change_sexy_status_hint">Tell your partner how you feel</string>
     <string name="empty_sexy_status">Enter your status first</string>
     <string name="error_updating_status">Error updating your status. Please try again.</string>
     <string name="saving_message">Saving...</string>
