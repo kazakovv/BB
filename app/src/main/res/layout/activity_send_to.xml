@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layoutSendTo"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -9,22 +10,37 @@
         android:id="@+id/toolbar"
         layout="@layout/app_toolbar" />
 
+    <!-- ne moga da go napravia da e po sredata-->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:layout_centerHorizontal="true"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/progress_bar_margin_top"
+        android:visibility="gone"
+
+        />
+
+
     <TextView
         android:id="@+id/emptyMessageSendTo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar"
-        android:text="@string/no_exisiting_partners_message" />
+        android:text="@string/no_existing_partners_message" />
 
     <ListView
-        android:layout_below="@+id/toolbar"
         android:id="@android:id/list"
-        android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/toolbar"
+        android:scrollbars="vertical"
 
         />
-
 
 
 </RelativeLayout>

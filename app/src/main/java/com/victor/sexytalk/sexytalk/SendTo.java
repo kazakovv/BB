@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,6 +46,7 @@ public class SendTo extends ActionBarActivity {
     protected static boolean isTextMessage;
     protected MenuItem mRefreshPartners;
     protected static MenuItem sendOk;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,18 +98,30 @@ public class SendTo extends ActionBarActivity {
             case R.id.action_refresh:
                 //tarsim dali ima dobaveni partniori, koito ne izlizat v spisaka
                 mListView = fragment.getListView();
+                final MenuItem refreshButton = item;
+
                 final TextView emptyMessage = fragment.mEmptyMessage;
                 String whereClause = "email='" + mCurrentUser.getEmail() + "'";
                 BackendlessDataQuery dataQuery = new BackendlessDataQuery();
                 dataQuery.setWhereClause(whereClause);
-                //
-                String message = mContext.getResources().getString(R.string.searching);
+
+                //skirvame list i pokazvame progress bar
+                fragment.progressBar.setVisibility(View.VISIBLE);
+                fragment.mEmptyMessage.setVisibility(View.GONE);
+                fragment.mSendToList.setVisibility(View.GONE);
+                refreshButton.setEnabled(false);
+
                 Backendless.Data.of(BackendlessUser.class).find(dataQuery,
-                        new DefaultCallback<BackendlessCollection<BackendlessUser>>(mContext,message) {
+                        new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
                     @Override
                     public void handleResponse(BackendlessCollection<BackendlessUser> partners) {
-                        super.handleResponse(partners);
                       if  (partners.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                          //pokazvame list i skrivame progress bar
+                          fragment.progressBar.setVisibility(View.GONE);
+                          fragment.mEmptyMessage.setVisibility(View.VISIBLE);
+                          fragment.mSendToList.setVisibility(View.VISIBLE);
+                          refreshButton.setEnabled(true);
+
                           //updatevame adaptora s partniorite
                             BackendlessUser[] newPartners = (BackendlessUser[]) partners.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
                          //dobaviame lokalno
@@ -117,14 +132,24 @@ public class SendTo extends ActionBarActivity {
                           mListView.setOnItemClickListener(fragment.onItemClickList);
                           mListView.setAdapter(adapter);
                       } else {
-                        //niama namereni partniori
+                          //pokazvame list i skrivame progress bar
+                          fragment.progressBar.setVisibility(View.GONE);
+                          fragment.mEmptyMessage.setVisibility(View.VISIBLE);
+                          fragment.mSendToList.setVisibility(View.VISIBLE);
+                          refreshButton.setEnabled(true);
+                          //niama namereni partniori
                           Toast.makeText(mContext,R.string.no_partners_found,Toast.LENGTH_LONG).show();
                       }
                     }
 
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
-                        super.handleFault(backendlessFault);
+                        //pokazvame list i skrivame progress bar
+                        fragment.progressBar.setVisibility(View.GONE);
+                        fragment.mEmptyMessage.setVisibility(View.VISIBLE);
+                        fragment.mSendToList.setVisibility(View.VISIBLE);
+                        refreshButton.setEnabled(true);
+
                         Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
                     }
                 });
@@ -145,17 +170,17 @@ public class SendTo extends ActionBarActivity {
         !!!!!!!!!!!!!!!!!!!!!!!!!!!
          */
     public static class FragmentSendTo extends ListFragment {
-        protected BackendlessUser[] mPartners;
-        protected BackendlessUser mCurrentUser;
-        protected ArrayList<Integer> mSendTo;
-        protected ArrayList<String> mRecepientUserNames;
-        protected ArrayList<String> mRecepientEmails;
-        protected ArrayList<String> mDeviceIds;
-        protected TextView mEmptyMessage;
-        protected Toolbar toolbar;
+            protected BackendlessUser[] mPartners;
+            protected BackendlessUser mCurrentUser;
+            protected ArrayList<Integer> mSendTo;
+            protected ArrayList<String> mRecepientUserNames;
+            protected ArrayList<String> mRecepientEmails;
+            protected ArrayList<String> mDeviceIds;
+            protected Toolbar toolbar;
 
-        protected ListView mSendToList;
-
+            protected TextView mEmptyMessage;
+            protected ListView mSendToList;
+            protected ProgressBar progressBar;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -163,6 +188,7 @@ public class SendTo extends ActionBarActivity {
             toolbar = (Toolbar) inflatedView.findViewById(R.id.toolbar);
             toolbar.setNavigationIcon(R.drawable.ic_action_back);
             mEmptyMessage = (TextView) inflatedView.findViewById(R.id.emptyMessageSendTo);
+            progressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
 
             ((SendTo) getActivity()).setSupportActionBar(toolbar);
 
