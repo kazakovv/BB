@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ import java.util.List;
  */
 public class FragmentSearchPartners extends ListFragment {
     protected EditText searchField;
-    protected Button searchButton;
+    protected ImageButton searchButton;
     protected TextView emptyMessage;
     protected List<BackendlessUser> foundUsers;
     protected ArrayList<Integer> selectedUsers;
@@ -45,7 +46,7 @@ public class FragmentSearchPartners extends ListFragment {
        View inflatedView = inflater.inflate(R.layout.fragment_fragment_search_partners, container, false);
         //vrazvame promenlivite
         searchField = (EditText) inflatedView.findViewById(R.id.searchField);
-        searchButton = (Button) inflatedView.findViewById(R.id.searchButton);
+        searchButton = (ImageButton) inflatedView.findViewById(R.id.searchButton);
         emptyMessage = (TextView) inflatedView.findViewById(R.id.emptyMessage);
         emptyMessage.setText(""); //za da ne izkarva saobshtenie ot nachalo
 

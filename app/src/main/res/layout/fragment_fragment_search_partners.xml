@@ -17,14 +17,17 @@
         android:layout_toLeftOf="@+id/searchButton"
         android:layout_toStartOf="@+id/searchButton" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/edit_partners_search_button"
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_action_search"
         android:id="@+id/searchButton"
         android:layout_alignTop="@+id/searchField"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        style="@style/DefaultButton"
+        android:background="@drawable/button_round"
+        />
 
     <TextView
         android:id="@+id/emptyMessage"

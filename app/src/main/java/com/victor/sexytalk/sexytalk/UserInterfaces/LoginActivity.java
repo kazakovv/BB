@@ -182,17 +182,12 @@ public class LoginActivity extends Activity {
 
                                         @Override
                                         public void handleFault(BackendlessFault backendlessFault) {
-                                            String error = backendlessFault.getMessage();
-                                            Log.d("Vic","error");
                                         }
                                     });
                                 }
 
                                 @Override
                                 public void handleFault(BackendlessFault backendlessFault) {
-                                    String error = backendlessFault.getMessage();
-                                    Toast.makeText(LoginActivity.this, "fault", Toast.LENGTH_LONG).show();
-                                    Log.d("Vic", "token");
 
                                 }
                             });
@@ -208,7 +203,6 @@ public class LoginActivity extends Activity {
                 @Override
                 public void handleFault(BackendlessFault backendlessFault) {
                     //TODO handle fault
-                    Log.d("Vic", "device not registered " + backendlessFault.getMessage());
                 }
             });
 
