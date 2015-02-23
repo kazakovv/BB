@@ -29,7 +29,9 @@
     <dimen name="progress_bar_margin_top">220dp</dimen>
     <dimen name="default_button_text_size">18sp</dimen>
     <dimen name="default_button_small_text_size">15sp</dimen>
-    <dimen name="round_button_height">20dp</dimen>
-    <dimen name="round_button_width">20dp</dimen>
+
+    <dimen name="round_button_height">45dp</dimen>
+    <dimen name="round_button_width">45dp</dimen>
+    <dimen name="round_button_radius">10dp</dimen>
 
 </resources>

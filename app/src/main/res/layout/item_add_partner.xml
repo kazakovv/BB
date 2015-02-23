@@ -27,12 +27,13 @@
         android:layout_toRightOf="@+id/thumbnail_partner"
         android:layout_toEndOf="@+id/thumbnail_partner" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/partner_search_list_button"
+    <ImageButton
+        android:layout_width="@dimen/round_button_width"
+        android:layout_height="@dimen/round_button_height"
+        android:src="@drawable/ic_action_add"
         android:id="@+id/addPartnerButton"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/button_round"/>
 </RelativeLayout>

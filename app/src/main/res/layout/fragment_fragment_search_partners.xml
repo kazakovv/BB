@@ -18,8 +18,8 @@
         android:layout_toStartOf="@+id/searchButton" />
 
     <ImageButton
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/round_button_width"
+        android:layout_height="@dimen/round_button_height"
         android:src="@drawable/ic_action_search"
         android:id="@+id/searchButton"
         android:layout_alignTop="@+id/searchField"
