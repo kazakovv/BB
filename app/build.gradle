@@ -21,7 +21,6 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':backendless')
     compile project(':commons-io-2.4')
     compile project(':picasso-2.3.4')
     compile 'com.android.support:support-v4:21.0.3'
@@ -30,4 +29,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:21.0.3'
     compile 'com.android.support:cardview-v7:21.0.3'
     compile project(':times-square')
+    compile project(':backendless')
 }
