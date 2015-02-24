@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +52,7 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                 holder = new ViewHolder();
                 holder.nameLabel = (TextView) convertView.findViewById(R.id.partnerUsername);
                 holder.iconImageView = (ImageView) convertView.findViewById(R.id.thumbnail_partner);
-                holder.deletePartnerButton = (Button) convertView.findViewById(R.id.deletePartnerButton);
+                holder.deletePartnerButton = (ImageButton) convertView.findViewById(R.id.deletePartnerButton);
                 convertView.setTag(holder);
 
             } else {
@@ -185,7 +186,7 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
     private static class ViewHolder {
         ImageView iconImageView;
         TextView nameLabel;
-        Button deletePartnerButton;
+        ImageButton deletePartnerButton;
     }
 
 

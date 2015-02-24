@@ -27,21 +27,24 @@
         android:layout_toRightOf="@+id/thumbnail_partner"
         android:layout_toEndOf="@+id/thumbnail_partner" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pending_partner_request_accept_button"
+    <ImageButton
+        android:layout_width="@dimen/round_button_width"
+        android:layout_height="@dimen/round_button_height"
+        android:src="@drawable/ic_action_accept"
         android:id="@+id/acceptPartnerButton"
         android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/default_padding"
         android:layout_toLeftOf="@+id/rejectPartnerButton"
-        android:layout_toStartOf="@+id/rejectPartnerButton" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pending_partner_request_reject_button"
+        android:layout_toStartOf="@+id/rejectPartnerButton"
+        android:background="@drawable/button_round"/>
+    <ImageButton
+        android:layout_width="@dimen/round_button_width"
+        android:layout_height="@dimen/round_button_height"
+        android:src="@drawable/ic_action_remove"
         android:id="@+id/rejectPartnerButton"
         android:layout_alignTop="@+id/acceptPartnerButton"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/button_round"/>
 </RelativeLayout>

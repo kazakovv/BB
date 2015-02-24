@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,8 +50,8 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
             holder = new ViewHolder();
             holder.nameLabel = (TextView) convertView.findViewById(R.id.partnerUsername);
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.thumbnail_partner);
-            holder.buttonAccceptPartner = (Button) convertView.findViewById(R.id.acceptPartnerButton);
-            holder.buttonRejectPartner = (Button) convertView.findViewById(R.id.rejectPartnerButton);
+            holder.buttonAccceptPartner = (ImageButton) convertView.findViewById(R.id.acceptPartnerButton);
+            holder.buttonRejectPartner = (ImageButton) convertView.findViewById(R.id.rejectPartnerButton);
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -218,7 +219,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
     private static class ViewHolder {
         ImageView iconImageView;
         TextView nameLabel;
-        Button buttonAccceptPartner;
-        Button buttonRejectPartner;
+        ImageButton buttonAccceptPartner;
+        ImageButton buttonRejectPartner;
     }
 }
