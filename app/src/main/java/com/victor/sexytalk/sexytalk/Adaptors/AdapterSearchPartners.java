@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,19 +29,19 @@ import java.util.List;
 public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
 
     protected Context mContext;
-    protected List<BackendlessUser> mPartners;
+    protected List<BackendlessUser> mFoundUsers;
     protected BackendlessUser mCurrentUser;
 
     public AdapterSearchPartners(Context context, List<BackendlessUser> partners, BackendlessUser currentUser) {
         super(context, R.layout.item_add_partner, partners);
         mContext = context;
-        mPartners = partners;
+        mFoundUsers = partners;
         mCurrentUser = currentUser;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null || convertView.getTag() == null ) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_add_partner, null);
             holder = new ViewHolder();
@@ -53,18 +52,39 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        BackendlessUser partner = mPartners.get(position);
-        holder.nameLabel.setText( partner.getProperty(Statics.KEY_USERNAME).toString());
+        BackendlessUser partner = mFoundUsers.get(position);
+        holder.nameLabel.setText(partner.getProperty(Statics.KEY_USERNAME).toString());
 
         holder.buttonAddPartner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check dali ne se opitva da dobavi sebe si
+                if(mFoundUsers.get(position).getEmail().equals(mCurrentUser.getEmail())){
+                    Toast.makeText(mContext,R.string.toast_cannot_add_yourself_as_partner,Toast.LENGTH_LONG).show();
+
+                    return;
+                }
+
+                //check dali ne se opitva da dobavi veche sastestvuvasht partner
+                if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[] ) {
+                    BackendlessUser[] existingPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+                    for(BackendlessUser partner : existingPartners) {
+                        if(mFoundUsers.get(position).getEmail().equals(partner.getEmail())) {
+                            String message = mFoundUsers.get(position).getProperty(Statics.KEY_USERNAME) + " "
+                                    + mContext.getResources().getString(R.string.user_already_partner);
+
+                            Toast.makeText(mContext, message,Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                }
+
                 sendPartnerRequest(position);
             }
         });
 
         //zarezdame profile pic, ako ima takava
-        BackendlessUser partnerSearch = mPartners.get(position);
+        BackendlessUser partnerSearch = mFoundUsers.get(position);
         if(partnerSearch.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
             String existingProfilePicPath = (String) partnerSearch.getProperty(Statics.KEY_PROFILE_PIC_PATH);
             Picasso.with(mContext)
@@ -94,7 +114,7 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
         //2. Izprashtame push message, che ima pending partner request na saotvetnia user
 
 
-        final BackendlessUser selectedPartner = mPartners.get(selectedPartnerPosition);
+        final BackendlessUser selectedPartner = mFoundUsers.get(selectedPartnerPosition);
 
         //izprashtame request da si stanem partniori
         PartnersAddRequest partnerToAdd = new PartnersAddRequest();
@@ -120,10 +140,12 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
                     @Override
                     public void handleResponse(MessageStatus messageStatus) {
                         //iztrivame rezultata ot spisaka i refreshvame spisaka
-                        mPartners.remove(selectedPartnerPosition);
+                        mFoundUsers.remove(selectedPartnerPosition);
                         notifyDataSetChanged();
+
                         Toast.makeText(mContext,
-                                R.string.partner_request_sent_toast, Toast.LENGTH_LONG).show();                            }
+                                R.string.partner_request_sent_toast, Toast.LENGTH_LONG).show();
+                    }
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
                         //TODO:tr da se promeni saobshtenieto. Izpratili sme tablicata, no ne push message
@@ -136,6 +158,7 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
                 Toast.makeText(mContext,
                         R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();
             }
+
         });
 
     }

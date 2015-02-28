@@ -176,6 +176,8 @@
     <string name="recovery_email_sent_dialog">We sent you an email with instructions how to recover your password</string>
     <string name="title_recovery_password_dialog">Email sent</string>
     <string name="email_not_found">User with this email address does not exist</string>
+    <string name="toast_cannot_add_yourself_as_partner">You can\'t add yourself as partner</string>
+    <string name="user_already_partner">is already your partner</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
