@@ -156,6 +156,7 @@
     <string name="sexyCalendar_needs_updating_message">Sexy Calendar needs to be updated</string>
     <string name="sexyCalendar_error_message">Sorry, there is a Sexy Calendar error</string>
     <string name="love_message_more_than_1_recipient">You can send your love message to only one partner at a time</string>
+    <string name="kiss_message_more_than_1_recipient">You can send a kiss to only one partner at a time</string>
     <string name="sending_sexy_calendar_update_to_partners_dialog_message">Sending Sexy Calendar update</string>
     <string name="no_partners_error">You do not have any partners</string>
     <string name="refresh_partner">Refresh partner</string>

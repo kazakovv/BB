@@ -278,13 +278,18 @@ public class SendTo extends ActionBarActivity {
                     //cakame v/u partior, koito ne e izbran oshte
 
                     //check kolko partionri sme izbrali. Ako e izbran poveche ot 1 partnior, otbroiavaneto za 24chasa ne raboti
+                    //otbroiavaneot za celuvkite sashto ne raboti
                     //parviat, koito otvori sabshtenieto startira broiacha
-                    if (isTextMessage == true) {
+
                         if (mSendTo.size() > 0) {
-                            Toast.makeText(getActivity(), R.string.love_message_more_than_1_recipient, Toast.LENGTH_LONG).show();
+                            if(isTextMessage == true) {
+                                Toast.makeText(getActivity(), R.string.love_message_more_than_1_recipient, Toast.LENGTH_LONG).show();
+                            } else {
+                                Toast.makeText(getActivity(), R.string.kiss_message_more_than_1_recipient, Toast.LENGTH_LONG).show();
+                            }
                             return;
                         }
-                    }
+
 
                     sendYesNoCheckBox.setChecked(true);
                     mSendTo.add(position);
