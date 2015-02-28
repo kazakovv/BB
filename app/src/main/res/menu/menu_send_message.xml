@@ -30,6 +30,7 @@
     android:id="@+id/action_send"
     android:orderInCategory="100"
     android:showAsAction="always"
+    android:icon="@drawable/ic_action_send_now"
     android:title="@string/recipients_send_button_action_bar"
     android:visible="true"
     app:showAsAction="always"/>

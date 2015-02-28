@@ -1,10 +1,12 @@
 package com.victor.sexytalk.sexytalk.UserInterfaces;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.backendless.Backendless;
@@ -28,6 +30,8 @@ public class FragmentExistingPartners extends ListFragment {
     BackendlessUser mCurrentUser;
     List<BackendlessUser> mExistingPartners;
     TextView emptyMessage;
+    Context mContext;
+    ListView mListview;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +41,7 @@ public class FragmentExistingPartners extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_fragment_existing_partners,container,false);
         emptyMessage = (TextView) inflatedView.findViewById(R.id.noExistingPartnersMessage);
+        mContext = inflatedView.getContext();
         return inflatedView;
     }
 
@@ -47,6 +52,7 @@ public class FragmentExistingPartners extends ListFragment {
         if (Backendless.UserService.CurrentUser() != null) {
             mCurrentUser = Backendless.UserService.CurrentUser();
         }
+        mListview = getListView();
         if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
             //imama partniori
             BackendlessUser[] existingPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
@@ -57,8 +63,8 @@ public class FragmentExistingPartners extends ListFragment {
             }
 
             AdapterExistingPartners adapter =
-                    new AdapterExistingPartners(getListView().getContext(),mExistingPartners, mCurrentUser);
-            getListView().setAdapter(adapter);
+                    new AdapterExistingPartners(mContext,mExistingPartners, mCurrentUser);
+            mListview.setAdapter(adapter);
 
             //updatevame list s partniori za vzeki sluchai. Tova se izkarva sled kato veche sme zaredili parvonachalnia spisak
             String whereClause = "email='" + mCurrentUser.getEmail() + "'";
@@ -79,8 +85,8 @@ public class FragmentExistingPartners extends ListFragment {
                         mCurrentUser.setProperty(Statics.KEY_PARTNERS,newListWithPartners);
                         //zarezdame spisakat nanovo
                         AdapterExistingPartners adapter =
-                                new AdapterExistingPartners(getListView().getContext(),newPartners, mCurrentUser);
-                        getListView().setAdapter(adapter);
+                                new AdapterExistingPartners(mContext,newPartners, mCurrentUser);
+                        mListview.setAdapter(adapter);
 
                     }
                 }

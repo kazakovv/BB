@@ -385,11 +385,7 @@ public class FragmentLoveDays extends Fragment {
                 cyclePhaseTitle.setText(" ");
                 cyclePhaseStatus.setText(message);
             }
-
-
         }//krai na if statement maz ili zhena
-
-
     }
 
     private void restoreValuesForLoggedInUser() {

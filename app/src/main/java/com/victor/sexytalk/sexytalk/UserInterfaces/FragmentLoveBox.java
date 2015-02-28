@@ -3,6 +3,8 @@ package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -68,7 +70,9 @@ public class FragmentLoveBox extends ListFragment {
         mFragmentLoveBoxLayout = (FrameLayout) rootView.findViewById(R.id.loveBoxLayout);
 
         setHasOptionsMenu(true);
-
+        //TODO zadavame cveta na progres bar
+        //mProgressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#D81B60"),
+        //        android.graphics.PorterDuff.Mode.MULTIPLY);
         return rootView;
     }
     //refresh listener za updatevane na tova dali ima novi saobstehnia

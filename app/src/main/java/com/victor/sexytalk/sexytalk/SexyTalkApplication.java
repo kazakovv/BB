@@ -26,7 +26,7 @@ public class SexyTalkApplication extends Application {
         Backendless.initApp(this,appID,sectetKey,appVersion);
 
 
-        Backendless.Data.mapTableToClass("Users", BackendlessUser.class);
+        //Backendless.Data.mapTableToClass("Users", BackendlessUser.class);
         //Backendless.Data.mapTableToClass("PartnersAddRequest",BackendlessUser.class);
 
 

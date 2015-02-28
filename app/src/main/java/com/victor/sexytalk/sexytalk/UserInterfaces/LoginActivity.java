@@ -86,6 +86,7 @@ public class LoginActivity extends Activity {
                             new DefaultCallback<BackendlessUser>(LoginActivity.this, progressSignInMessage) {
                         @Override
                         public void handleResponse(BackendlessUser backendlessUser) {
+                            BackendlessUser test = backendlessUser;
                             //Register device for push notifications
                             registerDeviceForPush(backendlessUser);
 

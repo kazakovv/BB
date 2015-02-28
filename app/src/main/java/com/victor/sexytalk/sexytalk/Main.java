@@ -58,7 +58,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -90,7 +89,8 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             //register device for push notifications
             final String channel = mCurrentUser.getEmail();
 
-
+            //TODO!!!!!!! causing a lot of polling requests
+            /*
             //subscribe to the channel, za da poluchvam saobshtenia
             Backendless.Messaging.subscribe(channel,
                     new AsyncCallback<List<Message>>() {
@@ -100,7 +100,8 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                                 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                 !!!!tuk se obrabotvat pristignalite saobshtenia!!!!
                                 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                 */
+                                 TODO tuk tr da se zatvori gornia komment
+
                                 String publisherId = message.getPublisherId();
                                 if (message.getData().equals(Statics.KEY_PARTNER_REQUEST)) {
                                     //pokazvame butona za dobaviane na nov partnior
@@ -127,7 +128,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     }
             );
 
-
+*/
             //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             //Load all relations for users (partners, etc)
 /*
@@ -314,8 +315,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                             SendPushMessage.sendPush(device, channel, mContext, Statics.TYPE_KISS);
                             i++;
                         }
-
-
                         Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_successful), Toast.LENGTH_LONG).show();
                     }
 
@@ -327,9 +326,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     }
                 });
 
-
-            } else if (resultCode != RESULT_CANCELED) {
-                Toast.makeText(this, R.string.general_error_message, Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -352,8 +348,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             /*
             HELPER METODI
              */
-
-
 
     protected void checkForPendingParnerRequests() {
 
@@ -460,7 +454,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                                 }
                             });
                         }
-
                     }
 
                     @Override

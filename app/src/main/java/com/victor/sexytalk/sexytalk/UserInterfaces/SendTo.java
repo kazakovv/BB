@@ -224,6 +224,8 @@ public class SendTo extends ActionBarActivity {
             mRecepientUserNames = new ArrayList<String>();
             mDeviceIds = new ArrayList<String>();
 
+            /*
+            TODO ZABIVA AKO ZATVORIM PROZORECA BARZO
             //puskame da updatene parniorite v background
             String whereClause = "email='" + mCurrentUser.getEmail() + "'";
             BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -249,6 +251,7 @@ public class SendTo extends ActionBarActivity {
                     //niama kakvo da napravim, ako varne greshka
                 }
             });
+            */
         }
 
         //onItem click listener za list
