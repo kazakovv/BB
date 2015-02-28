@@ -18,6 +18,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.MessageStatus;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -66,7 +67,10 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
         BackendlessUser partnerSearch = mPartners.get(position);
         if(partnerSearch.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
             String existingProfilePicPath = (String) partnerSearch.getProperty(Statics.KEY_PROFILE_PIC_PATH);
-            Picasso.with(mContext).load(existingProfilePicPath).into(holder.iconImageView);
+            Picasso.with(mContext)
+                    .load(existingProfilePicPath)
+                    .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS, 0))
+                    .into(holder.iconImageView);
         }
 
 

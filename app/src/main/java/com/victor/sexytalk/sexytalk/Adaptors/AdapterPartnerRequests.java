@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,9 +16,9 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.messaging.MessageStatus;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -36,7 +35,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
     public AdapterPartnerRequests(Context context, List<PartnersAddRequest> pendingPartnerRequests,
                                   BackendlessUser currentUser) {
-        super(context, R.layout.partner_request_item, pendingPartnerRequests);
+        super(context, R.layout.item_partner_request, pendingPartnerRequests);
         mContext = context;
         mPendingPartnerRequests = pendingPartnerRequests;
         mCurrentUser = currentUser;
@@ -46,7 +45,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
     public View getView(final int position, View convertView, final ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null || convertView.getTag() == null ) {
-            convertView = LayoutInflater.from(mContext).inflate(R.layout.partner_request_item, null);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_partner_request, null);
             holder = new ViewHolder();
             holder.nameLabel = (TextView) convertView.findViewById(R.id.partnerUsername);
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.thumbnail_partner);
@@ -64,7 +63,9 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
         BackendlessUser userRequesting = mPendingPartnerRequests.get(position).getUserRequesting();
         if(userRequesting.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
             String existingProfilePicPath = (String) userRequesting.getProperty(Statics.KEY_PROFILE_PIC_PATH);
-            Picasso.with(mContext).load(existingProfilePicPath).into(holder.iconImageView);
+            Picasso.with(mContext).load(existingProfilePicPath)
+                    .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS, 0))
+                    .into(holder.iconImageView);
         }
             //onClick za accept butona
             holder.buttonAccceptPartner.setOnClickListener(new View.OnClickListener() {
