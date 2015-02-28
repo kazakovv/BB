@@ -17,7 +17,9 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.squareup.picasso.Picasso;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.KissesCount;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.Helper.CreateKissTables;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -76,6 +78,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                     //3. uploadvame v backendless novia spisak s partniorite za tekushtia potrebitel
                     //4. uploadvame v backendless novai spisak s partniorite za potrebitel, koito izprashta partner request
                     //5. iztrivame pending request
+                    //6. sazdavame tablica za broia celuvki
 
                     //1.Namirame partniorite na tekushtia potrebitel
                     // i sazdavame nov massiv sas spisak ot partniori za tekushtia potrebitel
@@ -159,7 +162,9 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                                     mPendingPartnerRequests.remove(position);
                                                     notifyDataSetChanged();
                                                     Toast.makeText(mContext,R.string.new_partner_added_successfully,Toast.LENGTH_LONG).show();
-
+                                                        //6. sazdavame 2 reda za broia celuvki
+                                                    CreateKissTables.createTables(mCurrentUser,mUserRequesting);
+                                                    CreateKissTables.createTables(mUserRequesting,mCurrentUser);
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
                                                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111

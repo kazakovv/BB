@@ -162,6 +162,7 @@ public class FragmentLoveBox extends ListFragment {
         String messageType = message.getMessageType();
         String loveMessage =  message.getLoveMessage();
         String usernameSender = message.getSenderUsername();
+        int kissNumber = message.getKissNumber();
 
         String fileUrl = "";
 
@@ -234,6 +235,8 @@ public class FragmentLoveBox extends ListFragment {
             //otvariame kiss message
             Intent intent = new Intent(getActivity(),ViewKissActivity.class);
             intent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            intent.putExtra(Statics.KEY_USERNAME_SENDER,message.getSenderUsername());
+            intent.putExtra(Statics.KEY_NUMBER_OF_KISSES,kissNumber);
             startActivity(intent);
 
             //delete the kiss

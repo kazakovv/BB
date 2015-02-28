@@ -25,9 +25,11 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.Message;
 
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.KissesCount;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.Helper.CreateKissTables;
 import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
 import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 import com.victor.sexytalk.sexytalk.UserInterfaces.EditProfileActivity;
@@ -269,7 +271,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         super.onActivityResult(requestCode, resultCode, data);
         //tuk se izprashta push message sled cakane za izprashtane na celuvka
 
-        String user = (String) mCurrentUser.getProperty(Statics.KEY_USERNAME);
+        final String user = (String) mCurrentUser.getProperty(Statics.KEY_USERNAME);
         if (resultCode == RESULT_OK) {
             if (requestCode == ACTIVITY_SEND_TO) {
 
@@ -292,43 +294,118 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         emailsOfRecepients += ","; //dobaviame zapetaia ako ima oshte recepients
                     }
                 }
+
+
                 //message
-                String someoneSendsYouAKiss = user + " " + getString(R.string.send_a_kiss_message);
+                //1. parvo tarsim kolko celuvki sa izprateni veche
+                //2. sastaviame kiss i go izprashtame
+                //3. uvelichavame broia na izpratenite celuvki
 
-                //sazdavame saobshtenieto
-                final Messages kissMessage = new Messages();
-                kissMessage.setMessageType(Statics.TYPE_KISS);
-                kissMessage.setLoveMessage(someoneSendsYouAKiss);
-                kissMessage.setRecepientEmails(emailsOfRecepients);
-                kissMessage.setSederUsername((String) Backendless.UserService.CurrentUser().getProperty(Statics.KEY_USERNAME));
-                kissMessage.setSender(Backendless.UserService.CurrentUser());
-
-
-                //i go izprashtame
-                Backendless.Persistence.of(Messages.class).save(kissMessage, new AsyncCallback<Messages>() {
+                //1. TARSIM BROI CELUVKI, KOITO SA IZPRATENI DOSEGA
+                BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+                String whereClause = "senderEmail='" + mCurrentUser.getEmail() + "'" + " AND "
+                                    + "receiverEmail='" + recepientEmails.get(0) +"'";
+                dataQuery.setWhereClause(whereClause);
+                final String finalEmailsOfRecepients = emailsOfRecepients;
+                Backendless.Data.of(KissesCount.class).find(dataQuery, new AsyncCallback<BackendlessCollection<KissesCount>>() {
                     @Override
-                    public void handleResponse(Messages messages) {
-                        //send push message
-                        int i = 0;
-                        for (String device : deviceIds) {
-                            String channel = recepientEmails.get(i); //kanalat e email na poluchatelia
-                            SendPushMessage.sendPush(device, channel, mContext, Statics.TYPE_KISS);
-                            i++;
+                    public void handleResponse(final BackendlessCollection<KissesCount> kissesSent) {
+
+                        int kissesSentAlready = 0;
+                        //check dali veche sme prashtali celuvki
+                        if(kissesSent.getCurrentPage().size() > 0) {
+                            kissesSentAlready  = kissesSent.getCurrentPage().get(0).getNumberOfKisses();
                         }
-                        Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_successful), Toast.LENGTH_LONG).show();
-                    }
+                        final int kissNumber;
+                        if (kissesSentAlready > 0) {
+                           kissNumber = kissesSentAlready + 1;
+                        } else {
+                            kissNumber = 1;
+                        }
+
+                        //2. IZPRASHTAME KISS SAOBSHTENIETO
+
+                        String someoneSendsYouAKiss = user + " " + getString(R.string.send_a_kiss_message);
+
+                        //sazdavame saobshtenieto
+                        final Messages kissMessage = new Messages();
+                        kissMessage.setMessageType(Statics.TYPE_KISS);
+                        kissMessage.setLoveMessage(someoneSendsYouAKiss);
+                        kissMessage.setRecepientEmails(finalEmailsOfRecepients);
+                        kissMessage.setSederUsername((String) Backendless.UserService.CurrentUser().getProperty(Statics.KEY_USERNAME));
+                        kissMessage.setSender(Backendless.UserService.CurrentUser());
+                        kissMessage.setKissNumber(kissNumber);
+
+
+                        //i go izprashtame
+                        Backendless.Persistence.of(Messages.class).save(kissMessage, new AsyncCallback<Messages>() {
+                            @Override
+                            public void handleResponse(Messages messages) {
+                                //send push message
+                                int i = 0;
+                                for (String device : deviceIds) {
+                                    String channel = recepientEmails.get(i); //kanalat e email na poluchatelia
+                                    SendPushMessage.sendPush(device, channel, mContext, Statics.TYPE_KISS);
+                                    i++;
+                                }
+                                Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_successful), Toast.LENGTH_LONG).show();
+
+                                //3. UPDATEVAME TABLICATA, CHE SME IZPRATILI OSHTE EDNA CELUVKA
+                                KissesCount kissToUpdate;
+                                if(kissesSent.getCurrentPage().size() == 0) {
+                                    //ako niama entry go sazdavame
+                                    kissToUpdate = new KissesCount();
+                                    kissToUpdate.setSender(mCurrentUser);
+                                    kissToUpdate.setSenderEmail(mCurrentUser.getEmail());
+                                    kissToUpdate.setReceiverEmail(finalEmailsOfRecepients);
+                                    //TODO tr da dobavim i receiver kato Backendless user
+                                } else {
+                                    kissToUpdate = kissesSent.getCurrentPage().get(0);
+                                }
+                                kissToUpdate.setNumberOfKisses(kissNumber);
+
+                                Backendless.Data.of(KissesCount.class).save(kissToUpdate, new AsyncCallback<KissesCount>() {
+                                    @Override
+                                    public void handleResponse(KissesCount kissesCount) {
+                                     //uspeshno sme updatenali celukvata
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault backendlessFault) {
+                                    //ne e uspeshno updatnata, shte izleze s 1 po-malko, no kakvo da se pravi
+                                    }
+                                });//krai na updatevane na broi na veche izprateni celuvki
+
+                            }//krai na uspeshtanata send a kiss
+
+                            @Override
+                            public void handleFault(BackendlessFault backendlessFault) {
+                                String error = backendlessFault.getMessage();
+                                Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_unsuccessful), Toast.LENGTH_LONG).show();
+
+                            }//krai na nesupeshnata send a kiss
+                        });//krai na send a kiss
+
+
+                    } //krai na upseshno data quaery za tarsene na broi izprateni celuvki
 
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
+                        //error finind number of kiss messages already sent
                         String error = backendlessFault.getMessage();
+                        //tova e v sluchai, che niama sazdadena KissTable
+                        if(backendlessFault.getCode().equals(Statics.BACKENDLESS_TABLE_NOT_FOUND_CODE)) {
+                            CreateKissTables.createTables(mCurrentUser,mCurrentUser);
+                        }
                         Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_unsuccessful), Toast.LENGTH_LONG).show();
+                    } //krai na neuspeshnata data query za tarsene na broi celuvki
+                }); //krai na cialata data query za tarsene na broi celuvki
 
-                    }
-                });
 
-            }
-        }
-    }
+
+            } //krai na REQUESTCODE == Activity Send to
+        } //krai na RESULTCODE OK
+    } //krai na onactivity result
 
 
     @Override

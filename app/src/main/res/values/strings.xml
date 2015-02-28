@@ -178,6 +178,8 @@
     <string name="email_not_found">User with this email address does not exist</string>
     <string name="toast_cannot_add_yourself_as_partner">You can\'t add yourself as partner</string>
     <string name="user_already_partner">is already your partner</string>
+    <string name="number_of_kisses_sent_singular">has sent you %1$d kiss</string>
+    <string name="number_of_kisses_sent_plural">has sent you %1$d kisses</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>

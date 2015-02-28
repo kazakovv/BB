@@ -26,6 +26,8 @@ public class Statics {
 
     public static final String KEY_DATE_OF_BIRTH = "dateOfBirth";
     public static final String KEY_LOVE_MESSAGE = "loveMessage";
+    public static final String KEY_NUMBER_OF_KISSES = "kissNumber";
+
     public static final String KEY_URL = "urlAddress";
 
     //keys za podavane na values m/u Private Days calendar i Love Days fragment
@@ -67,6 +69,7 @@ public class Statics {
 
     public static final String BACKENDLESS_INVALID_LOGIN_OR_PASS_MESSAGE = "3003";
     public static final String BACKENDLESS_INVALID_EMAIL_PASSWORD_RECOVERY = "3020";
+    public static final String BACKENDLESS_TABLE_NOT_FOUND_CODE = "1009";
 
     public static final String KEY_USER_REQUESTING_TO_UPDATE_PARTNERS = "userRequestingToUpdatePartners";
 

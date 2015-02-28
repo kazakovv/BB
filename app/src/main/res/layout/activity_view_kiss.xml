@@ -19,6 +19,16 @@
         android:layout_height="wrap_content"
         android:src="@drawable/kiss_background"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:id="@+id/imageView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/kissNumber"
+        android:layout_alignBottom="@+id/imageView"
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

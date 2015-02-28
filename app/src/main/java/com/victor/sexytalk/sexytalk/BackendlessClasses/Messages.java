@@ -23,6 +23,7 @@ public class Messages {
     private String senderUsername;
     private String recepientEmails;
     private String objectId;
+    private int kissNumber;
     private Date created;
     private Date updated;
     private Date opened;
@@ -106,5 +107,8 @@ public class Messages {
     public Date getOpened() { return opened; }
 
     public void setOpened( Date opened ) { this.opened = opened; }
+
+    public int getKissNumber() {return kissNumber;}
+    public void setKissNumber(int kissNumber) {this.kissNumber = kissNumber;}
 }
 
