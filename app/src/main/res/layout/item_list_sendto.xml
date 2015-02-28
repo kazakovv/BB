@@ -19,6 +19,8 @@
         android:paddingTop="@dimen/message_list_vertical_margin"
         android:paddingBottom="@dimen/message_list_vertical_margin"
         android:src="@drawable/ic_action_person_black" />
+
+        />
     <TextView
         android:id="@+id/partnerUsername"
         android:layout_width="wrap_content"

@@ -3,6 +3,7 @@ package com.victor.sexytalk.sexytalk.UserInterfaces;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
 import com.victor.sexytalk.sexytalk.Helper.CycleStage;
+import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -128,7 +130,12 @@ public class FragmentLoveDays extends Fragment {
                 if(mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
                     //zarezda profile pic ako ima takava
                     String existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
-                    Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
+                    Picasso.with(getActivity())
+                            .load(existingProfilePicPath)
+                            .transform(new RoundedTransformation(10,10, Color.WHITE))
+
+                            .into(profilePic);
+                    //Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
                 } else {
                     profilePic.setImageResource(R.drawable.ic_action_person_black);
 

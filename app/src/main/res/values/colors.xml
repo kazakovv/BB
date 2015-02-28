@@ -9,4 +9,5 @@
     <color name="button_focused">#C2185B</color>
     <color name="title_messages">#D81B60</color>
     <color name="tab_text_color">#ffffff</color>
+    <color name="second_accent_color">#3F51B5</color>
 </resources>

@@ -11,13 +11,26 @@
     <ImageView
         android:layout_width="@dimen/thumbnail_width"
         android:layout_height="@dimen/thumbnail_height"
-        android:layout_below="@id/toolbar"
         android:id="@+id/profilePicture"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_action_person_black"
-        android:layout_centerHorizontal="true" />
+
+        android:layout_marginTop="@dimen/default_padding"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/toolbar"
+         />
+
+    <ImageView
+        android:id="@+id/thumbnail_frame"
+        android:src="@drawable/frame_thumbnail"
+        android:layout_width="@dimen/thumbnail_width_frame"
+        android:layout_height="@dimen/thumbnail_height_frame"
+        android:adjustViewBounds="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/toolbar" />
+
 
     <ListView
-
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@android:id/list"

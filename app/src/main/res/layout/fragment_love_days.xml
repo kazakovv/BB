@@ -39,11 +39,15 @@
             android:id="@+id/profilePicture"
             android:layout_width="@dimen/thumbnail_width"
             android:layout_height="@dimen/thumbnail_height"
+            android:src="@drawable/ic_action_person_black"
             android:scaleType="fitXY"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:src="@drawable/ic_action_person_black" />
+            android:padding="@dimen/thumbnail_stroke_width"
+            />
+
+
 
         <LinearLayout
             android:id="@+id/linerLayoutFields"

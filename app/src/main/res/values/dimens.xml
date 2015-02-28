@@ -12,6 +12,8 @@
     <dimen name="list_item_width">100dp</dimen>
     <dimen name="thumbnail_height">100dp</dimen>
     <dimen name="thumbnail_width">100dp</dimen>
+    <dimen name="thumbnail_width_frame">120dp</dimen>
+    <dimen name="thumbnail_height_frame">120dp</dimen>
     <dimen name="disappearing_message_text_size">10sp</dimen>
     <dimen name="card_corner_radius">4dp</dimen>
     <dimen name="message_image_height">500dp</dimen>
@@ -33,5 +35,8 @@
     <dimen name="round_button_height">45dp</dimen>
     <dimen name="round_button_width">45dp</dimen>
     <dimen name="round_button_radius">10dp</dimen>
+
+    <dimen name="thumbnail_frame_radius">30dp</dimen>
+    <dimen name="thumbnail_stroke_width">10dp</dimen>
 
 </resources>
