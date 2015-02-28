@@ -33,6 +33,7 @@ import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
 import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
+import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -107,7 +108,10 @@ public class EditProfileActivity extends ActionBarActivity {
                     // togava kachvame na servera novata kartinka i izpolzvame tazi promenliva,
                     // za da iztriem starata profile pic ot servera
                     existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
-                    Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePicture);
+                    Picasso.with(getActivity())
+                            .load(existingProfilePicPath)
+                            .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS, 0))
+                            .into(profilePicture);
                 } else {
                     userAlreadyHasProfilePic = false;
                 }

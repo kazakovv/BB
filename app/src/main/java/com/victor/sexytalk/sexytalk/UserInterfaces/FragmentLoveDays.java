@@ -132,8 +132,8 @@ public class FragmentLoveDays extends Fragment {
                     String existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
                     Picasso.with(getActivity())
                             .load(existingProfilePicPath)
-                            .transform(new RoundedTransformation(10,10, Color.WHITE))
-
+                            .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS,0))
+                            .centerCrop()
                             .into(profilePic);
                     //Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
                 } else {
@@ -179,7 +179,10 @@ public class FragmentLoveDays extends Fragment {
 
                 if(selectedPartner.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
                     String existingProfilePicPath = (String) selectedPartner.getProperty(Statics.KEY_PROFILE_PIC_PATH);
-                    Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
+                    Picasso.with(getActivity())
+                            .load(existingProfilePicPath)
+                            .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS,0))
+                            .into(profilePic);
                 } else {
                     profilePic.setImageResource(R.drawable.ic_action_person_black);
                 }

@@ -1,87 +1,40 @@
 package com.victor.sexytalk.sexytalk.Helper;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Shader;
 
-import com.squareup.picasso.Transformation;
+public class RoundedTransformation implements com.squareup.picasso.Transformation {
+    private final int radius;
+    private final int margin;
 
-public class RoundedTransformation implements Transformation {
-    private int mBorderSize;
-    private int mCornerRadius = 0;
-    private int mColor;
-
-    public RoundedTransformation(int borderSize, int color) {
-        this.mBorderSize = borderSize;
-        this.mColor = color;
-    }
-
-    public RoundedTransformation(int borderSize, int cornerRadius, int color) {
-        this.mBorderSize = borderSize;
-        this.mCornerRadius = cornerRadius;
-        this.mColor = color;
+    public RoundedTransformation(final int radius, final int margin) {
+        this.radius = radius;
+        this.margin = margin;
     }
 
     @Override
-    public Bitmap transform(Bitmap source) {
-        int width = source.getWidth();
-        int height = source.getHeight();
+    public Bitmap transform(final Bitmap source) {
+        final Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setShader(new BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
 
-        Bitmap image = Bitmap.createBitmap(width, height, source.getConfig());
-        Canvas canvas = new Canvas(image);
-        canvas.drawARGB(0, 0, 0, 0);
+        Bitmap output = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(output);
+        canvas.drawRoundRect(new RectF(margin, margin, source.getWidth() - margin, source.getHeight() - margin), radius, radius, paint);
 
-        Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        Rect rect = new Rect(0, 0, width, height);
-
-
-        if (this.mCornerRadius == 0) {
-            canvas.drawRect(rect, paint);
-        } else {
-            canvas.drawRoundRect(new RectF(rect),
-                    this.mCornerRadius, this.mCornerRadius, paint);
+        if (source != output) {
+            source.recycle();
         }
-
-        paint.setXfermode(new PorterDuffXfermode((PorterDuff.Mode.SRC_IN)));
-        canvas.drawBitmap(source, rect, rect, paint);
-
-        Bitmap output;
-
-        if (this.mBorderSize == 0) {
-            output = image;
-        } else {
-            width = width + this.mBorderSize * 2;
-            height = height + this.mBorderSize * 2;
-
-            output = Bitmap.createBitmap(width, height, source.getConfig());
-            canvas.setBitmap(output);
-            canvas.drawARGB(0, 0, 0, 0);
-
-            rect = new Rect(0, 0, width, height);
-
-            paint.setXfermode(null);
-            paint.setColor(this.mColor);
-            paint.setStyle(Paint.Style.FILL);
-
-            canvas.drawRoundRect(new RectF(rect), this.mCornerRadius, this.mCornerRadius, paint);
-
-            canvas.drawBitmap(image, this.mBorderSize, this.mBorderSize, null);
-        }
-
-        if (source != output) source.recycle();
 
         return output;
     }
 
     @Override
     public String key() {
-        return "bitmapBorder(" +
-                "borderSize=" + this.mBorderSize + ", " +
-                "cornerRadius=" + this.mCornerRadius + ", " +
-                "color=" + this.mColor + ")";
+        return "rounded(radius=" + radius + ", margin=" + margin + ")";
     }
 }

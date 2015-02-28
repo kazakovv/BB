@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.backendless.BackendlessUser;
 import com.squareup.picasso.Picasso;
+import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -59,7 +60,10 @@ public class AdapterSendTo extends ArrayAdapter<BackendlessUser> {
         //zarezdame avatarchetata
         if(mPartners[position].getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
             String existingProfilePicPath = (String) mPartners[position].getProperty(Statics.KEY_PROFILE_PIC_PATH);
-            Picasso.with(mContext).load(existingProfilePicPath).into(holder.iconImageView);
+            Picasso.with(mContext)
+                    .load(existingProfilePicPath)
+                    .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS,0))
+                    .into(holder.iconImageView);
         }
         //ako ne se napravi tova onClick listener vav SendTo fragment ne raboti
         holder.sendYesNoCheckbox.setClickable(false);
