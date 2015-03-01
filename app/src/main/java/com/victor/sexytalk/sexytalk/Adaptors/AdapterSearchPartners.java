@@ -18,6 +18,7 @@ import com.backendless.messaging.MessageStatus;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
+import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -53,7 +54,12 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
             holder = (ViewHolder) convertView.getTag();
         }
         BackendlessUser partner = mFoundUsers.get(position);
-        holder.nameLabel.setText(partner.getProperty(Statics.KEY_USERNAME).toString());
+        String username = (String) partner.getProperty(Statics.KEY_USERNAME);
+        if(username !=null) {
+            holder.nameLabel.setText(username);
+        } else {
+            holder.nameLabel.setText(partner.getEmail());
+        }
 
         holder.buttonAddPartner.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,8 +139,9 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
 
                 //tova e za kanala, po koito da izpratim push message
                 String channel = selectedPartner.getEmail();
-                //TODO tr da izpratim i istinsko push message
-
+                String deviceId = (String) selectedPartner.getProperty(Statics.KEY_DEVICE_ID);
+                SendPushMessage.sendPush(deviceId,channel,mContext,Statics.TYPE_PARTNER_REQUEST);
+/*
                 Backendless.Messaging.publish(channel,Statics.KEY_PARTNER_REQUEST,
                         new AsyncCallback<MessageStatus>() {
                     @Override
@@ -152,6 +159,7 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
                         Toast.makeText(mContext,
                                 R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();                            }
                 });
+                */
             }
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
@@ -160,6 +168,7 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
             }
 
         });
+
 
     }
 

@@ -104,6 +104,7 @@
     <string name="partner_request_sent_toast">Your partner request was sent</string>
     <string name="partner_request_not_sent_toast">Your partner request was not sent. Please try again.</string>
     <string name="new_partner_request">New partner request</string>
+    <string name="new_partner_request_push">You received a partner request</string>
     <string name="search_partners_tab">Search</string>
     <string name="requests_partners_tab">Requests</string>
     <string name="existing_partners_tab">Partners</string>

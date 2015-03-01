@@ -31,6 +31,8 @@ public class SendPushMessage {
             messagePush =  context.getResources().getString(R.string.title_receive_a_kiss_message);
             //toast se izprashta ot main activity. Ako izprashtam niakolko kiss toast shte se pokazva neprekasnato
             //messageToast = context.getResources().getString(R.string.send_a_kiss_toast_successful);
+        } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST)) {
+            messagePush = context.getResources().getString(R.string.new_partner_request_push);
         }
         PublishOptions publishOptions = new PublishOptions();
         publishOptions.putHeader(PublishOptions.ANDROID_TICKER_TEXT_TAG, messagePush);

@@ -82,8 +82,7 @@ public class LoginActivity extends Activity {
                     user.setPassword(password);
 
                     String progressSignInMessage = getResources().getString(R.string.progress_sign_in_message);
-                    Backendless.UserService.login(userEmail, password,
-                            new DefaultCallback<BackendlessUser>(LoginActivity.this, progressSignInMessage) {
+                    Backendless.UserService.login(userEmail, password,  new DefaultCallback<BackendlessUser>(LoginActivity.this, progressSignInMessage) {
                         @Override
                         public void handleResponse(BackendlessUser backendlessUser) {
                             BackendlessUser test = backendlessUser;
