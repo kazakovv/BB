@@ -151,7 +151,9 @@ public class BackendlessMessage {
 
                         //dobaviame username na polucahtelia kam message
                         if(finalRecepientBackendlessUser !=null) {
-                            message = message + " " + finalRecepientBackendlessUser.getProperty(Statics.KEY_USERNAME);
+                            message = message + " "
+                                    + finalRecepientBackendlessUser.getProperty(Statics.KEY_USERNAME)
+                                    +".";
                         }
                         String title = context.getResources().getString(R.string.dialog_number_kisses_title);
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);

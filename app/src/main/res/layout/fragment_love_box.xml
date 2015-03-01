@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout
-    android:layout_height="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
 
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_height="match_parent">
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        />
+        android:visibility="gone"
+        android:layout_centerInParent="true" />
 
     <!--
         Seldvat 2 swipe to refresh layots, za da moze da raboti swipe to refresh dobre
@@ -19,9 +18,9 @@
         Vtoriat e, ako imame saboshtenia
     -->
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/loveBoxLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/loveBoxLayout">
+        android:layout_height="match_parent">
 
         <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeRefreshLayout_emptyView"
@@ -34,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:clickable="true"
                 android:text="@string/no_messages" />
-
 
 
         </android.support.v4.widget.SwipeRefreshLayout>
@@ -58,14 +56,15 @@
         android:id="@+id/layoutLogo"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/kiss_background"
             android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:src="@drawable/kiss_background" />
 
-        </RelativeLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
 
