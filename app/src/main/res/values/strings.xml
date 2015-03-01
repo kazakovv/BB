@@ -103,6 +103,8 @@
     <string name="edit_partners_search_hint">Email</string>
     <string name="partner_request_sent_toast">Your partner request was sent</string>
     <string name="partner_request_not_sent_toast">Your partner request was not sent. Please try again.</string>
+    <string name="dialog_partner_request_already_sent_title">Waiting for love</string>
+    <string name="dialog_partner_request_already_sent_to_user_message">You have already sent a love request to</string>
     <string name="new_partner_request">New partner request</string>
     <string name="new_partner_request_push">You received a partner request</string>
     <string name="search_partners_tab">Search</string>

@@ -3,49 +3,74 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="@dimen/list_item_width"
-        android:layout_height="@dimen/list_item_hight"
-        android:id="@+id/thumbnail_partner"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/message_list_vertical_margin"
-        android:paddingBottom="@dimen/message_list_vertical_margin"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_action_person_black" />
+    <!-- Progress bar-->
+    <RelativeLayout
+        android:id="@+id/layoutProgressDialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:paddingLeft="@dimen/message_list_vertical_margin"
-        android:layout_centerVertical="true"
-        android:id="@+id/partnerUsername"
-        android:layout_alignBaseline="@+id/thumbnail_partner"
-        android:layout_toRightOf="@+id/thumbnail_partner"
-        android:layout_toEndOf="@+id/thumbnail_partner" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"/>
 
-    <ImageButton
-        android:layout_width="@dimen/round_button_width"
-        android:layout_height="@dimen/round_button_height"
-        android:src="@drawable/ic_action_accept"
-        android:id="@+id/acceptPartnerButton"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/default_padding"
-        android:layout_toLeftOf="@+id/rejectPartnerButton"
-        android:layout_toStartOf="@+id/rejectPartnerButton"
-        android:background="@drawable/button_round"/>
-    <ImageButton
-        android:layout_width="@dimen/round_button_width"
-        android:layout_height="@dimen/round_button_height"
-        android:src="@drawable/ic_action_remove"
-        android:id="@+id/rejectPartnerButton"
-        android:layout_alignTop="@+id/acceptPartnerButton"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/button_round"/>
+    </RelativeLayout>
+
+
+    <!-- Butoni-->
+    <RelativeLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="@dimen/list_item_width"
+            android:layout_height="@dimen/list_item_hight"
+            android:id="@+id/thumbnail_partner"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/message_list_vertical_margin"
+            android:paddingBottom="@dimen/message_list_vertical_margin"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_action_person_black" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:paddingLeft="@dimen/message_list_vertical_margin"
+            android:layout_centerVertical="true"
+            android:id="@+id/partnerUsername"
+            android:layout_alignBaseline="@+id/thumbnail_partner"
+            android:layout_toRightOf="@+id/thumbnail_partner"
+            android:layout_toEndOf="@+id/thumbnail_partner" />
+
+        <ImageButton
+            android:layout_width="@dimen/round_button_width"
+            android:layout_height="@dimen/round_button_height"
+            android:src="@drawable/ic_action_accept"
+            android:id="@+id/acceptPartnerButton"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/default_padding"
+            android:layout_toLeftOf="@+id/rejectPartnerButton"
+            android:layout_toStartOf="@+id/rejectPartnerButton"
+            android:background="@drawable/button_round" />
+
+        <ImageButton
+            android:layout_width="@dimen/round_button_width"
+            android:layout_height="@dimen/round_button_height"
+            android:src="@drawable/ic_action_remove"
+            android:id="@+id/rejectPartnerButton"
+            android:layout_alignTop="@+id/acceptPartnerButton"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/button_round" />
+    </RelativeLayout>
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.victor.sexytalk.sexytalk.Adaptors;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,14 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.MessageStatus;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
@@ -49,6 +54,8 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
             holder.nameLabel = (TextView) convertView.findViewById(R.id.partnerUsername);
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.thumbnail_partner);
             holder.buttonAddPartner = (ImageButton) convertView.findViewById(R.id.addPartnerButton);
+            holder.layoutButtons = (RelativeLayout) convertView.findViewById(R.id.layoutButtons);
+            holder.progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -85,7 +92,7 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
                     }
                 }
 
-                sendPartnerRequest(position);
+                sendPartnerRequest(position, holder.layoutButtons, holder.progressBar);
             }
         });
 
@@ -109,65 +116,98 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
         ImageView iconImageView;
         TextView nameLabel;
         ImageButton buttonAddPartner;
+        RelativeLayout layoutButtons;
+        ProgressBar progressBar;
     }
 
 
-    protected void sendPartnerRequest(final int selectedPartnerPosition) {
+    protected void sendPartnerRequest(final int selectedPartnerPosition,
+                                      final RelativeLayout layoutButtons, final ProgressBar progressBar) {
 
 
-        //Ako caknem na add ot list se sluchvat 2 neshta chrez 2 async tasks edna v druga
-        //1. Kazchavame data table s user request
-        //2. Izprashtame push message, che ima pending partner request na saotvetnia user
+        //Ako caknem na add ot list se sluchvat 3 neshta chrez 3 async tasks edna v druga
+        //1.Proveriavame dali veche ne e izpraten pending partner request. Ako e taka spirame
+        //2. Kazchavame data table s user request
+        //3. Izprashtame push message, che ima pending partner request na saotvetnia user
 
+        //skrimave view i pokazvame spinner
+        layoutButtons.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
         final BackendlessUser selectedPartner = mFoundUsers.get(selectedPartnerPosition);
 
-        //izprashtame request da si stanem partniori
-        PartnersAddRequest partnerToAdd = new PartnersAddRequest();
-        partnerToAdd.setEmail_partnerToConfirm(selectedPartner.getEmail());
-        partnerToAdd.setEmail_userRequesting(mCurrentUser.getEmail());
-        partnerToAdd.setPartnerToConfirm(selectedPartner);
-        partnerToAdd.setUserRequesting(mCurrentUser);
-        partnerToAdd.setUsername_userRequesting((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
-        partnerToAdd.setUsername_userToConfirm((String) selectedPartner.getProperty(Statics.KEY_USERNAME));
-        //Kachvame zaiavkata v Backendless
-
-        Backendless.Data.of(PartnersAddRequest.class).save(partnerToAdd, new AsyncCallback<PartnersAddRequest>() {
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        String whereClause = "email_userRequesting='" + mCurrentUser.getEmail() +"'" +
+                             "email_partnerToConfirm='" + selectedPartner.getEmail() + "'";
+        Backendless.Data.of(PartnersAddRequest.class).find(dataQuery, new AsyncCallback<BackendlessCollection<PartnersAddRequest>>() {
             @Override
-            public void handleResponse(PartnersAddRequest partnersAddRequest) {
-                //sled kato kachim data v backendless izprashtame i push
+            public void handleResponse(BackendlessCollection<PartnersAddRequest> pendingRequest) {
+                if (pendingRequest.getCurrentPage().size() > 0) {
+                    //veche e izpratena zaiavka za partner request. Prekratiavame metoda tuk
+                    layoutButtons.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                    String message = mContext.getResources()
+                            .getString(R.string.dialog_partner_request_already_sent_to_user_message) + " " +
+                            selectedPartner.getProperty(Statics.KEY_USERNAME);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                    builder.setTitle(R.string.dialog_partner_request_already_sent_title)
+                            .setMessage(message)
+                            .setPositiveButton(R.string.ok, null);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                } else {
+                    //niama izpratena zaiavka
 
-                //tova e za kanala, po koito da izpratim push message
-                String channel = selectedPartner.getEmail();
-                String deviceId = (String) selectedPartner.getProperty(Statics.KEY_DEVICE_ID);
-                SendPushMessage.sendPush(deviceId,channel,mContext,Statics.TYPE_PARTNER_REQUEST);
-/*
-                Backendless.Messaging.publish(channel,Statics.KEY_PARTNER_REQUEST,
-                        new AsyncCallback<MessageStatus>() {
-                    @Override
-                    public void handleResponse(MessageStatus messageStatus) {
-                        //iztrivame rezultata ot spisaka i refreshvame spisaka
-                        mFoundUsers.remove(selectedPartnerPosition);
-                        notifyDataSetChanged();
+                    //izprashtame request da si stanem partniori
+                    PartnersAddRequest partnerToAdd = new PartnersAddRequest();
+                    partnerToAdd.setEmail_partnerToConfirm(selectedPartner.getEmail());
+                    partnerToAdd.setEmail_userRequesting(mCurrentUser.getEmail());
+                    partnerToAdd.setPartnerToConfirm(selectedPartner);
+                    partnerToAdd.setUserRequesting(mCurrentUser);
+                    partnerToAdd.setUsername_userRequesting((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
+                    partnerToAdd.setUsername_userToConfirm((String) selectedPartner.getProperty(Statics.KEY_USERNAME));
 
-                        Toast.makeText(mContext,
-                                R.string.partner_request_sent_toast, Toast.LENGTH_LONG).show();
-                    }
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        //TODO:tr da se promeni saobshtenieto. Izpratili sme tablicata, no ne push message
-                        Toast.makeText(mContext,
-                                R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();                            }
-                });
-                */
+
+                    //Kachvame zaiavkata v Backendless
+                    Backendless.Data.of(PartnersAddRequest.class).save(partnerToAdd, new AsyncCallback<PartnersAddRequest>() {
+                        @Override
+                        public void handleResponse(PartnersAddRequest partnersAddRequest) {
+                            layoutButtons.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            //sled kato kachim data v backendless izprashtame i push
+
+                            //tova e za kanala, po koito da izpratim push message
+                            String channel = selectedPartner.getEmail();
+                            String deviceId = (String) selectedPartner.getProperty(Statics.KEY_DEVICE_ID);
+                            SendPushMessage.sendPush(deviceId, channel, mContext, Statics.TYPE_PARTNER_REQUEST);
+                            Toast.makeText(mContext, R.string.partner_request_sent_toast, Toast.LENGTH_LONG).show();
+                            mFoundUsers.remove(selectedPartnerPosition);
+                            notifyDataSetChanged();
+
+
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            layoutButtons.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(mContext,
+                                    R.string.partner_request_not_sent_toast, Toast.LENGTH_LONG).show();
+                        }
+
+                    }); //krai na kachvane na partner request
+
+                }
             }
+
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
+                layoutButtons.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(mContext,
-                        R.string.partner_request_not_sent_toast,Toast.LENGTH_LONG).show();
+                        R.string.partner_request_not_sent_toast, Toast.LENGTH_LONG).show();
             }
-
-        });
+        }); //krai proverka dali ne e izpraten pending partner request
 
 
     }
