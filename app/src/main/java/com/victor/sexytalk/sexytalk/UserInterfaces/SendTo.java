@@ -96,6 +96,14 @@ public class SendTo extends ActionBarActivity {
 
                 return true;
             case R.id.action_refresh:
+                //ako sme izbrali poluchatel i sled tova sme caknali refresh, iztrivame poluchatelia
+                fragment.mRecepientUserNames.clear();
+                fragment.mRecepientEmails.clear();
+                fragment.mDeviceIds.clear();
+                fragment.mSendTo.clear();
+                sendOk.setVisible(false);
+
+
                 //tarsim dali ima dobaveni partniori, koito ne izlizat v spisaka
                 mListView = fragment.getListView();
                 final MenuItem refreshButton = item;
