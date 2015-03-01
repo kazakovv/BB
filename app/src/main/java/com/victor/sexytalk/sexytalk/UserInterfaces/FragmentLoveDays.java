@@ -9,8 +9,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +35,10 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.CycleStage;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
+import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -67,7 +72,8 @@ public class FragmentLoveDays extends Fragment {
     protected TextView cyclePhaseStatus;
     protected Calendar firstDayOfCycle;
 
-    protected Toolbar toolbar;
+    protected ActionBar toolbar;
+    protected MenuItem addPartner;
 
     protected Context mContext;
 
@@ -89,6 +95,8 @@ public class FragmentLoveDays extends Fragment {
         mChoosePartnerLabel = (TextView) inflatedView.findViewById(R.id.chooseYourPartnerLabel);
         mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
         mFragmentLoveDaysLayout = (RelativeLayout) inflatedView.findViewById(R.id.layoutFragmentLoveDays);
+
+
         return inflatedView;
     }
 
@@ -132,7 +140,7 @@ public class FragmentLoveDays extends Fragment {
                     String existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
                     Picasso.with(getActivity())
                             .load(existingProfilePicPath)
-                            .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS,0))
+                            .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS, 0))
                             .into(profilePic);
                     //Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
                 } else {
@@ -278,13 +286,25 @@ public class FragmentLoveDays extends Fragment {
                 //vrazvam butona za refresh, za da moga da go enable/disable
                 mRefreshButton = item;
                 refreshPartnersList();
+
+                //proveriavame da delete i za pending partner request
+                if(mCurrentUser !=null) {
+
+                    BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
+
+                    BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
+                }
                 return true;
         }
         return super.onOptionsItemSelected(item);
 
     }
 
-
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        addPartner = menu.findItem(R.id.partner_request);
+    }
     /*
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!     NACHALO NA HELPER METODITE     !!!!!!!!!!!!!!!!!!!!!!!!!!

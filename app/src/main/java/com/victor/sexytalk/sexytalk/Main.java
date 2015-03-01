@@ -6,11 +6,9 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,17 +17,15 @@ import java.util.List;
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.Subscription;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.messaging.Message;
 
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.KissesCount;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
-import com.victor.sexytalk.sexytalk.Helper.CreateKissTables;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
 import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 import com.victor.sexytalk.sexytalk.UserInterfaces.EditProfileActivity;
@@ -70,7 +66,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         //ako niama lognat potrebitel preprashta kam log-in ekrana
 
 
-
         if (mCurrentUser == null) {
             //prashta ni kam login screen
             navigateToLogin();
@@ -82,16 +77,25 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             //todo tr da se vidi neshto na servera
 
             //check za pending parner request
-            checkForPendingParnerRequests();
-            //check za pending delete requests
-            checkForDeletePartnerRequest();
+            pendingPartnerRequest = BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
+            //pokazvame ili skrivame butona za dobaviane na partniori
+            if (pendingPartnerRequest == true) {
+                if (addPartner != null) {
+                    addPartner.setVisible(true);
+                } else { //niama chakashti zaiavki za partniori
+                    if (addPartner != null) {
+                        addPartner.setVisible(false);
+                    }
+                }
+                //check za pending delete requests
+                BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
 
-            //proveriavame dali e maz ili zhena
-            MaleOrFemale = (String) mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
-            //register device for push notifications
-            final String channel = mCurrentUser.getEmail();
+                //proveriavame dali e maz ili zhena
+                MaleOrFemale = (String) mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
+                //register device for push notifications
+                final String channel = mCurrentUser.getEmail();
 
-            //TODO!!!!!!! causing a lot of polling requests
+                //TODO!!!!!!! causing a lot of polling requests
             /*
             //subscribe to the channel, za da poluchvam saobshtenia
             Backendless.Messaging.subscribe(channel,
@@ -131,8 +135,8 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             );
 
 */
-            //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            //Load all relations for users (partners, etc)
+                //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                //Load all relations for users (partners, etc)
 /*
             List<String> rels = new ArrayList<String>();
             rels.add("*");
@@ -151,43 +155,44 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     }
                 });
 */
-        }
-
-        pager = (ViewPager) findViewById(R.id.pager);
-        PagerAdapterMain pAdapter = new PagerAdapterMain(getSupportFragmentManager(), this);
-        pager.setAdapter(pAdapter);
-
-        tabHost = (MaterialTabHost) this.findViewById(R.id.materialTabHost);
-        tabHost.setTextColor(mContext.getResources().getColor(R.color.tab_text_color));
-
-        pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
             }
 
-            @Override
-            public void onPageSelected(int position) {
-                // when user do a swipe the selected tab change
-                tabHost.setSelectedNavigationItem(position);
+            pager = (ViewPager) findViewById(R.id.pager);
+            PagerAdapterMain pAdapter = new PagerAdapterMain(getSupportFragmentManager(), this);
+            pager.setAdapter(pAdapter);
+
+            tabHost = (MaterialTabHost) this.findViewById(R.id.materialTabHost);
+            tabHost.setTextColor(mContext.getResources().getColor(R.color.tab_text_color));
+
+            pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    // when user do a swipe the selected tab change
+                    tabHost.setSelectedNavigationItem(position);
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
+
+
+            // insert all tabs from pagerAdapter data
+            for (int i = 0; i < pAdapter.getCount(); i++) {
+                tabHost.addTab(
+                        tabHost.newTab()
+                                .setTabListener(this)
+                                .setText(pAdapter.getPageTitle(i))
+
+                );
             }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
-
-        // insert all tabs from pagerAdapter data
-        for (int i = 0; i < pAdapter.getCount(); i++) {
-            tabHost.addTab(
-                    tabHost.newTab()
-                            .setTabListener(this)
-                            .setText(pAdapter.getPageTitle(i))
-
-            );
         }
     }
 
@@ -395,7 +400,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         String error = backendlessFault.getMessage();
                         //tova e v sluchai, che niama sazdadena KissTable
                         if(backendlessFault.getCode().equals(Statics.BACKENDLESS_TABLE_NOT_FOUND_CODE)) {
-                            CreateKissTables.createTables(mCurrentUser,mCurrentUser);
+                            BackendlessHelper.createTables(mCurrentUser, mCurrentUser);
                         }
                         Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_unsuccessful), Toast.LENGTH_LONG).show();
                     } //krai na neuspeshnata data query za tarsene na broi celuvki
@@ -422,130 +427,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
         return super.onCreateOptionsMenu(menu);
     }
-            /*
-            HELPER METODI
-             */
 
-    protected void checkForPendingParnerRequests() {
-
-        String whereClause = "email_partnerToConfirm='" + mCurrentUser.getEmail() + "'";
-        BackendlessDataQuery query = new BackendlessDataQuery();
-        query.setWhereClause(whereClause);
-        Backendless.Data.of(PartnersAddRequest.class).find(query, new AsyncCallback<BackendlessCollection<PartnersAddRequest>>() {
-            @Override
-            public void handleResponse(BackendlessCollection<PartnersAddRequest> partners) {
-                if (partners.getData().size() > 0) {
-                    //ako query vrashta rezultat, znachi ima pending request
-                    pendingPartnerRequest = true;
-                    //pokazvame butona za dobaviane na partniori, ako reference kam nego ne e null
-                    if (addPartner != null) {
-                        addPartner.setVisible(true);
-                    }
-                } else {
-                    //ako ne varne nishto mahame butona
-                    pendingPartnerRequest = false;
-                    if (addPartner != null) {
-                        addPartner.setVisible(false);
-                    }
-                }
-
-            }
-
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                pendingPartnerRequest = false;
-                if (addPartner != null) {
-                    addPartner.setVisible(false);
-                }
-            }
-        });
-
-    }
-
-    protected void checkForDeletePartnerRequest() {
-        String whereClause = "email_userDeleted='" + mCurrentUser.getEmail() + "'";
-        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-        dataQuery.setWhereClause(whereClause);
-
-        Backendless.Data.of(PartnerDeleteRequest.class).find(dataQuery, new AsyncCallback<BackendlessCollection<PartnerDeleteRequest>>() {
-            @Override
-            public void handleResponse(final BackendlessCollection<PartnerDeleteRequest> partnerDeleteRequest) {
-                final List<PartnerDeleteRequest> pendingDeleteRequests = partnerDeleteRequest.getData();
-
-                //svaliame masiv s tekushtite partniori
-                BackendlessUser[] currentListWithPartners;
-                if (mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-                    currentListWithPartners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
-                } else {
-                    currentListWithPartners = new BackendlessUser[0];
-                }
-
-                //kopirame currentlistWithPartners v array, za da moze po-lesno da triem ot nego
-                List<BackendlessUser> currentListWithPartnersArray = new ArrayList<BackendlessUser>();
-                for (BackendlessUser user : currentListWithPartners) {
-                    currentListWithPartnersArray.add(user);
-                }
-                //iztrivame partniorite koito sa pratili delete request ot currentListWithPartnersArray
-                for (PartnerDeleteRequest deleteRequest : pendingDeleteRequests) {
-                    BackendlessUser userToRemove = deleteRequest.getUserDeleting();
-                    //po emaila tarsim dali ima takav user v sastesvuvashtite partniori
-                    //i go iztrivame, ako go namerim
-                    for (int i = 0; i < currentListWithPartnersArray.size(); i++) {
-                        String emailOfExisingPartner = currentListWithPartnersArray.get(i).getEmail();
-                        if (userToRemove.getEmail().equals(emailOfExisingPartner)) {
-                            //iztrivame toya partnior ot spisaka
-                            currentListWithPartnersArray.remove(i);
-                        }
-                    }
-
-
-                }
-                //kopirame vsichki ostavashti partiori v novia spisak s partniori
-                BackendlessUser[] newListWithPartners = new BackendlessUser[currentListWithPartnersArray.size()];
-                int i = 0;
-                for (BackendlessUser user : currentListWithPartnersArray) {
-                    newListWithPartners[i] = user;
-                    i++;
-                }
-                //updatevame novia spisak s partniori za tekushtia potrebitel
-                mCurrentUser.setProperty(Statics.KEY_PARTNERS, newListWithPartners);
-                //updatevame i na servera
-                Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
-                    @Override
-                    public void handleResponse(BackendlessUser backendlessUser) {
-                        //iztrivame pending delete request
-                        for (PartnerDeleteRequest deleteRequest : pendingDeleteRequests) {
-                            Backendless.Data.of(PartnerDeleteRequest.class).remove(deleteRequest, new AsyncCallback<Long>() {
-                                @Override
-                                public void handleResponse(Long aLong) {
-                                    /*
-                                    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                    !!!TOVA E KRAIAT NA USPESHNOTO IZTRIVAME NA PARTNER!!!
-                                    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                     */
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault backendlessFault) {
-                                    //TODO: tr da se pomisli kakvo da se napravi v sluchai na greshka
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        //TODO: ne e zle da napravim neshto, ako ima greshka s updatevamento na partionri
-                    }
-                });
-            }
-
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
-                //TODO: NESHTO TR DA SE NAPRAVI
-            }
-        });
-    }
 
     @Override
     public void onTabSelected(MaterialTab tab) {

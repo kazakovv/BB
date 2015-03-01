@@ -11,6 +11,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +32,7 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.backendless.persistence.QueryOptions;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterMessage;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -55,6 +58,8 @@ public class FragmentLoveBox extends ListFragment {
    protected ProgressBar mProgressBar;
    protected FrameLayout mFragmentLoveBoxLayout;
    protected MenuItem mRefreshButton;
+   protected BackendlessUser mCurrentUser;
+   protected MenuItem addPartner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +78,9 @@ public class FragmentLoveBox extends ListFragment {
         //TODO zadavame cveta na progres bar
         //mProgressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#D81B60"),
         //        android.graphics.PorterDuff.Mode.MULTIPLY);
+        if(Backendless.UserService.CurrentUser() != null) {
+            mCurrentUser = Backendless.UserService.CurrentUser();
+        }
         return rootView;
     }
     //refresh listener za updatevane na tova dali ima novi saobstehnia
@@ -132,9 +140,31 @@ public class FragmentLoveBox extends ListFragment {
                 mRefreshButton.setEnabled(false);
 
                 searchForMessages();
+
+
+
+
+
+                //proveriavame da delete i za pending add/delete request
+                if(mCurrentUser !=null) {
+                    BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
+
+
+                   BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
+                }
+
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        addPartner = menu.findItem(R.id.partner_request);
+
+
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
