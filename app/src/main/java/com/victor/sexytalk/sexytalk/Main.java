@@ -289,121 +289,13 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         emailsOfRecepients += ","; //dobaviame zapetaia ako ima oshte recepients
                     }
                 }
-                //izprashtame kiss
+                //izprashtame kiss.
+                //Ima ogranichenie da izprashtame kiss samo do 1 poluchatel,
+                // zatova prosto vzimame parvia element ot array
                     BackendlessMessage.sendKissMessage(mCurrentUser,
                                                        recepientEmails.get(0),
                                                        deviceIds.get(0),
                                                        mContext);
-
-/*
-
-                //message
-                //1. parvo tarsim kolko celuvki sa izprateni veche
-                //2. sastaviame kiss i go izprashtame
-                //3. uvelichavame broia na izpratenite celuvki
-
-                //1. TARSIM BROI CELUVKI, KOITO SA IZPRATENI DOSEGA
-                BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-                String whereClause = "senderEmail='" + mCurrentUser.getEmail() + "'" + " AND "
-                                    + "receiverEmail='" + recepientEmails.get(0) +"'";
-                dataQuery.setWhereClause(whereClause);
-                final String finalEmailsOfRecepients = emailsOfRecepients;
-                Backendless.Data.of(KissesCount.class).find(dataQuery, new AsyncCallback<BackendlessCollection<KissesCount>>() {
-                    @Override
-                    public void handleResponse(final BackendlessCollection<KissesCount> kissesSent) {
-
-                        int kissesSentAlready = 0;
-                        //check dali veche sme prashtali celuvki
-                        if(kissesSent.getCurrentPage().size() > 0) {
-                            kissesSentAlready  = kissesSent.getCurrentPage().get(0).getNumberOfKisses();
-                        }
-                        final int kissNumber;
-                        if (kissesSentAlready > 0) {
-                           kissNumber = kissesSentAlready + 1;
-                        } else {
-                            kissNumber = 1;
-                        }
-
-                        //2. IZPRASHTAME KISS SAOBSHTENIETO
-
-                        String someoneSendsYouAKiss = user + " " + getString(R.string.send_a_kiss_message);
-
-                        //sazdavame saobshtenieto
-                        final Messages kissMessage = new Messages();
-                        kissMessage.setMessageType(Statics.TYPE_KISS);
-                        kissMessage.setLoveMessage(someoneSendsYouAKiss);
-                        kissMessage.setRecepientEmails(finalEmailsOfRecepients);
-                        kissMessage.setSederUsername((String) Backendless.UserService.CurrentUser().getProperty(Statics.KEY_USERNAME));
-                        kissMessage.setSender(Backendless.UserService.CurrentUser());
-                        kissMessage.setKissNumber(kissNumber);
-
-
-                        //i go izprashtame
-                        Backendless.Persistence.of(Messages.class).save(kissMessage, new AsyncCallback<Messages>() {
-                            @Override
-                            public void handleResponse(Messages messages) {
-                                //send push message
-                                int i = 0;
-                                for (String device : deviceIds) {
-                                    String channel = recepientEmails.get(i); //kanalat e email na poluchatelia
-                                    BackendlessMessage.sendPush(device, channel, mContext, Statics.TYPE_KISS);
-                                    i++;
-                                }
-                                Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_successful), Toast.LENGTH_LONG).show();
-
-                                //3. UPDATEVAME TABLICATA, CHE SME IZPRATILI OSHTE EDNA CELUVKA
-                                KissesCount kissToUpdate;
-                                if(kissesSent.getCurrentPage().size() == 0) {
-                                    //ako niama entry go sazdavame
-                                    kissToUpdate = new KissesCount();
-                                    kissToUpdate.setSender(mCurrentUser);
-                                    kissToUpdate.setSenderEmail(mCurrentUser.getEmail());
-                                    kissToUpdate.setReceiverEmail(finalEmailsOfRecepients);
-                                    //TODO tr da dobavim i receiver kato Backendless user
-                                } else {
-                                    kissToUpdate = kissesSent.getCurrentPage().get(0);
-                                }
-                                kissToUpdate.setNumberOfKisses(kissNumber);
-
-                                Backendless.Data.of(KissesCount.class).save(kissToUpdate, new AsyncCallback<KissesCount>() {
-                                    @Override
-                                    public void handleResponse(KissesCount kissesCount) {
-                                     //uspeshno sme updatenali celukvata
-                                    }
-
-                                    @Override
-                                    public void handleFault(BackendlessFault backendlessFault) {
-                                    //ne e uspeshno updatnata, shte izleze s 1 po-malko, no kakvo da se pravi
-                                    }
-                                });//krai na updatevane na broi na veche izprateni celuvki
-
-                            }//krai na uspeshtanata send a kiss
-
-                            @Override
-                            public void handleFault(BackendlessFault backendlessFault) {
-                                String error = backendlessFault.getMessage();
-                                Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_unsuccessful), Toast.LENGTH_LONG).show();
-
-                            }//krai na nesupeshnata send a kiss
-                        });//krai na send a kiss
-
-
-                    } //krai na upseshno data quaery za tarsene na broi izprateni celuvki
-
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        //error finind number of kiss messages already sent
-                        String error = backendlessFault.getMessage();
-                        //tova e v sluchai, che niama sazdadena KissTable
-                        if(backendlessFault.getCode().equals(Statics.BACKENDLESS_TABLE_NOT_FOUND_CODE)) {
-                            BackendlessHelper.createTables(mCurrentUser, mCurrentUser);
-                        }
-                        Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_unsuccessful), Toast.LENGTH_LONG).show();
-                    } //krai na neuspeshnata data query za tarsene na broi celuvki
-                }); //krai na cialata data query za tarsene na broi celuvki
-
-*/
-
             } //krai na REQUESTCODE == Activity Send to
         } //krai na RESULTCODE OK
     } //krai na onactivity result
