@@ -74,5 +74,9 @@ public class Statics {
     public static final String KEY_USER_REQUESTING_TO_UPDATE_PARTNERS = "userRequestingToUpdatePartners";
 
     public static final int PICASSO_ROUNDED_CORNERS = 30;
+
+    //izpolzva se za reference dali ima chakashti zaiavki za partniori. Ako e true pokazvame buton na main t
+    public static Boolean pendingPartnerRequest = false;
+
 }
 

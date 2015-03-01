@@ -164,6 +164,9 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                                         //6. sazdavame 2 reda za broia celuvki
                                                     BackendlessHelper.createTables(mCurrentUser, mUserRequesting);
                                                     BackendlessHelper.createTables(mUserRequesting, mCurrentUser);
+
+                                                    //proverka dali ima pending partner request, za da skriem butona
+                                                    BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
                                                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
@@ -173,6 +176,8 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                                 public void handleFault(BackendlessFault backendlessFault) {
                                                     Log.d("Vic","error" + backendlessFault.getMessage());
                                                     Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                                    //proverka dali ima pending partner request, za da skriem butona
+                                                    BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
                                                 }
                                             });
                                 }
@@ -181,6 +186,8 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                 public void handleFault(BackendlessFault backendlessFault) {
                                     Log.d("Vic","error" + backendlessFault.getMessage());
                                     Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                    //proverka dali ima pending partner request, za da skriem butona
+                                    BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
                                 }
                             });
                         }
@@ -189,6 +196,8 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                         public void handleFault(BackendlessFault backendlessFault) {
                             Log.d("Vic","error" + backendlessFault.getMessage());
                             Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                            //proverka dali ima pending partner request, za da skriem butona
+                            BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
                         }
                     });
 
@@ -209,12 +218,16 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                     //iztrivame reda ot spisaka
                                     mPendingPartnerRequests.remove(position);
                                     notifyDataSetChanged();
+                                    //proverka dali ima pending partner request, za da skriem butona
+                                    BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
                                 }
 
                                 @Override
                                 public void handleFault(BackendlessFault backendlessFault) {
                                     String error = backendlessFault.getMessage();
                                     Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                    //proverka dali ima pending partner request, za da skriem butona
+                                    BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
                                 }
                             });
                 }

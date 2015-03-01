@@ -11,6 +11,7 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.KissesCount;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.ArrayList;
@@ -132,8 +133,7 @@ public class BackendlessHelper {
     }
 
 //proverka dali niama chakashiti zaiavki
-    public static boolean checkForPendingParnerRequests(BackendlessUser mCurrentUser, final MenuItem addPartner) {
-        final boolean[] pendingPartnerRequest = new boolean[1];
+    public static void checkForPendingParnerRequests(BackendlessUser mCurrentUser, final MenuItem addPartner) {
 
         String whereClause = "email_partnerToConfirm='" + mCurrentUser.getEmail() + "'";
         BackendlessDataQuery query = new BackendlessDataQuery();
@@ -144,37 +144,32 @@ public class BackendlessHelper {
 
                 if (partners.getData().size() > 0) {
                     //ako query vrashta rezultat, znachi ima pending request
-                    pendingPartnerRequest[0] = true;
                     if(addPartner !=null) {
+                        //pokazvame butona za dobaviane na partniori, ako reference kam nego ne e null
                         addPartner.setVisible(true);
                     }
-                    //pokazvame butona za dobaviane na partniori, ako reference kam nego ne e null
+                    Statics.pendingPartnerRequest = true;
 
-                   /* if (addPartner != null) {
-                        addPartner.setVisible(true);
-                    }*/
+
                 } else {
                     //ako ne varne nishto mahame butona
-                    pendingPartnerRequest[0] = false;
                     if(addPartner !=null) {
                         addPartner.setVisible(false);
                     }
-                   /* if (addPartner != null) {
-                        addPartner.setVisible(false);
-                    }*/
+                    Statics.pendingPartnerRequest = false;
+
                 }
 
             }
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                pendingPartnerRequest[0] = false;
-               /* if (addPartner != null) {
+               if (addPartner != null) {
                     addPartner.setVisible(false);
-                }*/
+                }
+                Statics.pendingPartnerRequest = false;
             }
         });
-        return pendingPartnerRequest[0];
     }
 
 }

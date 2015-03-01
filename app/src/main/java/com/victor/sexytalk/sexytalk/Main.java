@@ -44,7 +44,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     protected ViewPager pager;
     static Context mContext;
     protected BackendlessUser mCurrentUser;
-    protected static Boolean pendingPartnerRequest;
     protected Toolbar toolbar;
 
     protected String MaleOrFemale;
@@ -52,6 +51,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     public static final int ACTIVITY_SEND_TO = 11;
 
     protected MenuItem addPartner;
+
     protected MaterialTabHost tabHost;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +77,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             //todo tr da se vidi neshto na servera
 
             //check za pending parner request
-            pendingPartnerRequest = BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
-            //pokazvame ili skrivame butona za dobaviane na partniori
-            if (pendingPartnerRequest == true) {
-                if (addPartner != null) {
-                    addPartner.setVisible(true);
-                } else { //niama chakashti zaiavki za partniori
-                    if (addPartner != null) {
-                        addPartner.setVisible(false);
-                    }
-                }
-                //check za pending delete requests
-                BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
+            BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
+
+            //check za pending delete requests
+            BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
 
                 //proveriavame dali e maz ili zhena
                 MaleOrFemale = (String) mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
@@ -155,7 +147,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     }
                 });
 */
-            }
+
 
             pager = (ViewPager) findViewById(R.id.pager);
             PagerAdapterMain pAdapter = new PagerAdapterMain(getSupportFragmentManager(), this);
@@ -419,10 +411,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         inflater.inflate(R.menu.main_menu, menu);
         //vrazvame butona za dobaviane na novi partniori
         addPartner = menu.findItem(R.id.partner_request);
-        //po podrazbirane partner request butona e nevidim,
-        // no go pokazvame, ako ima pending partner request
-        if (pendingPartnerRequest != null && pendingPartnerRequest == true) {
+        if (Statics.pendingPartnerRequest == true) {
             addPartner.setVisible(true);
+        } else  {
+            addPartner.setVisible(false);
         }
 
         return super.onCreateOptionsMenu(menu);
