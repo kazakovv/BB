@@ -26,7 +26,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 import com.victor.sexytalk.sexytalk.Helper.CycleStage;
-import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -230,7 +230,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                        String channel = partner.getEmail();
                        if (deviceId != null && channel != null) {
                            //ako ne sa prazni izprashtame push message
-                           SendPushMessage.sendPush(deviceId,channel,context,Statics.TYPE_CALENDAR_UPDATE);
+                           BackendlessMessage.sendPush(deviceId, channel, context, Statics.TYPE_CALENDAR_UPDATE);
 
                        }
 

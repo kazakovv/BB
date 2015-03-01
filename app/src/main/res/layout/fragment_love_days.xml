@@ -37,6 +37,8 @@
 
         <ImageView
             android:id="@+id/profilePicture"
+            android:layout_marginTop="@dimen/default_padding"
+            android:layout_marginRight="@dimen/default_padding"
             android:layout_width="@dimen/thumbnail_width"
             android:layout_height="@dimen/thumbnail_height"
             android:src="@drawable/ic_action_person_black"

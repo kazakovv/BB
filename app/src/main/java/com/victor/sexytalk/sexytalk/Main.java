@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessCollection;
@@ -23,10 +22,8 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.KissesCount;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
-import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
-import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
-import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 import com.victor.sexytalk.sexytalk.UserInterfaces.EditProfileActivity;
 import com.victor.sexytalk.sexytalk.UserInterfaces.LoginActivity;
@@ -342,7 +339,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                                 int i = 0;
                                 for (String device : deviceIds) {
                                     String channel = recepientEmails.get(i); //kanalat e email na poluchatelia
-                                    SendPushMessage.sendPush(device, channel, mContext, Statics.TYPE_KISS);
+                                    BackendlessMessage.sendPush(device, channel, mContext, Statics.TYPE_KISS);
                                     i++;
                                 }
                                 Toast.makeText(Main.this, getString(R.string.send_a_kiss_toast_successful), Toast.LENGTH_LONG).show();

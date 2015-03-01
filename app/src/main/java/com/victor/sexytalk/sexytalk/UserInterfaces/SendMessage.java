@@ -28,7 +28,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
-import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -495,7 +495,7 @@ public class SendMessage extends ActionBarActivity {
                                                     String channel = recepient.getEmail();
                                                     if (deviceId != null && channel != null) {
                                                         //ako ne sa prazni izprashtame push message
-                                                        SendPushMessage.sendPush(deviceId,channel,mContext,Statics.TYPE_TEXTMESSAGE);
+                                                        BackendlessMessage.sendPush(deviceId, channel, mContext, Statics.TYPE_TEXTMESSAGE);
                                                         switchToMainScreen();
                                                     }
 
@@ -549,7 +549,7 @@ public class SendMessage extends ActionBarActivity {
                                             String channel = recepient.getEmail();
                                             if (deviceId != null && channel != null) {
                                                 //ako ne sa prazni izprashtame push message
-                                                SendPushMessage.sendPush(deviceId,channel,mContext,Statics.TYPE_TEXTMESSAGE);
+                                                BackendlessMessage.sendPush(deviceId, channel, mContext, Statics.TYPE_TEXTMESSAGE);
                                                 switchToMainScreen();
                                             }
 

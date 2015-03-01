@@ -18,12 +18,11 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.messaging.MessageStatus;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
-import com.victor.sexytalk.sexytalk.Helper.SendPushMessage;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -179,7 +178,7 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
                             //tova e za kanala, po koito da izpratim push message
                             String channel = selectedPartner.getEmail();
                             String deviceId = (String) selectedPartner.getProperty(Statics.KEY_DEVICE_ID);
-                            SendPushMessage.sendPush(deviceId, channel, mContext, Statics.TYPE_PARTNER_REQUEST);
+                            BackendlessMessage.sendPush(deviceId, channel, mContext, Statics.TYPE_PARTNER_REQUEST);
                             Toast.makeText(mContext, R.string.partner_request_sent_toast, Toast.LENGTH_LONG).show();
                             mFoundUsers.remove(selectedPartnerPosition);
                             notifyDataSetChanged();
