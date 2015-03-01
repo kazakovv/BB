@@ -20,6 +20,7 @@ import android.widget.AbsListView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,6 +58,7 @@ public class FragmentLoveBox extends ListFragment {
    protected TextView mEmptyMessage;
    protected ProgressBar mProgressBar;
    protected FrameLayout mFragmentLoveBoxLayout;
+   protected RelativeLayout mLayoutLogo;
    protected MenuItem mRefreshButton;
    protected BackendlessUser mCurrentUser;
    protected MenuItem addPartner;
@@ -73,7 +75,7 @@ public class FragmentLoveBox extends ListFragment {
 
         mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         mFragmentLoveBoxLayout = (FrameLayout) rootView.findViewById(R.id.loveBoxLayout);
-
+        mLayoutLogo = (RelativeLayout) rootView.findViewById(R.id.layoutLogo);
         setHasOptionsMenu(true);
         //TODO zadavame cveta na progres bar
         //mProgressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#D81B60"),
@@ -137,6 +139,7 @@ public class FragmentLoveBox extends ListFragment {
                 //pokazvame spinnera i skrivame vsichko drugo
                 mProgressBar.setVisibility(View.VISIBLE);
                 mFragmentLoveBoxLayout.setVisibility(View.GONE);
+                mLayoutLogo.setVisibility(View.GONE);
                 mRefreshButton.setEnabled(false);
 
                 searchForMessages();
@@ -350,6 +353,8 @@ protected void searchForMessages(){
             }
             mProgressBar.setVisibility(View.GONE);
             mFragmentLoveBoxLayout.setVisibility(View.VISIBLE);
+            mLayoutLogo.setVisibility(View.VISIBLE);
+
             //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
             if(mSwipeRefreshLayout.isRefreshing()){
             mSwipeRefreshLayout.setRefreshing(false);
@@ -390,6 +395,8 @@ protected void searchForMessages(){
             }
             mProgressBar.setVisibility(View.GONE);
             mFragmentLoveBoxLayout.setVisibility(View.VISIBLE);
+            mLayoutLogo.setVisibility(View.VISIBLE);
+
 
             //ako sme drapnali swipe to refresh prekratiavame refreshvaneto
             if(mSwipeRefreshLayout.isRefreshing()){

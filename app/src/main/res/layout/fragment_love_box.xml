@@ -55,6 +55,7 @@
     </FrameLayout>
     <!-- TOVA E SAMO ZA LOGOTO ZA CELUVKATA -->
     <RelativeLayout
+        android:id="@+id/layoutLogo"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
