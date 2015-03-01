@@ -133,7 +133,6 @@ public class FragmentLoveDays extends Fragment {
                     Picasso.with(getActivity())
                             .load(existingProfilePicPath)
                             .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS,0))
-                            .centerCrop()
                             .into(profilePic);
                     //Picasso.with(getActivity()).load(existingProfilePicPath).into(profilePic);
                 } else {
