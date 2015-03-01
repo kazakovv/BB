@@ -1,44 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <!-- Progress bar-->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="@dimen/list_item_width"
-        android:layout_height="@dimen/list_item_hight"
-        android:id="@+id/thumbnail_partner"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/message_list_vertical_margin"
-        android:paddingBottom="@dimen/message_list_vertical_margin"
-        android:scaleType="fitXY"
-        android:src="@drawable/ic_action_person_black" />
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:paddingLeft="@dimen/message_list_vertical_margin"
-        android:layout_centerVertical="true"
-        android:id="@+id/partnerUsername"
-        android:layout_alignBaseline="@+id/thumbnail_partner"
-        android:layout_toRightOf="@+id/thumbnail_partner"
-        android:layout_toEndOf="@+id/thumbnail_partner" />
+    </RelativeLayout>
 
-    <ImageButton
-        android:layout_width="@dimen/round_button_width"
-        android:layout_height="@dimen/round_button_height"
-        android:src="@drawable/break_up"
-        android:id="@+id/deletePartnerButton"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:background="@drawable/button_round"/>
+    <!-- Butoni-->
+    <RelativeLayout
+        android:id="@+id/layoutButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
+        <ImageView
+            android:id="@+id/thumbnail_partner"
+            android:layout_width="@dimen/list_item_width"
+            android:layout_height="@dimen/list_item_hight"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:paddingBottom="@dimen/message_list_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/message_list_vertical_margin"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_action_person_black" />
 
+        <TextView
+            android:id="@+id/partnerUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/thumbnail_partner"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/thumbnail_partner"
+            android:layout_toRightOf="@+id/thumbnail_partner"
+            android:paddingLeft="@dimen/message_list_vertical_margin"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <ImageButton
+            android:id="@+id/deletePartnerButton"
+            android:layout_width="@dimen/round_button_width"
+            android:layout_height="@dimen/round_button_height"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/button_round"
+            android:src="@drawable/break_up" />
+
+    </RelativeLayout>
 </RelativeLayout>

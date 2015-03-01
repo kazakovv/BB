@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +47,7 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
 
             if (convertView == null || convertView.getTag() == null) {
 
@@ -54,6 +56,8 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                 holder.nameLabel = (TextView) convertView.findViewById(R.id.partnerUsername);
                 holder.iconImageView = (ImageView) convertView.findViewById(R.id.thumbnail_partner);
                 holder.deletePartnerButton = (ImageButton) convertView.findViewById(R.id.deletePartnerButton);
+                holder.layoutButtons = (RelativeLayout) convertView.findViewById(R.id.layoutButtons);
+                holder.progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
                 convertView.setTag(holder);
 
             } else {
@@ -86,6 +90,9 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                 builder.setPositiveButton(R.string.dialog_delete_partner_yes_button,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                //pokazvame spinner
+                                holder.progressBar.setVisibility(View.VISIBLE);
+                                holder.layoutButtons.setVisibility(View.INVISIBLE);
 
                                 BackendlessUser[] currentListWithPartners =
                                         (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
@@ -139,6 +146,9 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                                                 Backendless.Messaging.publish(receiverID,Statics.KEY_PARTNER_DELETE, new AsyncCallback<MessageStatus>() {
                                                     @Override
                                                     public void handleResponse(MessageStatus messageStatus) {
+                                                        //skrivame spinner
+                                                        holder.progressBar.setVisibility(View.GONE);
+                                                        holder.layoutButtons.setVisibility(View.VISIBLE);
                                                         /*
                                                         TUK USPESHNO ZAVARSHVAME
                                                          */
@@ -147,6 +157,10 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                                                     @Override
                                                     public void handleFault(BackendlessFault backendlessFault) {
                                                        //error sending push. Nisho ne mozem da napravim
+
+                                                        //skrivame spinner
+                                                        holder.progressBar.setVisibility(View.GONE);
+                                                        holder.layoutButtons.setVisibility(View.VISIBLE);
                                                     }
                                                 });
                                             }
@@ -154,6 +168,9 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                                             @Override
                                             public void handleFault(BackendlessFault backendlessFault) {
                                                     //error uploading delete request. Nishto ne mozem da napravim
+                                                //skrivame spinner
+                                                holder.progressBar.setVisibility(View.GONE);
+                                                holder.layoutButtons.setVisibility(View.VISIBLE);
                                             }
                                         });
 
@@ -163,6 +180,9 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                                     @Override
                                     public void handleFault(BackendlessFault backendlessFault) {
                                         Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                        //skrivame spinner
+                                        holder.progressBar.setVisibility(View.GONE);
+                                        holder.layoutButtons.setVisibility(View.VISIBLE);
                                     }
                                 });
 
@@ -190,6 +210,8 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
         ImageView iconImageView;
         TextView nameLabel;
         ImageButton deletePartnerButton;
+        RelativeLayout layoutButtons;
+        ProgressBar progressBar;
     }
 
 
