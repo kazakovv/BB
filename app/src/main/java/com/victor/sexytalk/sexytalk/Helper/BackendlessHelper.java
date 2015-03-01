@@ -150,7 +150,6 @@ public class BackendlessHelper {
                     }
                     Statics.pendingPartnerRequest = true;
 
-
                 } else {
                     //ako ne varne nishto mahame butona
                     if(addPartner !=null) {
