@@ -65,6 +65,8 @@
                 android:id="@+id/cyclePhase"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/default_padding"
+                android:paddingRight="@dimen/default_padding"
                 android:layout_below="@+id/listOfPartners"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/fragment_love_days_generic_title"
