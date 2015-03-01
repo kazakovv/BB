@@ -143,17 +143,12 @@ public class FragmentLoveBox extends ListFragment {
                 mRefreshButton.setEnabled(false);
 
                 searchForMessages();
-
-
-
-
-
-                //proveriavame da delete i za pending add/delete request
+             //proveriavame da delete i za pending add/delete request
+                //proveriavame dali evenualno niama mezhduvremenno novi dobaveni partniori
                 if(mCurrentUser !=null) {
                     BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
-
-
-                   BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
+                    BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
+                    BackendlessHelper.checkAndUpdatePartners(mCurrentUser);
                 }
 
 

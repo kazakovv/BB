@@ -170,5 +170,36 @@ public class BackendlessHelper {
             }
         });
     }
+    /*
+    CHECK DALI NIAMA NOVI PARTNIORI ZA DOBAVIANE
+     */
+
+    public static void checkAndUpdatePartners(final BackendlessUser mCurrentUser) {
+       BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        String whereClause = "email='" +mCurrentUser.getEmail() +"'";
+        dataQuery.setWhereClause(whereClause);
+        Backendless.Data.of(BackendlessUser.class).find(dataQuery, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<BackendlessUser> user) {
+                if(user.getCurrentPage().size()>0) {
+                    //bi triabvalo da ima samo 1 potrebitel tuk
+                    BackendlessUser currentUser = user.getCurrentPage().get(0);
+                    if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                        BackendlessUser[] updatedPartnersList = (BackendlessUser[]) currentUser.getProperty(Statics.KEY_PARTNERS);
+                        //updatevame lokalno
+                        mCurrentUser.setProperty(Statics.KEY_PARTNERS, updatedPartnersList);
+                        Backendless.UserService.setCurrentUser(mCurrentUser);
+                    }
+
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                //niama kakvo da napravim
+            }
+        });
+
+    }
 
 }

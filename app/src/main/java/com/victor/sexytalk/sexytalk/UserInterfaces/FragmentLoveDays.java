@@ -288,9 +288,11 @@ public class FragmentLoveDays extends Fragment {
                 refreshPartnersList();
 
                 //proveriavame da delete i za pending partner request
+                //proveriavame dali ne sa se updatnali partniorite na usera
                 if(mCurrentUser !=null) {
                     BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
                     BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
+                    BackendlessHelper.checkAndUpdatePartners(mCurrentUser);
                 }
                 return true;
         }
