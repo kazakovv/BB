@@ -39,6 +39,7 @@ public class FragmentSearchPartners extends ListFragment {
     protected ArrayList<Integer> selectedUsers;
     protected BackendlessUser currentUser;
     protected ListView listWithFoundUsers;
+    protected ProgressBar progressBar;
 
 
 
@@ -50,6 +51,7 @@ public class FragmentSearchPartners extends ListFragment {
         searchField = (EditText) inflatedView.findViewById(R.id.searchField);
         searchButton = (ImageButton) inflatedView.findViewById(R.id.searchButton);
         emptyMessage = (TextView) inflatedView.findViewById(R.id.emptyMessage);
+        progressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
         emptyMessage.setText(""); //za da ne izkarva saobshtenie ot nachalo
 
         return inflatedView;
@@ -72,12 +74,18 @@ public class FragmentSearchPartners extends ListFragment {
             @Override
             public void onClick(View view) {
 
+
                 //inicializirame array i po tozi nachin iztrivame predhodnite soinosti,
                 // ot predishni tarsenia ako ima takiva
                 selectedUsers = new ArrayList<Integer>();
 
                 String textToSearch = searchField.getText().toString();
-                if(!textToSearch.equals("")) {
+                if(!textToSearch.equals("")) { //check dali search field a prazno
+                    //pokazvame spinner
+                    searchButton.setEnabled(false);
+                    listWithFoundUsers.setVisibility(View.INVISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);
+
                     //TODO: izkarva rezultati po niakolko potati. Tr da se opravi kriteriat
                     String whereClause = "email LIKE'%" + textToSearch + "%'";
                     BackendlessDataQuery query = new BackendlessDataQuery();
@@ -86,6 +94,11 @@ public class FragmentSearchPartners extends ListFragment {
                     Backendless.Data.of(BackendlessUser.class).find(query, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
                         @Override
                         public void handleResponse(BackendlessCollection<BackendlessUser> users) {
+                            //skrivame spinner
+                            searchButton.setEnabled(true);
+                            listWithFoundUsers.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.INVISIBLE);
+
                             //Sazdavame spisak s namerenite potrebiteli
 
                             foundUsers = users.getData();
@@ -109,6 +122,7 @@ public class FragmentSearchPartners extends ListFragment {
 
                             } else { //zatvariame check dali sme namerili neshto
                                 //izchistvame spisaka, ako ne e namereno nishto
+
                                 emptyMessage.setText(R.string.no_partners_found);//gore go zadadohme da e prazno
                                 listWithFoundUsers.setAdapter(null);
                                 listWithFoundUsers.setEmptyView(emptyMessage);
@@ -116,6 +130,11 @@ public class FragmentSearchPartners extends ListFragment {
                         }
                         @Override
                         public void handleFault(BackendlessFault backendlessFault) {
+                            //skrivame spinner
+                            searchButton.setEnabled(true);
+                            listWithFoundUsers.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.INVISIBLE);
+
                             Toast.makeText(getActivity(), R.string.general_server_error,
                                     Toast.LENGTH_LONG).show();
                         }
