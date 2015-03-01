@@ -26,9 +26,9 @@ public class ViewKissActivity extends ActionBarActivity {
         //vkarvame broia na celuvkite kato promenliva v string
         String numberOfKissesMessage;
         if(kissesSent > 1) {
-            numberOfKissesMessage = getResources().getString(R.string.number_of_kisses_sent_plural, kissesSent);
+            numberOfKissesMessage = getResources().getString(R.string.number_of_kisses_received_plural, kissesSent);
         } else {
-            numberOfKissesMessage = getResources().getString(R.string.number_of_kisses_sent_singular, kissesSent);
+            numberOfKissesMessage = getResources().getString(R.string.number_of_kisses_received_singular, kissesSent);
         }
         String message = getIntent().getStringExtra(Statics.KEY_USERNAME_SENDER) + " " + numberOfKissesMessage ;
 
