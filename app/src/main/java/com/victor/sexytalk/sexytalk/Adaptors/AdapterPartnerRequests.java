@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,7 +46,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null || convertView.getTag() == null ) {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.item_partner_request, null);
             holder = new ViewHolder();
@@ -52,6 +54,8 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
             holder.iconImageView = (ImageView) convertView.findViewById(R.id.thumbnail_partner);
             holder.buttonAccceptPartner = (ImageButton) convertView.findViewById(R.id.acceptPartnerButton);
             holder.buttonRejectPartner = (ImageButton) convertView.findViewById(R.id.rejectPartnerButton);
+            holder.layoutButtons = (RelativeLayout) convertView.findViewById(R.id.layoutButtons);
+            holder.progressBar = (ProgressBar) convertView.findViewById(R.id.progressBar);
         }else {
             holder = (ViewHolder) convertView.getTag();
         }
@@ -72,6 +76,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
             holder.buttonAccceptPartner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     //1.Namirame partniorite na tekushtia potrebitel
                     //2.Namirame partiorite na partner, koito prashta request
                     //3. uploadvame v backendless novia spisak s partniorite za tekushtia potrebitel
@@ -79,8 +84,13 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                     //5. iztrivame pending request
                     //6. sazdavame tablica za broia celuvki
 
+                    //prokazvame spinner
+                    holder.layoutButtons.setVisibility(View.INVISIBLE);
+                    holder.progressBar.setVisibility(View.VISIBLE);
+
                     //1.Namirame partniorite na tekushtia potrebitel
                     // i sazdavame nov massiv sas spisak ot partniori za tekushtia potrebitel
+
 
                     BackendlessUser[] newListWithPartners;
                     if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
@@ -107,7 +117,6 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                     }
                     //updatevame spisaka s partniori za tekushtia potrebitel
                     mCurrentUser.setProperty(Statics.KEY_PARTNERS, newListWithPartners);
-
 
                     //2.Namirame partniorite na user, koito prashta partner request
                     // i sazdavame nov massiv sas spisak ot partniori za nego
@@ -167,6 +176,11 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
                                                     //proverka dali ima pending partner request, za da skriem butona
                                                     BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
+
+                                                    //skrivame spinner
+                                                    holder.layoutButtons.setVisibility(View.VISIBLE);
+                                                    holder.progressBar.setVisibility(View.GONE);
+
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
                                                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
@@ -175,6 +189,10 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                                 @Override
                                                 public void handleFault(BackendlessFault backendlessFault) {
                                                     Log.d("Vic","error" + backendlessFault.getMessage());
+                                                    //skrivame spinner
+                                                    holder.layoutButtons.setVisibility(View.VISIBLE);
+                                                    holder.progressBar.setVisibility(View.GONE);
+
                                                     Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
                                                     //proverka dali ima pending partner request, za da skriem butona
                                                     BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
@@ -185,6 +203,10 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                 @Override
                                 public void handleFault(BackendlessFault backendlessFault) {
                                     Log.d("Vic","error" + backendlessFault.getMessage());
+                                    //skrivame spinner
+                                    holder.layoutButtons.setVisibility(View.VISIBLE);
+                                    holder.progressBar.setVisibility(View.GONE);
+
                                     Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
                                     //proverka dali ima pending partner request, za da skriem butona
                                     BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
@@ -195,6 +217,9 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                         @Override
                         public void handleFault(BackendlessFault backendlessFault) {
                             Log.d("Vic","error" + backendlessFault.getMessage());
+                            //skrivame spinner
+                            holder.layoutButtons.setVisibility(View.VISIBLE);
+                            holder.progressBar.setVisibility(View.GONE);
                             Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
                             //proverka dali ima pending partner request, za da skriem butona
                             BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
@@ -210,6 +235,9 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
             holder.buttonRejectPartner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //pokazvame spinner
+                    holder.layoutButtons.setVisibility(View.INVISIBLE);
+                    holder.progressBar.setVisibility(View.VISIBLE);
                     //iztrivame request ot backendless
                     Backendless.Data.of(PartnersAddRequest.class)
                             .remove(mPendingPartnerRequests.get(position), new AsyncCallback<Long>() {
@@ -218,6 +246,9 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                     //iztrivame reda ot spisaka
                                     mPendingPartnerRequests.remove(position);
                                     notifyDataSetChanged();
+                                    //skrivame spinner
+                                    holder.layoutButtons.setVisibility(View.VISIBLE);
+                                    holder.progressBar.setVisibility(View.GONE);
                                     //proverka dali ima pending partner request, za da skriem butona
                                     BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
                                 }
@@ -225,6 +256,9 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                 @Override
                                 public void handleFault(BackendlessFault backendlessFault) {
                                     String error = backendlessFault.getMessage();
+                                    //skrivame spinner
+                                    holder.layoutButtons.setVisibility(View.VISIBLE);
+                                    holder.progressBar.setVisibility(View.GONE);
                                     Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
                                     //proverka dali ima pending partner request, za da skriem butona
                                     BackendlessHelper.checkForPendingParnerRequests(mCurrentUser,null);
@@ -239,5 +273,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
         TextView nameLabel;
         ImageButton buttonAccceptPartner;
         ImageButton buttonRejectPartner;
+        RelativeLayout layoutButtons;
+        ProgressBar progressBar;
     }
 }
