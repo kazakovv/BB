@@ -186,7 +186,7 @@
     <string name="number_of_kisses_received_singular">has sent you %1$d kiss</string>
     <string name="number_of_kisses_received_plural">has sent you %1$d kisses</string>
     <string name="dialog_number_kisses_title">Kiss</string>
-    <string name="number_of_kisses_sent_singular">You have sent %1$d kiss to</string>
+    <string name="number_of_kisses_sent_singular">This is the first kiss you send to</string>
     <string name="number_of_kisses_sent_plural">You have sent %1$d kisses to</string>
 
     <string-array name="camera_choices">

@@ -146,7 +146,7 @@ public class BackendlessMessage {
 
                         } else {
                             //kiss v edinstveno chislo
-                            message = context.getResources().getString(R.string.number_of_kisses_sent_singular, kissNumber);
+                            message = context.getResources().getString(R.string.number_of_kisses_sent_singular);
                         }
 
                         //dobaviame username na polucahtelia kam message

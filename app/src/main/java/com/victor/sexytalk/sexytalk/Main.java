@@ -270,6 +270,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             if (requestCode == ACTIVITY_SEND_TO) {
 
                 //tezi dva arraylist se vrashtat ot SendTo, sled kato izberem na kogo da pratim celuvka
+                //ogranicheni sa da vrashtat samo edin poluchatel
                 ArrayList<String> recepientUserNames =
                         data.getStringArrayListExtra(Statics.KEY_USERNAME);
                 final ArrayList<String> recepientEmails =
@@ -288,7 +289,13 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         emailsOfRecepients += ","; //dobaviame zapetaia ako ima oshte recepients
                     }
                 }
+                //izprashtame kiss
+                    BackendlessMessage.sendKissMessage(mCurrentUser,
+                                                       recepientEmails.get(0),
+                                                       deviceIds.get(0),
+                                                       mContext);
 
+/*
 
                 //message
                 //1. parvo tarsim kolko celuvki sa izprateni veche
@@ -395,7 +402,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     } //krai na neuspeshnata data query za tarsene na broi celuvki
                 }); //krai na cialata data query za tarsene na broi celuvki
 
-
+*/
 
             } //krai na REQUESTCODE == Activity Send to
         } //krai na RESULTCODE OK
