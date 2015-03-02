@@ -187,8 +187,8 @@ public class BackendlessHelper {
                     if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
                         BackendlessUser[] updatedPartnersList = (BackendlessUser[]) currentUser.getProperty(Statics.KEY_PARTNERS);
                         //updatevame lokalno
-                        mCurrentUser.setProperty(Statics.KEY_PARTNERS, updatedPartnersList);
-                        Backendless.UserService.setCurrentUser(mCurrentUser);
+                        currentUser.setProperty(Statics.KEY_PARTNERS, updatedPartnersList);
+                        Backendless.UserService.setCurrentUser(currentUser);
                     }
 
                 }

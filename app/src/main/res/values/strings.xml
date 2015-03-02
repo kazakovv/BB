@@ -95,7 +95,7 @@
     <string name="empty_search_field_message">Please enter a valid email address</string>
     <string name="general_server_error">Sorry, there was a server error</string>
     <string name="partner_hasnt_updated_calendar">has not updated her calendar</string>
-    <string name="general_calendar_error">Please update your Private Days calendar</string>
+    <string name="general_calendar_error">Please update your Private Days</string>
     <string name="fragment_love_days_generic_title">Please update your private days to start using all of SexyTalk\'s functions</string>
     <string name="no_partners_message">Add your partners to start using SexyTalk</string>
     <string name="no_partners_found">No partners were found</string>
@@ -189,6 +189,10 @@
     <string name="number_of_kisses_sent_singular">This is the first kiss you send to</string>
     <string name="number_of_kisses_sent_plural">You have sent %1$d kisses to</string>
 
+    <string name="username_cannot_be_empty">The username cannot be empty</string>
+    <string name="toast_username_updated">Your username was updated</string>
+    <string name="dialog_change_username_title">Change your username</string>
+
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
@@ -202,6 +206,7 @@
         <item>Change date of birth</item>
         <item>Change password</item>
         <item>Change profile picture</item>
+        <item>Change your username</item>
     </string-array>
 
     <string name="title_activity_change_sexy_status">ChangeSexyStatus</string>

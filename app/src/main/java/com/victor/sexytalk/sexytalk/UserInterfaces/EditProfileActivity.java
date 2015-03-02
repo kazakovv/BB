@@ -30,6 +30,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.files.BackendlessFile;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
+import com.victor.sexytalk.sexytalk.CustomDialogs.ChangeUsername;
 import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
 import com.victor.sexytalk.sexytalk.Helper.FileHelper;
@@ -64,6 +65,7 @@ public class EditProfileActivity extends ActionBarActivity {
         public static int TAKE_PHOTO_REQUEST = 333;
         public static int SET_BIRTHDAY = 444;
         public static int CHANGE_PASSWORD = 555;
+        public static int CHANGE_USERNAME= 666;
         protected String mMessageType;
         protected Uri mMediaUri;
         public static final int FILE_SIZE_LIMIT = 1024*1024*10;
@@ -178,6 +180,12 @@ public class EditProfileActivity extends ActionBarActivity {
                     AlertDialog dialog = builder.create();
                     dialog.show();
                     return;
+                case 4:
+                    //change username
+                    ChangeUsername changeUsername = new ChangeUsername();
+                    changeUsername.setTargetFragment(FragmentEditProfileActivity.this, CHANGE_USERNAME);
+                    changeUsername.show(getFragmentManager(),"Welcome");
+                    return;
 
             }
 
@@ -278,7 +286,7 @@ public class EditProfileActivity extends ActionBarActivity {
 
 
 
-        //onClick listener za uploadvane na snimko
+        //onClick listener za uploadvane na snimka
         protected DialogInterface.OnClickListener mUploadPicture =
                 new DialogInterface.OnClickListener() {
 

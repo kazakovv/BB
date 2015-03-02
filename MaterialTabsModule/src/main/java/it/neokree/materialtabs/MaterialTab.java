@@ -26,9 +26,9 @@ import at.markushi.ui.RevealColorView;
  *
  */ 
 public class MaterialTab implements View.OnTouchListener {
-
-    private final static int REVEAL_DURATION = 400;
-    private final static int HIDE_DURATION = 500;
+    //ako zadadem po-golemi stoinisti se poluchava ripple efekt
+    private final static int REVEAL_DURATION = 4; //400
+    private final static int HIDE_DURATION = 4; //500
 	
 	private View completeView;
 	private ImageView icon;
