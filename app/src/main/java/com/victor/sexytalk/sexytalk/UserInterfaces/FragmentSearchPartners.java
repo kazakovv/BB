@@ -1,17 +1,19 @@
 package com.victor.sexytalk.sexytalk.UserInterfaces;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +34,7 @@ import java.util.List;
 /**
  */
 public class FragmentSearchPartners extends ListFragment {
-    protected EditText searchField;
+    protected EditText emailSearchField;
     protected ImageButton searchButton;
     protected TextView emptyMessage;
     protected List<BackendlessUser> foundUsers;
@@ -40,6 +42,7 @@ public class FragmentSearchPartners extends ListFragment {
     protected BackendlessUser currentUser;
     protected ListView listWithFoundUsers;
     protected ProgressBar progressBar;
+    protected Context mContext;
 
 
 
@@ -48,7 +51,8 @@ public class FragmentSearchPartners extends ListFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        View inflatedView = inflater.inflate(R.layout.fragment_fragment_search_partners, container, false);
         //vrazvame promenlivite
-        searchField = (EditText) inflatedView.findViewById(R.id.searchField);
+        mContext = inflater.getContext();
+        emailSearchField = (EditText) inflatedView.findViewById(R.id.searchField);
         searchButton = (ImageButton) inflatedView.findViewById(R.id.searchButton);
         emptyMessage = (TextView) inflatedView.findViewById(R.id.emptyMessage);
         progressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
@@ -79,15 +83,15 @@ public class FragmentSearchPartners extends ListFragment {
                 // ot predishni tarsenia ako ima takiva
                 selectedUsers = new ArrayList<Integer>();
 
-                String textToSearch = searchField.getText().toString();
-                if(!textToSearch.equals("")) { //check dali search field a prazno
+                String emailToSearch = emailSearchField.getText().toString();
+                if(!emailToSearch.equals("")) { //check dali search field a prazno
                     //pokazvame spinner
                     searchButton.setEnabled(false);
                     listWithFoundUsers.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
 
                     //TODO: izkarva rezultati po niakolko potati. Tr da se opravi kriteriat
-                    String whereClause = "email LIKE'%" + textToSearch + "%'";
+                    String whereClause = "email LIKE'%" + emailToSearch + "%'";
                     BackendlessDataQuery query = new BackendlessDataQuery();
                     query.setWhereClause(whereClause);
 
@@ -126,6 +130,17 @@ public class FragmentSearchPartners extends ListFragment {
                                 emptyMessage.setText(R.string.no_partners_found);//gore go zadadohme da e prazno
                                 listWithFoundUsers.setAdapter(null);
                                 listWithFoundUsers.setEmptyView(emptyMessage);
+
+                                //izkarvame dialog box dali ne izkame da izpratim email s pokana
+                                AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+                                builder.setTitle(R.string.dialog_invite_partner_join_sexytalk_title)
+                                        .setMessage(R.string.dialog_message_partner_not_joined_sexytalk)
+                                        .setNegativeButton(R.string.cancel, null)
+                                        .setPositiveButton(R.string.ok, sendEmail);
+
+                                AlertDialog dialog = builder.create();
+                                dialog.show();
+
                             }
                         }
                         @Override
@@ -156,4 +171,23 @@ public class FragmentSearchPartners extends ListFragment {
         Log.d("Vic","We are hare");
 
     }
+
+    DialogInterface.OnClickListener sendEmail = new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            String emailToSearch = emailSearchField.getText().toString();
+            String subject = mContext.getResources().getString(R.string.email_invite_to_sexytalk_subject);
+            String body = mContext.getResources().getString(R.string.email_invite_to_sexytalk_body);
+            Intent i = new Intent(Intent.ACTION_SEND);
+            i.setType("message/rfc822");
+            i.putExtra(Intent.EXTRA_EMAIL  , new String[]{emailToSearch});
+            i.putExtra(Intent.EXTRA_SUBJECT, subject);
+            i.putExtra(Intent.EXTRA_TEXT   , body);
+            try {
+                startActivity(Intent.createChooser(i, "Send mail..."));
+            } catch (android.content.ActivityNotFoundException ex) {
+                Toast.makeText(mContext, R.string.toast_no_email_clients_installed, Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 }

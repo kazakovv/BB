@@ -193,6 +193,11 @@
     <string name="toast_username_updated">Your username was updated</string>
     <string name="dialog_change_username_title">Change your username</string>
 
+    <string name="dialog_invite_partner_join_sexytalk_title">Invite your loved one to join SexyTalk</string>
+    <string name="dialog_message_partner_not_joined_sexytalk">You partner is not using SexyTalk. Do you want to send an invitation by email?</string>
+    <string name="email_invite_to_sexytalk_subject">I want to have a SexyTalk with you</string>
+    <string name="email_invite_to_sexytalk_body">Hi honey, let\'s start sexy talking! Just download SexyTalk from the Google Play Store. I am waiting for you... :) </string>
+    <string name="toast_no_email_clients_installed">"There are no email clients installed."</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>
