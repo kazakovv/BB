@@ -1,16 +1,16 @@
 package com.victor.sexytalk.sexytalk.CustomDialogs;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -23,9 +23,10 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class SetBirthdaySignUp extends DialogFragment {
-protected DatePicker mBirthday;
-protected BackendlessUser mCurrentUser;
-protected Context mContext;
+    protected DatePicker mBirthday;
+    protected BackendlessUser mCurrentUser;
+    protected Context mContext;
+    private OnCompleteListener mListener;
 
     @NonNull
     @Override
@@ -46,7 +47,7 @@ protected Context mContext;
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         Calendar birthDate = Calendar.getInstance();
-                        birthDate.set(mBirthday.getYear(),mBirthday.getMonth(),mBirthday.getDayOfMonth());
+                        birthDate.set(mBirthday.getYear(), mBirthday.getMonth(), mBirthday.getDayOfMonth());
                         dismiss();
                     }//krai na on click ok button
 
@@ -58,4 +59,19 @@ protected Context mContext;
     }
 
 
+    //interface za pass value to SignUp Activity
+    public static interface OnCompleteListener {
+        public abstract void onComplete(Date dateOfBirth);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            this.mListener = (OnCompleteListener)activity;
+        }
+        catch (final ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement OnCompleteListener");
+        }
+    }
 }

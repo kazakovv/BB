@@ -26,7 +26,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class SignUpActivity extends Activity {
+public class SignUpActivity extends Activity implements SetBirthdaySignUp.OnCompleteListener {
     protected EditText mUserName;
     protected EditText mPassword;
     protected EditText mEmail;
@@ -110,7 +110,8 @@ public class SignUpActivity extends Activity {
                                         newUser.setProperty(Statics.KEY_DATE_OF_BIRTH,dateOfBirth.getTime());
                                          */
 
-
+                                        SetBirthdaySignUp birthdaySignUp = new SetBirthdaySignUp();
+                                        birthdaySignUp.show(getFragmentManager(),"Welcome");
 
                                         final String message = getResources().getString(R.string.signing_in_message);
                                         Backendless.UserService.register(newUser,
@@ -187,5 +188,12 @@ public class SignUpActivity extends Activity {
         });
     }
 
+    //vrashtame date of Birth
+    @Override
+    public void onComplete(Date dateOfBirth) {
+     if(newUser !=null) {
+        newUser.setProperty(Statics.KEY_DATE_OF_BIRTH,dateOfBirth);
 
+     }
+    }
 }//krai na sign up activity
