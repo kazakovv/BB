@@ -21,6 +21,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -181,6 +182,11 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                                     holder.layoutButtons.setVisibility(View.VISIBLE);
                                                     holder.progressBar.setVisibility(View.GONE);
 
+                                                    //izprashtame push message, che pokanata e prieta
+                                                    String deviceID = (String) mUserRequesting.getProperty(Statics.KEY_DEVICE_ID);
+                                                    BackendlessMessage.sendPush( deviceID,
+                                                                                mUserRequesting.getEmail(),
+                                                                                mContext,Statics.KEY_PARTNER_REQUEST_APPROVED );
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
                                                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111

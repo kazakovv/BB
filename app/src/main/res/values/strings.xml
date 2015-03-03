@@ -198,6 +198,7 @@
     <string name="email_invite_to_sexytalk_subject">I want to have a SexyTalk with you</string>
     <string name="email_invite_to_sexytalk_body">Hi honey, let\'s start sexy talking! Just download SexyTalk from the Google Play Store. I am waiting for you... :) </string>
     <string name="toast_no_email_clients_installed">"There are no email clients installed."</string>
+    <string name="partner_request_approved">Your loved one approved your partner request</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>

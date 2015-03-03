@@ -1,6 +1,7 @@
 package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -57,28 +58,18 @@ public class ViewImageActivity extends ActionBarActivity {
 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_view_image_activity, menu);
+        getMenuInflater().inflate(R.menu.menu_view_text_image_message, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        /*
         int id = item.getItemId();
-        int rotationAngle;
-        switch(id){
-            case R.id.action_rotate_left:
-                rotationAngle = (int) imageViewToDisplay.getRotation();
-                imageViewToDisplay.setRotation(rotationAngle -90);
-
-                break;
-            case R.id.action_rotate_right:
-                rotationAngle = (int) imageViewToDisplay.getRotation();
-                imageViewToDisplay.setRotation(rotationAngle + 90);
-                break;
+        if (id == R.id.menu_send_message) {
+            Intent intent = new Intent(ViewImageActivity.this,SendMessage.class);
+            startActivity(intent);
+            return true;
         }
-
-*/
         return super.onOptionsItemSelected(item);
 
     }

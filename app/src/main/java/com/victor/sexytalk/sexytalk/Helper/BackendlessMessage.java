@@ -43,6 +43,8 @@ public class BackendlessMessage {
             //messageToast = context.getResources().getString(R.string.send_a_kiss_toast_successful);
         } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST)) {
             messagePush = context.getResources().getString(R.string.new_partner_request_push);
+        } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST_APPROVED)) {
+            messagePush = context.getResources().getString(R.string.partner_request_approved);
         }
         PublishOptions publishOptions = new PublishOptions();
         publishOptions.putHeader(PublishOptions.ANDROID_TICKER_TEXT_TAG, messagePush);

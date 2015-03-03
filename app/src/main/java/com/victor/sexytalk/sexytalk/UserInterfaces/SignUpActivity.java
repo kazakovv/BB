@@ -100,6 +100,8 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                                     } else {
                                         SetBirthdaySignUp birthdaySignUp = new SetBirthdaySignUp();
                                         birthdaySignUp.show(getSupportFragmentManager(),"Welcome");
+                                        //sled kato se izbere Rozhden den, prodalzavame natatak s registraciata
+                                        //Kodat za tova e v onClomplete
 
                                     } //krai na niama takav potrevitel
                                 }//krai na uspeshna parva query dali ima veche registriran takav email

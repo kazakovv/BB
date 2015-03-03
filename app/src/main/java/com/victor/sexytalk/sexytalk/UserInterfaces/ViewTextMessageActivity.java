@@ -1,10 +1,12 @@
 package com.victor.sexytalk.sexytalk.UserInterfaces;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterViewTextMessage;
@@ -39,8 +41,11 @@ public class ViewTextMessageActivity extends ActionBarActivity {
         recList.setAdapter(adapter);
     }
 
-
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_view_text_image_message,menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -50,7 +55,9 @@ public class ViewTextMessageActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.menu_send_message) {
+            Intent intent = new Intent(ViewTextMessageActivity.this,SendMessage.class);
+            startActivity(intent);
             return true;
         }
 

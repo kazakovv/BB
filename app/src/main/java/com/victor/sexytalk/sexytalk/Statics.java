@@ -72,6 +72,8 @@ public class Statics {
     public static final String BACKENDLESS_INVALID_EMAIL_PASSWORD_RECOVERY = "3020";
     public static final String BACKENDLESS_TABLE_NOT_FOUND_CODE = "1009";
 
+    public static final String KEY_PARTNER_REQUEST_APPROVED = "partnerRequestApproved";
+
     public static final String KEY_USER_REQUESTING_TO_UPDATE_PARTNERS = "userRequestingToUpdatePartners";
 
     public static final int PICASSO_ROUNDED_CORNERS = 30;
