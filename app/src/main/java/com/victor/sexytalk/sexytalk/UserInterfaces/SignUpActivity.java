@@ -16,6 +16,8 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
+import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthdaySignUp;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -30,7 +32,7 @@ public class SignUpActivity extends Activity {
     protected EditText mEmail;
     protected Button mSignUpButton;
     protected Spinner spinner;
-    protected DatePicker mDateOfBirth;
+    protected BackendlessUser newUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +55,7 @@ public class SignUpActivity extends Activity {
         mPassword = (EditText) findViewById(R.id.sign_up_password);
         mEmail = (EditText) findViewById(R.id.sign_up_email);
         mSignUpButton = (Button) findViewById(R.id.sign_up_button);
-        mDateOfBirth = (DatePicker) findViewById(R.id.dateOfBirth);
-        //zadavame max date dnes
-        mDateOfBirth.setMaxDate(new Date().getTime());
+
         mSignUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,15 +97,20 @@ public class SignUpActivity extends Activity {
                                     } else {
                                         //niama takav registriran user. Prodalzhavame natatak
 
-                                        BackendlessUser newUser = new BackendlessUser();
+                                        newUser = new BackendlessUser();
                                         newUser.setEmail(email);
                                         newUser.setPassword(password);
                                         newUser.setProperty(Statics.KEY_USERNAME, userName);
                                         newUser.setProperty(Statics.KEY_MALE_OR_FEMALE, spinner.getSelectedItem().toString());
                                         //zadavame rozdenia den
+
+                                        /* TODO!!!!!!!!!!!
                                         Calendar dateOfBirth = Calendar.getInstance();
                                         dateOfBirth.set(mDateOfBirth.getYear(), mDateOfBirth.getMonth(), mDateOfBirth.getDayOfMonth());
                                         newUser.setProperty(Statics.KEY_DATE_OF_BIRTH,dateOfBirth.getTime());
+                                         */
+
+
 
                                         final String message = getResources().getString(R.string.signing_in_message);
                                         Backendless.UserService.register(newUser,
@@ -114,7 +119,7 @@ public class SignUpActivity extends Activity {
                                                     @Override
                                                     public void handleResponse(BackendlessUser backendlessUser) {
 
-                                                        //tuk varzvame push!!!!!!!!!!!!!!!!!
+                                                        //TODO tuk varzvame push!!!!!!!!!!!!!!!!!
                                                         //!!!!!!!!!!!!!!!!!!
                                                         //User successfully created!
                                                         //log in!
@@ -181,4 +186,6 @@ public class SignUpActivity extends Activity {
             }
         });
     }
-}
+
+
+}//krai na sign up activity

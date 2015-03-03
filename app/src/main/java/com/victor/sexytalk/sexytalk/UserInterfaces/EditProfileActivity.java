@@ -148,6 +148,7 @@ public class EditProfileActivity extends ActionBarActivity {
             }
         }
 
+
         @Override
         public void onListItemClick(ListView l, View v, int position, long id) {
             super.onListItemClick(l, v, position, id);
@@ -329,6 +330,7 @@ public class EditProfileActivity extends ActionBarActivity {
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
         }
+
     }//Krai na internal list fragment
 
 }//krai celia klas
