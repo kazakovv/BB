@@ -3,14 +3,12 @@ package com.victor.sexytalk.sexytalk.UserInterfaces;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
 import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +36,6 @@ import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.CycleStage;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
-import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -69,7 +66,7 @@ public class FragmentLoveDays extends Fragment {
 
 
     protected TextView cyclePhaseTitle;
-    protected TextView cyclePhaseStatus;
+    protected TextView mSexyStatus;
     protected Calendar firstDayOfCycle;
 
     protected ActionBar toolbar;
@@ -96,7 +93,6 @@ public class FragmentLoveDays extends Fragment {
         mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
         mFragmentLoveDaysLayout = (RelativeLayout) inflatedView.findViewById(R.id.layoutFragmentLoveDays);
 
-
         return inflatedView;
     }
 
@@ -113,7 +109,7 @@ public class FragmentLoveDays extends Fragment {
 
         showPrivateDaysDialog = (Button) getActivity().findViewById(R.id.showPrivateDaysDialog);
         cyclePhaseTitle = (TextView) getActivity().findViewById(R.id.cyclePhase);
-        cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
+        mSexyStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
         listOfPartnersSpinner = (Spinner) getActivity().findViewById(R.id.listOfPartners);
         sexyCalendar = (Button) getActivity().findViewById(R.id.showSexyCalendar);
 
@@ -148,10 +144,10 @@ public class FragmentLoveDays extends Fragment {
 
                 }
                 restoreValuesForLoggedInUser();
-                cyclePhaseStatus.setOnClickListener(new View.OnClickListener() {
+                mSexyStatus.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(mContext,ActivityChangeSexyStatus.class);
+                        Intent intent = new Intent(mContext, ActivityChangeSexyStatus.class);
                         startActivityForResult(intent, UPDATE_STATUS);
                     }
                 });
@@ -255,7 +251,7 @@ public class FragmentLoveDays extends Fragment {
         if(requestCode == UPDATE_STATUS) {
 
             String status = data.getStringExtra(Statics.KEY_SET_STATUS);
-            cyclePhaseStatus.setText(status);
+            mSexyStatus.setText(status);
         }
 
         if(requestCode == MENSTRUAL_CALENDAR_DIALOG) {
@@ -317,7 +313,6 @@ public class FragmentLoveDays extends Fragment {
         mProgressBar.setVisibility(View.VISIBLE);
         mFragmentLoveDaysLayout.setVisibility(View.GONE);
 
-        getActivity().setProgressBarIndeterminateVisibility(true);
 
         String whereClause = "email='" + mCurrentUser.getEmail() +"'";
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -335,6 +330,11 @@ public class FragmentLoveDays extends Fragment {
                     BackendlessUser[] partners = (BackendlessUser[]) users.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
                     //updatevame lokalno
                     mCurrentUser.setProperty(Statics.KEY_PARTNERS, partners);
+                    Backendless.UserService.setCurrentUser(mCurrentUser);
+                    //updatevame spinnera s statusite
+                    if(mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
+                        findPartnersAndPopulateSpinner();
+                    }
 
                     Toast.makeText(mContext,R.string.toast_update_partners,Toast.LENGTH_LONG).show();
 
@@ -381,7 +381,7 @@ public class FragmentLoveDays extends Fragment {
         } else {
             //niamame dobaveni partniori, izkarvame niakakvo saobshtenie
             cyclePhaseTitle.setText(" ");
-            cyclePhaseStatus.setText(R.string.no_partners_message); //Add your partners to start using SexyTalk
+            mSexyStatus.setText(R.string.no_partners_message); //Add your partners to start using SexyTalk
         }
     }
 
@@ -396,7 +396,7 @@ public class FragmentLoveDays extends Fragment {
             String message = partnerUsername + " " + getString(R.string.sexy_calendar_default_message_guys);
 
             cyclePhaseTitle.setText(message);
-            cyclePhaseStatus.setText(" ");
+            mSexyStatus.setText(" ");
         } else {
             //ako e zhena
             if(partner.getProperty(Statics.FIRST_DAY_OF_CYCLE) != null) {
@@ -406,13 +406,13 @@ public class FragmentLoveDays extends Fragment {
                 String cycleTitle = CycleStage.determineCyclePhase(partner, mContext);
                 cyclePhaseTitle.setText(cycleTitle);
                 //determineCyclePhase(partner);
-                cyclePhaseStatus.setText((String) partner.getProperty(Statics.KEY_SEXY_STATUS));
+                mSexyStatus.setText((String) partner.getProperty(Statics.KEY_SEXY_STATUS));
             } else {
                 //nishto ne e namereno, sledovatelno partnera ne si e updatenal kalendara
                 String message = partnerUsername + " " + getString(R.string.partner_hasnt_updated_calendar);
 
                 cyclePhaseTitle.setText(" ");
-                cyclePhaseStatus.setText(message);
+                mSexyStatus.setText(message);
             }
         }//krai na if statement maz ili zhena
     }
@@ -427,7 +427,7 @@ public class FragmentLoveDays extends Fragment {
 
             if(mCurrentUser.getProperty(Statics.KEY_SEXY_STATUS) !=null) {
             String sexyStatus = (String) mCurrentUser.getProperty(Statics.KEY_SEXY_STATUS);
-               cyclePhaseStatus.setText(sexyStatus);
+               mSexyStatus.setText(sexyStatus);
             }
             //na baza na stoinostite opredelia fazata
             String cycleTitle = CycleStage.determineCyclePhase(mCurrentUser, mContext);

@@ -73,6 +73,7 @@ protected BackendlessUser mCurrentUser;
                        Intent data = new Intent();
                        data.putExtra(Statics.KEY_SET_STATUS, mSexyStatus.getText().toString().trim());
                        setResult(Activity.RESULT_OK, data);
+                       //TODO send push notification to all partners
                        finish();
                        Toast.makeText(ActivityChangeSexyStatus.this,R.string.sexy_status_saved_message,Toast.LENGTH_LONG).show();
                    }
