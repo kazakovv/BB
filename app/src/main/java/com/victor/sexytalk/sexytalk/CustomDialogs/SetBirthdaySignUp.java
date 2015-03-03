@@ -3,21 +3,21 @@ package com.victor.sexytalk.sexytalk.CustomDialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.DatePicker;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.R;
-import com.victor.sexytalk.sexytalk.Statics;
+import com.victor.sexytalk.sexytalk.UserInterfaces.SignUpActivity;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -28,9 +28,13 @@ public class SetBirthdaySignUp extends DialogFragment {
     protected Context mContext;
     private OnCompleteListener mListener;
 
+    public SetBirthdaySignUp() {
+        //empty constructor required for dialog fragment
+    }
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        setCancelable(false);
         if(Backendless.UserService.CurrentUser() != null) {
             mCurrentUser = Backendless.UserService.CurrentUser();
         }
@@ -48,6 +52,9 @@ public class SetBirthdaySignUp extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         Calendar birthDate = Calendar.getInstance();
                         birthDate.set(mBirthday.getYear(), mBirthday.getMonth(), mBirthday.getDayOfMonth());
+                        SignUpActivity activity = (SignUpActivity) getActivity();
+                        //predavame stoinostta
+                        activity.onComplete(birthDate.getTime());
                         dismiss();
                     }//krai na on click ok button
 
@@ -57,6 +64,8 @@ public class SetBirthdaySignUp extends DialogFragment {
 
         return builder.create();
     }
+
+
 
 
     //interface za pass value to SignUp Activity
