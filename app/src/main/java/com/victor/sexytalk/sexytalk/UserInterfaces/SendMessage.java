@@ -490,17 +490,11 @@ public class SendMessage extends ActionBarActivity {
                                                   //      R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
 
                                                 //izprashtame push message
-                                                for (BackendlessUser recepient : recepients) {
-                                                    String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
-                                                    String channel = recepient.getEmail();
-                                                    if (deviceId != null && channel != null) {
-                                                        //ako ne sa prazni izprashtame push message
-                                                        BackendlessMessage.sendPush(deviceId, channel, mContext, Statics.TYPE_TEXTMESSAGE);
-                                                        switchToMainScreen();
-                                                    }
-
+                                                for (BackendlessUser recipient : recepients) {
+                                                    //ako ne sa prazni izprashtame push message
+                                                    BackendlessMessage.sendPush(mCurrentUser, recipient, mContext, Statics.TYPE_TEXTMESSAGE);
+                                                    switchToMainScreen();
                                                 }//krai na send push
-
 
                                             }
 
@@ -544,15 +538,10 @@ public class SendMessage extends ActionBarActivity {
 
 
                                         //izprashtame push message
-                                        for (BackendlessUser recepient : recepients) {
-                                            String deviceId = (String) recepient.getProperty(Statics.KEY_DEVICE_ID);
-                                            String channel = recepient.getEmail();
-                                            if (deviceId != null && channel != null) {
-                                                //ako ne sa prazni izprashtame push message
-                                                BackendlessMessage.sendPush(deviceId, channel, mContext, Statics.TYPE_TEXTMESSAGE);
-                                                switchToMainScreen();
-                                            }
-
+                                        for (BackendlessUser recipient : recepients) {
+                                            //ako ne sa prazni izprashtame push message
+                                            BackendlessMessage.sendPush(mCurrentUser, recipient, mContext, Statics.TYPE_TEXTMESSAGE);
+                                            switchToMainScreen();
                                         }
                                     }
 
@@ -590,8 +579,6 @@ public class SendMessage extends ActionBarActivity {
                             dialog.show();
                         }
                     });//Krai na query koiato tarsi poluchatelite na saobshtenieto po emailite im
-
-
         }//krai na send koda
 
 
@@ -627,7 +614,6 @@ public class SendMessage extends ActionBarActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return bitmap;
     }
 
@@ -638,8 +624,5 @@ public class SendMessage extends ActionBarActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-
     }
-
-
 }

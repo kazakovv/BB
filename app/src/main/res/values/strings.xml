@@ -63,6 +63,7 @@
     <string name="send_a_kiss_toast_unsuccessful">Error sending kiss</string>
     <string name="send_a_message_message">sent you a message</string>
     <string name="title_receive_a_kiss_message">You received a kiss</string>
+    <string name="push_receive_a_kiss">sent you a kiss</string>
     <string name="title_receive_a_message_message">You received a message</string>
     <string name="title_update_calendar_notification">Sexy Calendar update</string>
     <string name="button_send_kiss">Send a kiss</string>
@@ -106,7 +107,7 @@
     <string name="dialog_partner_request_already_sent_title">Waiting for love</string>
     <string name="dialog_partner_request_already_sent_to_user_message">You have already sent a love request to</string>
     <string name="new_partner_request">New partner request</string>
-    <string name="new_partner_request_push">You received a partner request</string>
+    <string name="new_partner_request_push">wants to become your partner</string>
     <string name="search_partners_tab">Search</string>
     <string name="requests_partners_tab">Requests</string>
     <string name="existing_partners_tab">Partners</string>
@@ -124,8 +125,8 @@
     <string name="toast_no_recepients">To who should I send the message to?</string>
     <string name="dialog_box_deleting_partner">Are you breaking up?</string>
     <string name="push_message_kiss">You received a kiss</string>
-    <string name="push_calendar_update">You received a Sexy Calendar update</string>
-    <string name="push_message_love_message">You received a love message</string>
+    <string name="push_calendar_update">updated her Sexy Calendar</string>
+    <string name="push_message_love_message">sent you a love message</string>
     <string name="progress_sign_in_message">Signing in, please wait.</string>
     <string name="logout_message">Logging out</string>
     <string name="uploading_file_message">Uploading file...</string>
@@ -198,7 +199,7 @@
     <string name="email_invite_to_sexytalk_subject">I want to have a SexyTalk with you</string>
     <string name="email_invite_to_sexytalk_body">Hi honey, let\'s start sexy talking! Just download SexyTalk from the Google Play Store. I am waiting for you... :) </string>
     <string name="toast_no_email_clients_installed">"There are no email clients installed."</string>
-    <string name="partner_request_approved">You and your loved one are now connected</string>
+    <string name="partner_request_approved">and you are now connected</string>
     <string-array name="camera_choices">
         <item>Take Picture</item>
         <item>Choose Picture</item>

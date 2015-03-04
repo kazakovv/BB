@@ -226,13 +226,8 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                     BackendlessUser[] parters = (BackendlessUser[]) user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
                     //send push
                    for (BackendlessUser partner : parters) {
-                       String deviceId = (String) partner.getProperty(Statics.KEY_DEVICE_ID);
-                       String channel = partner.getEmail();
-                       if (deviceId != null && channel != null) {
-                           //ako ne sa prazni izprashtame push message
-                           BackendlessMessage.sendPush(deviceId, channel, context, Statics.TYPE_CALENDAR_UPDATE);
-
-                       }
+                       //ako ne sa prazni izprashtame push message
+                       BackendlessMessage.sendPush(mCurrentUser, partner, context, Statics.TYPE_CALENDAR_UPDATE);
 
                    }//krai na send push
                }

@@ -28,23 +28,30 @@ public class BackendlessMessage {
     /*
     IZPRASHTANE NA PUSH MESSAGES
      */
-    public static void sendPush(String deviceId, String channel, final Context context, String TYPE_MESSAGE) {
+    public static void sendPush(BackendlessUser sender, BackendlessUser recipient, final Context context, String TYPE_MESSAGE) {
+
+        String deviceID = null;
+        String senderUsername = (String) sender.getProperty(Statics.KEY_USERNAME);
+        String channel =  recipient.getEmail();
+        if(recipient.getProperty(Statics.KEY_DEVICE_ID) != null) {
+            deviceID= (String) recipient.getProperty(Statics.KEY_DEVICE_ID);
+
+        }
+
         String messagePush="";
         String messageToast="";
         if(TYPE_MESSAGE.equals(Statics.TYPE_TEXTMESSAGE)) {
-            messagePush = context.getResources().getString(R.string.push_message_love_message);
-            messageToast = context.getResources().getString(R.string.message_successfully_sent);
+            messagePush = senderUsername + " " +  context.getResources().getString(R.string.push_message_love_message);
         } else if(TYPE_MESSAGE.equals(Statics.TYPE_CALENDAR_UPDATE)) {
-            messagePush = context.getResources().getString(R.string.push_calendar_update);
-            messageToast = context.getResources().getString(R.string.calendar_update_sent);
+            messagePush = senderUsername + " " +  context.getResources().getString(R.string.push_calendar_update);
         } else if(TYPE_MESSAGE.equals(Statics.TYPE_KISS)) {
-            messagePush =  context.getResources().getString(R.string.title_receive_a_kiss_message);
+            messagePush = senderUsername + " " + context.getResources().getString(R.string.push_receive_a_kiss);
             //toast se izprashta ot main activity. Ako izprashtam niakolko kiss toast shte se pokazva neprekasnato
             //messageToast = context.getResources().getString(R.string.send_a_kiss_toast_successful);
         } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST)) {
-            messagePush = context.getResources().getString(R.string.new_partner_request_push);
+            messagePush = senderUsername + " " + context.getResources().getString(R.string.new_partner_request_push);
         } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST_APPROVED)) {
-            messagePush = context.getResources().getString(R.string.partner_request_approved);
+            messagePush = senderUsername + " " + context.getResources().getString(R.string.partner_request_approved);
         }
         PublishOptions publishOptions = new PublishOptions();
         publishOptions.putHeader(PublishOptions.ANDROID_TICKER_TEXT_TAG, messagePush);
@@ -52,42 +59,34 @@ public class BackendlessMessage {
         publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, messagePush);
         DeliveryOptions deliveryOptions = new DeliveryOptions();
         deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
-        deliveryOptions.addPushSinglecast(deviceId);
+        if(deviceID !=null) {
+            deliveryOptions.addPushSinglecast(deviceID);
 
 
-        Backendless.Messaging.publish(channel, "Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
-            @Override
-            public void handleResponse(MessageStatus messageStatus) {
+            Backendless.Messaging.publish(channel, "Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+                @Override
+                public void handleResponse(MessageStatus messageStatus) {
 
-            }
+                }
 
-            @Override
-            public void handleFault(BackendlessFault backendlessFault) {
+                @Override
+                public void handleFault(BackendlessFault backendlessFault) {
 
-            }
-        });
-
+                }
+            });
+        }//krai na check dali deviceId e null
     }//krai na send push
     /*
     IZPRASHTANE NA KISS
      */
     public static void sendKissMessage(final BackendlessUser mCurrentUser,
-                                       final String recepientEmail,
+                                       final String recipientEmail,
                                        final String deviceId,
                                        final Context context){
-        BackendlessUser recepientBackendlessUser = null;
 
-        //probvame da namerim poluchatelia po emaila v spisaka na partniorite na currentUser
-        if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-            BackendlessUser[] partners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
-            for(BackendlessUser partner: partners) {
-                if(partner.getEmail().equals(recepientEmail)) {
-                    //namirame recepient kato Backendless user v spisakat ot partniori
-                    recepientBackendlessUser = partner;
-                }
-            }
+        final BackendlessUser recipientBackendlessUser = BackendlessMessage.findBackendlessUserByEmail(mCurrentUser,recipientEmail );
 
-        }
+
 
 
         //message
@@ -98,9 +97,9 @@ public class BackendlessMessage {
         //1. TARSIM BROI CELUVKI, KOITO SA IZPRATENI DOSEGA
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
         String whereClause = "senderEmail='" + mCurrentUser.getEmail() + "'" + " AND "
-                + "receiverEmail='" + recepientEmail +"'";
+                + "receiverEmail='" + recipientEmail +"'";
         dataQuery.setWhereClause(whereClause);
-        final BackendlessUser finalRecepientBackendlessUser = recepientBackendlessUser;
+        final BackendlessUser finalRecepientBackendlessUser = recipientBackendlessUser;
         Backendless.Data.of(KissesCount.class).find(dataQuery, new AsyncCallback<BackendlessCollection<KissesCount>>() {
             @Override
             public void handleResponse(final BackendlessCollection<KissesCount> kissesSent) {
@@ -126,7 +125,7 @@ public class BackendlessMessage {
                 final Messages kissMessage = new Messages();
                 kissMessage.setMessageType(Statics.TYPE_KISS);
                 kissMessage.setLoveMessage(someoneSendsYouAKiss);
-                kissMessage.setRecepientEmails(recepientEmail);
+                kissMessage.setRecepientEmails(recipientEmail);
                 kissMessage.setSederUsername((String) Backendless.UserService.CurrentUser().getProperty(Statics.KEY_USERNAME));
                 kissMessage.setSender(Backendless.UserService.CurrentUser());
                 kissMessage.setKissNumber(kissNumber);
@@ -138,7 +137,10 @@ public class BackendlessMessage {
                     public void handleResponse(Messages messages) {
                         //send push message
                         //channel po koito izprashtame push e emailat na poluchatelia
-                        BackendlessMessage.sendPush(deviceId,recepientEmail,context,Statics.TYPE_KISS);
+                        if(recipientBackendlessUser != null) {
+                            BackendlessMessage.sendPush(mCurrentUser,recipientBackendlessUser,context,Statics.TYPE_KISS);
+                        }
+
                         String message;
 
                         //pokazvame alerdialog s broia na izpratenite doesga celuvki
@@ -173,7 +175,7 @@ public class BackendlessMessage {
                             kissToUpdate = new KissesCount();
                             kissToUpdate.setSender(mCurrentUser);
                             kissToUpdate.setSenderEmail(mCurrentUser.getEmail());
-                            kissToUpdate.setReceiverEmail(recepientEmail);
+                            kissToUpdate.setReceiverEmail(recipientEmail);
                             //dobaviame i receiver kato Backendless user
                             if(finalRecepientBackendlessUser != null) {
                              kissToUpdate.setReceiver(finalRecepientBackendlessUser);
@@ -226,4 +228,22 @@ public class BackendlessMessage {
 
 
     }//krai na send kiss
+
+    //namirane na backendless user v spisaka na partniorite na tekushtia potrebitel po email
+
+    public static BackendlessUser findBackendlessUserByEmail(BackendlessUser currentUser, String emailOfPartner) {
+        BackendlessUser recipientBackendlessUser = null;
+        //probvame da namerim poluchatelia po emaila v spisaka na partniorite na currentUser
+        if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+            BackendlessUser[] partners = (BackendlessUser[]) currentUser.getProperty(Statics.KEY_PARTNERS);
+            for(BackendlessUser partner: partners) {
+                if(partner.getEmail().equals(emailOfPartner)) {
+                    //namirame recepient kato Backendless user v spisakat ot partniori
+                    recipientBackendlessUser = partner;
+                }
+            }
+
+        }
+        return recipientBackendlessUser;
+    }
 }

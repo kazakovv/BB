@@ -184,8 +184,8 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
                                                     //izprashtame push message, che pokanata e prieta
                                                     String deviceID = (String) mUserRequesting.getProperty(Statics.KEY_DEVICE_ID);
-                                                    BackendlessMessage.sendPush( deviceID,
-                                                                                mUserRequesting.getEmail(),
+                                                    BackendlessMessage.sendPush( mCurrentUser,
+                                                                                mUserRequesting,
                                                                                 mContext,Statics.KEY_PARTNER_REQUEST_APPROVED );
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
