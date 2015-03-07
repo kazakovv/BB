@@ -65,7 +65,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         } else {
 
             //TODO!!!!!
-
             //TODO TR da se optimizira ot kam backendless api requests
             //todo tr da se vidi neshto na servera
 

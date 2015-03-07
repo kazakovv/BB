@@ -18,6 +18,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthdaySignUp;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
+import com.victor.sexytalk.sexytalk.Helper.EmailForLogin;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -151,6 +152,8 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                          BackendlessMessage.registerDeviceForPush(backendlessUser);
                          //!!!!!!!!!!!!!!!!!!
                          //User successfully created!
+                         //zapisvame emaila v shared preferences, za da moze posle da se logvame po-lesno
+                         EmailForLogin.saveEmailForLogin(SignUpActivity.this, backendlessUser);
                          //log in!
                          Backendless.UserService.login(email, password,
                                  new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {

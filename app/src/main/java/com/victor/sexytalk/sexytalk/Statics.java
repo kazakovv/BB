@@ -79,6 +79,9 @@ public class Statics {
     public static final int PICASSO_ROUNDED_CORNERS = 30;
 
     public static final String KEY_REFRESH_FRAGMENT_LOVE_BOX = "fragmentLoveBox";
+
+    public static final String SHARED_PREFS="myPrefs";
+    public static final String KEY_SAVED_EMAIL_FOR_LOGIN = "emailForLogin";
     //izpolzva se za reference dali ima chakashti zaiavki za partniori. Ako e true pokazvame buton na main t
     public static Boolean pendingPartnerRequest = false;
 

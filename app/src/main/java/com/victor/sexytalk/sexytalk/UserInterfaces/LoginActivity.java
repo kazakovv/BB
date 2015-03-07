@@ -19,6 +19,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ForgotPassword;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
+import com.victor.sexytalk.sexytalk.Helper.EmailForLogin;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -57,7 +58,11 @@ public class LoginActivity extends Activity {
         mEmail = (EditText) findViewById(R.id.login_email);
         mPassword = (EditText) findViewById(R.id.login_password);
         mLoginButton = (Button) findViewById(R.id.logInButton);
-
+        //zarezdame emaila na poslednia lognal se potrebitel
+        String emailOfLastLoggedInUser = EmailForLogin.loadEmailOfLastLoggedInUser(LoginActivity.this);
+        if (emailOfLastLoggedInUser !=null) {
+            mEmail.setText(emailOfLastLoggedInUser);
+        }
         mLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +94,8 @@ public class LoginActivity extends Activity {
                             BackendlessUser test = backendlessUser;
                             //Register device for push notifications
                             BackendlessMessage.registerDeviceForPush(backendlessUser);
-
+                            // zapisvame username v shared prefs, za da moze da se zaredi po-lesno sledvashtiat pat
+                            EmailForLogin.saveEmailForLogin(LoginActivity.this, backendlessUser);
                             //User successfully loged in!.Switch to main screen.
                             Intent intent = new Intent(LoginActivity.this, Main.class);
                             //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
