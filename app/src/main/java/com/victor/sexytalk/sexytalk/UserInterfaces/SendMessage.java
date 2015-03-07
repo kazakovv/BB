@@ -27,7 +27,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
-import com.victor.sexytalk.sexytalk.Helper.FileHelper;
+import com.victor.sexytalk.sexytalk.Helper.ImageHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
@@ -294,7 +294,10 @@ public class SendMessage extends ActionBarActivity {
 
         imageViewForThumbnailPreview = (ImageView) findViewById(R.id.thumbnailPreview);
 
-
+        //zavartame thumbnail, ako ima nuzda
+        if(thumbnail != null && mMediaUri !=null) {
+            thumbnail = ImageHelper.rotateImageIfNeeded(mContext, mMediaUri, thumbnail);
+        }
         imageViewForThumbnailPreview.setImageBitmap(thumbnail);
         if (thumbnail == null) {
             //ako thumbnail e null zadavame default kartinka
@@ -460,14 +463,14 @@ public class SendMessage extends ActionBarActivity {
                                 //ako image uploadvame file na servera
                                 //razbiva fila na array ot bitove, za da go smalim i kachim na servera
 
-                                byte[] fileBytes = FileHelper.getByteArrayFromFile(SendMessage.this, mMediaUri);
+                                byte[] fileBytes = ImageHelper.getByteArrayFromFile(SendMessage.this, mMediaUri);
                                 String path = "";
 
                                 //ako e image go smaliavame
                                 if (fileBytes != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
-                                    fileBytes = FileHelper.reduceImageForUpload(fileBytes, Statics.SHORT_SIDE_TARGET_PIC);
+                                    fileBytes = ImageHelper.reduceImageForUpload(fileBytes, Statics.SHORT_SIDE_TARGET_PIC);
                                     path = "/pics/" +
-                                            FileHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_IMAGE);
+                                            ImageHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_IMAGE);
                                 }
 
 

@@ -1,7 +1,6 @@
 package com.victor.sexytalk.sexytalk.Helper;
 
 import android.annotation.TargetApi;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -27,9 +26,9 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class FileHelper {
+public class ImageHelper {
 	
-	public static final String TAG = FileHelper.class.getSimpleName();
+	public static final String TAG = ImageHelper.class.getSimpleName();
 	
 	//public static final int SHORT_SIDE_TARGET = 500; //1280
 
@@ -136,6 +135,9 @@ public class FileHelper {
                 case ExifInterface.ORIENTATION_ROTATE_180:
                     rotationAngle = 180;
                     break;
+                case  ExifInterface.ORIENTATION_ROTATE_270:
+                    rotationAngle = 270;
+                    break;
             }
             //zavartame image
             if(rotationAngle !=0) {
@@ -148,7 +150,7 @@ public class FileHelper {
             }
 
         } catch(Exception e) {
-            //TODO tr da napravia neshto tuk
+            e.printStackTrace();
         }
 
 

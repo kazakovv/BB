@@ -33,7 +33,7 @@ import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangeUsername;
 import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
-import com.victor.sexytalk.sexytalk.Helper.FileHelper;
+import com.victor.sexytalk.sexytalk.Helper.ImageHelper;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
 import com.victor.sexytalk.sexytalk.R;
@@ -211,11 +211,11 @@ public class EditProfileActivity extends ActionBarActivity {
 
             //sledvashtite 3 reda imat za cel da namaliat razmera na kartinkata
             //parvo go oravim v array, sled tova namaliavame razmera i sled tova go uploadvame v backendless
-            byte[] imageBytes = FileHelper.getByteArrayFromFile(getActivity(), mMediaUri);
-            byte[] reducedImage = FileHelper.reduceImageForUpload(imageBytes,Statics.SHORT_SIDE_TARGET_THUMBNAIL);
+            byte[] imageBytes = ImageHelper.getByteArrayFromFile(getActivity(), mMediaUri);
+            byte[] reducedImage = ImageHelper.reduceImageForUpload(imageBytes, Statics.SHORT_SIDE_TARGET_THUMBNAIL);
             Bitmap profilePictureBitmap = BitmapFactory.decodeByteArray(reducedImage, 0, reducedImage.length);
             //zavartame profile pic, ama ima nuzhda
-            profilePictureBitmap = FileHelper.rotateImageIfNeeded(mContext,mMediaUri,profilePictureBitmap);
+            profilePictureBitmap = ImageHelper.rotateImageIfNeeded(mContext, mMediaUri, profilePictureBitmap);
 
             //Bitmap profilePictureBitmap = help.createThumbnail(mMediaUri);
             profilePicture.setImageBitmap(profilePictureBitmap);
@@ -224,7 +224,7 @@ public class EditProfileActivity extends ActionBarActivity {
 
             if (mMediaUri != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
                     //Zadavame patia kam profile pic
-                    fileName = FileHelper.getFileName(getActivity(), mMediaUri, Statics.TYPE_IMAGE);
+                    fileName = ImageHelper.getFileName(getActivity(), mMediaUri, Statics.TYPE_IMAGE);
 
             }
 
