@@ -10,6 +10,7 @@
         layout="@layout/app_toolbar" />
 
     <EditText
+        android:layout_marginTop="@dimen/default_padding"
         android:id="@+id/changeSexyStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,5 +20,18 @@
         android:maxLength="200"
         android:singleLine="true"
          />
+    <!-- LOGO NA CELUVKA -->
+    <RelativeLayout
+        android:id="@+id/layoutLogo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/kiss_background" />
+
+    </RelativeLayout>
 </LinearLayout>

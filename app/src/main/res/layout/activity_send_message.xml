@@ -27,7 +27,9 @@
             android:layout_marginTop="5dp"
             android:paddingLeft="@dimen/default_padding"
             android:paddingRight="@dimen/default_padding"
-            android:text="@string/send_message_to" />
+            android:text="@string/send_message_to"
+            android:textSize="@dimen/Send_to"
+            android:textColor="@color/second_accent_color"/>
 
         <EditText
             android:id="@+id/messageToSend"

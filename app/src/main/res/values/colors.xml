@@ -3,11 +3,11 @@
     <color name="apptheme_color">#D81B60</color>
     <color name="text_color">#ffffff</color>
     <color name="tabs_color">#D81B60</color>
-    <color name="accent_color">#000000</color>
+    <color name="accent_color">#1A237E</color>
     <color name="button_default">#D81B60</color>
     <color name="button_pressed">#AD1457</color>
     <color name="button_focused">#C2185B</color>
     <color name="title_messages">#D81B60</color>
     <color name="tab_text_color">#ffffff</color>
-    <color name="second_accent_color">#3F51B5</color>
+    <color name="second_accent_color">#1A237E</color>
 </resources>

@@ -78,6 +78,7 @@ public class Statics {
 
     public static final int PICASSO_ROUNDED_CORNERS = 30;
 
+
     //izpolzva se za reference dali ima chakashti zaiavki za partniori. Ako e true pokazvame buton na main t
     public static Boolean pendingPartnerRequest = false;
 

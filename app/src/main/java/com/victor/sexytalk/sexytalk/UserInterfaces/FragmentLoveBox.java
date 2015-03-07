@@ -2,7 +2,10 @@ package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -62,10 +65,12 @@ public class FragmentLoveBox extends ListFragment {
    protected MenuItem mRefreshButton;
    protected BackendlessUser mCurrentUser;
    protected MenuItem addPartner;
+   protected Context mContext;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_love_box, container, false);
+        mContext = inflater.getContext();
         mEmptyMessage = (TextView) rootView.findViewById(android.R.id.empty);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout_emptyView = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout_emptyView);
@@ -83,6 +88,8 @@ public class FragmentLoveBox extends ListFragment {
         if(Backendless.UserService.CurrentUser() != null) {
             mCurrentUser = Backendless.UserService.CurrentUser();
         }
+
+
         return rootView;
     }
     //refresh listener za updatevane na tova dali ima novi saobstehnia
@@ -93,6 +100,32 @@ public class FragmentLoveBox extends ListFragment {
             searchForMessages();
         }
     };
+//!!!!!!!!!!!!! broadcast receiver
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            // Extract data included in the Intent
+            String message = intent.getStringExtra("pushType");
+
+            //do other stuff here
+            Toast.makeText(mContext,"good ddd" + message, Toast.LENGTH_LONG).show();
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mContext.registerReceiver(mMessageReceiver, new IntentFilter("fragmentLoveBox"));
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mContext.unregisterReceiver(mMessageReceiver);
+
+    }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -137,10 +170,7 @@ public class FragmentLoveBox extends ListFragment {
                 //vrazvame refresh butona
                 mRefreshButton = item;
                 //pokazvame spinnera i skrivame vsichko drugo
-                mProgressBar.setVisibility(View.VISIBLE);
-                mFragmentLoveBoxLayout.setVisibility(View.GONE);
-                mLayoutLogo.setVisibility(View.GONE);
-                mRefreshButton.setEnabled(false);
+
 
                 searchForMessages();
              //proveriavame da delete i za pending add/delete request
@@ -327,8 +357,13 @@ public class FragmentLoveBox extends ListFragment {
 
    //Tozi metod se vrazva kam backendless da vidi dali imame saobsthenia
 protected void searchForMessages(){
-
-
+    //pokazvame spinner
+    mProgressBar.setVisibility(View.VISIBLE);
+    mFragmentLoveBoxLayout.setVisibility(View.GONE);
+    mLayoutLogo.setVisibility(View.GONE);
+    if(mRefreshButton !=null) {
+        mRefreshButton.setEnabled(false);
+    }
     String whereClause = "recepientEmails LIKE '%" + currentUser.getEmail() + "%'";
 
     BackendlessDataQuery query = new BackendlessDataQuery();

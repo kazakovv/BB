@@ -39,24 +39,32 @@ public class BackendlessMessage {
         }
 
         String messagePush="";
-        String messageToast="";
+        String messageTag="";
         if(TYPE_MESSAGE.equals(Statics.TYPE_TEXTMESSAGE)) {
             messagePush = senderUsername + " " +  context.getResources().getString(R.string.push_message_love_message);
+            messageTag = Statics.TYPE_TEXTMESSAGE;
         } else if(TYPE_MESSAGE.equals(Statics.TYPE_CALENDAR_UPDATE)) {
             messagePush = senderUsername + " " +  context.getResources().getString(R.string.push_calendar_update);
+            messageTag = Statics.TYPE_CALENDAR_UPDATE;
         } else if(TYPE_MESSAGE.equals(Statics.TYPE_KISS)) {
             messagePush = senderUsername + " " + context.getResources().getString(R.string.push_receive_a_kiss);
+            messageTag = Statics.TYPE_KISS;
             //toast se izprashta ot main activity. Ako izprashtam niakolko kiss toast shte se pokazva neprekasnato
             //messageToast = context.getResources().getString(R.string.send_a_kiss_toast_successful);
         } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST)) {
             messagePush = senderUsername + " " + context.getResources().getString(R.string.new_partner_request_push);
+            messageTag = Statics.KEY_PARTNER_REQUEST;
         } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST_APPROVED)) {
             messagePush = senderUsername + " " + context.getResources().getString(R.string.partner_request_approved);
+            messageTag = Statics.KEY_PARTNER_REQUEST_APPROVED;
+
         }
         PublishOptions publishOptions = new PublishOptions();
         publishOptions.putHeader(PublishOptions.ANDROID_TICKER_TEXT_TAG, messagePush);
         publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, context.getResources().getString(R.string.app_name));
         publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, messagePush);
+        publishOptions.putHeader(PublishOptions.MESSAGE_TAG,messageTag);
+
         DeliveryOptions deliveryOptions = new DeliveryOptions();
         deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
         if(deviceID !=null) {
@@ -85,9 +93,6 @@ public class BackendlessMessage {
                                        final Context context){
 
         final BackendlessUser recipientBackendlessUser = BackendlessMessage.findBackendlessUserByEmail(mCurrentUser,recipientEmail );
-
-
-
 
         //message
         //1. parvo tarsim kolko celuvki sa izprateni veche
@@ -166,7 +171,6 @@ public class BackendlessMessage {
                                 .setPositiveButton(R.string.ok, null);
                         AlertDialog dialog = builder.create();
                         dialog.show();
-
 
                         //3. UPDATEVAME TABLICATA, CHE SME IZPRATILI OSHTE EDNA CELUVKA
                         KissesCount kissToUpdate;

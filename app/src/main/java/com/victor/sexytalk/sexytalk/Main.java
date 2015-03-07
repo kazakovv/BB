@@ -14,14 +14,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
-import com.backendless.persistence.BackendlessDataQuery;
-import com.victor.sexytalk.sexytalk.BackendlessClasses.KissesCount;
-import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
+
 import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
@@ -195,6 +191,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //sazdavo zadacha
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); //iztriva vsichki predishni zadachi.
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
     }
 
