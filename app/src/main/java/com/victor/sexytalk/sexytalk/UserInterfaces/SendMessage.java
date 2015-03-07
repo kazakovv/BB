@@ -23,12 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
-import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
-import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.ImageHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Main;
@@ -81,13 +78,13 @@ public class SendMessage extends ActionBarActivity {
                             if (mMediaUri == null) {
                                 Toast.makeText(SendMessage.this, R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();
                             } else {
-                                mMessageType = Statics.TYPE_IMAGE;
+                                mMessageType = Statics.TYPE_IMAGE_MESSAGE;
                                 takePicture();
                             }
                             break;
 
                         case 1: //choose picture
-                            mMessageType = Statics.TYPE_IMAGE;
+                            mMessageType = Statics.TYPE_IMAGE_MESSAGE;
                             Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                             choosePhotoIntent.setType("image/*");
                             startActivityForResult(choosePhotoIntent, CHOOSE_PHOTO_REQUEST);
@@ -436,7 +433,7 @@ public class SendMessage extends ActionBarActivity {
             //ako saobshtenieto e Image ili Video, go izprashtame
             //Parvo uploadvame file, posle izprashteme i saboshtenieto
             //uploadvame file, ako ima takav
-            if (mMessageType.equals(Statics.TYPE_IMAGE)) {
+            if (mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
                 //ako image uploadvame file na servera
                 //razbiva fila na array ot bitove, za da go smalim i kachim na servera
 
@@ -444,14 +441,14 @@ public class SendMessage extends ActionBarActivity {
                 String path = "";
 
                 //ako e image go smaliavame
-                if (imageToUpload != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
+                if (imageToUpload != null && mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
                     imageToUpload = ImageHelper.reduceImageForUpload(imageToUpload, Statics.SHORT_SIDE_TARGET_PIC);
                     //zavartame image, ako ima nuzda
                     Bitmap temp = BitmapFactory.decodeByteArray(imageToUpload, 0, imageToUpload.length);
                     temp = ImageHelper.rotateImageIfNeeded(mContext,mMediaUri,temp);
                     imageToUpload = ImageHelper.convertBitmapToByteArray(temp);
                     path = "/pics/" +
-                            ImageHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_IMAGE);
+                            ImageHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_IMAGE_MESSAGE);
                 }
 
 
@@ -477,7 +474,8 @@ public class SendMessage extends ActionBarActivity {
                                 //izprashtame push message
                                 for (BackendlessUser recipient : recipients) {
                                     //ako ne sa prazni izprashtame push message
-                                    BackendlessMessage.sendPush(mCurrentUser, recipient, mContext, Statics.TYPE_TEXTMESSAGE);
+                                    BackendlessMessage.sendPush(mCurrentUser, recipient, message,
+                                            mContext, Statics.TYPE_IMAGE_MESSAGE);
                                     switchToMainScreen();
                                 }//krai na send push
 
@@ -526,7 +524,7 @@ public class SendMessage extends ActionBarActivity {
                         //izprashtame push message
                         for (BackendlessUser recipient : recipients) {
                             //ako ne sa prazni izprashtame push message
-                            BackendlessMessage.sendPush(mCurrentUser, recipient, mContext, Statics.TYPE_TEXTMESSAGE);
+                            BackendlessMessage.sendPush(mCurrentUser, recipient, message, mContext, Statics.TYPE_TEXTMESSAGE);
                             switchToMainScreen();
                         }
                     }

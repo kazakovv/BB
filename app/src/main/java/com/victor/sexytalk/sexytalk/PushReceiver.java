@@ -9,7 +9,11 @@ import android.support.v4.app.NotificationCompat;
 
 import com.backendless.messaging.PublishOptions;
 import com.backendless.push.BackendlessBroadcastReceiver;
+import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.UserInterfaces.FragmentLoveDays;
+import com.victor.sexytalk.sexytalk.UserInterfaces.ViewImageActivity;
+import com.victor.sexytalk.sexytalk.UserInterfaces.ViewKissActivity;
+import com.victor.sexytalk.sexytalk.UserInterfaces.ViewTextMessageActivity;
 
 public class PushReceiver extends BackendlessBroadcastReceiver
 {
@@ -21,24 +25,58 @@ public class PushReceiver extends BackendlessBroadcastReceiver
     String contentText = intent.getStringExtra( PublishOptions.ANDROID_CONTENT_TEXT_TAG );
     String messageType = intent.getStringExtra(PublishOptions.MESSAGE_TAG); //tip saobstenie
     String subtopic = intent.getStringExtra( "message" );
-
     if( tickerText != null && tickerText.length() > 0 )
     {
 
-        createNotification(context, "test",tickerText,contentTitle, contentText );
+        createNotification(context, messageType, intent, tickerText,contentTitle, contentText );
     }
 
     return false;
   }
 
     // This function will create an intent. This intent must take as parameter the "unique_name" that you registered your activity with
-    static void createNotification(Context context, String message,
+    static void createNotification(Context context, String messageType, Intent intent,
                                    String tickerText, String contentTitle,
                                    String contentText) {
         int appIcon = context.getApplicationInfo().icon;
 
+        //TODO!!!! tuk tr da se promeni za razlichnite tipove message
+        Intent notificationIntent;
+        if(messageType.equals(Statics.TYPE_TEXTMESSAGE)) {
+            notificationIntent = new Intent( context, ViewTextMessageActivity.class );
 
-        Intent notificationIntent = new Intent( context, Main.class );
+            String loveMessage = intent.getStringExtra(Statics.KEY_LOVE_MESSAGE);
+            String usernameSender = intent.getStringExtra(Statics.KEY_USERNAME_SENDER);
+
+            notificationIntent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            notificationIntent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
+
+        } else if(messageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
+            notificationIntent = new Intent(context, ViewImageActivity.class);
+
+            String loveMessage = intent.getStringExtra(Statics.KEY_LOVE_MESSAGE);
+            String usernameSender = intent.getStringExtra(Statics.KEY_USERNAME_SENDER);
+            String mediaUrl = intent.getStringExtra(Statics.KEY_URL);
+
+            notificationIntent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            notificationIntent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
+            notificationIntent.putExtra(Statics.KEY_URL, mediaUrl);
+
+        } else if(messageType.equals(Statics.TYPE_KISS)){
+            notificationIntent = new Intent(context, ViewKissActivity.class);
+            String loveMessage = intent.getStringExtra(Statics.KEY_LOVE_MESSAGE);
+            String usernameSender = intent.getStringExtra(Statics.KEY_USERNAME_SENDER);
+            String kissCount = intent.getStringExtra(Statics.KEY_NUMBER_OF_KISSES);
+
+            notificationIntent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
+            notificationIntent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
+            int numberOfKisses = Integer.valueOf(kissCount);
+            notificationIntent.putExtra(Statics.KEY_NUMBER_OF_KISSES,numberOfKisses);
+
+        } else {
+            notificationIntent = new Intent(context, Main.class);
+        }
+
 
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT);
@@ -62,13 +100,13 @@ public class PushReceiver extends BackendlessBroadcastReceiver
 
 
         //!!!!!!!!!!!!!!!!!!!!!!
-        Intent intent = new Intent(Statics.KEY_REFRESH_FRAGMENT_LOVE_BOX);
+        Intent intentRefresh = new Intent(Statics.KEY_REFRESH_FRAGMENT_LOVE_BOX);
 
         //put whatever data you want to send, if any
         //intent.putExtra("message", message);
 
         //send broadcast
-        context.sendBroadcast(intent);
+        context.sendBroadcast(intentRefresh);
     }
 }
                                             

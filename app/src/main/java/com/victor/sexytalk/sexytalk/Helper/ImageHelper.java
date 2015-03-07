@@ -106,7 +106,7 @@ public class ImageHelper {
 
         //TODO: tr da se dobavi random string/number kam imeto na fila
 
-        if (fileType.equals(Statics.TYPE_IMAGE)) {
+        if (fileType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
             fileName="IMG"+timeStamp;
             fileName += ".png";
 		}

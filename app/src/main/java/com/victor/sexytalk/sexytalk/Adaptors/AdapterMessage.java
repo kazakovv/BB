@@ -54,7 +54,7 @@ public class AdapterMessage extends ArrayAdapter<Messages> {
 
 
         Messages message = mMessages.get(position);
-        if(message.getMessageType().equals(Statics.TYPE_IMAGE)) {
+        if(message.getMessageType().equals(Statics.TYPE_IMAGE_MESSAGE)) {
             holder.iconImageView.setImageResource(R.drawable.ic_action_picture);
 
             if(message.getOpened() !=null) {

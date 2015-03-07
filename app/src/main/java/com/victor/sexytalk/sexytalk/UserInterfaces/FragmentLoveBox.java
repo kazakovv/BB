@@ -6,8 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -229,7 +227,7 @@ public class FragmentLoveBox extends ListFragment {
            fileUrl = message.getMediaUrl();
         }
 
-        if(messageType.equals(Statics.TYPE_IMAGE)) {
+        if(messageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
 
             //view image
 
@@ -470,7 +468,7 @@ protected void searchForMessages(boolean hideFragment){
                             //niama nuzda da pravim nishto, nai-mnogo da go vodim pak
 
                             //ako message sadarzha image, iztrivame i nego
-                            if(message.getMessageType().equals(Statics.TYPE_IMAGE))  {
+                            if(message.getMessageType().equals(Statics.TYPE_IMAGE_MESSAGE))  {
                                 //iztrivame image
                                 if(message.getBackendlessFilePath() != null) {
                                     String backenlessPath = message.getBackendlessFilePath();

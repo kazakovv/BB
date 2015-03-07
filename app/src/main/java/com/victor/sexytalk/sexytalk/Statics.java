@@ -16,7 +16,7 @@ public class Statics {
     public static final String KEY_MALE_OR_FEMALE = "maleOrFemale";
 
 
-    public static final String TYPE_IMAGE = "image";
+    public static final String TYPE_IMAGE_MESSAGE = "image";
     public static final String TYPE_TEXTMESSAGE = "textMessage";
     public static final String TYPE_KISS = "messageKiss";
     public static final String TYPE_CALENDAR_UPDATE = "calendarUpdate";
@@ -79,6 +79,8 @@ public class Statics {
     public static final int PICASSO_ROUNDED_CORNERS = 30;
 
     public static final String KEY_REFRESH_FRAGMENT_LOVE_BOX = "fragmentLoveBox";
+
+
 
     public static final String SHARED_PREFS="myPrefs";
     public static final String KEY_SAVED_EMAIL_FOR_LOGIN = "emailForLogin";

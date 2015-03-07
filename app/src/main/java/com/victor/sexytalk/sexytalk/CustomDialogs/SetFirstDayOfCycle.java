@@ -227,7 +227,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                     //send push
                    for (BackendlessUser partner : parters) {
                        //ako ne sa prazni izprashtame push message
-                       BackendlessMessage.sendPush(mCurrentUser, partner, context, Statics.TYPE_CALENDAR_UPDATE);
+                       BackendlessMessage.sendPush(mCurrentUser, partner, null, context, Statics.TYPE_CALENDAR_UPDATE);
 
                    }//krai na send push
                }

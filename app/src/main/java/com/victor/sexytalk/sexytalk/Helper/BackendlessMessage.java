@@ -32,7 +32,7 @@ public class BackendlessMessage {
     /*
     IZPRASHTANE NA PUSH MESSAGES
      */
-    public static void sendPush(BackendlessUser sender, BackendlessUser recipient, final Context context, String TYPE_MESSAGE) {
+    public static void sendPush(BackendlessUser sender, BackendlessUser recipient, Messages message,  final Context context, String TYPE_MESSAGE) {
 
         String deviceID = null;
         String senderUsername = (String) sender.getProperty(Statics.KEY_USERNAME);
@@ -43,31 +43,54 @@ public class BackendlessMessage {
         }
 
         String messagePush="";
-        String messageTag="";
+        String messageType="";
         if(TYPE_MESSAGE.equals(Statics.TYPE_TEXTMESSAGE)) {
             messagePush = senderUsername + " " +  context.getResources().getString(R.string.push_message_love_message);
-            messageTag = Statics.TYPE_TEXTMESSAGE;
+            messageType = Statics.TYPE_TEXTMESSAGE;
+        } if(TYPE_MESSAGE.equals(Statics.TYPE_IMAGE_MESSAGE)) {
+            messagePush = senderUsername + " " +  context.getResources().getString(R.string.push_message_love_message);
+            messageType = Statics.TYPE_IMAGE_MESSAGE;
         } else if(TYPE_MESSAGE.equals(Statics.TYPE_CALENDAR_UPDATE)) {
             messagePush = senderUsername + " " +  context.getResources().getString(R.string.push_calendar_update);
-            messageTag = Statics.TYPE_CALENDAR_UPDATE;
+            messageType = Statics.TYPE_CALENDAR_UPDATE;
         } else if(TYPE_MESSAGE.equals(Statics.TYPE_KISS)) {
             messagePush = senderUsername + " " + context.getResources().getString(R.string.push_receive_a_kiss);
-            messageTag = Statics.TYPE_KISS;
+            messageType = Statics.TYPE_KISS;
             //toast se izprashta ot main activity. Ako izprashtam niakolko kiss toast shte se pokazva neprekasnato
             //messageToast = context.getResources().getString(R.string.send_a_kiss_toast_successful);
         } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST)) {
             messagePush = senderUsername + " " + context.getResources().getString(R.string.new_partner_request_push);
-            messageTag = Statics.KEY_PARTNER_REQUEST;
+            messageType = Statics.KEY_PARTNER_REQUEST;
         } else if( TYPE_MESSAGE.equals(Statics.KEY_PARTNER_REQUEST_APPROVED)) {
             messagePush = senderUsername + " " + context.getResources().getString(R.string.partner_request_approved);
-            messageTag = Statics.KEY_PARTNER_REQUEST_APPROVED;
+            messageType = Statics.KEY_PARTNER_REQUEST_APPROVED;
 
         }
         PublishOptions publishOptions = new PublishOptions();
+
         publishOptions.putHeader(PublishOptions.ANDROID_TICKER_TEXT_TAG, messagePush);
         publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TITLE_TAG, context.getResources().getString(R.string.app_name));
         publishOptions.putHeader(PublishOptions.ANDROID_CONTENT_TEXT_TAG, messagePush);
-        publishOptions.putHeader(PublishOptions.MESSAGE_TAG,messageTag);
+        publishOptions.putHeader(PublishOptions.MESSAGE_TAG,messageType);
+
+        //dobaviame info za message. Tova se pravi, za da moze kato caknem na push notificationa da se otvori
+        if(message != null){
+            if(TYPE_MESSAGE.equals(Statics.TYPE_TEXTMESSAGE)) {
+                publishOptions.putHeader(Statics.KEY_LOVE_MESSAGE, message.getLoveMessage());
+                publishOptions.putHeader(Statics.KEY_USERNAME_SENDER, message.getSenderUsername());
+
+            } else if(TYPE_MESSAGE.equals(Statics.TYPE_IMAGE_MESSAGE)) {
+                publishOptions.putHeader(Statics.KEY_URL, message.getMediaUrl());
+                publishOptions.putHeader(Statics.KEY_LOVE_MESSAGE, message.getLoveMessage());
+                publishOptions.putHeader(Statics.KEY_USERNAME_SENDER, message.getSenderUsername());
+
+            } else if(TYPE_MESSAGE.equals(Statics.TYPE_KISS)){
+                publishOptions.putHeader(Statics.KEY_LOVE_MESSAGE, message.getLoveMessage());
+                publishOptions.putHeader(Statics.KEY_USERNAME_SENDER, message.getSenderUsername());
+                publishOptions.putHeader(Statics.KEY_NUMBER_OF_KISSES, String.valueOf(message.getKissNumber()));
+            }
+        }
+
 
         DeliveryOptions deliveryOptions = new DeliveryOptions();
         deliveryOptions.setPushPolicy(PushPolicyEnum.ONLY);
@@ -75,7 +98,7 @@ public class BackendlessMessage {
             deliveryOptions.addPushSinglecast(deviceID);
 
 
-            Backendless.Messaging.publish(channel, "Push message", publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
+            Backendless.Messaging.publish(channel, TYPE_MESSAGE, publishOptions, deliveryOptions, new AsyncCallback<MessageStatus>() {
                 @Override
                 public void handleResponse(MessageStatus messageStatus) {
 
@@ -147,7 +170,7 @@ public class BackendlessMessage {
                         //send push message
                         //channel po koito izprashtame push e emailat na poluchatelia
                         if(recipientBackendlessUser != null) {
-                            BackendlessMessage.sendPush(mCurrentUser,recipientBackendlessUser,context,Statics.TYPE_KISS);
+                            BackendlessMessage.sendPush(mCurrentUser,recipientBackendlessUser, kissMessage, context,Statics.TYPE_KISS);
                         }
 
                         String message;

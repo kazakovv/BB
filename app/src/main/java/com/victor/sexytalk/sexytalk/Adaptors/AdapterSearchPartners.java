@@ -177,7 +177,7 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
 
                             //tova e za kanala, po koito da izpratim push message
 
-                            BackendlessMessage.sendPush(mCurrentUser, selectedPartner, mContext, Statics.TYPE_PARTNER_REQUEST);
+                            BackendlessMessage.sendPush(mCurrentUser, selectedPartner, null, mContext, Statics.TYPE_PARTNER_REQUEST);
                             Toast.makeText(mContext, R.string.partner_request_sent_toast, Toast.LENGTH_LONG).show();
                             mFoundUsers.remove(selectedPartnerPosition);
                             notifyDataSetChanged();

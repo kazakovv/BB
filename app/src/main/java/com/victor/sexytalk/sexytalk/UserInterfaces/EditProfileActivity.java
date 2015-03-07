@@ -222,9 +222,9 @@ public class EditProfileActivity extends ActionBarActivity {
 
             String fileName = "";
 
-            if (mMediaUri != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
+            if (mMediaUri != null && mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
                     //Zadavame patia kam profile pic
-                    fileName = ImageHelper.getFileName(getActivity(), mMediaUri, Statics.TYPE_IMAGE);
+                    fileName = ImageHelper.getFileName(getActivity(), mMediaUri, Statics.TYPE_IMAGE_MESSAGE);
 
             }
 
@@ -305,13 +305,13 @@ public class EditProfileActivity extends ActionBarActivity {
                                 if (mMediaUri == null) {
                                     Toast.makeText(getActivity(), R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();
                                 } else {
-                                    mMessageType = Statics.TYPE_IMAGE;
+                                    mMessageType = Statics.TYPE_IMAGE_MESSAGE;
                                     takePicture();
                                 }
                                 break;
 
                             case 1: //choose picture
-                                mMessageType = Statics.TYPE_IMAGE;
+                                mMessageType = Statics.TYPE_IMAGE_MESSAGE;
                                 Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
                                 choosePhotoIntent.setType("image/*");
                                 startActivityForResult(choosePhotoIntent, CHOOSE_PHOTO_REQUEST);
