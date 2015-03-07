@@ -71,75 +71,14 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
             //check za pending parner request
             BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
-
             //check za pending delete requests
             BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
+            //updatevame partnirite
+            BackendlessHelper.checkAndUpdatePartners(mCurrentUser);
 
                 //proveriavame dali e maz ili zhena
                 MaleOrFemale = (String) mCurrentUser.getProperty(Statics.KEY_MALE_OR_FEMALE);
-                //register device for push notifications
-                final String channel = mCurrentUser.getEmail();
 
-                //TODO!!!!!!! causing a lot of polling requests
-            /*
-            //subscribe to the channel, za da poluchvam saobshtenia
-            Backendless.Messaging.subscribe(channel,
-                    new AsyncCallback<List<Message>>() {
-                        public void handleResponse(List<Message> response) {
-                            for (Message message : response) {
-                                /*
-                                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                !!!!tuk se obrabotvat pristignalite saobshtenia!!!!
-                                !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                                 TODO tuk tr da se zatvori gornia komment
-
-                                String publisherId = message.getPublisherId();
-                                if (message.getData().equals(Statics.KEY_PARTNER_REQUEST)) {
-                                    //pokazvame butona za dobaviane na nov partnior
-                                    addPartner.setVisible(true);
-                                    pendingPartnerRequest = true;
-                                } else if (message.getData().equals(Statics.KEY_PARTNER_DELETE)) {
-                                    //niakoi iska da iztrie tekushtia potrebitel kato partnior
-                                    checkForDeletePartnerRequest();
-                                }
-                            }
-                        }
-
-                        public void handleFault(BackendlessFault fault) {
-                        }
-                    },
-                    new AsyncCallback<Subscription>() {
-                        public void handleResponse(Subscription response) {
-                            Log.d("Vic", "subscribed" + response.getChannelName());
-                        }
-
-                        public void handleFault(BackendlessFault fault) {
-                            Log.d("Vic", "subscription error" + fault.getMessage());
-                        }
-                    }
-            );
-
-*/
-                //TODO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                //Load all relations for users (partners, etc)
-/*
-            List<String> rels = new ArrayList<String>();
-            rels.add("*");
-
-                Backendless.Data.of(BackendlessUser.class).loadRelations(mCurrentUser,rels, new AsyncCallback<BackendlessUser>() {
-                    @Override
-                    public void handleResponse(BackendlessUser backendlessUser) {
-                        Log.d("Vic", "relation loaded");
-
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        Log.d("Vic", "relation not loaded loaded" + backendlessFault.getMessage());
-
-                    }
-                });
-*/
 
 
             pager = (ViewPager) findViewById(R.id.pager);

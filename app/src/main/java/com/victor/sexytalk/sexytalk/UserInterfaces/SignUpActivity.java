@@ -17,6 +17,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthdaySignUp;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -146,8 +147,8 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
 
                      @Override
                      public void handleResponse(BackendlessUser backendlessUser) {
-
-                         //TODO tuk varzvame push!!!!!!!!!!!!!!!!!
+                         //reigstrirame za push notifications
+                         BackendlessMessage.registerDeviceForPush(backendlessUser);
                          //!!!!!!!!!!!!!!!!!!
                          //User successfully created!
                          //log in!

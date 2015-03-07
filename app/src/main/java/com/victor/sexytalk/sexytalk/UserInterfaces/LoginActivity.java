@@ -18,6 +18,7 @@ import com.backendless.DeviceRegistration;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ForgotPassword;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -87,7 +88,7 @@ public class LoginActivity extends Activity {
                         public void handleResponse(BackendlessUser backendlessUser) {
                             BackendlessUser test = backendlessUser;
                             //Register device for push notifications
-                            registerDeviceForPush(backendlessUser);
+                            BackendlessMessage.registerDeviceForPush(backendlessUser);
 
                             //User successfully loged in!.Switch to main screen.
                             Intent intent = new Intent(LoginActivity.this, Main.class);
@@ -144,61 +145,5 @@ public class LoginActivity extends Activity {
 
     }
 
-        public void registerDeviceForPush(final BackendlessUser currentUser){
 
-            final String channel = currentUser.getEmail();
-
-
-            Backendless.Messaging.registerDevice(Statics.GOOGLE_PROJECT_ID, channel, new AsyncCallback<Void>() {
-                @Override
-                public void handleResponse(Void aVoid) {
-                    //Get registration and re-register....
-                    Backendless.Messaging.getRegistrations(new AsyncCallback<DeviceRegistration>() {
-                        @Override
-                        public void handleResponse(final DeviceRegistration deviceRegistration) {
-                            String token = deviceRegistration.getDeviceToken();
-                            List<String> channels = new ArrayList<String>();
-                            channels.add(channel);
-                            Calendar c = Calendar.getInstance();
-                            c.add(Calendar.YEAR, 10);
-                            Date expiration = c.getTime();
-                            Backendless.Messaging.registerDeviceOnServer(token, channels, expiration.getTime(), new AsyncCallback<String>() {
-                                @Override
-                                public void handleResponse(String s) {
-
-                                    currentUser.setProperty(Statics.KEY_DEVICE_ID,deviceRegistration.getDeviceId());
-
-                                    Backendless.UserService.update(currentUser, new AsyncCallback<BackendlessUser>() {
-                                        @Override
-                                        public void handleResponse(BackendlessUser backendlessUser) {
-                                            //Toast.makeText(LoginActivity.this,"updated user " + currentUser.getProperty(Statics.KEY_DEVICE_ID),Toast.LENGTH_LONG).show();
-                                        }
-
-                                        @Override
-                                        public void handleFault(BackendlessFault backendlessFault) {
-                                        }
-                                    });
-                                }
-
-                                @Override
-                                public void handleFault(BackendlessFault backendlessFault) {
-
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void handleFault(BackendlessFault backendlessFault) {
-                            //TODO handle fault
-                        }
-                    });
-                }
-
-                @Override
-                public void handleFault(BackendlessFault backendlessFault) {
-                    //TODO handle fault
-                }
-            });
-
-        }
 }
