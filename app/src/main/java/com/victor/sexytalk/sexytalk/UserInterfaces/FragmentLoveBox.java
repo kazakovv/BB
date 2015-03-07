@@ -96,8 +96,8 @@ public class FragmentLoveBox extends ListFragment {
     protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
         public void onRefresh() {
-
-            searchForMessages();
+            //samo tuk davame false kato argument, zashtoto ne iskam da skrivam spinnera, koito si varvi sas swipe to refresh
+            searchForMessages(false);
         }
     };
 //!!!!!!!!!!!!! broadcast receiver
@@ -106,17 +106,17 @@ public class FragmentLoveBox extends ListFragment {
         public void onReceive(Context context, Intent intent) {
 
             // Extract data included in the Intent
-            String message = intent.getStringExtra("pushType");
+            //String message = intent.getStringExtra("pushType");
 
             //do other stuff here
-            Toast.makeText(mContext,"good ddd" + message, Toast.LENGTH_LONG).show();
+            searchForMessages(true);
         }
     };
 
     @Override
     public void onResume() {
         super.onResume();
-        mContext.registerReceiver(mMessageReceiver, new IntentFilter("fragmentLoveBox"));
+        mContext.registerReceiver(mMessageReceiver, new IntentFilter(Statics.KEY_REFRESH_FRAGMENT_LOVE_BOX));
 
     }
 
@@ -172,7 +172,7 @@ public class FragmentLoveBox extends ListFragment {
                 //pokazvame spinnera i skrivame vsichko drugo
 
 
-                searchForMessages();
+                searchForMessages(true);
              //proveriavame da delete i za pending add/delete request
                 //proveriavame dali evenualno niama mezhduvremenno novi dobaveni partniori
                 if(mCurrentUser !=null) {
@@ -204,7 +204,7 @@ public class FragmentLoveBox extends ListFragment {
         if(Backendless.UserService.CurrentUser() != null) {
             currentUser = Backendless.UserService.CurrentUser();
 
-            searchForMessages();
+            searchForMessages(true);
         }
     }
 
@@ -356,13 +356,16 @@ public class FragmentLoveBox extends ListFragment {
     }
 
    //Tozi metod se vrazva kam backendless da vidi dali imame saobsthenia
-protected void searchForMessages(){
-    //pokazvame spinner
-    mProgressBar.setVisibility(View.VISIBLE);
-    mFragmentLoveBoxLayout.setVisibility(View.GONE);
-    mLayoutLogo.setVisibility(View.GONE);
-    if(mRefreshButton !=null) {
-        mRefreshButton.setEnabled(false);
+protected void searchForMessages(boolean hideFragment){
+    //pokazvame spinner.
+    //bolean se izpolzva, shahtoto ako drapnem swime to refresh ne izkame da skirvame spinnera, koito varvi sas swipe to refresh
+    if(hideFragment == true) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        mFragmentLoveBoxLayout.setVisibility(View.GONE);
+        mLayoutLogo.setVisibility(View.GONE);
+        if (mRefreshButton != null) {
+            mRefreshButton.setEnabled(false);
+        }
     }
     String whereClause = "recepientEmails LIKE '%" + currentUser.getEmail() + "%'";
 

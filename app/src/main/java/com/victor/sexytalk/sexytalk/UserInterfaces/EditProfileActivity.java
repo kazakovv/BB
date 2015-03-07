@@ -214,6 +214,8 @@ public class EditProfileActivity extends ActionBarActivity {
             byte[] imageBytes = FileHelper.getByteArrayFromFile(getActivity(), mMediaUri);
             byte[] reducedImage = FileHelper.reduceImageForUpload(imageBytes,Statics.SHORT_SIDE_TARGET_THUMBNAIL);
             Bitmap profilePictureBitmap = BitmapFactory.decodeByteArray(reducedImage, 0, reducedImage.length);
+            //zavartame profile pic, ama ima nuzhda
+            profilePictureBitmap = FileHelper.rotateImageIfNeeded(mContext,mMediaUri,profilePictureBitmap);
 
             //Bitmap profilePictureBitmap = help.createThumbnail(mMediaUri);
             profilePicture.setImageBitmap(profilePictureBitmap);
