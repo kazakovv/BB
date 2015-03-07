@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -52,7 +53,7 @@ public class SendMessage extends ActionBarActivity {
     protected Toolbar toolbar;
 
     protected ArrayList<String> backendlessUserNames; //spisak s Usernames na poluchatelite na saobshtenieto
-    protected ArrayList<String> backendlessRecepientEmails; //spisak s emails na poluchatelite na saobshtenieto
+    protected ArrayList<String> backendlessRecipientEmails; //spisak s emails na poluchatelite na saobshtenieto
     protected String recepientEmails = "";
 
     public static final int TAKE_PHOTO_REQUEST = 0;
@@ -173,7 +174,7 @@ public class SendMessage extends ActionBarActivity {
             if (requestCode == ACTIVITY_SEND_TO) {
 
                 backendlessUserNames = data.getStringArrayListExtra(Statics.KEY_USERNAME);
-                backendlessRecepientEmails = data.getStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS);
+                backendlessRecipientEmails = data.getStringArrayListExtra(Statics.KEY_RECEPIENT_EMAILS);
                 String message = constructListOfRecepeintsAsStringTo(backendlessUserNames);
                 mSendMessageTo.setText(message);
                 return; //ne prodalzhavame natatak s metoda
@@ -463,12 +464,16 @@ public class SendMessage extends ActionBarActivity {
                                 //ako image uploadvame file na servera
                                 //razbiva fila na array ot bitove, za da go smalim i kachim na servera
 
-                                byte[] fileBytes = ImageHelper.getByteArrayFromFile(SendMessage.this, mMediaUri);
+                                byte[] imageToUpload = ImageHelper.getByteArrayFromFile(SendMessage.this, mMediaUri);
                                 String path = "";
 
                                 //ako e image go smaliavame
-                                if (fileBytes != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
-                                    fileBytes = ImageHelper.reduceImageForUpload(fileBytes, Statics.SHORT_SIDE_TARGET_PIC);
+                                if (imageToUpload != null && mMessageType.equals(Statics.TYPE_IMAGE)) {
+                                    imageToUpload = ImageHelper.reduceImageForUpload(imageToUpload, Statics.SHORT_SIDE_TARGET_PIC);
+                                    //zavartame image, ako ima nuzda
+                                    Bitmap temp = BitmapFactory.decodeByteArray(imageToUpload, 0, imageToUpload.length);
+                                    temp = ImageHelper.rotateImageIfNeeded(mContext,mMediaUri,temp);
+                                    imageToUpload = ImageHelper.convertBitmapToByteArray(temp);
                                     path = "/pics/" +
                                             ImageHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_IMAGE);
                                 }
@@ -476,7 +481,7 @@ public class SendMessage extends ActionBarActivity {
 
                                 //kachvame file na servera
                                 final String finalPath = path;//kopirame path kam image
-                                Backendless.Files.saveFile(path, fileBytes, true, new DefaultCallback<String>(mContext, sendingMessage) {
+                                Backendless.Files.saveFile(path, imageToUpload, true, new DefaultCallback<String>(mContext, sendingMessage) {
                                     @Override
                                     public void handleResponse(String s) {
                                         super.handleResponse(s);
@@ -596,10 +601,10 @@ public class SendMessage extends ActionBarActivity {
 
     protected String constructWhereClause() {
         String whereClause = "";
-        int numberOfRecepients = backendlessRecepientEmails.size();
+        int numberOfRecepients = backendlessRecipientEmails.size();
         for (int i = 0; i < numberOfRecepients; i++) {
             whereClause = whereClause + "email=";
-            whereClause = whereClause + "'" + backendlessRecepientEmails.get(i) + "'";
+            whereClause = whereClause + "'" + backendlessRecipientEmails.get(i) + "'";
 
             if (i < numberOfRecepients - 1) {
                 whereClause = whereClause + " OR ";

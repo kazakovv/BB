@@ -75,6 +75,13 @@ public class ImageHelper {
         
         return fileBytes;
 	}
+    public static byte[] convertBitmapToByteArray(Bitmap bitmapToConvert){
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmapToConvert.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        return  byteArray;
+    }
 	
 	public static byte[] reduceImageForUpload(byte[] imageData, int shortSideTarget) {
 		Bitmap bitmap = ImageResizer.resizeImageMaintainAspectRatio(imageData, shortSideTarget);
