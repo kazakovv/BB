@@ -40,7 +40,6 @@ public class PushReceiver extends BackendlessBroadcastReceiver
                                    String contentText) {
         int appIcon = context.getApplicationInfo().icon;
 
-        //TODO!!!! tuk tr da se promeni za razlichnite tipove message
         Intent notificationIntent;
         if(messageType.equals(Statics.TYPE_TEXTMESSAGE)) {
             notificationIntent = new Intent( context, ViewTextMessageActivity.class );
@@ -99,7 +98,7 @@ public class PushReceiver extends BackendlessBroadcastReceiver
         notificationManager.notify( 0, notification );
 
 
-        //!!!!!!!!!!!!!!!!!!!!!!
+        //!!!!!!!!!!!!!!!!!!!!!! TOVA RABOTI SAMO, AKO E OTVORENA PROGRAMATA. TOGAVA SE UPDATEVA LOVE BOX
         Intent intentRefresh = new Intent(Statics.KEY_REFRESH_FRAGMENT_LOVE_BOX);
 
         //put whatever data you want to send, if any
