@@ -196,6 +196,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
+                String error = backendlessFault.getMessage();
                 Toast.makeText(context,R.string.error_sending_calendar_updates, Toast.LENGTH_LONG).show();
 
             }

@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -47,6 +48,7 @@ public class FragmentLoveDays extends Fragment {
 
     protected ProgressBar mProgressBar;
     protected RelativeLayout mFragmentLoveDaysLayout;
+    protected SwipeRefreshLayout mSwipeToRefreshLayout;
 
     protected List<BackendlessUser> cardsToDisplay;
     protected MenuItem addPartner;
@@ -66,7 +68,9 @@ public class FragmentLoveDays extends Fragment {
 
         mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
         mFragmentLoveDaysLayout = (RelativeLayout) inflatedView.findViewById(R.id.layoutFragmentLoveDays);
+        mSwipeToRefreshLayout = (SwipeRefreshLayout) inflatedView.findViewById(R.id.swipeRefreshLayout);
 
+        mSwipeToRefreshLayout.setOnRefreshListener(mOnRefreshListener);
         if(Backendless.UserService.CurrentUser() != null) {
             mCurrentUser = Backendless.UserService.CurrentUser();
             loadCardList(mCurrentUser);
@@ -74,7 +78,14 @@ public class FragmentLoveDays extends Fragment {
 
         return inflatedView;
     }
-
+    //refresh listener za updatevane na tova dali ima novi saobstehnia
+    protected SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            //samo tuk davame false kato argument, zashtoto ne iskam da skrivam spinnera, koito si varvi sas swipe to refresh
+            refreshPartnersList(false);
+        }
+    };
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,7 +127,7 @@ public class FragmentLoveDays extends Fragment {
             case R.id.refresh:
                 //vrazvam butona za refresh, za da moga da go enable/disable
                 mRefreshButton = item;
-                refreshPartnersList();
+                refreshPartnersList(true);
 
                 //proveriavame da delete i za pending partner request
                 //proveriavame dali ne sa se updatnali partniorite na usera
@@ -143,12 +154,15 @@ public class FragmentLoveDays extends Fragment {
  */
 
 
-    protected void refreshPartnersList(){
-
-        mRefreshButton.setEnabled(false);
-        mProgressBar.setVisibility(View.VISIBLE);
-        mFragmentLoveDaysLayout.setVisibility(View.GONE);
-
+    protected void refreshPartnersList(final boolean hideLayouts){
+        if(hideLayouts == true) {
+            mRefreshButton.setEnabled(false);
+            mProgressBar.setVisibility(View.VISIBLE);
+            mFragmentLoveDaysLayout.setVisibility(View.GONE);
+        } else {
+            //ako ne skirvame layouts, znachi metodat e izvikan ot swipe to refresh
+            mSwipeToRefreshLayout.setRefreshing(true);
+        }
 
         String whereClause = "email='" + mCurrentUser.getEmail() +"'";
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
@@ -158,10 +172,14 @@ public class FragmentLoveDays extends Fragment {
 
             @Override
             public void handleResponse(BackendlessCollection<BackendlessUser> user) {
-                mRefreshButton.setEnabled(true);
-                mProgressBar.setVisibility(View.GONE);
-                mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
-
+                if(hideLayouts == true) {
+                    mRefreshButton.setEnabled(true);
+                    mProgressBar.setVisibility(View.GONE);
+                    mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
+                }
+                if(mSwipeToRefreshLayout.isRefreshing()){
+                    mSwipeToRefreshLayout.setRefreshing(false);
+                }
                 //tova e updatnat tekusht potrebitel
                 BackendlessUser currentUser = user.getCurrentPage().get(0);
                 //updatevame go lokano
@@ -169,18 +187,7 @@ public class FragmentLoveDays extends Fragment {
 
                 if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
 
-                    BackendlessUser[] partners = (BackendlessUser[]) user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
-                    //updatevame cardList i prezarezhdame list
-                    cardsToDisplay.clear();
-                    cardsToDisplay.add(currentUser);
-                    for(BackendlessUser partner : partners) {
-                        cardsToDisplay.add(partner);
-                    }
-
-                    //zarezdame adaptora
-                    AdapterLoveDays adapter = new AdapterLoveDays(cardsToDisplay, mContext, FragmentLoveDays.this);
-                    loveDaysCards.setAdapter(adapter);
-
+                    loadCardList(currentUser);
                     Toast.makeText(mContext,R.string.toast_update_partners,Toast.LENGTH_LONG).show();
 
                 } else {
@@ -192,9 +199,14 @@ public class FragmentLoveDays extends Fragment {
 
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
-                mRefreshButton.setEnabled(true);
-                mProgressBar.setVisibility(View.GONE);
-                mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
+                if(hideLayouts == true) {
+                    mRefreshButton.setEnabled(true);
+                    mProgressBar.setVisibility(View.GONE);
+                    mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
+                }
+                if(mSwipeToRefreshLayout.isRefreshing()){
+                    mSwipeToRefreshLayout.setRefreshing(false);
+                }
                 //niama kakvo da napravim
                 Toast.makeText(mContext,"not refreshed...",Toast.LENGTH_LONG).show();
 
