@@ -173,6 +173,9 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
             mCurrentUser.setProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,
                     Integer.parseInt(spinnerCycle.getSelectedItem().toString()) );
             mCurrentUser.setProperty(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle.getTime());
+            //updatevame current user lokalno
+            Backendless.UserService.setCurrentUser(mCurrentUser);
+
         if(sendSexyCalendarUpdateToPartners.isChecked()) {
             mCurrentUser.setProperty(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS, true);
         } else {
@@ -197,11 +200,6 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
 
             }
         });
-
-
-
-
-
 
     }
 

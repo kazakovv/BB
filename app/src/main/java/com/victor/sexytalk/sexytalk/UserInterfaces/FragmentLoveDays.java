@@ -9,20 +9,28 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterLoveDays;
-import com.victor.sexytalk.sexytalk.Adaptors.AdapterViewImage;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -36,6 +44,15 @@ public class FragmentLoveDays extends Fragment {
     protected RecyclerView loveDaysCards;
     protected Context mContext;
     protected BackendlessUser mCurrentUser;
+
+    protected ProgressBar mProgressBar;
+    protected RelativeLayout mFragmentLoveDaysLayout;
+
+    protected List<BackendlessUser> cardsToDisplay;
+    protected MenuItem addPartner;
+    protected MenuItem mRefreshButton;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
@@ -47,59 +64,161 @@ public class FragmentLoveDays extends Fragment {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         loveDaysCards.setLayoutManager(llm);
 
+        mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
+        mFragmentLoveDaysLayout = (RelativeLayout) inflatedView.findViewById(R.id.layoutFragmentLoveDays);
+
         if(Backendless.UserService.CurrentUser() != null) {
             mCurrentUser = Backendless.UserService.CurrentUser();
-            List<BackendlessUser> cardsToDisplay = new ArrayList<BackendlessUser>();
-            cardsToDisplay.add(mCurrentUser);
-
-            //dobaviame partniorite, ako ima takiva
-            if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-                BackendlessUser[] partners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
-                for(BackendlessUser partner : partners) {
-                    cardsToDisplay.add(partner);
-                }
-            }
-
-            //zarezdame adaptora
-            AdapterLoveDays adapter = new AdapterLoveDays(cardsToDisplay, mContext, FragmentLoveDays.this);
-            loveDaysCards.setAdapter(adapter);
+            loadCardList(mCurrentUser);
         }
 
         return inflatedView;
     }
 
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == Statics.UPDATE_STATUS) {
-
-            Toast.makeText(mContext,"good",Toast.LENGTH_LONG).show();
+            BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+            loadCardList(currentUser);
         }
 
         if(requestCode ==  Statics.MENSTRUAL_CALENDAR_DIALOG) {
 
 
             if (resultCode == Activity.RESULT_OK) {
+                BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+                loadCardList(currentUser);
 
-                Toast.makeText(mContext,"Even better",Toast.LENGTH_LONG).show();
-                /*
                 Bundle bundle = data.getExtras();
                 Boolean sendSexyCalendarUpdateToPartners =
                         bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
                 //izchisliavam v koi etap ot cikala e i updatevame statusite
 
-                String titleCycle = bundle.getString(Statics.TITLE_CYCLE);
-                cyclePhaseTitle.setText(titleCycle);
 
                 if(sendSexyCalendarUpdateToPartners == true) {
                     //TODO: izprashtam update na partniorite
                 }
-                */
+
             }
         }
     } //krai na onActivity result
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.refresh:
+                //vrazvam butona za refresh, za da moga da go enable/disable
+                mRefreshButton = item;
+                refreshPartnersList();
+
+                //proveriavame da delete i za pending partner request
+                //proveriavame dali ne sa se updatnali partniorite na usera
+                if(mCurrentUser !=null) {
+                    BackendlessHelper.checkForPendingParnerRequests(mCurrentUser, addPartner);
+                    BackendlessHelper.checkForDeletePartnerRequest(mCurrentUser);
+                    BackendlessHelper.checkAndUpdatePartners(mCurrentUser);
+                }
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        addPartner = menu.findItem(R.id.partner_request);
+    }
+/*
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!1  HELPER METODI !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
+ */
+
+
+    protected void refreshPartnersList(){
+
+        mRefreshButton.setEnabled(false);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mFragmentLoveDaysLayout.setVisibility(View.GONE);
+
+
+        String whereClause = "email='" + mCurrentUser.getEmail() +"'";
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+        Backendless.Data.of(BackendlessUser.class).find(dataQuery, new AsyncCallback<BackendlessCollection<BackendlessUser>>() {
+
+
+            @Override
+            public void handleResponse(BackendlessCollection<BackendlessUser> user) {
+                mRefreshButton.setEnabled(true);
+                mProgressBar.setVisibility(View.GONE);
+                mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
+
+                //tova e updatnat tekusht potrebitel
+                BackendlessUser currentUser = user.getCurrentPage().get(0);
+                //updatevame go lokano
+                Backendless.UserService.setCurrentUser(currentUser);
+
+                if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+
+                    BackendlessUser[] partners = (BackendlessUser[]) user.getCurrentPage().get(0).getProperty(Statics.KEY_PARTNERS);
+                    //updatevame cardList i prezarezhdame list
+                    cardsToDisplay.clear();
+                    cardsToDisplay.add(currentUser);
+                    for(BackendlessUser partner : partners) {
+                        cardsToDisplay.add(partner);
+                    }
+
+                    //zarezdame adaptora
+                    AdapterLoveDays adapter = new AdapterLoveDays(cardsToDisplay, mContext, FragmentLoveDays.this);
+                    loveDaysCards.setAdapter(adapter);
+
+                    Toast.makeText(mContext,R.string.toast_update_partners,Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    //niama namereni partniori
+                    Toast.makeText(mContext,R.string.toast_update_partners_no_partners_found,Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                mRefreshButton.setEnabled(true);
+                mProgressBar.setVisibility(View.GONE);
+                mFragmentLoveDaysLayout.setVisibility(View.VISIBLE);
+                //niama kakvo da napravim
+                Toast.makeText(mContext,"not refreshed...",Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+    }
+
+    protected void loadCardList(BackendlessUser currentUser) {
+        cardsToDisplay = new ArrayList<BackendlessUser>();
+        cardsToDisplay.add(currentUser);
+
+        if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+           BackendlessUser[] partners = (BackendlessUser[]) currentUser.getProperty(Statics.KEY_PARTNERS);
+            //updatevame cardList i prezarezhdame list
+
+            for(BackendlessUser partner : partners) {
+                cardsToDisplay.add(partner);
+            }
+      }
+        //zarezdame adaptora
+        AdapterLoveDays adapter = new AdapterLoveDays(cardsToDisplay, mContext, FragmentLoveDays.this);
+        loveDaysCards.setAdapter(adapter);
+    }
 
 
     /*

@@ -64,6 +64,8 @@ protected BackendlessUser mCurrentUser;
 
 
                 mCurrentUser.setProperty(Statics.KEY_SEXY_STATUS,mSexyStatus.getText().toString());
+                //updatevame loklano
+                Backendless.UserService.setCurrentUser(mCurrentUser);
                 String message = this.getResources().getString(R.string.saving_message);
                 Backendless.UserService.update(mCurrentUser, new DefaultCallback<BackendlessUser>(this,message) {
                    @Override
