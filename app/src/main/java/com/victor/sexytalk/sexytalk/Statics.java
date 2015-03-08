@@ -79,6 +79,11 @@ public class Statics {
 
     public static final int PICASSO_ROUNDED_CORNERS = 30;
 
+    //onactivity result codes
+    public static final int MENSTRUAL_CALENDAR_DIALOG = 11;
+    public static final int UPDATE_STATUS = 22;
+
+
     public static final String KEY_REFRESH_FRAGMENT_LOVE_BOX = "fragmentLoveBox";
 
 

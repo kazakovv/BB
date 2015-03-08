@@ -1,5 +1,6 @@
 package com.victor.sexytalk.sexytalk.UserInterfaces;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,47 +9,100 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 
 
-import android.support.v7.app.ActionBar;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
+
 import com.backendless.Backendless;
-import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
-import com.backendless.persistence.BackendlessDataQuery;
-import com.squareup.picasso.Picasso;
-import com.victor.sexytalk.sexytalk.CustomDialogs.SetFirstDayOfCycle;
-import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
-import com.victor.sexytalk.sexytalk.Helper.CycleStage;
-import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
+import com.victor.sexytalk.sexytalk.Adaptors.AdapterLoveDays;
+import com.victor.sexytalk.sexytalk.Adaptors.AdapterViewImage;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
  * Created by Victor on 13/10/2014.
  */
 public class FragmentLoveDays extends Fragment {
+    protected RecyclerView loveDaysCards;
+    protected Context mContext;
+    protected BackendlessUser mCurrentUser;
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View inflatedView = inflater.inflate(R.layout.fragment_love_days, container, false);
+        mContext = inflatedView.getContext();
+
+        loveDaysCards = (RecyclerView) inflatedView.findViewById(R.id.cardList);
+        loveDaysCards.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(mContext);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        loveDaysCards.setLayoutManager(llm);
+
+        if(Backendless.UserService.CurrentUser() != null) {
+            mCurrentUser = Backendless.UserService.CurrentUser();
+            List<BackendlessUser> cardsToDisplay = new ArrayList<BackendlessUser>();
+            cardsToDisplay.add(mCurrentUser);
+
+            //dobaviame partniorite, ako ima takiva
+            if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+                BackendlessUser[] partners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+                for(BackendlessUser partner : partners) {
+                    cardsToDisplay.add(partner);
+                }
+            }
+
+            //zarezdame adaptora
+            AdapterLoveDays adapter = new AdapterLoveDays(cardsToDisplay, mContext, FragmentLoveDays.this);
+            loveDaysCards.setAdapter(adapter);
+        }
+
+        return inflatedView;
+    }
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == Statics.UPDATE_STATUS) {
+
+            Toast.makeText(mContext,"good",Toast.LENGTH_LONG).show();
+        }
+
+        if(requestCode ==  Statics.MENSTRUAL_CALENDAR_DIALOG) {
+
+
+            if (resultCode == Activity.RESULT_OK) {
+
+                Toast.makeText(mContext,"Even better",Toast.LENGTH_LONG).show();
+                /*
+                Bundle bundle = data.getExtras();
+                Boolean sendSexyCalendarUpdateToPartners =
+                        bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
+                //izchisliavam v koi etap ot cikala e i updatevame statusite
+
+                String titleCycle = bundle.getString(Statics.TITLE_CYCLE);
+                cyclePhaseTitle.setText(titleCycle);
+
+                if(sendSexyCalendarUpdateToPartners == true) {
+                    //TODO: izprashtam update na partniorite
+                }
+                */
+            }
+        }
+    } //krai na onActivity result
+
+
+    /*
     protected BackendlessUser mCurrentUser;
     protected Button showPrivateDaysDialog;
     protected Spinner listOfPartnersSpinner;
@@ -302,11 +356,11 @@ public class FragmentLoveDays extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         addPartner = menu.findItem(R.id.partner_request);
     }
-    /*
+
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!     NACHALO NA HELPER METODITE     !!!!!!!!!!!!!!!!!!!!!!!!!!
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    */
+
 
     protected void refreshPartnersList(){
 
@@ -437,4 +491,6 @@ public class FragmentLoveDays extends Fragment {
         }
 
     }
+
+    */
 }

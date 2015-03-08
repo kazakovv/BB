@@ -17,7 +17,13 @@
         android:layout_height="match_parent"
         tools:context="com.victor.sexytalk.sexytalk.UserInterfaces.FragmentLoveDays">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cardList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
 
+<!--
         <TextView
             android:id="@+id/chooseYourPartnerLabel"
             android:layout_width="match_parent"
@@ -110,7 +116,7 @@
 
         </LinearLayout>
 
-
+-->
     </RelativeLayout>
 
 </RelativeLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="4dp">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/card_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/title_messages"
+            android:text="Love message for the day"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/message_title" />
+
+        <ImageView
+            android:id="@+id/profilePicture"
+            android:layout_width="@dimen/thumbnail_width"
+            android:layout_height="@dimen/thumbnail_height"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/card_title"
+            android:layout_marginRight="@dimen/default_padding"
+            android:layout_marginTop="@dimen/default_padding"
+
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_action_person_black" />
+
+
+        <TextView
+            android:id="@+id/sexyStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/card_title"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/default_padding"
+            android:paddingRight="@dimen/default_padding"
+            android:paddingTop="@dimen/default_padding"
+            android:text="@string/sexy_status_default"
+            android:textAlignment="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/second_accent_color" />
+
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
