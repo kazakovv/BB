@@ -184,14 +184,11 @@ public class FragmentLoveDays extends Fragment {
                 BackendlessUser currentUser = user.getCurrentPage().get(0);
                 //updatevame go lokano
                 Backendless.UserService.setCurrentUser(currentUser);
+                loadCardList(currentUser);
 
                 if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
-
-                    loadCardList(currentUser);
                     Toast.makeText(mContext,R.string.toast_update_partners,Toast.LENGTH_LONG).show();
-
                 } else {
-
                     //niama namereni partniori
                     Toast.makeText(mContext,R.string.toast_update_partners_no_partners_found,Toast.LENGTH_LONG).show();
                 }
