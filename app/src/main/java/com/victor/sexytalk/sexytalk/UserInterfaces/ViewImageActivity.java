@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterViewImage;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -38,6 +39,13 @@ public class ViewImageActivity extends ActionBarActivity {
         String imageUrl = getIntent().getStringExtra(Statics.KEY_URL);
         String senderUsername = getIntent().getStringExtra(Statics.KEY_USERNAME_SENDER);
 
+        //messageId se izpolzva, za da se zadade koga e otvoreno saobsthenieto,
+        // ako sme go otvorile kato sme caknali na push notification
+        String messageId = getIntent().getStringExtra(Statics.KEY_MESSAGE_ID);
+        if(messageId !=null){
+            BackendlessMessage.findMessageAndSetDateOpened(messageId);
+
+        }
         //SET UP THE RECYCLER VIEW
         RecyclerView recList = (RecyclerView) findViewById(R.id.cardList);
         recList.setHasFixedSize(true);

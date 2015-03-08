@@ -46,7 +46,9 @@ public class PushReceiver extends BackendlessBroadcastReceiver
 
             String loveMessage = intent.getStringExtra(Statics.KEY_LOVE_MESSAGE);
             String usernameSender = intent.getStringExtra(Statics.KEY_USERNAME_SENDER);
+            String messageId = intent.getStringExtra(Statics.KEY_MESSAGE_ID);
 
+            notificationIntent.putExtra(Statics.KEY_MESSAGE_ID, messageId);
             notificationIntent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             notificationIntent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
 
@@ -56,7 +58,9 @@ public class PushReceiver extends BackendlessBroadcastReceiver
             String loveMessage = intent.getStringExtra(Statics.KEY_LOVE_MESSAGE);
             String usernameSender = intent.getStringExtra(Statics.KEY_USERNAME_SENDER);
             String mediaUrl = intent.getStringExtra(Statics.KEY_URL);
+            String messageId = intent.getStringExtra(Statics.KEY_MESSAGE_ID);
 
+            notificationIntent.putExtra(Statics.KEY_MESSAGE_ID, messageId);
             notificationIntent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             notificationIntent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
             notificationIntent.putExtra(Statics.KEY_URL, mediaUrl);

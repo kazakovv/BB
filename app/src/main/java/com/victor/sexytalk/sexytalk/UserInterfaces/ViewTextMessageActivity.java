@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterViewTextMessage;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -25,6 +26,14 @@ public class ViewTextMessageActivity extends ActionBarActivity {
         //loveMessageToDisplay = (TextView) findViewById(R.id.loveMessageTextMessage);
         String loveMessage = getIntent().getStringExtra(Statics.KEY_LOVE_MESSAGE);
         String senderUsername = getIntent().getStringExtra(Statics.KEY_USERNAME_SENDER);
+
+        //messageId se izpolzva, za da se zadade koga e otvoreno saobsthenieto,
+        // ako sme go otvorile kato sme caknali na push notification
+        String messageId = getIntent().getStringExtra(Statics.KEY_MESSAGE_ID);
+        if(messageId !=null){
+            BackendlessMessage.findMessageAndSetDateOpened(messageId);
+
+        }
 
         //loveMessageToDisplay.setText(loveMessage);
         toolbar = (Toolbar) findViewById(R.id.toolbar);

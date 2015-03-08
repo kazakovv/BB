@@ -93,6 +93,7 @@ public class FragmentLoveDays extends Fragment {
         mProgressBar = (ProgressBar) inflatedView.findViewById(R.id.progressBar);
         mFragmentLoveDaysLayout = (RelativeLayout) inflatedView.findViewById(R.id.layoutFragmentLoveDays);
 
+
         return inflatedView;
     }
 

@@ -78,11 +78,13 @@ public class BackendlessMessage {
             if(TYPE_MESSAGE.equals(Statics.TYPE_TEXTMESSAGE)) {
                 publishOptions.putHeader(Statics.KEY_LOVE_MESSAGE, message.getLoveMessage());
                 publishOptions.putHeader(Statics.KEY_USERNAME_SENDER, message.getSenderUsername());
+                publishOptions.putHeader(Statics.KEY_MESSAGE_ID, message.getObjectId());
 
             } else if(TYPE_MESSAGE.equals(Statics.TYPE_IMAGE_MESSAGE)) {
                 publishOptions.putHeader(Statics.KEY_URL, message.getMediaUrl());
                 publishOptions.putHeader(Statics.KEY_LOVE_MESSAGE, message.getLoveMessage());
                 publishOptions.putHeader(Statics.KEY_USERNAME_SENDER, message.getSenderUsername());
+                publishOptions.putHeader(Statics.KEY_MESSAGE_ID, message.getObjectId());
 
             } else if(TYPE_MESSAGE.equals(Statics.TYPE_KISS)){
                 publishOptions.putHeader(Statics.KEY_LOVE_MESSAGE, message.getLoveMessage());
@@ -332,6 +334,49 @@ public class BackendlessMessage {
             @Override
             public void handleFault(BackendlessFault backendlessFault) {
                 //TODO handle fault
+            }
+        });
+
+    }
+
+    public static void findMessageAndSetDateOpened(String messageID){
+        String whereClause = "objectId'" + messageID +"'";
+        BackendlessDataQuery dataQuery = new BackendlessDataQuery();
+        dataQuery.setWhereClause(whereClause);
+
+        //find message
+        Backendless.Data.of(Messages.class).find(dataQuery, new AsyncCallback<BackendlessCollection<Messages>>() {
+            @Override
+            public void handleResponse(BackendlessCollection<Messages> message) {
+                if(message.getCurrentPage().size() > 0) {
+                    //namereno e saobshtenieto
+                    //updatevame koga e otvoreno
+
+                    Messages messageToUpdate = message.getCurrentPage().get(0);//tr da ima samo 1 saobstehnie
+                    if(messageToUpdate.getOpened() == null) { }
+                    //ne e zadadeno koga e bilo otvoreno
+                    Calendar c = Calendar.getInstance();
+                    messageToUpdate.setOpened(c.getTime());
+
+                    //zapazvame go na servera
+                    Backendless.Data.of(Messages.class).save(messageToUpdate, new AsyncCallback<Messages>() {
+                        @Override
+                        public void handleResponse(Messages messages) {
+
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+
+                        }
+                    });
+
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                //nishto ne moze da se napravi,
             }
         });
 
