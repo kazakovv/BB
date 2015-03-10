@@ -29,7 +29,8 @@
             android:paddingRight="@dimen/default_padding"
             android:text="@string/send_message_to"
             android:textSize="@dimen/Send_to"
-            android:textColor="@color/second_accent_color"/>
+            android:textColor="@color/color_black"
+            android:background="@drawable/edit_text_rounded_corners"/>
 
         <EditText
             android:id="@+id/messageToSend"

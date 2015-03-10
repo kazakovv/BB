@@ -17,9 +17,9 @@
             android:id="@+id/card_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/title_messages"
+            android:background="@color/title_message_female"
             android:text="Love message for the day"
-            android:textColor="@color/color_white"
+            android:textColor="@color/color_black"
             android:textSize="@dimen/message_title" />
 
         <ImageView
@@ -44,7 +44,7 @@
             android:paddingRight="@dimen/default_padding"
             android:text="@string/fragment_love_days_generic_title"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/apptheme_color"
+            android:textColor="@color/color_black"
             android:layout_alignBottom="@+id/profilePicture"
             android:layout_toLeftOf="@+id/profilePicture"
             android:layout_toStartOf="@+id/profilePicture" />
@@ -73,6 +73,7 @@
             android:layout_marginTop="@dimen/margin_top_button"
             android:layout_marginLeft="@dimen/default_padding"
             android:text="@string/title_activity_sexy_calendar"
+            android:layout_marginBottom="@dimen/default_padding"
             android:textAlignment="center" />
 
         <Button
@@ -85,6 +86,7 @@
             android:gravity="center"
             android:layout_marginRight="@dimen/default_padding"
             android:text="@string/show_private_days_dialog_button"
+            android:layout_marginBottom="@dimen/default_padding"
             android:layout_alignTop="@+id/showSexyCalendar"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />

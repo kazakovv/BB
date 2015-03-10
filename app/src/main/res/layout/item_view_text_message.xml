@@ -15,8 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/message_title"
-            android:background="@color/title_messages"
-            android:textColor="@color/color_white"
+            android:background="@color/title_message_female"
+            android:textColor="@color/color_black"
             android:textSize="@dimen/message_title"
             android:text="Love message for the day"/>
         <TextView

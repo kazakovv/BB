@@ -340,7 +340,7 @@ public class BackendlessMessage {
     }
 
     public static void findMessageAndSetDateOpened(String messageID){
-        String whereClause = "objectId'" + messageID +"'";
+        String whereClause = "objectId='" + messageID +"'";
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
         dataQuery.setWhereClause(whereClause);
 
@@ -348,6 +348,7 @@ public class BackendlessMessage {
         Backendless.Data.of(Messages.class).find(dataQuery, new AsyncCallback<BackendlessCollection<Messages>>() {
             @Override
             public void handleResponse(BackendlessCollection<Messages> message) {
+
                 if(message.getCurrentPage().size() > 0) {
                     //namereno e saobshtenieto
                     //updatevame koga e otvoreno
