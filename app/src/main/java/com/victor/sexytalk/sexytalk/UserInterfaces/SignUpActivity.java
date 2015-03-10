@@ -17,6 +17,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthdaySignUp;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Helper.EmailForLogin;
 import com.victor.sexytalk.sexytalk.Main;
@@ -160,12 +161,15 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                                      @Override
                                      public void handleResponse(BackendlessUser backendlessUser) {
                                          super.handleResponse(backendlessUser);
+                                         //registrirame user za push
+                                         BackendlessMessage.registerDeviceForPush(backendlessUser);
                                          // Switch to main screen.
                                          Intent intent = new Intent(SignUpActivity.this, Main.class);
                                          //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran
                                          intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                          intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                          startActivity(intent);
+
                                      }
 
                                      @Override

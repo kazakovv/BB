@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="max_status_length">200</integer>
+    <integer name="max_love_message_length">400</integer>
+    <integer name="max_love_message_lines">7</integer>
+    <integer name="max_username_length">20</integer>
+    <integer name="max_password_length">20</integer>
+    <integer name="max_email_length">50</integer>
+</resources>

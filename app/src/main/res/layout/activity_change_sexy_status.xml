@@ -17,8 +17,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/app_toolbar"
         android:hint="@string/change_sexy_status_hint"
-        android:maxLength="200"
-        android:singleLine="true"
+        android:maxLength="@integer/max_status_length"
          />
     <!-- LOGO NA CELUVKA -->
     <RelativeLayout

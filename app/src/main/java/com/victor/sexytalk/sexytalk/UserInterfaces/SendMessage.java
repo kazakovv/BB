@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
+import com.victor.sexytalk.sexytalk.CustomDialogs.OneLoveMessageDialog;
 import com.victor.sexytalk.sexytalk.Helper.ImageHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Main;
@@ -352,6 +354,12 @@ public class SendMessage extends ActionBarActivity {
                 startActivityForResult(intent, ACTIVITY_SEND_TO);
             }
         });
+
+
+        //pokazvame saobshtenie che moze da se izprashta 1 sabshtenie na den
+        //TODO tr da se proveri dali ne e izbrano, che ne iskame da vizhdame saobshtenieto
+        DialogFragment oneLoveMessageDialog = new OneLoveMessageDialog();
+        oneLoveMessageDialog.show(getSupportFragmentManager(), "Welcome");
 
     }
 

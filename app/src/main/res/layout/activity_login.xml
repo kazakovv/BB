@@ -24,6 +24,7 @@
 
         <EditText
             android:id="@+id/login_email"
+            android:maxLength="@integer/max_email_length"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_email"
@@ -31,6 +32,7 @@
 
         <EditText
             android:id="@+id/login_password"
+            android:maxLength="@integer/max_password_length"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

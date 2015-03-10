@@ -8,7 +8,7 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:hint="@string/hint_login_username"
-        android:maxLength="30"
+        android:maxLength="@integer/max_username_length"
         android:ems="10"
         android:id="@+id/changeUsername" />
 </LinearLayout>
