@@ -10,7 +10,14 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
+import com.backendless.files.BackendlessFile;
 import com.victor.sexytalk.sexytalk.R;
+import com.victor.sexytalk.sexytalk.Statics;
+import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -179,6 +186,104 @@ public class UploadPicture {
         }
         return bitMapImage;
     }
+
+
+    //uploadvane na profile pic v Backendless i updatevane na profila na protrebitelia
+    // s patia kam profile kartinkata
+
+    public void uploadProfilePicInBackendless(Uri mMediaUri, final BackendlessUser mCurrentUser) {
+        boolean userAlreadyHasProfilePic = false;
+        String existingProfilePicPath = null;
+        //proveriavame dali usera ima profile pic i ako da updatevame gornite 2 promenlivi
+        if(mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null){
+            userAlreadyHasProfilePic = true;
+            existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
+        }
+        //1. uploadvame profile picture v backendless
+        //2. updatevame user s patia kam profile picture
+        //3. ako zamestvame stara profile pic, iztrivame predishnata, za da ne zaema mistno na servera
+
+
+        //sledvashtite 3 reda imat za cel da namaliat razmera na kartinkata
+        //parvo go oravim v array, sled tova namaliavame razmera i sled tova go uploadvame v backendless
+        byte[] imageBytes = ImageHelper.getByteArrayFromFile(context, mMediaUri);
+        byte[] reducedImage = ImageHelper.reduceImageForUpload(imageBytes, Statics.SHORT_SIDE_TARGET_THUMBNAIL);
+        Bitmap profilePictureBitmap = BitmapFactory.decodeByteArray(reducedImage, 0, reducedImage.length);
+        //zavartame profile pic, ama ima nuzhda
+        profilePictureBitmap = ImageHelper.rotateImageIfNeeded(context, mMediaUri, profilePictureBitmap);
+
+
+        String fileName = "";
+
+        if (mMediaUri != null ) {
+            //Zadavame patia kam profile pic
+            fileName = ImageHelper.getFileName(context, mMediaUri, Statics.TYPE_IMAGE_MESSAGE);
+
+        }
+
+        //1. uploadvame profile picture v backendles
+        final String uploadingFileMessage = context.getResources().getString(R.string.uploading_file_message);
+        final boolean finalUserAlreadyHasProfilePic = userAlreadyHasProfilePic;
+        final String finalExistingProfilePicPath = existingProfilePicPath;
+        Backendless.Files.Android.upload(profilePictureBitmap,
+                Bitmap.CompressFormat.PNG, 50 ,fileName,"profilePictures",
+                new DefaultCallback<BackendlessFile>(context,uploadingFileMessage) {
+                    @Override
+                    public void handleResponse(BackendlessFile backendlessFile) {
+                        super.handleResponse(backendlessFile);
+
+                        //2. zapazvame patia kam profile pic v properties na current user
+                        String profilePictureUrl = backendlessFile.getFileURL();
+                        mCurrentUser.setProperty(Statics.KEY_PROFILE_PIC_PATH, profilePictureUrl);
+                        Backendless.UserService.setCurrentUser(mCurrentUser);
+                        Backendless.UserService.update(mCurrentUser,
+                                new DefaultCallback<BackendlessUser>(context,uploadingFileMessage) {
+                                    @Override
+                                    public void handleResponse(BackendlessUser backendlessUser) {
+                                        super.handleResponse(backendlessUser);
+                                        Toast.makeText(context,
+                                                R.string.profile_pic_uploaded_successfully,Toast.LENGTH_LONG).show();
+
+                                        //3. iztrivame starata profile pic, ako ima takava
+                                        if(finalUserAlreadyHasProfilePic == true) {
+                                            Backendless.Files.remove(finalExistingProfilePicPath, new AsyncCallback<Void>() {
+                                                @Override
+                                                public void handleResponse(Void aVoid) {
+                                                    //niama nuzda pa pravim nishto
+                                                }
+
+                                                @Override
+                                                public void handleFault(BackendlessFault backendlessFault) {
+                                                    //ako ne ia izptriem samo zaemame izlishno miasnta na servera
+                                                }
+                                            });
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void handleFault(BackendlessFault backendlessFault) {
+                                        super.handleFault(backendlessFault);
+                                        Toast.makeText(context,
+                                                R.string.error_associating_profile_pic_with_profile,Toast.LENGTH_LONG).show();
+                                    }
+                                });
+
+
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        super.handleFault(backendlessFault);
+                        Toast.makeText(context,R.string.error_uploading_profile_pic,Toast.LENGTH_LONG).show();
+
+                    }
+                });
+
+
+    }
+
+
 
 
 }

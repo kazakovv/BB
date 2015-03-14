@@ -80,7 +80,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     private LinearLayout mDrawerLinear;
     private Button logoutButtonNavigationDrawer;
 
-
+    public static int CHOOSE_PHOTO_REQUEST = 222;
+    public static int TAKE_PHOTO_REQUEST = 333;
+    protected Uri mMediaUri;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -296,6 +298,26 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                                                        deviceIds.get(0),
                                                        mContext);
             } //krai na REQUESTCODE == Activity Send to
+            if(requestCode == CHOOSE_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST){
+                if ( data == null ) {
+                    //ako e null i sme izbrali photo pokazvame error message
+                    if(requestCode == CHOOSE_PHOTO_REQUEST) {
+                        Toast.makeText(Main.this, R.string.general_error_message, Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    mMediaUri = data.getData();
+                }
+                //parvo proveriavame razmera
+                UploadPicture help = new UploadPicture(mContext);
+
+                if (help.checkFileSizeExceedsLimit(Statics.FILE_SIZE_LIMIT, mMediaUri) == true) {
+                    Toast.makeText(Main.this, R.string.error_file_too_large, Toast.LENGTH_LONG).show();
+                    mMediaUri = null;
+                    return; //prekratiavame metoda tuk.
+                } else {
+                    help.uploadProfilePicInBackendless(mMediaUri,mCurrentUser);
+                }//krai na else statement
+            }//on activity result za promiana na profile pic
         } //krai na RESULTCODE OK
     } //krai na onactivity result
 
@@ -345,7 +367,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         //zadavame spisaka, koito shte se pokazva
         List<NavigationDrawerItems> items = new ArrayList<NavigationDrawerItems>();
         //partners
-        items.add(new NavigationDrawerItems(R.drawable.ic_action_add,getString(R.string.menu_edit_partner)));
+        items.add(new NavigationDrawerItems(R.drawable.partner_icon,getString(R.string.menu_edit_partner)));
         String partnerOptions[] = getResources().getStringArray(R.array.navigation_drawer_partners_options);
         for(String option: partnerOptions ){
             items.add(new NavigationDrawerItems(option));
@@ -426,14 +448,13 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                         .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS, 0))
                         .into(profilePicture);
 
-                //vrazvame username i password
-                TextView usernameDrawerHeader = (TextView) findViewById(R.id.username);
-                TextView emailDrawerHeader = (TextView) findViewById(R.id.emailUser);
-
-                emailDrawerHeader.setText(mCurrentUser.getEmail());
-                usernameDrawerHeader.setText((String)mCurrentUser.getProperty(Statics.KEY_USERNAME));
-
             }
+            //vrazvame username i password
+            TextView usernameDrawerHeader = (TextView) findViewById(R.id.username);
+            TextView emailDrawerHeader = (TextView) findViewById(R.id.emailUser);
+
+            emailDrawerHeader.setText(mCurrentUser.getEmail());
+            usernameDrawerHeader.setText((String)mCurrentUser.getProperty(Statics.KEY_USERNAME));
         }
     }
     /*
@@ -465,10 +486,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     };
     //on click za ostanalite opcii
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
-        protected Uri mMediaUri;
+
         protected String mMessageType;
-        public int CHOOSE_PHOTO_REQUEST = 222;
-        public int TAKE_PHOTO_REQUEST = 333;
+
+
 
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

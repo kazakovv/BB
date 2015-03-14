@@ -88,6 +88,9 @@ public class Statics {
 
     public static final String KEY_REFRESH_FRAGMENT_LOVE_BOX = "fragmentLoveBox";
 
+    //max size na pic
+    public static final int FILE_SIZE_LIMIT = 1024*1024*10;
+
 
 
     public static final String SHARED_PREFS="myPrefs";
