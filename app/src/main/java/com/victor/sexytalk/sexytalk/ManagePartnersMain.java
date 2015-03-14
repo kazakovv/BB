@@ -63,12 +63,21 @@ public class ManagePartnersMain extends ActionBarActivity implements MaterialTab
                             .setTabListener(this)
             );
         }
-        //chek dali ekranat e otvoren ot main activity s cel da ni izprati kam pending partner requests
-        //t.e. potrebiteliat e vidial v main activity che ima pending request i e caknal na iconata
+        //chek dali ekranat e otvoren ot main activity ili ot navigation drawer
+        // i prevckluchvame kam saotvetnia tab
         Intent intent = getIntent();
         if(intent.getStringExtra(Statics.KEY_PARTNERS_SELECT_TAB) != null) {
+            if (intent.getStringExtra(Statics.KEY_PARTNERS_SELECT_TAB)
+                    .equals(Statics.KEY_PARTNERS_SELECT_SEARCH)) {
+                pager.setCurrentItem(0);
+            } else if (intent.getStringExtra(Statics.KEY_PARTNERS_SELECT_TAB)
+                    .equals(Statics.KEY_PARTNERS_SELECT_PENDING_REQUESTS)) {
                 pager.setCurrentItem(1);
-        }
+            } else if (intent.getStringExtra(Statics.KEY_PARTNERS_SELECT_TAB)
+                    .equals(Statics.KEY_PARTNERS_SELECT_EXISTING_PARTNERS)) {
+                pager.setCurrentItem(2);
+            }
+        }//krai na check dali intent getstring extra ne e null
     }
 
 

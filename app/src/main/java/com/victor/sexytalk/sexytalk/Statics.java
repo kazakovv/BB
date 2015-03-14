@@ -53,8 +53,10 @@ public class Statics {
     public static final String KEY_PARTNER_REQUEST = "partnerRequest";
     public static final String KEY_PARTNER_DELETE = "deletePartner";
 
-    public static final String KEY_PARTNERS_SELECT_TAB = "selectPendingPartnerRequest";
+    public static final String KEY_PARTNERS_SELECT_TAB = "selectTab";
+    public static final String KEY_PARTNERS_SELECT_SEARCH = "selectSearchPartnersTab";
     public static final String KEY_PARTNERS_SELECT_PENDING_REQUESTS = "selectPendingRequestsTab";
+    public static final String KEY_PARTNERS_SELECT_EXISTING_PARTNERS = "selectExistingPartnersTab";
 
     public static final String GOOGLE_PROJECT_ID = "473995671207";
 

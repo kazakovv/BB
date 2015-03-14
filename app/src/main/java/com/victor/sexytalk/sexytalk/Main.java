@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 
@@ -22,8 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
+
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -79,10 +78,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     private ActionBarDrawerToggle mDrawerToggle;
     private ListView mDrawerList;
     private LinearLayout mDrawerLinear;
-    private String[] mDrawerListItems;
+    private Button logoutButtonNavigationDrawer;
 
-    EditText usernameDrawerHeader;
-    EditText emailDrawerHeader;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,7 +157,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             }
         }
 
-
+        //vrazvmam logout butona ot navigation drawer
+        logoutButtonNavigationDrawer = (Button) findViewById(R.id.logout_button);
+        logoutButtonNavigationDrawer.setOnClickListener(logoutButtonOnClick);
     }
 
 
@@ -342,15 +342,14 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         mDrawerLinear = (LinearLayout) findViewById(R.id.left_drawer_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mDrawerListItems = mContext.getResources().getStringArray(R.array.edit_profile_options);
         //zadavame spisaka, koito shte se pokazva
         List<NavigationDrawerItems> items = new ArrayList<NavigationDrawerItems>();
         //partners
         items.add(new NavigationDrawerItems(R.drawable.ic_action_add,getString(R.string.menu_edit_partner)));
-        items.add(new NavigationDrawerItems("Search for Partners"));
-        items.add(new NavigationDrawerItems("Pending Partner Requests"));
-        items.add(new NavigationDrawerItems("Existing Partners"));
-
+        String partnerOptions[] = getResources().getStringArray(R.array.navigation_drawer_partners_options);
+        for(String option: partnerOptions ){
+            items.add(new NavigationDrawerItems(option));
+        }
 
         //account settings
         items.add(new NavigationDrawerItems(R.drawable.ic_action_settings,getString(R.string.account_settings_title)));
@@ -359,11 +358,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             items.add(new NavigationDrawerItems(option));
         }
 
-        /*items.add(new NavigationDrawerItems("Change your sex"));
-        items.add(new NavigationDrawerItems("Change your date of birth"));
-        items.add(new NavigationDrawerItems("Change your password"));
-        items.add(new NavigationDrawerItems("Change your profile picture"));
-        items.add(new NavigationDrawerItems("Change your username"));*/
 
 
        // ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(mContext, R.array.edit_profile_options, android.R.layout.simple_spinner_dropdown_item);
@@ -447,7 +441,29 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     ON CLICK LISTENER ZA NAVIGATION DRAWER
     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
      */
+    //on lick za logout buttona
+    private View.OnClickListener logoutButtonOnClick = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //logout
+            Backendless.UserService
+                    .logout(new DefaultCallback<Void>(Main.this, getResources().getString(R.string.logout_message)) {
+                        @Override
+                        public void handleResponse(Void aVoid) {
 
+                            //prashta kam login screen
+                            navigateToLogin();
+                        }
+
+                        @Override
+                        public void handleFault(BackendlessFault backendlessFault) {
+                            super.handleFault(backendlessFault);
+                            Toast.makeText(Main.this, R.string.logout_error, Toast.LENGTH_LONG).show();
+                        }
+                    });
+        }
+    };
+    //on click za ostanalite opcii
     private class DrawerItemClickListener implements ListView.OnItemClickListener {
         protected Uri mMediaUri;
         protected String mMessageType;
@@ -458,13 +474,41 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             switch (position) {
                 case 0:
+                    //zaglavna linia Partners
+
+                    return;
+                case 1:
+                    //search for partners
+                    Intent searchPartner = new Intent(Main.this, ManagePartnersMain.class);
+                    //slagame toya KEY, za da prevkluchim na pravilia tab ot drugata strana kato otvorim ekrana
+                    searchPartner.putExtra(Statics.KEY_PARTNERS_SELECT_TAB, Statics.KEY_PARTNERS_SELECT_SEARCH);
+                    startActivity(searchPartner);
+                    return;
+                case 2:
+                    //pending partner requests
+                    Intent partnerRequest = new Intent(Main.this, ManagePartnersMain.class);
+                    //slagame toya KEY, za da prevkluchim na pravilia tab ot drugata strana kato otvorim ekrana
+                    partnerRequest.putExtra(Statics.KEY_PARTNERS_SELECT_TAB, Statics.KEY_PARTNERS_SELECT_PENDING_REQUESTS);
+                    startActivity(partnerRequest);
+                    return;
+                case 3:
+                    //existing partners
+                    Intent existingPartners = new Intent(Main.this, ManagePartnersMain.class);
+                    //slagame toya KEY, za da prevkluchim na pravilia tab ot drugata strana kato otvorim ekrana
+                    existingPartners.putExtra(Statics.KEY_PARTNERS_SELECT_TAB, Statics.KEY_PARTNERS_SELECT_EXISTING_PARTNERS);
+                    startActivity(existingPartners);
+                    return;
+                case 4:
+                    //zaglavna lina za account settings
+                    return;
+                case 5:
                     //change sex
                     DialogFragment sexDialog = new MaleOrFemaleDialog();
                     sexDialog.show(getFragmentManager(), "Welcome");
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);
                     return;
-                case 1:
+                case 6:
                     //change date of birth
 
                     SetBirthday setBirthday = new SetBirthday();
@@ -473,7 +517,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);
                     return;
-                case 2:
+                case 7:
                     //change password
 
                     ChangePassword changePassword = new ChangePassword();
@@ -482,7 +526,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);
                     return;
-                case 3:
+                case 8:
                     //change profile picture
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
@@ -493,7 +537,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);
                     return;
-                case 4:
+                case 9:
                     //change username
                     ChangeUsername changeUsername = new ChangeUsername();
                     //changeUsername.setTargetFragment(FragmentEditProfileActivity.this, CHANGE_USERNAME);

@@ -223,6 +223,12 @@
         <item>Change your username</item>
     </string-array>
 
+    <string-array name="navigation_drawer_partners_options">
+        <item>Search for Partners</item>
+        <item>Pending Partner Requests</item>
+        <item>Existing Partners</item>
+    </string-array>
+
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
 
