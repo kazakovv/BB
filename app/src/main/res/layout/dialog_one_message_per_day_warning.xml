@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/default_padding">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/drawerListItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/message_can_send_only_one_message_per_day"

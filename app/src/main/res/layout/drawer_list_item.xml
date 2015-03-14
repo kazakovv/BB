@@ -3,4 +3,6 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:text="New Text"
-    android:id="@+id/textView"/>
+    android:paddingLeft="@dimen/navigation_drawer_margin_items"
+    android:textSize="@dimen/navigation_drawer_text_size_group_title"
+    android:id="@+id/drawerListItem"/>

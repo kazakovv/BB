@@ -213,6 +213,8 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+
+    <string name="account_settings_title">Account Settings</string>
     <string-array name="edit_profile_options">
         <item>Change your sex</item>
         <item>Change date of birth</item>

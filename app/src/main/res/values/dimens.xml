@@ -44,7 +44,12 @@
     <dimen name="thumbnail_frame_radius">30dp</dimen>
     <dimen name="thumbnail_stroke_width">10dp</dimen>
 
+    <!-- NAVIGATION DRAWER -->
     <dimen name="drawer_width">240dp</dimen>
     <dimen name="drawer_header_hight">240dp</dimen>
+    <dimen name="navigation_drawer_group_title_icon_width">50dp</dimen>
+    <dimen name="navigation_drawer_group_title_icon_height">50dp</dimen>
+    <dimen name="navigation_drawer_text_size_group_title">16sp</dimen>
+    <dimen name="navigation_drawer_margin_items">15dp</dimen>
 
 </resources>

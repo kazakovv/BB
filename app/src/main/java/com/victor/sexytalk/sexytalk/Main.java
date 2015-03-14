@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -38,6 +39,7 @@ import com.backendless.exceptions.BackendlessFault;
 
 
 import com.squareup.picasso.Picasso;
+import com.victor.sexytalk.sexytalk.Adaptors.AdapterNavigationDrawer;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangeUsername;
 import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
@@ -166,6 +168,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
 
+        mDrawerLayout.closeDrawer(mDrawerLinear);
         mDrawerToggle.syncState();
     }
 
@@ -340,10 +343,33 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerListItems = mContext.getResources().getStringArray(R.array.edit_profile_options);
-        ArrayAdapter<CharSequence> arrayAdapter =
-                ArrayAdapter.createFromResource(mContext, R.array.edit_profile_options, android.R.layout.simple_spinner_dropdown_item);
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mDrawerListItems));
+        //zadavame spisaka, koito shte se pokazva
+        List<NavigationDrawerItems> items = new ArrayList<NavigationDrawerItems>();
+        //partners
+        items.add(new NavigationDrawerItems(R.drawable.ic_action_add,getString(R.string.menu_edit_partner)));
+        items.add(new NavigationDrawerItems("Search for Partners"));
+        items.add(new NavigationDrawerItems("Pending Partner Requests"));
+        items.add(new NavigationDrawerItems("Existing Partners"));
+
+
+        //account settings
+        items.add(new NavigationDrawerItems(R.drawable.ic_action_settings,getString(R.string.account_settings_title)));
+        String[] accountOptions =  getResources().getStringArray(R.array.edit_profile_options);
+        for(String option: accountOptions) {
+            items.add(new NavigationDrawerItems(option));
+        }
+
+        /*items.add(new NavigationDrawerItems("Change your sex"));
+        items.add(new NavigationDrawerItems("Change your date of birth"));
+        items.add(new NavigationDrawerItems("Change your password"));
+        items.add(new NavigationDrawerItems("Change your profile picture"));
+        items.add(new NavigationDrawerItems("Change your username"));*/
+
+
+       // ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(mContext, R.array.edit_profile_options, android.R.layout.simple_spinner_dropdown_item);
+       AdapterNavigationDrawer adapter = new AdapterNavigationDrawer(this,items);
+
+        mDrawerList.setAdapter(adapter);
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 

@@ -4,17 +4,26 @@
     android:layout_height="48dp"
 
     android:background="#F3F3F3">
-
+    <!-- icon -->
+    <ImageView
+        android:layout_width="@dimen/navigation_drawer_group_title_icon_width"
+        android:layout_height="@dimen/navigation_drawer_group_title_icon_height"
+        android:id="@+id/iconHeader"
+        android:src="@drawable/ic_action_chat"/>
     <!-- title -->
     <TextView
-        android:id="@+id/header"
+        android:id="@+id/headerTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:textSize="16dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginBottom="4dp"
-        android:layout_alignParentBottom="true" />
+        android:textSize="@dimen/navigation_drawer_text_size_group_title"
+
+        android:text="New Text"
+
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/iconHeader"
+        android:layout_toEndOf="@+id/iconHeader"
+         />
 
     <!--  divider -->
     <View
@@ -22,6 +31,6 @@
         android:layout_height="1dp"
         android:layout_marginBottom="1dp"
         android:layout_alignParentBottom="true"
-        android:background="#DADADC" ></View>
+        android:background="@color/navigation_drawer_group_title" ></View>
 
 </RelativeLayout>
