@@ -44,4 +44,7 @@
     <dimen name="thumbnail_frame_radius">30dp</dimen>
     <dimen name="thumbnail_stroke_width">10dp</dimen>
 
+    <dimen name="drawer_width">240dp</dimen>
+    <dimen name="drawer_header_hight">240dp</dimen>
+
 </resources>

@@ -221,6 +221,10 @@
         <item>Change your username</item>
     </string-array>
 
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+
     <string name="title_activity_change_sexy_status">ChangeSexyStatus</string>
     <string name="title_activity_activity_sexy_calendar">ActivitySexyCalendar</string>
     <string name="title_activity_set_birthday">SetBirthday</string>

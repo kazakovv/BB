@@ -1,14 +1,33 @@
 package com.victor.sexytalk.sexytalk;
 
+
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -18,8 +37,15 @@ import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 
 
+import com.squareup.picasso.Picasso;
+import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
+import com.victor.sexytalk.sexytalk.CustomDialogs.ChangeUsername;
+import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
+import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
+import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
+import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
 import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 import com.victor.sexytalk.sexytalk.UserInterfaces.EditProfileActivity;
 import com.victor.sexytalk.sexytalk.UserInterfaces.LoginActivity;
@@ -47,22 +73,35 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     protected MaterialTabHost tabHost;
 
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private ListView mDrawerList;
+    private LinearLayout mDrawerLinear;
+    private String[] mDrawerListItems;
+
+    EditText usernameDrawerHeader;
+    EditText emailDrawerHeader;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         mContext = this;
         //vrazvame osnovnotosaobshtenie
         mCurrentUser = Backendless.UserService.CurrentUser();
         //ako niama lognat potrebitel preprashta kam log-in ekrana
 
 
+        setUpDrawer();
+
         if (mCurrentUser == null) {
             //prashta ni kam login screen
             navigateToLogin();
         } else {
+            //zarezdame navigation drawer
 
             //TODO!!!!!
             //TODO TR da se optimizira ot kam backendless api requests
@@ -117,6 +156,24 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 );
             }
         }
+
+
+    }
+
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+
     }
 
 
@@ -135,9 +192,13 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
+        //tova e za da se otvaria navigation drawer
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
         switch (item.getItemId()) {
+
             case R.id.menu_send_kiss:
                 //SendPushMessages sadarza metoda za izprashtane na push
 
@@ -238,7 +299,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
+        MenuInflater inflater = new MenuInflater(this);
         inflater.inflate(R.menu.main_menu, menu);
         //vrazvame butona za dobaviane na novi partniori
         addPartner = menu.findItem(R.id.partner_request);
@@ -266,6 +327,197 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     @Override
     public void onTabUnselected(MaterialTab tab) {
 
+    }
+
+     /*
+        HELPER METODI ZA NAVIGATION DRAWER
+     */
+
+    //setup the drawer
+    private void setUpDrawer(){
+        //vrazvame navigation drawer
+        mDrawerLinear = (LinearLayout) findViewById(R.id.left_drawer_view);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerListItems = mContext.getResources().getStringArray(R.array.edit_profile_options);
+        ArrayAdapter<CharSequence> arrayAdapter =
+                ArrayAdapter.createFromResource(mContext, R.array.edit_profile_options, android.R.layout.simple_spinner_dropdown_item);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mDrawerListItems));
+        // Set the list's click listener
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                toolbar,  /* nav drawer icon to replace 'Up' caret */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
+
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                mDrawerToggle.syncState();
+                //invalidateOptionsMenu();
+
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                loadHeaderNavigationDrawer();
+                mDrawerToggle.syncState();
+                //invalidateOptionsMenu();
+
+
+            }
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, 0); // this disables the animation
+            }
+
+        };
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        // Set the drawer toggle as the DrawerListener
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+
+
+    }
+
+    //load header
+    private void loadHeaderNavigationDrawer(){
+        if(mCurrentUser != null) {
+            mCurrentUser = Backendless.UserService.CurrentUser();
+            //zarezdame profile pic, ako ima takava
+            if (mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH) != null) {
+                //ako ima profile pic ia zarezdame s picaso
+                //existingprofilePicPath se izpolzva i v sluchaite, kogato user si smenia profile pic
+                // togava kachvame na servera novata kartinka i izpolzvame tazi promenliva,
+                // za da iztriem starata profile pic ot servera
+                String existingProfilePicPath = (String) mCurrentUser.getProperty(Statics.KEY_PROFILE_PIC_PATH);
+                ImageView profilePicture = (ImageView) findViewById(R.id.drawer_header_image);
+                Picasso.with(Main.this)
+                        .load(existingProfilePicPath)
+                        .transform(new RoundedTransformation(Statics.PICASSO_ROUNDED_CORNERS, 0))
+                        .into(profilePicture);
+
+                //vrazvame username i password
+                TextView usernameDrawerHeader = (TextView) findViewById(R.id.username);
+                TextView emailDrawerHeader = (TextView) findViewById(R.id.emailUser);
+
+                emailDrawerHeader.setText(mCurrentUser.getEmail());
+                usernameDrawerHeader.setText((String)mCurrentUser.getProperty(Statics.KEY_USERNAME));
+
+            }
+        }
+    }
+    /*
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ON CLICK LISTENER ZA NAVIGATION DRAWER
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+     */
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        protected Uri mMediaUri;
+        protected String mMessageType;
+        public int CHOOSE_PHOTO_REQUEST = 222;
+        public int TAKE_PHOTO_REQUEST = 333;
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            switch (position) {
+                case 0:
+                    //change sex
+                    DialogFragment sexDialog = new MaleOrFemaleDialog();
+                    sexDialog.show(getFragmentManager(), "Welcome");
+                    mDrawerList.setItemChecked(position, true);
+                    mDrawerLayout.closeDrawer(mDrawerLinear);
+                    return;
+                case 1:
+                    //change date of birth
+
+                    SetBirthday setBirthday = new SetBirthday();
+                    //setBirthday.setTargetFragment(FragmentEditProfileActivity.this,SET_BIRTHDAY);
+                    setBirthday.show(getSupportFragmentManager(),"Welcome");
+                    mDrawerList.setItemChecked(position, true);
+                    mDrawerLayout.closeDrawer(mDrawerLinear);
+                    return;
+                case 2:
+                    //change password
+
+                    ChangePassword changePassword = new ChangePassword();
+                    //changePassword.setTargetFragment(FragmentEditProfileActivity.this, CHANGE_PASSWORD);
+                    changePassword.show(getSupportFragmentManager(),"Welcome");
+                    mDrawerList.setItemChecked(position, true);
+                    mDrawerLayout.closeDrawer(mDrawerLinear);
+                    return;
+                case 3:
+                    //change profile picture
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
+                    builder.setTitle(R.string.menu_camera_alertdialog_title);
+                    builder.setItems(R.array.camera_choices, mUploadPicture);
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    mDrawerList.setItemChecked(position, true);
+                    mDrawerLayout.closeDrawer(mDrawerLinear);
+                    return;
+                case 4:
+                    //change username
+                    ChangeUsername changeUsername = new ChangeUsername();
+                    //changeUsername.setTargetFragment(FragmentEditProfileActivity.this, CHANGE_USERNAME);
+                    changeUsername.show(getSupportFragmentManager(),"Welcome");
+                    mDrawerList.setItemChecked(position, true);
+                    mDrawerLayout.closeDrawer(mDrawerLinear);
+                    return;
+
+            }
+        }
+
+
+
+        //onClick listener za uploadvane na snimka
+        protected DialogInterface.OnClickListener mUploadPicture =
+                new DialogInterface.OnClickListener() {
+
+                    //UploadPicture up = new UploadPicture();
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        UploadPicture help = new UploadPicture(Main.this);
+                        switch (which) {
+                            case 0: //take picture
+                                //tova e metod, koito frashta adresa na kartinakata kaot Uri
+                                mMediaUri = help.getOutputMediaFileUri();
+                                if (mMediaUri == null) {
+                                    Toast.makeText(Main.this, R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();
+                                } else {
+                                    mMessageType = Statics.TYPE_IMAGE_MESSAGE;
+                                    takePicture();
+                                }
+                                break;
+
+                            case 1: //choose picture
+                                mMessageType = Statics.TYPE_IMAGE_MESSAGE;
+                                Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                                choosePhotoIntent.setType("image/*");
+                                startActivityForResult(choosePhotoIntent, CHOOSE_PHOTO_REQUEST);
+                                break;
+
+                        }
+                    }
+                };
+        //helper za onClick listener
+        public void takePicture( ) {
+            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
+        }
     }
 
 }
