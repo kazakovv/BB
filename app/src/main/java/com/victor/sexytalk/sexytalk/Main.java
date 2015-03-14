@@ -97,13 +97,12 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         //ako niama lognat potrebitel preprashta kam log-in ekrana
 
 
-        setUpDrawer();
+
 
         if (mCurrentUser == null) {
             //prashta ni kam login screen
             navigateToLogin();
         } else {
-            //zarezdame navigation drawer
 
             //TODO!!!!!
             //TODO TR da se optimizira ot kam backendless api requests
@@ -157,11 +156,13 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
                 );
             }
+
+            //zarezdame navigation drawer
+            setUpDrawer();
+
         }
 
-        //vrazvmam logout butona ot navigation drawer
-        logoutButtonNavigationDrawer = (Button) findViewById(R.id.logout_button);
-        logoutButtonNavigationDrawer.setOnClickListener(logoutButtonOnClick);
+
     }
 
 
@@ -170,15 +171,17 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
 
-        mDrawerLayout.closeDrawer(mDrawerLinear);
-        mDrawerToggle.syncState();
+        if(mDrawerToggle !=null) {
+            mDrawerToggle.syncState();
+        }
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        mDrawerToggle.onConfigurationChanged(newConfig);
-
+        if(mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
 
@@ -315,7 +318,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     mMediaUri = null;
                     return; //prekratiavame metoda tuk.
                 } else {
-                    help.uploadProfilePicInBackendless(mMediaUri,mCurrentUser);
+                    help.uploadProfilePicInBackendless(mMediaUri, mCurrentUser);
                 }//krai na else statement
             }//on activity result za promiana na profile pic
         } //krai na RESULTCODE OK
@@ -402,6 +405,8 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             public void onDrawerClosed(View view) {
                 super.onDrawerClosed(view);
                 mDrawerToggle.syncState();
+
+
                 //invalidateOptionsMenu();
 
             }
@@ -415,18 +420,25 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
 
             }
+            //disables animation from hamburger to back arrow
             @Override
             public void onDrawerSlide(View drawerView, float slideOffset) {
                 super.onDrawerSlide(drawerView, 0); // this disables the animation
             }
 
         };
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        //vrazvmam logout butona ot navigation drawer
+        logoutButtonNavigationDrawer = (Button) findViewById(R.id.logout_button);
+        logoutButtonNavigationDrawer.setOnClickListener(logoutButtonOnClick);
+
+
         // Set the drawer toggle as the DrawerListener
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+
+        mDrawerToggle.syncState();
 
 
     }

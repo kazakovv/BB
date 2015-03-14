@@ -67,13 +67,20 @@
                 android:id="@+id/username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/drawer_header_image" />
+                android:layout_above="@+id/emailUser"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/drawer_header_text_size"
+                android:layout_marginLeft="@dimen/default_padding"
+                />
 
             <TextView
                 android:id="@+id/emailUser"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/username"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/drawer_header_text_size"
+                android:layout_marginLeft="@dimen/default_padding"
                 android:layout_marginBottom="@dimen/default_padding" />
 
         </RelativeLayout>

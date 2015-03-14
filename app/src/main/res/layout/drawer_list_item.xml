@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/navigation_drawer_list_row_hight"
     android:text="New Text"
     android:paddingLeft="@dimen/navigation_drawer_margin_items"
     android:textSize="@dimen/navigation_drawer_text_size_group_title"
+    android:layout_marginTop="@dimen/nav_drawer_list_margin_top"
+    android:layout_centerInParent="true"
     android:id="@+id/drawerListItem"/>
