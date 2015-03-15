@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.victor.sexytalk.sexytalk.UserInterfaces.ActivityChangeSexyStatus">
+    tools:context="com.victor.sexytalk.sexytalk.UserInterfaces.ActivityChangeSexyStatus"
+    >
 
     <include
         android:id="@+id/toolbar"
@@ -25,7 +26,9 @@
         android:layout_below="@+id/toolbar"
         android:layout_marginTop="@dimen/default_padding"
         android:hint="@string/change_sexy_status_hint"
-        android:maxLength="@integer/max_status_length" />
+        android:maxLength="@integer/max_status_length"
+        android:background="@drawable/_edit_text_holo_light"
+        />
 
 
 </RelativeLayout>

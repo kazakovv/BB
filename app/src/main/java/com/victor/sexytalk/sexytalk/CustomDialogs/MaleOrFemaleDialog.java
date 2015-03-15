@@ -33,6 +33,7 @@ public class MaleOrFemaleDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.dialog_menu_title)
+
                 .setItems(R.array.sex_options, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int which) {

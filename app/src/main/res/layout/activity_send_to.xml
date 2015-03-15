@@ -2,8 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layoutSendTo"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/navigation_drawer_group_title"
     tools:context="com.example.victor.swipeviews.ListWithPartners">
 
     <include
@@ -22,7 +23,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/progress_bar_margin_top"
         android:visibility="gone"
-
+        android:listSelector="#00000000"
         />
 
 

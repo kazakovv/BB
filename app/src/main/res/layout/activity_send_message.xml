@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.victor.swipeviews.SendMessage">
+    android:theme="@style/AppTheme"
+    >
 
     <include
         android:id="@+id/toolbar"
@@ -41,6 +42,7 @@
             android:maxLength="@integer/max_love_message_length"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:background="@drawable/_edit_text_holo_light"
             android:layout_marginTop="46dp" />
     </LinearLayout>
 

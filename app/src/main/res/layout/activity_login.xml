@@ -2,12 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_white"
 
     tools:context="com.example.victor.swipeviews.LoginActivity">
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/backgroud"
+        android:background="@drawable/background"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
@@ -28,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_email"
+            android:background="@drawable/_edit_text_holo_light"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -37,6 +40,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/hint_login_password"
+            android:background="@drawable/_edit_text_holo_light"
             android:inputType="textPassword" />
     </LinearLayout>
 
