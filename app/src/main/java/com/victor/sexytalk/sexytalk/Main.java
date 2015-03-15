@@ -97,7 +97,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
 
 
-
         if (mCurrentUser == null) {
             //prashta ni kam login screen
             navigateToLogin();
@@ -162,7 +161,11 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         }
 
 
+        if(mDrawerToggle !=null){
+            mDrawerToggle.syncState();
+        }
     }
+
 
 
     @Override
@@ -407,6 +410,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
 
         // Set the drawer toggle as the DrawerListener
+        mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -530,6 +534,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     ChangePassword changePassword = new ChangePassword();
                     //changePassword.setTargetFragment(FragmentEditProfileActivity.this, CHANGE_PASSWORD);
                     changePassword.show(getSupportFragmentManager(),"Welcome");
+
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);
                     return;

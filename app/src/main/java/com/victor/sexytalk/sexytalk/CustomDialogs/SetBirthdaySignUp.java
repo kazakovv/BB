@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 
 import com.backendless.Backendless;
@@ -20,7 +21,7 @@ import com.victor.sexytalk.sexytalk.UserInterfaces.SignUpActivity;
 import java.util.Calendar;
 import java.util.Date;
 
-public class SetBirthdaySignUp extends DialogFragment {
+public class SetBirthdaySignUp extends DialogFragment implements DialogInterface.OnShowListener {
     protected DatePicker mBirthday;
     protected BackendlessUser mCurrentUser;
     protected Context mContext;
@@ -56,14 +57,28 @@ public class SetBirthdaySignUp extends DialogFragment {
                         dismiss();
                     }//krai na on click ok button
 
-                })//end ok button
+                });//end ok button
 
-        .setTitle(mContext.getResources().getString(R.string.choose_date_of_birth));
 
-        return builder.create();
+
+        Dialog dialog = builder.create();
+        dialog.setOnShowListener(this);
+
+        return dialog;
     }
 
+    //tova promenia cveta na butona kato se klikne na nego
+    @Override
+    public void onShow(DialogInterface dialog) {
 
+        Button positiveButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setBackgroundResource(R.drawable.custom_dialog_button);
+
+        Button negativeButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setBackgroundResource(R.drawable.custom_dialog_button);
+    }
 
 
     //interface za pass value to SignUp Activity

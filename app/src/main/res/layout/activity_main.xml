@@ -96,7 +96,7 @@
             android:background="@color/color_white"
             android:choiceMode="singleChoice"
             android:divider="?android:dividerHorizontal"
-            android:listSelector="@color/list_selection"
+            android:listSelector="@color/selection_buttons_lists"
             android:showDividers="middle" />
         <!-- Log out button-->
         <LinearLayout

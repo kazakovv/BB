@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:androuid="http://schemas.android.com/tools"
+
+    androuid:shape="rectangle">
+    <solid android:color="@color/selection_buttons_lists" />
+</shape>

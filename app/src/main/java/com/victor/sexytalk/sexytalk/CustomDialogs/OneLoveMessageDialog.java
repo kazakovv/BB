@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 
 import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
@@ -17,7 +18,7 @@ import com.victor.sexytalk.sexytalk.R;
 /**
  * Created by Victor on 10/03/2015.
  */
-public class OneLoveMessageDialog extends DialogFragment {
+public class OneLoveMessageDialog extends DialogFragment implements DialogInterface.OnShowListener {
     protected Context mContext;
     protected CheckBox doNotShowAgain;
 
@@ -42,12 +43,26 @@ public class OneLoveMessageDialog extends DialogFragment {
 
                         }
                     }
-                })//end na  save positive button
+                });//end na  save positive button
 
 
-                .setTitle(mContext.getResources().getString(R.string.title_dialog_one_message_per_day));
 
-        return builder.create();
+        Dialog dialog = builder.create();
+        dialog.setOnShowListener(this);
 
+        return dialog;
+    }
+
+    //tova promenia cveta na butona kato se klikne na nego
+    @Override
+    public void onShow(DialogInterface dialog) {
+
+        Button positiveButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setBackgroundResource(R.drawable.custom_dialog_button);
+
+        Button negativeButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setBackgroundResource(R.drawable.custom_dialog_button);
     }
 }

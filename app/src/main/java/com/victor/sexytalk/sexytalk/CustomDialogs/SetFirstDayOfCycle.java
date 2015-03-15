@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.Spinner;
@@ -36,7 +37,7 @@ import java.util.Date;
 /**
  * Created by Victor on 17/10/2014.
  */
-public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.OnItemSelectedListener {
+public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.OnItemSelectedListener, DialogInterface.OnShowListener {
     DatePicker datePicker;
     Spinner spinnerCycle;
     int averageLengthOfMenstrualCycle;
@@ -133,9 +134,10 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                         SetFirstDayOfCycle.this.getDialog().cancel();
                     }
                 });
+        Dialog dialog = builder.create();
+        dialog.setOnShowListener(this);
 
-
-        return builder.create();
+        return dialog;
     }
 
 
@@ -204,6 +206,19 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
 
     }
 
+    //tova promenia cveta na butona kato se klikne na nego
+    @Override
+    public void onShow(DialogInterface dialog) {
+
+        Button positiveButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setBackgroundResource(R.drawable.custom_dialog_button);
+
+        Button negativeButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setBackgroundResource(R.drawable.custom_dialog_button);
+    }
+
     /*
     HELPER METODI
      */
@@ -240,5 +255,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
         });
 
     }
+
+
 
 }

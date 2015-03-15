@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,7 +22,7 @@ import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 /**
  * Created by Victor on 02/03/2015.
  */
-public class ChangeUsername extends DialogFragment {
+public class ChangeUsername extends DialogFragment implements DialogInterface.OnShowListener{
     protected BackendlessUser mCurrentUser;
     protected Context mContext;
     protected EditText mChangeUsername;
@@ -43,7 +44,7 @@ public class ChangeUsername extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String username = mChangeUsername.getText().toString().trim();
-                        if(username.isEmpty()) {
+                        if (username.isEmpty()) {
                             //ako edno ot dvete e prazno pokavame error
                             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                             builder.setTitle(R.string.general_error_title)
@@ -58,20 +59,20 @@ public class ChangeUsername extends DialogFragment {
 
                             Backendless.UserService.update(mCurrentUser,
                                     new DefaultCallback<BackendlessUser>(mContext, message) {
-                                @Override
-                                public void handleResponse(BackendlessUser backendlessUser) {
-                                    super.handleResponse(backendlessUser);
-                                    Toast.makeText(mContext,R.string.toast_username_updated, Toast.LENGTH_LONG).show();
-                                }
+                                        @Override
+                                        public void handleResponse(BackendlessUser backendlessUser) {
+                                            super.handleResponse(backendlessUser);
+                                            Toast.makeText(mContext, R.string.toast_username_updated, Toast.LENGTH_LONG).show();
+                                        }
 
-                                @Override
-                                public void handleFault(BackendlessFault backendlessFault) {
-                                    super.handleFault(backendlessFault);
-                                    String error = backendlessFault.getMessage();
-                                    Toast.makeText(mContext,R.string.general_server_error, Toast.LENGTH_LONG).show();
+                                        @Override
+                                        public void handleFault(BackendlessFault backendlessFault) {
+                                            super.handleFault(backendlessFault);
+                                            String error = backendlessFault.getMessage();
+                                            Toast.makeText(mContext, R.string.general_server_error, Toast.LENGTH_LONG).show();
 
-                                }
-                            });
+                                        }
+                                    });
 
                         }
 
@@ -79,13 +80,26 @@ public class ChangeUsername extends DialogFragment {
                 })//end na  save positive button
 
             .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                ChangeUsername.this.getDialog().cancel();
-            }
-        })
-                .setTitle(mContext.getResources().getString(R.string.dialog_change_username_title));
+                public void onClick(DialogInterface dialog, int id) {
+                    ChangeUsername.this.getDialog().cancel();
+                }
+            });
+        Dialog dialog = builder.create();
+        dialog.setOnShowListener(this);
 
-        return builder.create();
+        return dialog;
 
+    }
+    //tova promenia cveta na butona kato se klikne na nego
+    @Override
+    public void onShow(DialogInterface dialog) {
+
+        Button positiveButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setBackgroundResource(R.drawable.custom_dialog_button);
+
+        Button negativeButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setBackgroundResource(R.drawable.custom_dialog_button);
     }
 }

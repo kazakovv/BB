@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.backendless.Backendless;
@@ -19,7 +20,7 @@ import com.victor.sexytalk.sexytalk.Statics;
 
 import java.util.Calendar;
 
-public class ForgotPassword extends DialogFragment {
+public class ForgotPassword extends DialogFragment implements DialogInterface.OnShowListener {
     protected BackendlessUser mCurrentUser;
     protected Context mContext;
     protected EditText mEmailForPasswordRecovery;
@@ -85,12 +86,24 @@ public class ForgotPassword extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         ForgotPassword.this.getDialog().cancel();
                     }
-                })
-                .setTitle(mContext.getResources().getString(R.string.forgot_your_password));
+                });
+        Dialog dialog = builder.create();
+        dialog.setOnShowListener(this);
 
-        return builder.create();
+        return dialog;
 
     }
 
+    //tova promenia cveta na butona kato se klikne na nego
+    @Override
+    public void onShow(DialogInterface dialog) {
 
+        Button positiveButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setBackgroundResource(R.drawable.custom_dialog_button);
+
+        Button negativeButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setBackgroundResource(R.drawable.custom_dialog_button);
+    }
 }

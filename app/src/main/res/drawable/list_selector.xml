@@ -1,4 +1,4 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@color/list_selection" />
+    <item android:state_pressed="true" android:drawable="@color/selection_buttons_lists" />
     <item android:drawable="@color/navigation_drawer_group_title"/>
 </selector>

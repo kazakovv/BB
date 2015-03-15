@@ -18,7 +18,9 @@
 
     <color name="navigation_drawer_group_title">#DADADC</color>
 
-    <color name="list_selection">#F8BBD0</color>
+    <color name="selection_buttons_lists">#F8BBD0</color>
 
     <color name="android_grey_icons_color">#848384</color>
+
+    <color name="dialog_box_background_color">#DADADC</color>
 </resources>

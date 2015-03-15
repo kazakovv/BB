@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
@@ -28,7 +29,7 @@ import com.victor.sexytalk.sexytalk.Statics;
 import java.util.Calendar;
 import java.util.Date;
 
-public class SetBirthday extends DialogFragment {
+public class SetBirthday extends DialogFragment implements DialogInterface.OnShowListener {
 protected DatePicker mBirthday;
 protected BackendlessUser mCurrentUser;
 protected Context mContext;
@@ -52,19 +53,19 @@ protected Context mContext;
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         Calendar birthDate = Calendar.getInstance();
-                        birthDate.set(mBirthday.getYear(),mBirthday.getMonth(),mBirthday.getDayOfMonth());
+                        birthDate.set(mBirthday.getYear(), mBirthday.getMonth(), mBirthday.getDayOfMonth());
                         //updatevame localno
                         mCurrentUser.setProperty(Statics.KEY_DATE_OF_BIRTH, birthDate.getTime());
                         //updatevame na servera
                         Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
                             @Override
                             public void handleResponse(BackendlessUser backendlessUser) {
-                                Toast.makeText(mContext,R.string.messaged_successfully_saved_to_server,Toast.LENGTH_LONG).show();
+                                Toast.makeText(mContext, R.string.messaged_successfully_saved_to_server, Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void handleFault(BackendlessFault backendlessFault) {
-                                Toast.makeText(mContext,R.string.messaged_unsuccessfully_saved_to_server,Toast.LENGTH_LONG).show();
+                                Toast.makeText(mContext, R.string.messaged_unsuccessfully_saved_to_server, Toast.LENGTH_LONG).show();
 
                             }
                         });
@@ -76,11 +77,25 @@ protected Context mContext;
                     public void onClick(DialogInterface dialog, int id) {
                         SetBirthday.this.getDialog().cancel();
                     }
-                })
-        .setTitle(mContext.getResources().getString(R.string.choose_date_of_birth));
+                });
+        Dialog dialog = builder.create();
+        dialog.setOnShowListener(this);
 
-        return builder.create();
+        return dialog;
     }
 
 
+
+    //tova promenia cveta na butona kato se klikne na nego
+    @Override
+    public void onShow(DialogInterface dialog) {
+
+        Button positiveButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setBackgroundResource(R.drawable.custom_dialog_button);
+
+        Button negativeButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setBackgroundResource(R.drawable.custom_dialog_button);
+    }
 }

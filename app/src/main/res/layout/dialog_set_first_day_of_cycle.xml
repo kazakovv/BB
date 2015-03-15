@@ -1,52 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
+
 
     <TextView
+        android:id="@+id/titleTextView"
+        style="@style/DialogWindowTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="What was the first day of your last period?"
-        android:id="@+id/titleTextView"
-        android:layout_below="@+id/signUpText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:layout_below="@+id/signUpText"
+        android:enabled="true"
         android:gravity="center"
-        android:enabled="true" />
+        android:text="What was the first day of your last period?"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <DatePicker
+        android:id="@+id/datePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/datePicker"
-        android:layout_centerVertical="true"
-        android:layout_alignRight="@+id/titleTextView"
         android:layout_alignEnd="@+id/titleTextView"
+        android:layout_alignRight="@+id/titleTextView"
+        android:layout_centerVertical="true"
         android:calendarViewShown="false"
         android:focusable="false" />
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:gravity="center"
         android:text="What is the average length of your menstrual cycle:"
-        android:id="@+id/textView3"
-        android:gravity="center" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Spinner
+        android:id="@+id/spinnerMenstrualCycleLength"
         android:layout_width="64dp"
         android:layout_height="wrap_content"
-        android:id="@+id/spinnerMenstrualCycleLength"
         android:layout_gravity="center_horizontal" />
 
     <CheckBox
+        android:id="@+id/sendSexyCalendarUpdateCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/send_sexy_calendar_update_checkbox"
-        android:id="@+id/sendSexyCalendarUpdateCheck"
         android:layout_gravity="center_horizontal"
-        android:checked="true" />
+        android:checked="true"
+        android:text="@string/send_sexy_calendar_update_checkbox" />
 
 </LinearLayout>

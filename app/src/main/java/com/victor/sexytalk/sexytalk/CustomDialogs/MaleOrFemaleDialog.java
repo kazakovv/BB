@@ -95,6 +95,8 @@ public class MaleOrFemaleDialog extends DialogFragment {
                 }
             }
         });
+
+
         return builder.create();
 
     }
