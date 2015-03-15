@@ -40,7 +40,6 @@
     <string name="title_activity_edit_friends">EditFriendsActivity</string>
     <string name="error_title">Oops!</string>
     <string name="menu_camera">Camera</string>
-    <string name="menu_camera_alertdialog_title">What would you like to do?</string>
     <string name="error_message_toast_external_storage">There was a problem accessing your device\'s external storage</string>
     <string name="general_error_message">Sorry, there was an error</string>
     <string name="warning_max_video_size">The selected video must be less than 10MB.</string>
@@ -205,6 +204,10 @@
     <string name="message_can_send_only_one_message_per_day">You can send only one love message per day to each of your partners. Make it count!</string>
     <string name="message_can_send_one_message_per_day_not_show_again">Don\'t show this again</string>
     <string name="title_dialog_one_message_per_day">Make it count!</string>
+
+    <string name="menu_camera_alertdialog_title">Change your profile picture</string>
+    <string name="camera_choice_take_pic">Take a picture</string>
+    <string name="camera_choice_choose_pic">Choose a picture from your gallery</string>
 
     <string name="guy">Guy</string>
     <string name="girl">Girl</string>

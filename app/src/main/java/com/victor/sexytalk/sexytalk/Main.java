@@ -40,6 +40,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterNavigationDrawer;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
+import com.victor.sexytalk.sexytalk.CustomDialogs.ChangeProfilePic;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangeUsername;
 import com.victor.sexytalk.sexytalk.CustomDialogs.GuyOrGirlDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
@@ -81,7 +82,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     public static int CHOOSE_PHOTO_REQUEST = 222;
     public static int TAKE_PHOTO_REQUEST = 333;
+
     protected Uri mMediaUri;
+    ChangeProfilePic changeProfilePic;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -248,6 +251,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
         final String user = (String) mCurrentUser.getProperty(Statics.KEY_USERNAME);
         if (resultCode == RESULT_OK) {
+
             if (requestCode == ACTIVITY_SEND_TO) {
 
                 //tezi dva arraylist se vrashtat ot SendTo, sled kato izberem na kogo da pratim celuvka
@@ -279,13 +283,22 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                                                        mContext);
             } //krai na REQUESTCODE == Activity Send to
             if(requestCode == CHOOSE_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST){
+                //obrabotva se v Change profile pic dialog box
+                changeProfilePic.onActivityResult(requestCode,resultCode,data);
+/*
                 if ( data == null ) {
                     //ako e null i sme izbrali photo pokazvame error message
                     if(requestCode == CHOOSE_PHOTO_REQUEST) {
                         Toast.makeText(Main.this, R.string.general_error_message, Toast.LENGTH_LONG).show();
+                        return;
                     }
                 } else {
                     mMediaUri = data.getData();
+                }
+
+                if(mMediaUri == null){
+                    changeProfilePic.onActivityResult(requestCode,resultCode,data);
+                    return;
                 }
                 //parvo proveriavame razmera
                 UploadPicture help = new UploadPicture(mContext);
@@ -297,7 +310,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 } else {
                     help.uploadProfilePicInBackendless(mMediaUri, mCurrentUser);
                 }//krai na else statement
+                */
             }//on activity result za promiana na profile pic
+
         } //krai na RESULTCODE OK
     } //krai na onactivity result
 
@@ -540,12 +555,15 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     return;
                 case 8:
                     //change profile picture
+                     changeProfilePic = new ChangeProfilePic();
+                    changeProfilePic.show(getSupportFragmentManager(),"Welcome");
 
+                    /*
                     AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
                     builder.setTitle(R.string.menu_camera_alertdialog_title);
                     builder.setItems(R.array.camera_choices, mUploadPicture);
                     AlertDialog dialog = builder.create();
-                    dialog.show();
+                    dialog.show();*/
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);
                     return;
