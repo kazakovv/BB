@@ -98,5 +98,8 @@ public class Statics {
     //izpolzva se za reference dali ima chakashti zaiavki za partniori. Ako e true pokazvame buton na main t
     public static Boolean pendingPartnerRequest = false;
 
+    //display one message per day dialog warning
+    public static String displayOneMessagePerDayDialogBox="displayOneMessageDialog";
+
 }
 

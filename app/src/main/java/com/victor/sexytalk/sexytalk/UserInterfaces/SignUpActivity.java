@@ -1,7 +1,6 @@
 package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -17,14 +16,12 @@ import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthdaySignUp;
-import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
-import com.victor.sexytalk.sexytalk.Helper.EmailForLogin;
+import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
-import java.util.Calendar;
 import java.util.Date;
 
 
@@ -154,7 +151,7 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                          //!!!!!!!!!!!!!!!!!!
                          //User successfully created!
                          //zapisvame emaila v shared preferences, za da moze posle da se logvame po-lesno
-                         EmailForLogin.saveEmailForLogin(SignUpActivity.this, backendlessUser);
+                         SharedPrefsHelper.saveEmailForLogin(SignUpActivity.this, backendlessUser);
                          //log in!
                          Backendless.UserService.login(email, password,
                                  new DefaultCallback<BackendlessUser>(SignUpActivity.this, message) {

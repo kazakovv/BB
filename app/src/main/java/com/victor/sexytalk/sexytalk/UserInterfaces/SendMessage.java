@@ -30,6 +30,7 @@ import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.CustomDialogs.OneLoveMessageDialog;
 import com.victor.sexytalk.sexytalk.Helper.ImageHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
+import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -357,9 +358,10 @@ public class SendMessage extends ActionBarActivity {
 
 
         //pokazvame saobshtenie che moze da se izprashta 1 sabshtenie na den
-        //TODO tr da se proveri dali ne e izbrano, che ne iskame da vizhdame saobshtenieto
-        DialogFragment oneLoveMessageDialog = new OneLoveMessageDialog();
-        oneLoveMessageDialog.show(getSupportFragmentManager(), "Welcome");
+        if(SharedPrefsHelper.displayOneLoveMessagePerDayDialog(mContext) != true) {
+            DialogFragment oneLoveMessageDialog = new OneLoveMessageDialog();
+            oneLoveMessageDialog.show(getSupportFragmentManager(), "Welcome");
+        }
 
     }
 

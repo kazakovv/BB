@@ -5,29 +5,20 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.DeviceRegistration;
-import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ForgotPassword;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
-import com.victor.sexytalk.sexytalk.Helper.EmailForLogin;
+import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
 import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 
 public class LoginActivity extends Activity {
@@ -59,7 +50,7 @@ public class LoginActivity extends Activity {
         mPassword = (EditText) findViewById(R.id.login_password);
         mLoginButton = (Button) findViewById(R.id.logInButton);
         //zarezdame emaila na poslednia lognal se potrebitel
-        String emailOfLastLoggedInUser = EmailForLogin.loadEmailOfLastLoggedInUser(LoginActivity.this);
+        String emailOfLastLoggedInUser = SharedPrefsHelper.loadEmailOfLastLoggedInUser(LoginActivity.this);
         if (emailOfLastLoggedInUser !=null) {
             mEmail.setText(emailOfLastLoggedInUser);
         }
@@ -95,7 +86,7 @@ public class LoginActivity extends Activity {
                             //Register device for push notifications
                             BackendlessMessage.registerDeviceForPush(backendlessUser);
                             // zapisvame username v shared prefs, za da moze da se zaredi po-lesno sledvashtiat pat
-                            EmailForLogin.saveEmailForLogin(LoginActivity.this, backendlessUser);
+                            SharedPrefsHelper.saveEmailForLogin(LoginActivity.this, backendlessUser);
                             //User successfully loged in!.Switch to main screen.
                             Intent intent = new Intent(LoginActivity.this, Main.class);
                             //dobaviame flagove, za da ne moze usera da se varne pak kam toya ekran

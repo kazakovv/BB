@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 
+import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
 import com.victor.sexytalk.sexytalk.R;
 
 
@@ -35,8 +36,11 @@ public class OneLoveMessageDialog extends DialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                    //Cehck dali ne iskame da se pokazva nikoga i ako da zapisvame v shared prefs
+                        //Cehck dali ne iskame da se pokazva nikoga i ako da zapisvame v shared prefs
+                        if (doNotShowAgain.isChecked()) {
+                            SharedPrefsHelper.doNotShowOneMessagePerDay(mContext, true);
 
+                        }
                     }
                 })//end na  save positive button
 

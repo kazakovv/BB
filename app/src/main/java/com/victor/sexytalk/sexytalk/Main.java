@@ -48,7 +48,6 @@ import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
 import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
-import com.victor.sexytalk.sexytalk.UserInterfaces.EditProfileActivity;
 import com.victor.sexytalk.sexytalk.UserInterfaces.LoginActivity;
 import com.victor.sexytalk.sexytalk.UserInterfaces.SendMessage;
 import com.victor.sexytalk.sexytalk.UserInterfaces.SendTo;
@@ -230,34 +229,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 partnerRequest.putExtra(Statics.KEY_PARTNERS_SELECT_TAB, Statics.KEY_PARTNERS_SELECT_PENDING_REQUESTS);
                 startActivity(partnerRequest);
                 return true;
-            case R.id.menu_edit_profile:
-                Intent editProfileIntent = new Intent(this, EditProfileActivity.class);
-                startActivity(editProfileIntent);
-                return true;
-            case R.id.menu_logout:
-                Backendless.UserService
-                        .logout(new DefaultCallback<Void>(this, getResources().getString(R.string.logout_message)) {
-                            @Override
-                            public void handleResponse(Void aVoid) {
-
-                                //prashta kam login screen
-                                navigateToLogin();
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault backendlessFault) {
-                                super.handleFault(backendlessFault);
-                                Toast.makeText(Main.this, R.string.logout_error, Toast.LENGTH_LONG).show();
-                            }
-                        });
 
 
-                return true;
 
-            case R.id.menu_edit_friends:
-                Intent intentManagePartners = new Intent(this, ManagePartnersMain.class);
-                startActivity(intentManagePartners);
-                return true;
 
         }
 
