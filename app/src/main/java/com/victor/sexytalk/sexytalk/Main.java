@@ -41,7 +41,7 @@ import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterNavigationDrawer;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangePassword;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ChangeUsername;
-import com.victor.sexytalk.sexytalk.CustomDialogs.MaleOrFemaleDialog;
+import com.victor.sexytalk.sexytalk.CustomDialogs.GuyOrGirlDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
@@ -514,7 +514,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     return;
                 case 5:
                     //change sex
-                    DialogFragment sexDialog = new MaleOrFemaleDialog();
+                    DialogFragment sexDialog = new GuyOrGirlDialog();
                     sexDialog.show(getFragmentManager(), "Welcome");
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);
