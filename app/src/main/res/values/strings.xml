@@ -219,7 +219,7 @@
 
     <string name="account_settings_title">Account Settings</string>
     <string-array name="edit_profile_options">
-        <item>Change your sex</item>
+        <item>Change Guy or Girl</item>
         <item>Change date of birth</item>
         <item>Change password</item>
         <item>Change profile picture</item>

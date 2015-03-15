@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -47,6 +48,23 @@ public class GuyOrGirlDialog extends DialogFragment implements DialogInterface.O
         context = inflatedView.getContext();
         mGuy = (RadioButton) inflatedView.findViewById(R.id.radioButtonGuy);
         mGirl =(RadioButton) inflatedView.findViewById(R.id.radioButtonGirl);
+        mGuy.setChecked(true);
+        mGuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mGirl.isChecked()){
+                    mGirl.setChecked(false);
+                }
+            }
+        });
+        mGirl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mGuy.isChecked()){
+                    mGuy.setChecked(false);
+                }
+            }
+        });
 
         builder.setView(inflatedView)
 
@@ -54,43 +72,25 @@ public class GuyOrGirlDialog extends DialogFragment implements DialogInterface.O
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        if (mGuy.isChecked()) {
+                            currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_MALE);
+                        } else {
+                            currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_FEMALE);
+                        }
 
-                    }//krai na on click ok button
-
-                })//end ok button
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        GuyOrGirlDialog.this.getDialog().cancel();
-                    }
-                });
-        Dialog dialog = builder.create();
-        dialog.setOnShowListener(this);
-
-        return dialog;
-/*
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.dialog_menu_title)
-
-                .setItems(R.array.sex_options, new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                // The 'which' argument contains the index position
-                // of the selected item
-
-                  String messageCallback = context.getResources().getString(R.string.saving_preferences_message);
-
-                   switch(which) {
-                    case 0:
                         dialog.dismiss();
                         //mainMessage.setText(R.string.main_message_male);
 
-                        //update v backendless che e male
-                        currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_MALE);
-                        Backendless.UserService.update(currentUser, new DefaultCallback<BackendlessUser>(context,messageCallback) {
+                        //update v backendless
+
+                        String messageCallback = context.getResources().getString(R.string.saving_preferences_message);
+
+                        Backendless.UserService.update(currentUser, new DefaultCallback<BackendlessUser>(context, messageCallback) {
                             @Override
                             public void handleResponse(BackendlessUser backendlessUser) {
                                 super.handleResponse(backendlessUser);
+                                //zapisvame lokalno
+                                Backendless.UserService.setCurrentUser(currentUser);
                                 Toast.makeText(context,
                                         R.string.selection_saved_successfully, Toast.LENGTH_LONG).show();
 
@@ -104,39 +104,19 @@ public class GuyOrGirlDialog extends DialogFragment implements DialogInterface.O
                                         R.string.selection_not_saved, Toast.LENGTH_LONG).show();
                             }
                         });
+                    }//krai na on click ok button
 
-                        break;
-                    case 1:
-                       // update v backendless che e female
-                        dialog.dismiss();
+                })//end ok button
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        GuyOrGirlDialog.this.getDialog().cancel();
+                    }
+                });
+        Dialog dialog = builder.create();
+        dialog.setOnShowListener(this);
 
-                        currentUser.setProperty(Statics.KEY_MALE_OR_FEMALE, Statics.SEX_FEMALE);
-                        Backendless.UserService.update(currentUser, new DefaultCallback<BackendlessUser>(context, messageCallback) {
-                            @Override
-                            public void handleResponse(BackendlessUser backendlessUser) {
-                                super.handleResponse(backendlessUser);
-                                Toast.makeText(context,
-                                        R.string.selection_saved_successfully,Toast.LENGTH_LONG).show();
+        return dialog;
 
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault backendlessFault) {
-                                super.handleFault(backendlessFault);
-                                String error = backendlessFault.getMessage();
-                                Toast.makeText(context,
-                                        R.string.selection_not_saved,Toast.LENGTH_LONG).show();
-                            }
-                        });
-
-                        break;
-                }
-            }
-        });
-
-
-        return builder.create();
-*/
     }
 
     //tova promenia cveta na butona kato se klikne na nego

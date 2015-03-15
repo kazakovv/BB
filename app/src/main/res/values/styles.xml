@@ -17,6 +17,8 @@
         <item name="android:dropDownSpinnerStyle">@style/Spinner</item>
 
         <item name="android:buttonStyleToggle">@style/Toggle</item>
+        <item name="android:listChoiceIndicatorSingle">@drawable/apptheme_btn_radio_holo_light</item>
+
 
     </style>
 
