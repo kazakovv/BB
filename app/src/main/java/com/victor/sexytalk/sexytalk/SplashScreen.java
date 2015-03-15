@@ -2,23 +2,24 @@ package com.victor.sexytalk.sexytalk;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBarActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.victor.sexytalk.sexytalk.UserInterfaces.LoginActivity;
 
-/**
- * Created by Victor on 14/03/2015.
- */
+
 public class SplashScreen extends Activity {
-    private static final int SPLASH_DISPLAY_TIME = 4000; // splash screen delay time
+    private static final int SPLASH_DISPLAY_TIME = 1000; // splash screen delay time
     private BackendlessUser mCurrentUser;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_screen);
+        setContentView(R.layout.activity_splash_screen);
         mCurrentUser = Backendless.UserService.CurrentUser();
 
         new Handler().postDelayed(new Runnable() {
@@ -30,12 +31,14 @@ public class SplashScreen extends Activity {
                 } else {
                     intent.setClass(SplashScreen.this, LoginActivity.class);
                 }
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK); //sazdavo zadacha
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK); //iztriva vsichki predishni zadachi.
                 SplashScreen.this.startActivity(intent);
                 SplashScreen.this.finish();
 
                 // transition from splash to main menu
-                //overridePendingTransition(R.animate.activityfadein,
-                //        R.animate.splashfadeout);
+                overridePendingTransition(R.anim.abc_fade_in,
+                        R.anim.abc_fade_out);
 
             }
         }, SPLASH_DISPLAY_TIME);

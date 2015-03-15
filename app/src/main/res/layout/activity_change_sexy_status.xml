@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,28 +9,23 @@
         android:id="@+id/toolbar"
         layout="@layout/app_toolbar" />
 
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/kiss_background" />
+
+
     <EditText
-        android:layout_marginTop="@dimen/default_padding"
         android:id="@+id/changeSexyStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/app_toolbar"
+        android:layout_below="@+id/toolbar"
+        android:layout_marginTop="@dimen/default_padding"
         android:hint="@string/change_sexy_status_hint"
-        android:maxLength="@integer/max_status_length"
-         />
-    <!-- LOGO NA CELUVKA -->
-    <RelativeLayout
-        android:id="@+id/layoutLogo"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:maxLength="@integer/max_status_length" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/kiss_background" />
 
-    </RelativeLayout>
-</LinearLayout>
+</RelativeLayout>
