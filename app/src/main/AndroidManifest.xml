@@ -86,12 +86,7 @@
             android:label="@string/app_name"
             android:parentActivityName=".Main"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".UserInterfaces.EditProfileActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:label="@string/app_name"
-            android:parentActivityName=".Main"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".UserInterfaces.ActivityChangeSexyStatus"
             android:configChanges="orientation|keyboardHidden"

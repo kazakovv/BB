@@ -142,7 +142,8 @@ public class UploadPicture {
 
         } finally {
             try {
-                inputStream.close();
+
+                    inputStream.close();
 
             } catch (IOException e) {
                 //blank
@@ -235,12 +236,14 @@ public class UploadPicture {
                         //2. zapazvame patia kam profile pic v properties na current user
                         String profilePictureUrl = backendlessFile.getFileURL();
                         mCurrentUser.setProperty(Statics.KEY_PROFILE_PIC_PATH, profilePictureUrl);
-                        Backendless.UserService.setCurrentUser(mCurrentUser);
                         Backendless.UserService.update(mCurrentUser,
                                 new DefaultCallback<BackendlessUser>(context,uploadingFileMessage) {
                                     @Override
                                     public void handleResponse(BackendlessUser backendlessUser) {
                                         super.handleResponse(backendlessUser);
+                                        //updatevame lokalno
+                                        Backendless.UserService.setCurrentUser(mCurrentUser);
+
                                         Toast.makeText(context,
                                                 R.string.profile_pic_uploaded_successfully,Toast.LENGTH_LONG).show();
 

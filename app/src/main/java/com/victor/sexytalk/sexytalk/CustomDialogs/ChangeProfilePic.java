@@ -17,12 +17,9 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
-import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
-import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 
 /**
  * Created by Victor on 15/03/2015.
@@ -31,7 +28,7 @@ public class ChangeProfilePic extends DialogFragment implements DialogInterface.
     protected RadioButton mTakePic;
     protected RadioButton mChoosePic;
     protected Context mContext;
-    protected Uri mMediaUri;
+    protected Uri mMediaUriOutputTakePic;
     protected String mMessageType;
     protected BackendlessUser mCurrentUser;
 
@@ -77,8 +74,8 @@ public class ChangeProfilePic extends DialogFragment implements DialogInterface.
 
                         if (mTakePic.isChecked()) {
 
-                            mMediaUri = help.getOutputMediaFileUri();
-                            if (mMediaUri == null) {
+                            mMediaUriOutputTakePic = help.getOutputMediaFileUri();
+                            if (mMediaUriOutputTakePic == null) {
                                 Toast.makeText(mContext, R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();
                             } else {
                                 mMessageType = Statics.TYPE_IMAGE_MESSAGE;
@@ -110,7 +107,7 @@ public class ChangeProfilePic extends DialogFragment implements DialogInterface.
     //helper za onClick
     public void takePicture( ) {
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUriOutputTakePic);
 
         getActivity().startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
     }
@@ -122,24 +119,22 @@ public class ChangeProfilePic extends DialogFragment implements DialogInterface.
 
         if ( data == null ) {
             //ako e choose photo request vrashta null znachi ima greshka
-            //take photo vrashta null po podrazbirane
+            //take photo vrashta null po podrazbirane.
+            // V tozi sluchai izpolzvame mMediaUriOutputTakePic
             if(requestCode == CHOOSE_PHOTO_REQUEST) {
                 Toast.makeText(mContext, R.string.general_error_message, Toast.LENGTH_LONG).show();
                 return;
             }
+        } else {
+            //ako ne e null, znachi sme izbrali da izberem snimka ot galeriata.
+            // V takav sluchai vzmimame output
+            mMediaUriOutputTakePic = data.getData();
         }
 
-
-        //parvo proveriavame razmera
+        //uploadvame v backendless
         UploadPicture help = new UploadPicture(mContext);
+        help.uploadProfilePicInBackendless(mMediaUriOutputTakePic, mCurrentUser);
 
-        if (help.checkFileSizeExceedsLimit(Statics.FILE_SIZE_LIMIT, mMediaUri) == true) {
-            Toast.makeText(mContext, R.string.error_file_too_large, Toast.LENGTH_LONG).show();
-            mMediaUri = null;
-            return; //prekratiavame metoda tuk.
-        } else {
-            help.uploadProfilePicInBackendless(mMediaUri, mCurrentUser);
-        }//krai na else statement
 
     } //krai na onActivity result
 

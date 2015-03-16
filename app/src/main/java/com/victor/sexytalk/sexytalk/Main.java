@@ -1,15 +1,11 @@
 package com.victor.sexytalk.sexytalk;
 
 
-import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -47,7 +43,6 @@ import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
-import com.victor.sexytalk.sexytalk.Helper.UploadPicture;
 import com.victor.sexytalk.sexytalk.UserInterfaces.DefaultCallback;
 import com.victor.sexytalk.sexytalk.UserInterfaces.LoginActivity;
 import com.victor.sexytalk.sexytalk.UserInterfaces.SendMessage;
@@ -83,8 +78,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
     public static int CHOOSE_PHOTO_REQUEST = 222;
     public static int TAKE_PHOTO_REQUEST = 333;
 
-    protected Uri mMediaUri;
-    ChangeProfilePic changeProfilePic;
+    protected ChangeProfilePic changeProfilePic;//tova se izpolzva za onactivity result ako smeniame profile pic
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -283,34 +277,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                                                        mContext);
             } //krai na REQUESTCODE == Activity Send to
             if(requestCode == CHOOSE_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST){
-                //obrabotva se v Change profile pic dialog box
+                //obrabotva se v OnActivityResult v ChangeProfilePic dialog box
                 changeProfilePic.onActivityResult(requestCode,resultCode,data);
-/*
-                if ( data == null ) {
-                    //ako e null i sme izbrali photo pokazvame error message
-                    if(requestCode == CHOOSE_PHOTO_REQUEST) {
-                        Toast.makeText(Main.this, R.string.general_error_message, Toast.LENGTH_LONG).show();
-                        return;
-                    }
-                } else {
-                    mMediaUri = data.getData();
-                }
 
-                if(mMediaUri == null){
-                    changeProfilePic.onActivityResult(requestCode,resultCode,data);
-                    return;
-                }
-                //parvo proveriavame razmera
-                UploadPicture help = new UploadPicture(mContext);
-
-                if (help.checkFileSizeExceedsLimit(Statics.FILE_SIZE_LIMIT, mMediaUri) == true) {
-                    Toast.makeText(Main.this, R.string.error_file_too_large, Toast.LENGTH_LONG).show();
-                    mMediaUri = null;
-                    return; //prekratiavame metoda tuk.
-                } else {
-                    help.uploadProfilePicInBackendless(mMediaUri, mCurrentUser);
-                }//krai na else statement
-                */
             }//on activity result za promiana na profile pic
 
         } //krai na RESULTCODE OK
@@ -395,11 +364,11 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
             /** Called when a drawer has settled in a completely closed state. */
             public void onDrawerClosed(View view) {
+
                 super.onDrawerClosed(view);
                 mDrawerToggle.syncState();
 
 
-                //invalidateOptionsMenu();
 
             }
 
@@ -408,7 +377,6 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 super.onDrawerOpened(drawerView);
                 loadHeaderNavigationDrawer();
                 mDrawerToggle.syncState();
-                //invalidateOptionsMenu();
 
 
             }
@@ -426,11 +394,12 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
         // Set the drawer toggle as the DrawerListener
         mDrawerToggle.setDrawerIndicatorEnabled(true);
+
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
 
-
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
         mDrawerToggle.syncState();
 
 
@@ -555,15 +524,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     return;
                 case 8:
                     //change profile picture
-                     changeProfilePic = new ChangeProfilePic();
-                    changeProfilePic.show(getSupportFragmentManager(),"Welcome");
 
-                    /*
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Main.this);
-                    builder.setTitle(R.string.menu_camera_alertdialog_title);
-                    builder.setItems(R.array.camera_choices, mUploadPicture);
-                    AlertDialog dialog = builder.create();
-                    dialog.show();*/
+                    //rezultatat se obrabotva v OnActivityResult v ChangeProfilePic dialog
+                    changeProfilePic = new ChangeProfilePic();
+                    changeProfilePic.show(getSupportFragmentManager(),"Welcome");
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);
                     return;
@@ -581,43 +545,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
 
 
-        //onClick listener za uploadvane na snimka
-        protected DialogInterface.OnClickListener mUploadPicture =
-                new DialogInterface.OnClickListener() {
 
-                    //UploadPicture up = new UploadPicture();
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        UploadPicture help = new UploadPicture(Main.this);
-                        switch (which) {
-                            case 0: //take picture
-                                //tova e metod, koito frashta adresa na kartinakata kaot Uri
-                                mMediaUri = help.getOutputMediaFileUri();
-                                if (mMediaUri == null) {
-                                    Toast.makeText(Main.this, R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();
-                                } else {
-                                    mMessageType = Statics.TYPE_IMAGE_MESSAGE;
-                                    takePicture();
-                                }
-                                break;
-
-                            case 1: //choose picture
-                                mMessageType = Statics.TYPE_IMAGE_MESSAGE;
-                                Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                                choosePhotoIntent.setType("image/*");
-                                startActivityForResult(choosePhotoIntent, CHOOSE_PHOTO_REQUEST);
-                                break;
-
-                        }
-                    }
-                };
-        //helper za onClick listener
-        public void takePicture( ) {
-            Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-            startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
-        }
     }
 
 }

@@ -88,6 +88,7 @@ public class FragmentLoveBox extends ListFragment {
         }
 
 
+
         return rootView;
     }
     //refresh listener za updatevane na tova dali ima novi saobstehnia
@@ -115,6 +116,7 @@ public class FragmentLoveBox extends ListFragment {
     public void onResume() {
         super.onResume();
         mContext.registerReceiver(mMessageReceiver, new IntentFilter(Statics.KEY_REFRESH_FRAGMENT_LOVE_BOX));
+
 
     }
 

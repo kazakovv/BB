@@ -23,6 +23,7 @@
     </style>
 
 
+
     <!-- style za zaglaviata n dialog box-->
     <style name="DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
         <item name="android:textColor">@color/apptheme_color</item>
