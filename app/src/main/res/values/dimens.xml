@@ -45,6 +45,9 @@
     <dimen name="thumbnail_frame_radius">30dp</dimen>
     <dimen name="thumbnail_stroke_width">10dp</dimen>
 
+    <dimen name="alert_dialog_title_text_size">20sp</dimen>
+    <dimen name="alert_dialog_message_text_size">15sp</dimen>
+
     <dimen name="margin_bottom_dialog_box_title">15dp</dimen>
     <!-- NAVIGATION DRAWER -->
     <dimen name="drawer_header_text_size">16sp</dimen>

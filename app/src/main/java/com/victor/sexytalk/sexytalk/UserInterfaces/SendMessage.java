@@ -357,6 +357,7 @@ public class SendMessage extends ActionBarActivity {
         });
 
 
+
         //pokazvame saobshtenie che moze da se izprashta 1 sabshtenie na den
         if(SharedPrefsHelper.displayOneLoveMessagePerDayDialog(mContext) != true) {
             DialogFragment oneLoveMessageDialog = new OneLoveMessageDialog();

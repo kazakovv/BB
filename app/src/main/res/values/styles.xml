@@ -28,7 +28,15 @@
     <style name="DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
         <item name="android:textColor">@color/apptheme_color</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/alert_dialog_title_text_size</item>
         <item name="android:layout_marginBottom">@dimen/margin_bottom_dialog_box_title</item>
+    </style>
+
+    <style name="CustomAlertDialogText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+      <!--  <item name="android:textSize">@dimen/alert_dialog_message_text_size</item> -->
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:paddingBottom">@dimen/default_padding</item>
     </style>
 
 

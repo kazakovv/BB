@@ -91,7 +91,9 @@ public class Statics {
     //max size na pic
     public static final int FILE_SIZE_LIMIT = 1024*1024*10;
 
-
+    //custom alert dialog
+    public static final String ALERTDIALOG_TITLE = "titleAD";
+    public static final String ALERTDIALOG_MESSAGE="messageAD";
 
     public static final String SHARED_PREFS="myPrefs";
     public static final String KEY_SAVED_EMAIL_FOR_LOGIN = "emailForLogin";

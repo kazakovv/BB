@@ -274,7 +274,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                     BackendlessMessage.sendKissMessage(mCurrentUser,
                                                        recepientEmails.get(0),
                                                        deviceIds.get(0),
-                                                       mContext);
+                                                       mContext, this);
             } //krai na REQUESTCODE == Activity Send to
             if(requestCode == CHOOSE_PHOTO_REQUEST || requestCode == TAKE_PHOTO_REQUEST){
                 //obrabotva se v OnActivityResult v ChangeProfilePic dialog box
@@ -328,36 +328,11 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         mDrawerLinear = (LinearLayout) findViewById(R.id.left_drawer_view);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        //zadavame spisaka, koito shte se pokazva
-        List<NavigationDrawerItems> items = new ArrayList<NavigationDrawerItems>();
-        //partners
-        items.add(new NavigationDrawerItems(R.drawable.partner_icon,getString(R.string.menu_edit_partner)));
-        String partnerOptions[] = getResources().getStringArray(R.array.navigation_drawer_partners_options);
-        for(String option: partnerOptions ){
-            items.add(new NavigationDrawerItems(option));
-        }
-
-        //account settings
-        items.add(new NavigationDrawerItems(R.drawable.ic_action_settings,getString(R.string.account_settings_title)));
-        String[] accountOptions =  getResources().getStringArray(R.array.edit_profile_options);
-        for(String option: accountOptions) {
-            items.add(new NavigationDrawerItems(option));
-        }
-
-
-
-       // ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(mContext, R.array.edit_profile_options, android.R.layout.simple_spinner_dropdown_item);
-       AdapterNavigationDrawer adapter = new AdapterNavigationDrawer(this,items);
-
-        mDrawerList.setAdapter(adapter);
-        // Set the list's click listener
-        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
 
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                toolbar,  /* nav drawer icon to replace 'Up' caret */
+                toolbar,                /*toolbar */
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
         ) {
@@ -387,19 +362,48 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             }
 
         };
+        mDrawerToggle.syncState();
+
+        //zadavame spisaka, koito shte se pokazva
+        List<NavigationDrawerItems> items = new ArrayList<NavigationDrawerItems>();
+        //partners
+        items.add(new NavigationDrawerItems(R.drawable.partner_icon,getString(R.string.menu_edit_partner)));
+        String partnerOptions[] = getResources().getStringArray(R.array.navigation_drawer_partners_options);
+        for(String option: partnerOptions ){
+            items.add(new NavigationDrawerItems(option));
+        }
+
+        //account settings
+        items.add(new NavigationDrawerItems(R.drawable.ic_action_settings,getString(R.string.account_settings_title)));
+        String[] accountOptions =  getResources().getStringArray(R.array.edit_profile_options);
+        for(String option: accountOptions) {
+            items.add(new NavigationDrawerItems(option));
+        }
+
+
+
+       // ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(mContext, R.array.edit_profile_options, android.R.layout.simple_spinner_dropdown_item);
+       AdapterNavigationDrawer adapter = new AdapterNavigationDrawer(this,items);
+
+        mDrawerList.setAdapter(adapter);
+        // Set the list's click listener
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
         //vrazvmam logout butona ot navigation drawer
         logoutButtonNavigationDrawer = (Button) findViewById(R.id.logout_button);
         logoutButtonNavigationDrawer.setOnClickListener(logoutButtonOnClick);
 
 
         // Set the drawer toggle as the DrawerListener
-        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        //mDrawerToggle.setDrawerIndicatorEnabled(true);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+        /*
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_drawer);
+        */
         mDrawerToggle.syncState();
 
 
@@ -508,6 +512,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
                     SetBirthday setBirthday = new SetBirthday();
                     //setBirthday.setTargetFragment(FragmentEditProfileActivity.this,SET_BIRTHDAY);
+
                     setBirthday.show(getSupportFragmentManager(),"Welcome");
                     mDrawerList.setItemChecked(position, true);
                     mDrawerLayout.closeDrawer(mDrawerLinear);

@@ -1,7 +1,10 @@
 package com.victor.sexytalk.sexytalk.Helper;
 
-import android.app.AlertDialog;
+
+import android.app.Activity;
 import android.content.Context;
+
+import android.os.Bundle;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
@@ -17,8 +20,10 @@ import com.backendless.messaging.PushPolicyEnum;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.KissesCount;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
+import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,10 +33,13 @@ import java.util.List;
 /**
  * Created by Victor on 15/02/2015.
  */
-public class BackendlessMessage {
+public class BackendlessMessage  {
+
+
+
     /*
-    IZPRASHTANE NA PUSH MESSAGES
-     */
+        IZPRASHTANE NA PUSH MESSAGES
+         */
     public static void sendPush(BackendlessUser sender, BackendlessUser recipient, Messages message,  final Context context, String TYPE_MESSAGE) {
 
         String deviceID = null;
@@ -119,7 +127,8 @@ public class BackendlessMessage {
     public static void sendKissMessage(final BackendlessUser mCurrentUser,
                                        final String recipientEmail,
                                        final String deviceId,
-                                       final Context context){
+                                       final Context context,
+                                       final Activity activity ){
 
         final BackendlessUser recipientBackendlessUser = BackendlessMessage.findBackendlessUserByEmail(mCurrentUser,recipientEmail );
 
@@ -194,12 +203,20 @@ public class BackendlessMessage {
                                     +".";
                         }
                         String title = context.getResources().getString(R.string.dialog_number_kisses_title);
+
+                        CustomAlertDialog kissDialog = new CustomAlertDialog();
+                        Bundle dialogContent = new Bundle();
+                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                        kissDialog.setArguments(dialogContent);
+                        kissDialog.show(activity.getFragmentManager(),"tag_alert_dialog");
+                        /*
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setTitle(title)
                                 .setMessage(message)
                                 .setPositiveButton(R.string.ok, null);
                         AlertDialog dialog = builder.create();
-                        dialog.show();
+                        dialog.show();*/
 
                         //3. UPDATEVAME TABLICATA, CHE SME IZPRATILI OSHTE EDNA CELUVKA
                         KissesCount kissToUpdate;

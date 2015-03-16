@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
+import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ForgotPassword;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
@@ -62,13 +63,21 @@ public class LoginActivity extends Activity {
                 String password = mPassword.getText().toString().trim();
 
                 if(userEmail.isEmpty() || password.isEmpty() ) {
-
+                    String title = getResources().getString(R.string.login_error_title);
+                    String message = getResources().getString(R.string.login_error_message);
+                    CustomAlertDialog kissDialog = new CustomAlertDialog();
+                    Bundle dialogContent = new Bundle();
+                    dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                    dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                    kissDialog.setArguments(dialogContent);
+                    kissDialog.show(getFragmentManager(),"tag_alert_dialog");
+                    /*
                     AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                     builder.setTitle(R.string.login_error_title)
                             .setMessage(R.string.login_error_message)
                             .setPositiveButton(R.string.ok, null);
                     AlertDialog dialog = builder.create();
-                    dialog.show();
+                    dialog.show();*/
                 }
 
                 else {
