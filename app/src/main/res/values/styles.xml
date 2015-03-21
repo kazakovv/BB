@@ -21,11 +21,22 @@
 
 
     </style>
+    <!-- style za sexy status -->
+    <style name="SexyStatus">
 
+        <item name="android:paddingTop">@dimen/default_padding</item>
+        <item name="android:paddingLeft">@dimen/default_padding</item>
+        <item name="android:paddingRight">@dimen/default_padding</item>
+        <item name="android:textColor">@color/second_accent_color</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <!--
     <style name="CustomActivityTheme" parent="AppTheme">
         <item name="android:homeAsUpIndicator">@drawable/ic_drawer</item>
     </style>
-
+-->
     <!-- style za zaglaviata n dialog box-->
     <style name="DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
         <item name="android:textColor">@color/apptheme_color</item>

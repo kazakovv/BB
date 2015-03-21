@@ -148,7 +148,9 @@
     <string name="sexy_status_saved_message">Your sexy status was saved</string>
     <string name="signing_in_message">Signing in...</string>
     <string name="choose_partner_label">Choose your partner</string>
-    <string name="sexy_status_default">Change your sexy status</string>
+    <string name="sexy_status_default">Tap to change your sexy status</string>
+    <string name="sexy_status_not_set_male">has not updated his sexy status</string>
+    <string name="sexy_status_not_set_female">has not updated her sexy status</string>
     <string name="check_email_sign_up_message">Checking if the email address is already in use</string>
     <string name="email_in_use">This email is already in use</string>
     <string name="searching">Searching</string>

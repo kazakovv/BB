@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/card_title"
-            android:layout_gravity="center_horizontal"
+            android:layout_alignParentLeft="true"
             android:paddingLeft="@dimen/default_padding"
             android:paddingRight="@dimen/default_padding"
             android:text="@string/fragment_love_days_generic_title"
@@ -53,15 +53,9 @@
             android:id="@+id/sexyStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/cyclePhase"
-            android:layout_gravity="center"
-            android:paddingLeft="@dimen/default_padding"
-            android:paddingRight="@dimen/default_padding"
-            android:paddingTop="@dimen/default_padding"
+            android:layout_below="@+id/profilePicture"
             android:text="@string/sexy_status_default"
-            android:textAlignment="center"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/second_accent_color" />
+            style="@style/SexyStatus" />
 
         <Button
             android:id="@+id/showSexyCalendar"

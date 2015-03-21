@@ -398,6 +398,8 @@ public class SendMessage extends ActionBarActivity {
 
 
         if (id == R.id.photoMenu) {
+
+
             AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
             builder.setTitle(R.string.menu_camera_alertdialog_title);
             builder.setItems(R.array.camera_choices, mUploadPicture);

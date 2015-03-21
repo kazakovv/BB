@@ -58,6 +58,21 @@ public class AdapterLoveDays extends RecyclerView.Adapter<AdapterLoveDays.Contac
         if(userToDisplay.getProperty(Statics.KEY_SEXY_STATUS) !=null) {
             String sexyStatus = (String) userToDisplay.getProperty(Statics.KEY_SEXY_STATUS);
             contactViewHolder.vSexyStatus.setText(sexyStatus);
+        } else {
+            //ako ne si e updatenal statusa zadavame message v savisimost ot tova dali partner e maz ili zhena
+
+            //parvo obache proveriavame dali partner e razlichen ot tekushtia user.
+            //ako e razlichen proveniame saobstehnieto, ako ne go ostaviame
+            if (i > 0) {
+            //tekushtiat user e parviat v spisaka. T.e. ako i >0 znachi stava vapros za partior, a ne za current user
+                String message = (String) userToDisplay.getProperty(Statics.KEY_USERNAME) + " ";
+                if (userToDisplay.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)) {
+                    message = message + mContext.getResources().getString(R.string.sexy_status_not_set_female);
+                } else {
+                    message = message + mContext.getResources().getString(R.string.sexy_status_not_set_male);
+                }
+                contactViewHolder.vSexyStatus.setText(message);
+            } //krai na else dali sexy status e null
         }
         //Picasso e vanshta bibilioteka, koito ni pozvoliava da otvariame snimki ot internet
         //zarezdame profile pic

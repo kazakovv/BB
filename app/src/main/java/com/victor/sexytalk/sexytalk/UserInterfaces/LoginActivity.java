@@ -112,6 +112,16 @@ public class LoginActivity extends Activity {
                             String error = backendlessFault.getCode();
                             if(error.equals(Statics.BACKENDLESS_INVALID_LOGIN_OR_PASS_MESSAGE)) {
                                 //greshno portrebitelsko ime ili parola
+                                String title = getResources().getString(R.string.login_error_title);
+                                String message = getResources().getString(R.string.invalid_login_details_dialog);
+                                CustomAlertDialog dialogError = new CustomAlertDialog();
+                                Bundle dialogContent = new Bundle();
+                                dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                dialogError.setArguments(dialogContent);
+                                dialogError.show(getFragmentManager(),"tag_alert_dialog");
+                                /*
+
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setTitle(R.string.login_error_title)
                                         .setMessage(R.string.invalid_login_details_dialog)
@@ -120,14 +130,26 @@ public class LoginActivity extends Activity {
 
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
+                                */
                             } else {
                                 //niakakva greshka sas servera
+                                String title = getResources().getString(R.string.login_error_title);
+                                String message = getResources().getString(R.string.general_login_error_message);
+                                CustomAlertDialog dialogError = new CustomAlertDialog();
+                                Bundle dialogContent = new Bundle();
+                                dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                dialogError.setArguments(dialogContent);
+                                dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+                                /*
                                 AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                                 builder.setTitle(R.string.login_error_title)
                                         .setMessage(R.string.general_login_error_message)
                                         .setPositiveButton(R.string.ok, null);
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
+                                */
                             }
                         }
                     });
