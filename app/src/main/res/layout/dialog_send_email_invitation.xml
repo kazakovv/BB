@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingRight="@dimen/default_padding"
+    android:paddingLeft="@dimen/default_padding"
+    android:paddingTop="@dimen/default_padding"
+    android:paddingBottom="@dimen/default_padding">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_invite_partner_join_sexytalk_title"
+        style="@style/DialogWindowTitle"/>
+
+    <TextView
+        android:id="@+id/drawerListItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/dialog_message_partner_not_joined_sexytalk"
+        style="@style/CustomAlertDialogText"/>
+
+</LinearLayout>

@@ -24,6 +24,7 @@ import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.Adaptors.AdapterSearchPartners;
+import com.victor.sexytalk.sexytalk.CustomDialogs.SendEmailInvitation;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -118,7 +119,7 @@ public class FragmentSearchPartners extends ListFragment {
                                 //tam se izpalnaiva koda za dobaviane na partners kato caknem na butona
                                 //current user e nuzen, za da izpratim info kam Backendless
                                 AdapterSearchPartners adapter = new AdapterSearchPartners(listWithFoundUsers.getContext(),
-                                        foundUsers,currentUser);
+                                        foundUsers,currentUser, getActivity());
 
                                 listWithFoundUsers.setAdapter(adapter);
 
@@ -131,6 +132,15 @@ public class FragmentSearchPartners extends ListFragment {
                                 listWithFoundUsers.setEmptyView(emptyMessage);
 
                                 //izkarvame dialog box dali ne izkame da izpratim email s pokana
+                                SendEmailInvitation sendEmailInvitation = new SendEmailInvitation();
+                                Bundle dialogContent = new Bundle();
+                                String emailToSend = emailSearchField.getText().toString();
+                                dialogContent.putString(Statics.KEY_RECEPIENT_EMAILS,emailToSend);
+                                sendEmailInvitation.setArguments(dialogContent);
+                                sendEmailInvitation.show(getFragmentManager(),"tag_alert_dialog");
+
+
+                                /*
                                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                 builder.setTitle(R.string.dialog_invite_partner_join_sexytalk_title)
                                         .setMessage(R.string.dialog_message_partner_not_joined_sexytalk)
@@ -139,7 +149,7 @@ public class FragmentSearchPartners extends ListFragment {
 
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
-
+                                */
                             }
                         }
                         @Override
@@ -170,7 +180,7 @@ public class FragmentSearchPartners extends ListFragment {
         Log.d("Vic","We are hare");
 
     }
-
+/*
     DialogInterface.OnClickListener sendEmail = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -189,4 +199,5 @@ public class FragmentSearchPartners extends ListFragment {
             }
         }
     };
+    */
 }

@@ -80,10 +80,13 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
             @Override
             public void onClick(View v) {
                 //pogazvame dialog boh dali naistina iskame da iztriem partiora
+
+                //TODO tr da se napravi custom dialog za da e v tochnia stil
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 String namePartnerToDelete = (String) mPartners.get(position).getProperty(Statics.KEY_USERNAME);
                 String message = mContext.getString(R.string.dialog_delete_partner_confirmation)
                         + " " + namePartnerToDelete + "?";
+
                 builder.setMessage(message);
                 builder.setTitle(R.string.dialog_box_deleting_partner);
                 builder.setCancelable(true);
@@ -118,6 +121,7 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
 
                                 //updatevame spisaka s partniori za tekushtia potrebitel
                                 mCurrentUser.setProperty(Statics.KEY_PARTNERS,newListWithPartnersForCurrentUser);
+                                Backendless.UserService.setCurrentUser(mCurrentUser);
                                 //kachvame novia spisak s partniori v backendless
                                 Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
                                     @Override

@@ -1,7 +1,9 @@
 package com.victor.sexytalk.sexytalk.Adaptors;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +23,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnersAddRequest;
+import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.R;
@@ -36,12 +39,14 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
     protected Context mContext;
     protected List<BackendlessUser> mFoundUsers;
     protected BackendlessUser mCurrentUser;
+    protected Activity mActivity;
 
-    public AdapterSearchPartners(Context context, List<BackendlessUser> partners, BackendlessUser currentUser) {
+    public AdapterSearchPartners(Context context, List<BackendlessUser> partners, BackendlessUser currentUser, Activity activity) {
         super(context, R.layout.item_add_partner, partners);
         mContext = context;
         mFoundUsers = partners;
         mCurrentUser = currentUser;
+        mActivity = activity;
     }
 
     @Override
@@ -145,15 +150,25 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
                     //veche e izpratena zaiavka za partner request. Prekratiavame metoda tuk
                     layoutButtons.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
+                    String title = mContext.getResources().getString(R.string.dialog_partner_request_already_sent_title);
                     String message = mContext.getResources()
                             .getString(R.string.dialog_partner_request_already_sent_to_user_message) + " " +
                             selectedPartner.getProperty(Statics.KEY_USERNAME);
+
+                    CustomAlertDialog waitingForLove = new CustomAlertDialog();
+                    Bundle dialogContent = new Bundle();
+                    dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                    dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                    waitingForLove.setArguments(dialogContent);
+                    waitingForLove.show( mActivity.getFragmentManager(),"tag_alert_dialog");
+                    /*
                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                     builder.setTitle(R.string.dialog_partner_request_already_sent_title)
                             .setMessage(message)
                             .setPositiveButton(R.string.ok, null);
                     AlertDialog dialog = builder.create();
                     dialog.show();
+                    */
                 } else {
                     //niama izpratena zaiavka
 

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
+import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -83,12 +84,22 @@ protected BackendlessUser mCurrentUser;
                    @Override
                    public void handleFault(BackendlessFault backendlessFault) {
                         super.handleFault(backendlessFault);
+                       String title = getResources().getString(R.string.general_error_title);
+                       String message = getResources().getString(R.string.error_updating_status);
+                       CustomAlertDialog changeStatus = new CustomAlertDialog();
+                       Bundle dialogContent = new Bundle();
+                       dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                       dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                       changeStatus.setArguments(dialogContent);
+                       changeStatus.show(getFragmentManager(),"tag_alert_dialog");
+                       /*
                        AlertDialog.Builder builder = new AlertDialog.Builder(ActivityChangeSexyStatus.this);
                        builder.setTitle(R.string.general_error_title)
                                .setMessage(R.string.error_updating_status)
                                .setPositiveButton(R.string.ok, null);
                        AlertDialog dialog = builder.create();
                        dialog.show();
+                       */
                    }
                });
             }
