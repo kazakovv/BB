@@ -15,6 +15,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.ForgotPassword;
+import com.victor.sexytalk.sexytalk.CustomDialogs.WrongPasswordLogin;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
 import com.victor.sexytalk.sexytalk.Main;
@@ -30,14 +31,7 @@ public class LoginActivity extends Activity {
     protected Button mLoginButton;
     protected static int FORGOT_PASSWORD = 111;
 
-    //onClick Listener za recover password
-    protected DialogInterface.OnClickListener recoverPasswordOnClickListener = new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-            ForgotPassword forgotPassword = new ForgotPassword();
-            forgotPassword.show(getFragmentManager(),"Welcome");
-        }
-    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,25 +106,10 @@ public class LoginActivity extends Activity {
                             String error = backendlessFault.getCode();
                             if(error.equals(Statics.BACKENDLESS_INVALID_LOGIN_OR_PASS_MESSAGE)) {
                                 //greshno portrebitelsko ime ili parola
-                                String title = getResources().getString(R.string.login_error_title);
-                                String message = getResources().getString(R.string.invalid_login_details_dialog);
-                                CustomAlertDialog dialogError = new CustomAlertDialog();
-                                Bundle dialogContent = new Bundle();
-                                dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
-                                dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
-                                dialogError.setArguments(dialogContent);
-                                dialogError.show(getFragmentManager(),"tag_alert_dialog");
-                                /*
+                                WrongPasswordLogin wrongPasswordLogin = new WrongPasswordLogin();
+                                wrongPasswordLogin.show(getFragmentManager(),"show");
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                                builder.setTitle(R.string.login_error_title)
-                                        .setMessage(R.string.invalid_login_details_dialog)
-                                        .setNeutralButton(R.string.forgot_your_password,recoverPasswordOnClickListener)
-                                        .setPositiveButton(R.string.try_again_enter_correct_password, null);
 
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                                */
                             } else {
                                 //niakakva greshka sas servera
                                 String title = getResources().getString(R.string.login_error_title);

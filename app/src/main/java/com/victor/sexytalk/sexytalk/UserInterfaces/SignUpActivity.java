@@ -15,6 +15,7 @@ import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.backendless.persistence.BackendlessDataQuery;
+import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthdaySignUp;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
@@ -69,12 +70,23 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
 
                 if (userName.isEmpty() || password.isEmpty() || email.isEmpty()) {
 
+                    String title = getResources().getString(R.string.sign_up_error_title);
+                    String message = getResources().getString(R.string.sign_up_error_message);
+                    CustomAlertDialog dialogError = new CustomAlertDialog();
+                    Bundle dialogContent = new Bundle();
+                    dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                    dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                    dialogError.setArguments(dialogContent);
+                    dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+                    /*
                     AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                     builder.setTitle(R.string.sign_up_error_title)
                             .setMessage(R.string.sign_up_error_message)
                             .setPositiveButton(R.string.ok, null);
                     AlertDialog dialog = builder.create();
                     dialog.show();
+                    */
                 } else {
                     //ako username, password, email ne sa prazni gi zapisvame v backendless
 
@@ -91,13 +103,23 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                                     super.handleResponse(user);
                                     if (user.getCurrentPage().size() > 0) {
                                         //veche ima user registriran s toya email
+                                        String title = getResources().getString(R.string.sign_up_error_title);
+                                        String message = getResources().getString(R.string.email_in_use);
+                                        CustomAlertDialog dialogError = new CustomAlertDialog();
+                                        Bundle dialogContent = new Bundle();
+                                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                        dialogError.setArguments(dialogContent);
+                                        dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+                                        /*
                                         AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                                         builder.setTitle(R.string.sign_up_error_title)
                                                 .setMessage(R.string.email_in_use)
                                                 .setPositiveButton(R.string.ok, null);
                                         AlertDialog dialog = builder.create();
                                         dialog.show();
-
+                                        */
                                     } else {
 
                                         SetBirthdaySignUp birthdaySignUp = new SetBirthdaySignUp();
@@ -112,12 +134,24 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                                 public void handleFault(BackendlessFault backendlessFault) {
                                     //greshka na parvata query dali ima takav email
                                     super.handleFault(backendlessFault);
+
+                                    String title = getResources().getString(R.string.sign_up_error_title);
+                                    String message = getResources().getString(R.string.error_unable_to_sign_in);
+                                    CustomAlertDialog dialogError = new CustomAlertDialog();
+                                    Bundle dialogContent = new Bundle();
+                                    dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                    dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                    dialogError.setArguments(dialogContent);
+                                    dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+                                    /*
                                     AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                                     builder.setTitle(R.string.sign_up_error_title)
                                             .setMessage(R.string.error_unable_to_sign_in)
                                             .setPositiveButton(R.string.ok, null);
                                     AlertDialog dialog = builder.create();
                                     dialog.show();
+                                    */
                                 }
                             });//krai na check if email is already in use
 
@@ -172,6 +206,18 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                                      @Override
                                      public void handleFault(BackendlessFault backendlessFault) {
                                          super.handleFault(backendlessFault);
+
+                                         String title = getResources().getString(R.string.sign_up_error_title);
+                                         String message = getResources().getString(R.string.error_user_registered_but_unable_to_log_in);
+                                         CustomAlertDialog dialogError = new CustomAlertDialog();
+                                         Bundle dialogContent = new Bundle();
+                                         dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                         dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                         dialogError.setArguments(dialogContent);
+                                         dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+                                         /*
+
                                          setProgressBarIndeterminateVisibility(false);
                                          AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                                          builder.setTitle(R.string.sign_up_error_title)
@@ -179,6 +225,7 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                                                  .setPositiveButton(R.string.ok, null);
                                          AlertDialog dialog = builder.create();
                                          dialog.show();
+                                         */
                                      }
                                  });
                      }
@@ -186,13 +233,23 @@ public class SignUpActivity extends FragmentActivity implements SetBirthdaySignU
                      @Override
                      public void handleFault(BackendlessFault backendlessFault) {
                          super.handleFault(backendlessFault);
-                         setProgressBarIndeterminateVisibility(false);
+                         String title = getResources().getString(R.string.sign_up_error_title);
+                         String message = getResources().getString(R.string.error_unable_to_sign_in);
+                         CustomAlertDialog dialogError = new CustomAlertDialog();
+                         Bundle dialogContent = new Bundle();
+                         dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                         dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                         dialogError.setArguments(dialogContent);
+                         dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+                         /*
                          AlertDialog.Builder builder = new AlertDialog.Builder(SignUpActivity.this);
                          builder.setTitle(R.string.sign_up_error_title)
                                  .setMessage(R.string.error_unable_to_sign_in)
                                  .setPositiveButton(R.string.ok, null);
                          AlertDialog dialog = builder.create();
                          dialog.show();
+                         */
                      }
                  });
 

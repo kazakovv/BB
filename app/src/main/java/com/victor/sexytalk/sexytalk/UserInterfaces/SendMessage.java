@@ -27,6 +27,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
+import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.OneLoveMessageDialog;
 import com.victor.sexytalk.sexytalk.Helper.ImageHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
@@ -398,7 +399,7 @@ public class SendMessage extends ActionBarActivity {
 
 
         if (id == R.id.photoMenu) {
-
+            //TODO: TR da se napravi !!!!!!!!!!!!!!!!!!1 v stila na programata
 
             AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
             builder.setTitle(R.string.menu_camera_alertdialog_title);
@@ -498,12 +499,22 @@ public class SendMessage extends ActionBarActivity {
                             public void handleFault(BackendlessFault backendlessFault) {
                                 super.handleFault(backendlessFault);
                                 Log.d("Vic", "error sending message " + backendlessFault.toString());
+                                String title = getResources().getString(R.string.error_title);
+                                String message = getResources().getString(R.string.error_sending_message);
+                                CustomAlertDialog dialogError = new CustomAlertDialog();
+                                Bundle dialogContent = new Bundle();
+                                dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                dialogError.setArguments(dialogContent);
+                                dialogError.show(getFragmentManager(),"tag_alert_dialog");
+                                /*
                                 AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
                                 builder.setMessage(R.string.error_sending_message)
                                         .setTitle(R.string.error_title)
                                         .setPositiveButton(android.R.string.ok, null);
                                 AlertDialog dialog = builder.create();
                                 dialog.show();
+                                */
                             }
                         });
                     }
@@ -511,6 +522,16 @@ public class SendMessage extends ActionBarActivity {
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
                         super.handleFault(backendlessFault);
+
+                        String title = getResources().getString(R.string.error_title);
+                        String message = getResources().getString(R.string.error_sending_message);
+                        CustomAlertDialog dialogError = new CustomAlertDialog();
+                        Bundle dialogContent = new Bundle();
+                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                        dialogError.setArguments(dialogContent);
+                        dialogError.show(getFragmentManager(),"tag_alert_dialog");
+                        /*
                         Log.d("Vic", "error sending message " + backendlessFault.toString());
                         AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
                         builder.setMessage(R.string.error_sending_message)
@@ -518,6 +539,7 @@ public class SendMessage extends ActionBarActivity {
                                 .setPositiveButton(android.R.string.ok, null);
                         AlertDialog dialog = builder.create();
                         dialog.show();
+                        */
                     }
                 });
             } //krai na send image message
@@ -546,10 +568,16 @@ public class SendMessage extends ActionBarActivity {
                     public void handleFault(BackendlessFault backendlessFault) {
                         super.handleFault(backendlessFault);
                         Log.d("Vic", "error sending message " + backendlessFault.toString());
-                        //TODO izkarva greshka:
-                        //TODO tr da se misli kak da se vzeme mContext za async tasks
-                        //android.view.WindowManager$BadTokenException: Unable to add window -- token android.os.BinderProxy@52a6d994 is not valid; is your activity running?
+                        String title = getResources().getString(R.string.error_title);
+                        String message = getResources().getString(R.string.error_sending_message);
+                        CustomAlertDialog dialogError = new CustomAlertDialog();
+                        Bundle dialogContent = new Bundle();
+                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                        dialogError.setArguments(dialogContent);
+                        dialogError.show(getFragmentManager(),"tag_alert_dialog");
 
+                        /*
                         AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
                         //builder.setMessage(R.string.error_sending_file)
                         builder.setMessage(R.string.error_sending_message)
@@ -557,6 +585,7 @@ public class SendMessage extends ActionBarActivity {
                                 .setPositiveButton(android.R.string.ok, null);
                         AlertDialog dialog = builder.create();
                         dialog.show();
+                        */
                     }
                 });
             }//krai na send text message

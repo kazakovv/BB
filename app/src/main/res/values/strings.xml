@@ -26,7 +26,7 @@
     <string name="sign_up_error_message">Please make sure you enter username, password and email address!</string>
     <string name="error_unable_to_sign_in">You were unable to sign in. Please try again</string>
     <string name="sign_up_error_title">Oops!</string>
-    <string name="login_error_message">Please make sure you enter username and password!</string>
+    <string name="login_error_message">Please make sure you enter email and password!</string>
     <string name="general_login_error_message">Login unsuccessful, please try again.</string>
     <string name="load_settings_error">I could not load your profile due to a server error. Please try again.</string>
     <string name="login_error_title">Oops!</string>
@@ -175,8 +175,9 @@
     <string name="password_not_changed_error_toast">Your password was not changed due to a server error</string>
     <string name="password_empty">Your password can\'t be empty</string>
     <string name="passwords_dont_match">The passwords you entered don\'t match</string>
-    <string name="invalid_login_details_dialog">The email or password you entered was invalid.</string>
+    <string name="invalid_login_details_dialog">The email or password you entered were invalid.</string>
     <string name="forgot_your_password">Forgot my password</string>
+    <string name="try_again">Try again</string>
     <string name="try_again_enter_correct_password">Try again</string>
     <string name="email_for_password_recovery_message">Enter your email and we will send you instructions how to recover your password</string>
     <string name="recovery_email_sent_dialog">We sent you an email with instructions how to recover your password</string>
