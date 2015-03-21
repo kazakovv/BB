@@ -186,7 +186,7 @@
     <string name="toast_cannot_add_yourself_as_partner">You can\'t add yourself as partner</string>
     <string name="user_already_partner">is already your partner</string>
     <string name="message_does_not_share_private_days">Does not want to share her private days</string>
-
+    <string name="picture_message_title">Attach picture</string>
     <string name="number_of_kisses_received_singular">has sent you %1$d kiss</string>
     <string name="number_of_kisses_received_plural">has sent you %1$d kisses</string>
     <string name="dialog_number_kisses_title">Kiss</string>

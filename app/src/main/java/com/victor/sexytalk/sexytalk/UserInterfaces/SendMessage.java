@@ -27,6 +27,7 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
+import com.victor.sexytalk.sexytalk.CustomDialogs.AttachPictureToMessage;
 import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.CustomDialogs.OneLoveMessageDialog;
 import com.victor.sexytalk.sexytalk.Helper.ImageHelper;
@@ -51,7 +52,7 @@ public class SendMessage extends ActionBarActivity {
 
     protected EditText messageToSend;
     protected TextView mSendMessageTo;
-    protected String mMessageType;
+    public String mMessageType;
     protected Toolbar toolbar;
 
     protected ArrayList<String> backendlessUserNames; //spisak s Usernames na poluchatelite na saobshtenieto
@@ -62,7 +63,7 @@ public class SendMessage extends ActionBarActivity {
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int ACTIVITY_SEND_TO = 11;
 
-    protected Uri mMediaUri;
+    public static Uri mMediaUri;
 
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; //1024*1024 = 1MB
 
@@ -70,6 +71,8 @@ public class SendMessage extends ActionBarActivity {
     protected MenuItem mRotateLeft;
     protected MenuItem mRotateRight;
     protected ImageView imageViewForThumbnailPreview;
+
+    AttachPictureToMessage attachPictureToMessage;
 
     //onCLick listener za uload na picture
     protected DialogInterface.OnClickListener mUploadPicture =
@@ -185,6 +188,8 @@ public class SendMessage extends ActionBarActivity {
 
             //tova obrabotva rezultata ot snimane ili kachvane na file
             if (requestCode == CHOOSE_PHOTO_REQUEST) {
+                mMessageType = Statics.TYPE_IMAGE_MESSAGE;
+
                 //pokazvame dvete vratki za snimkite
                 mRotateRight.setVisible(true);
                 mRotateLeft.setVisible(true);
@@ -199,6 +204,8 @@ public class SendMessage extends ActionBarActivity {
                 }
 
             } else {
+                mMessageType = Statics.TYPE_IMAGE_MESSAGE;
+
                 //pokazvame dvete vratki za snimkite
                 mRotateRight.setVisible(true);
                 mRotateLeft.setVisible(true);
@@ -399,13 +406,17 @@ public class SendMessage extends ActionBarActivity {
 
 
         if (id == R.id.photoMenu) {
-            //TODO: TR da se napravi !!!!!!!!!!!!!!!!!!1 v stila na programata
+            attachPictureToMessage = new AttachPictureToMessage();
+            attachPictureToMessage.show(getSupportFragmentManager(),"tag_attach");
 
+            //TODO: TR da se napravi !!!!!!!!!!!!!!!!!!1 v stila na programata
+            /*
             AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
             builder.setTitle(R.string.menu_camera_alertdialog_title);
             builder.setItems(R.array.camera_choices, mUploadPicture);
             AlertDialog dialog = builder.create();
             dialog.show();
+            */
         }
 
 
