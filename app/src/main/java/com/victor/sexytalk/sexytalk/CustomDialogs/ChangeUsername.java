@@ -46,12 +46,24 @@ public class ChangeUsername extends DialogFragment implements DialogInterface.On
                         String username = mChangeUsername.getText().toString().trim();
                         if (username.isEmpty()) {
                             //ako edno ot dvete e prazno pokavame error
+
+                            String title = getResources().getString(R.string.general_error_title);
+                            String message = getResources().getString(R.string.username_cannot_be_empty);
+                            CustomAlertDialog dialogError = new CustomAlertDialog();
+                            Bundle dialogContent = new Bundle();
+                            dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                            dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                            dialogError.setArguments(dialogContent);
+                            dialogError.show(getActivity().getFragmentManager(),"tag_alert_dialog");
+
+                            /*
                             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                             builder.setTitle(R.string.general_error_title)
                                     .setMessage(R.string.username_cannot_be_empty)
                                     .setPositiveButton(R.string.ok, null);
                             AlertDialog error = builder.create();
                             error.show();
+                            */
                         } else { //ako e vavedeno username updatevame lokalno i v backendless
                             mCurrentUser.setProperty(Statics.KEY_USERNAME, username);
                             Backendless.UserService.setCurrentUser(mCurrentUser);

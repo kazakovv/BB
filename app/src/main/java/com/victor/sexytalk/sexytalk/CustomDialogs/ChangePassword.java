@@ -56,22 +56,46 @@ public class ChangePassword extends DialogFragment implements DialogInterface.On
                         //check dali ne e vkarana prazna parola
                         if (password.isEmpty() || confirmPassword.isEmpty()) {
                             //ako edno ot dvete e prazno pokavame error
+
+                            String title = getResources().getString(R.string.general_error_title);
+                            String message = getResources().getString(R.string.password_empty);
+                            CustomAlertDialog dialogError = new CustomAlertDialog();
+                            Bundle dialogContent = new Bundle();
+                            dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                            dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                            dialogError.setArguments(dialogContent);
+                            dialogError.show(getActivity().getFragmentManager(),"tag_alert_dialog");
+
+
+                            /*
                             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                             builder.setTitle(R.string.general_error_title)
                                     .setMessage(R.string.password_empty)
                                     .setPositiveButton(R.string.ok, null);
                             AlertDialog error = builder.create();
                             error.show();
+                            */
                         }
                         //check dali 2 paroli savpadat
                         if (!password.equals(confirmPassword)) {
                             //error message che parolite ne savpadat
+
+                            String title = getResources().getString(R.string.general_error_title);
+                            String message = getResources().getString(R.string.passwords_dont_match);
+                            CustomAlertDialog dialogError = new CustomAlertDialog();
+                            Bundle dialogContent = new Bundle();
+                            dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                            dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                            dialogError.setArguments(dialogContent);
+                            dialogError.show(getActivity().getFragmentManager(),"tag_alert_dialog");
+                            /*
                             AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                             builder.setTitle(R.string.general_error_title)
                                     .setMessage(R.string.passwords_dont_match)
                                     .setPositiveButton(R.string.ok, null);
                             AlertDialog error = builder.create();
                             error.show();
+                            */
                         }
 
                         //vsicko e ok case

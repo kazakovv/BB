@@ -48,12 +48,23 @@ public class ForgotPassword extends DialogFragment implements DialogInterface.On
                             Backendless.UserService.restorePassword(email, new AsyncCallback<Void>() {
                                 @Override
                                 public void handleResponse(Void aVoid) {
+                                    String title = getResources().getString(R.string.title_recovery_password_dialog);
+                                    String message = getResources().getString(R.string.recovery_email_sent_dialog);
+                                    CustomAlertDialog dialogError = new CustomAlertDialog();
+                                    Bundle dialogContent = new Bundle();
+                                    dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                    dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                    dialogError.setArguments(dialogContent);
+                                    dialogError.show(getActivity().getFragmentManager(),"tag_alert_dialog");
+
+                                    /*
                                     AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                     builder.setTitle(R.string.title_recovery_password_dialog)
                                             .setMessage(R.string.recovery_email_sent_dialog)
                                             .setPositiveButton(R.string.ok, null);
                                     AlertDialog dialog = builder.create();
                                     dialog.show();
+                                    */
                                 }
 
                                 @Override
@@ -61,20 +72,41 @@ public class ForgotPassword extends DialogFragment implements DialogInterface.On
                                     String error = backendlessFault.getCode();
                                     //niama nameren takav email
                                     if(error.equals(Statics.BACKENDLESS_INVALID_EMAIL_PASSWORD_RECOVERY)) {
+                                        String title = getResources().getString(R.string.general_error_title);
+                                        String message = getResources().getString(R.string.email_not_found);
+                                        CustomAlertDialog dialogError = new CustomAlertDialog();
+                                        Bundle dialogContent = new Bundle();
+                                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                        dialogError.setArguments(dialogContent);
+                                        dialogError.show(getActivity().getFragmentManager(),"tag_alert_dialog");
+                                        /*
                                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                         builder.setTitle(R.string.general_error_title)
                                                 .setMessage(R.string.email_not_found)
                                                 .setPositiveButton(R.string.ok, null);
                                         AlertDialog dialog = builder.create();
                                         dialog.show();
+                                        */
                                     } else {
                                         //niakakva druga greshka
+                                        String title = getResources().getString(R.string.general_error_title);
+                                        String message = getResources().getString(R.string.general_server_error);
+                                        CustomAlertDialog dialogError = new CustomAlertDialog();
+                                        Bundle dialogContent = new Bundle();
+                                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                                        dialogError.setArguments(dialogContent);
+                                        dialogError.show(getActivity().getFragmentManager(),"tag_alert_dialog");
+
+                                        /*
                                         AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                                         builder.setTitle(R.string.general_error_title)
                                                 .setMessage(R.string.general_server_error)
                                                 .setPositiveButton(R.string.ok, null);
                                         AlertDialog dialog = builder.create();
                                         dialog.show();
+                                        */
                                     }
                                 }
                             });
