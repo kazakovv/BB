@@ -14,12 +14,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:textColor="@color/apptheme_color"
+        android:textStyle="bold"
         android:textSize="@dimen/title_cycle_period"/>
     <TextView
+        android:id="@+id/remainingDaysMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:textSize="@dimen/subtitle_cycle_period"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:textColor="@color/second_accent_color"
         android:text="@string/sub_title_remaining_days"/>
 
     <com.squareup.timessquare.CalendarPickerView

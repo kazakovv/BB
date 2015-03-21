@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.TextView;
 
 import com.squareup.timessquare.CalendarPickerView;
@@ -47,7 +48,7 @@ protected TextView mCycleTitle;
         CalendarPickerView calendar = (CalendarPickerView) findViewById(R.id.calendar_view);
         calendar.init(firstDate.getTime(), lastDate.getTime())
                 .inMode(CalendarPickerView.SelectionMode.RANGE)
-
+                .displayOnly()
                 .withHighlightedDates(datesToBeSelected);
     }
 
@@ -118,6 +119,11 @@ protected TextView mCycleTitle;
                 dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
                 datesToBeSelected.add(dateToBeAdded.getTime());
             }
+        } else {
+            //tr da se updatene kalendara
+            mCycleTitle.setText(R.string.sexyCalendar_needs_updating_message);
+            TextView remainingDaysMessage = (TextView) findViewById(R.id.remainingDaysMessage);
+            remainingDaysMessage.setVisibility(View.INVISIBLE);
         }
 
 
