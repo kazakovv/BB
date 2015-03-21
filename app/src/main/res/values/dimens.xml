@@ -32,6 +32,8 @@
     <dimen name="default_button_text_size">18sp</dimen>
     <dimen name="default_button_small_text_size">15sp</dimen>
 
+    <dimen name="search_partners_margin_top">41dp</dimen>
+
     <dimen name="kiss_count_font">15sp</dimen>
     <dimen name="kiss_title_font">50sp</dimen>
 

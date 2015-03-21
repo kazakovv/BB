@@ -22,7 +22,9 @@
 
     </style>
 
-
+    <style name="CustomActivityTheme" parent="AppTheme">
+        <item name="android:homeAsUpIndicator">@drawable/ic_drawer</item>
+    </style>
 
     <!-- style za zaglaviata n dialog box-->
     <style name="DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">

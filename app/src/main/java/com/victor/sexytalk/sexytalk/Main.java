@@ -69,9 +69,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
     protected MaterialTabHost tabHost;
 
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mDrawerToggle;
-    private ListView mDrawerList;
+    protected DrawerLayout mDrawerLayout;
+    protected ActionBarDrawerToggle mDrawerToggle;
+    protected ListView mDrawerList;
+
     private LinearLayout mDrawerLinear;
     private Button logoutButtonNavigationDrawer;
 
@@ -98,6 +99,8 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             //prashta ni kam login screen
             navigateToLogin();
         } else {
+            //zarezdame navigation drawer
+            setUpDrawer();
 
             //TODO!!!!!
             //TODO TR da se optimizira ot kam backendless api requests
@@ -119,30 +122,32 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             PagerAdapterMain pAdapter = new PagerAdapterMain(getSupportFragmentManager(), this);
             pager.setAdapter(pAdapter);
 
-            tabHost = (MaterialTabHost) this.findViewById(R.id.materialTabHost);
-            tabHost.setTextColor(mContext.getResources().getColor(R.color.tab_text_color));
 
             pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                    mDrawerToggle.syncState();
                 }
 
                 @Override
                 public void onPageSelected(int position) {
                     // when user do a swipe the selected tab change
                     tabHost.setSelectedNavigationItem(position);
+                    mDrawerToggle.syncState();
                 }
 
                 @Override
                 public void onPageScrollStateChanged(int state) {
-
+                    mDrawerToggle.syncState();
                 }
             });
 
+            tabHost = (MaterialTabHost) this.findViewById(R.id.materialTabHost);
+            tabHost.setTextColor(mContext.getResources().getColor(R.color.tab_text_color));
 
             // insert all tabs from pagerAdapter data
+
             for (int i = 0; i < pAdapter.getCount(); i++) {
                 tabHost.addTab(
                         tabHost.newTab()
@@ -152,15 +157,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 );
             }
 
-            //zarezdame navigation drawer
-            setUpDrawer();
 
         }
 
 
-        if(mDrawerToggle !=null){
-            mDrawerToggle.syncState();
-        }
     }
 
 
@@ -171,7 +171,10 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         // Sync the toggle state after onRestoreInstanceState has occurred.
 
         if(mDrawerToggle !=null) {
+
+
             mDrawerToggle.syncState();
+
         }
     }
 
@@ -329,15 +332,23 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
 
+
+
+
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
-                toolbar,                /*toolbar */
+                toolbar,
                 R.string.drawer_open,  /* "open drawer" description */
                 R.string.drawer_close  /* "close drawer" description */
-        ) {
+        )
 
-            /** Called when a drawer has settled in a completely closed state. */
+        {
+
+
+
+
+            // Called when a drawer has settled in a completely closed state.
             public void onDrawerClosed(View view) {
 
                 super.onDrawerClosed(view);
@@ -347,7 +358,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
 
             }
 
-            /** Called when a drawer has settled in a completely open state. */
+            // Called when a drawer has settled in a completely open state.
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
                 loadHeaderNavigationDrawer();
@@ -361,7 +372,17 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
                 super.onDrawerSlide(drawerView, 0); // this disables the animation
             }
 
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+                mDrawerToggle.syncState();
+
+            }
+
+
         };
+
+
         mDrawerToggle.syncState();
 
         //zadavame spisaka, koito shte se pokazva
@@ -398,7 +419,7 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         //mDrawerToggle.setDrawerIndicatorEnabled(true);
 
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-        /*
+/*
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);

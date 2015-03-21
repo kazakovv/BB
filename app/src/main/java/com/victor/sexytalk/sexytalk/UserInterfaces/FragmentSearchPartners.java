@@ -90,8 +90,7 @@ public class FragmentSearchPartners extends ListFragment {
                     listWithFoundUsers.setVisibility(View.INVISIBLE);
                     progressBar.setVisibility(View.VISIBLE);
 
-                    //TODO: izkarva rezultati po niakolko potati. Tr da se opravi kriteriat
-                    String whereClause = "email LIKE'%" + emailToSearch + "%'";
+                    String whereClause = "email='" + emailToSearch + "'";
                     BackendlessDataQuery query = new BackendlessDataQuery();
                     query.setWhereClause(whereClause);
 

@@ -14,7 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="41dp"
+        android:layout_marginTop="@dimen/search_partners_margin_top"
+        android:background="@drawable/_edit_text_holo_light"
         android:layout_toLeftOf="@+id/searchButton"
         android:layout_toStartOf="@+id/searchButton" />
 
