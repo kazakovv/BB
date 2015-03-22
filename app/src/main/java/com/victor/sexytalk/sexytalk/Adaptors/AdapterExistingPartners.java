@@ -44,7 +44,8 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
     protected Activity mActivity;
 
     public static int BREAK_UP_YES = 111111;
-    protected ViewHolder holder;
+
+    ViewHolder holderPostion;
 
     public AdapterExistingPartners(Context context,  List<BackendlessUser> partners,
                                    BackendlessUser currentUser, Activity activity) {
@@ -57,6 +58,7 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
+        final ViewHolder holder;
 
 
             if (convertView == null || convertView.getTag() == null) {
@@ -86,6 +88,7 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
         }
 
 
+        final View finalConvertView = convertView;
         holder.deletePartnerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +105,11 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
                 breakUpDialog.setListener(AdapterExistingPartners.this);
                 breakUpDialog.show(mActivity.getFragmentManager(), "tag_break_up");
 
-
+                //tova se pravi, za da dam na returnData reference kam saotvetnia spinner,
+                // koito da se varti dokato se obrabotva zaiavkata
+                holderPostion = new ViewHolder();
+                holderPostion.layoutButtons = (RelativeLayout) finalConvertView.findViewById(R.id.layoutButtons);
+                holderPostion.progressBar = (ProgressBar) finalConvertView.findViewById(R.id.progressBar);
 
             }
         });
@@ -117,8 +124,8 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
         if(result == BREAK_UP_YES){
 
             //pokazvame spinner
-            holder.progressBar.setVisibility(View.VISIBLE);
-            holder.layoutButtons.setVisibility(View.INVISIBLE);
+            holderPostion.progressBar.setVisibility(View.VISIBLE);
+            holderPostion.layoutButtons.setVisibility(View.INVISIBLE);
 
             BackendlessUser[] currentListWithPartners =
                     (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
@@ -174,8 +181,8 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
                                 @Override
                                 public void handleResponse(MessageStatus messageStatus) {
                                     //skrivame spinner
-                                    holder.progressBar.setVisibility(View.GONE);
-                                    holder.layoutButtons.setVisibility(View.VISIBLE);
+                                    holderPostion.progressBar.setVisibility(View.GONE);
+                                    holderPostion.layoutButtons.setVisibility(View.VISIBLE);
                                                         /*
                                                         TUK USPESHNO ZAVARSHVAME
                                                          */
@@ -186,8 +193,8 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
                                     //error sending push. Nisho ne mozem da napravim
 
                                     //skrivame spinner
-                                    holder.progressBar.setVisibility(View.GONE);
-                                    holder.layoutButtons.setVisibility(View.VISIBLE);
+                                    holderPostion.progressBar.setVisibility(View.GONE);
+                                    holderPostion.layoutButtons.setVisibility(View.VISIBLE);
                                 }
                             });
                         }
@@ -196,8 +203,8 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
                         public void handleFault(BackendlessFault backendlessFault) {
                             //error uploading delete request. Nishto ne mozem da napravim
                             //skrivame spinner
-                            holder.progressBar.setVisibility(View.GONE);
-                            holder.layoutButtons.setVisibility(View.VISIBLE);
+                            holderPostion.progressBar.setVisibility(View.GONE);
+                            holderPostion.layoutButtons.setVisibility(View.VISIBLE);
                         }
                     });
 
@@ -208,14 +215,14 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> impl
                 public void handleFault(BackendlessFault backendlessFault) {
                     Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
                     //skrivame spinner
-                    holder.progressBar.setVisibility(View.GONE);
-                    holder.layoutButtons.setVisibility(View.VISIBLE);
+                    holderPostion.progressBar.setVisibility(View.GONE);
+                    holderPostion.layoutButtons.setVisibility(View.VISIBLE);
                 }
             });
 
 
         }//krai na check dali result e raven na BREAK_UP_YES
-    }
+    } //krai na interface za return value
 
     private static class ViewHolder {
         ImageView iconImageView;

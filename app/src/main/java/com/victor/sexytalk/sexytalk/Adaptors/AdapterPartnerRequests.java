@@ -187,6 +187,9 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
                                                     BackendlessMessage.sendPush( mCurrentUser,
                                                                                 mUserRequesting, null,
                                                                                 mContext,Statics.KEY_PARTNER_REQUEST_APPROVED );
+
+                                                    //updatevame lokalno tekushtia potrebitel
+                                                    Backendless.UserService.setCurrentUser(mCurrentUser);
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
                                                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
