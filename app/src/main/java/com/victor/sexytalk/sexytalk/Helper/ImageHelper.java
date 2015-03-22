@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 public class ImageHelper {
 	
@@ -104,10 +105,20 @@ public class ImageHelper {
 
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 
-        //TODO: tr da se dobavi random string/number kam imeto na fila
+        String randomNumber="";
+        //generirame 5 sluchaini chisla mezhdu 0 i 100
+        for (int i = 0; i< 5; i++){
+
+            int max = 100;
+            int min = 0;
+
+            Random r = new Random();
+            int rand = r.nextInt(max - min + 1);
+            randomNumber =  randomNumber + rand;
+        }
 
         if (fileType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
-            fileName="IMG"+timeStamp;
+            fileName="IMG"+"_" + timeStamp + "_" + randomNumber;
             fileName += ".png";
 		}
 		else {

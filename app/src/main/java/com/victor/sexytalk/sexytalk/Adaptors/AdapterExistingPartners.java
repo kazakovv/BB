@@ -1,6 +1,7 @@
 package com.victor.sexytalk.sexytalk.Adaptors;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.backendless.exceptions.BackendlessFault;
 import com.backendless.messaging.MessageStatus;
 import com.squareup.picasso.Picasso;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.PartnerDeleteRequest;
+import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.Helper.RoundedTransformation;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
@@ -36,7 +38,6 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
     protected Context mContext;
     protected BackendlessUser mCurrentUser;
     protected List<BackendlessUser> mPartners;
-
 
     public AdapterExistingPartners(Context context,  List<BackendlessUser> partners, BackendlessUser currentUser) {
         super(context, R.layout.item_delete_partner, partners );
@@ -82,6 +83,10 @@ public class AdapterExistingPartners  extends ArrayAdapter<BackendlessUser> {
                 //pogazvame dialog boh dali naistina iskame da iztriem partiora
 
                 //TODO tr da se napravi custom dialog za da e v tochnia stil
+                CustomAlertDialog customAlertDialog = new CustomAlertDialog();
+                customAlertDialog.set
+
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
                 String namePartnerToDelete = (String) mPartners.get(position).getProperty(Statics.KEY_USERNAME);
                 String message = mContext.getString(R.string.dialog_delete_partner_confirmation)

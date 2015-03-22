@@ -76,6 +76,9 @@ public class AttachPictureToMessage  extends DialogFragment implements DialogInt
                     public void onClick(DialogInterface dialog, int id) {
                         if (mTakePic.isChecked()) {
                             //snimame
+
+                            //zadavame patia kam output Uri. Tova e statichna promenliva v SendMessage clasa.
+                            //ne e elegantno, no kakvo da se pravi
                             SendMessage.mMediaUri = getOutputMediaFileUri(SendMessage.MEDIA_TYPE_IMAGE); //tova e metod, koito e definiran po-dolu
                             if (SendMessage.mMediaUri == null) {
                                 Toast.makeText(mContext, R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();

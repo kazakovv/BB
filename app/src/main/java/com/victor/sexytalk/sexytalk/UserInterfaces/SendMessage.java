@@ -2,14 +2,12 @@ package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
@@ -37,12 +35,9 @@ import com.victor.sexytalk.sexytalk.Main;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -68,102 +63,11 @@ public class SendMessage extends ActionBarActivity {
 
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; //1024*1024 = 1MB
 
-    public static final String TAG = SendMessage.class.getSimpleName();
     protected MenuItem mRotateLeft;
     protected MenuItem mRotateRight;
     protected ImageView imageViewForThumbnailPreview;
 
-/*
-    //onCLick listener za uload na picture
-    protected DialogInterface.OnClickListener mUploadPicture =
-            new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which) {
-                        case 0: //take picture
-                            mMediaUri = getOutputMediaFileUri(MEDIA_TYPE_IMAGE); //tova e metod, koito e definiran po-dolu
-                            if (mMediaUri == null) {
-                                Toast.makeText(SendMessage.this, R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();
-                            } else {
-                                mMessageType = Statics.TYPE_IMAGE_MESSAGE;
-                                takePicture();
-                            }
-                            break;
 
-                        case 1: //choose picture
-                            mMessageType = Statics.TYPE_IMAGE_MESSAGE;
-                            Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                            choosePhotoIntent.setType("image/*");
-                            startActivityForResult(choosePhotoIntent, CHOOSE_PHOTO_REQUEST);
-                            break;
-
-                    }
-                }
-
-                //tuk zapochvat vatreshni helper metodi za switch statementa
-
-                private Uri getOutputMediaFileUri(int mediaType) {
-                    //parvo triabva da se proveri dali ima external storage
-
-                    if (isExternalStorageAvailable()) {
-
-                        //sled tova vrashtame directoriata za pictures ili ia sazdavame
-                        //1.Get external storage directory
-                        String appName = SendMessage.this.getString(R.string.app_name);
-                        String environmentDirectory; //
-                        //ako snimame picture zapismave v papkata za kartiniki, ako ne v papkata za Movies
-
-
-                        environmentDirectory = Environment.DIRECTORY_PICTURES;
-                        File mediaStorageDirectory = new File(
-                                Environment.getExternalStoragePublicDirectory(environmentDirectory),
-                                appName);
-
-                        //2.Create subdirectory if it does not exist
-                        if (!mediaStorageDirectory.exists()) {
-                            if (!mediaStorageDirectory.mkdirs()) {
-                                Log.e(TAG, "failed to create directory");
-                                return null;
-                            }
-                        }
-
-                        //3.Create file name
-                        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-
-                        File mediaFile;
-                        mediaFile = new File(mediaStorageDirectory.getPath() + File.separator +
-                                "IMG_" + timeStamp + ".jpg");
-
-
-                        //4.Return the file's URI
-                        return Uri.fromFile(mediaFile);
-
-                    } else //ako niama external storage
-                        Log.d("Vic", "no external strogage, mediaUri si null");
-                    return null;
-
-                }
-
-
-                private boolean isExternalStorageAvailable() {
-                    String state = Environment.getExternalStorageState();
-                    if (state.equals(Environment.MEDIA_MOUNTED)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-
-                private void takePicture() {
-                    Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaUri);
-                    startActivityForResult(takePhotoIntent, TAKE_PHOTO_REQUEST);
-                }
-
-
-            };
-
-*/
     @Override
     //metod koito se vika kogato niakoi Intent varne rezultat
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
