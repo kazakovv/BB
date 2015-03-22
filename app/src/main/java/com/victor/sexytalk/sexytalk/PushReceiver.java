@@ -76,15 +76,16 @@ public class PushReceiver extends BackendlessBroadcastReceiver
             notificationIntent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
             int numberOfKisses = Integer.valueOf(kissCount);
             notificationIntent.putExtra(Statics.KEY_NUMBER_OF_KISSES,numberOfKisses);
-
+            id = 2;
         } else if (messageType.equals(Statics.TYPE_CALENDAR_UPDATE)) {
             notificationIntent = new Intent(context, Main.class);
             notificationIntent.setFlags(Statics.FLAG_CALENDAR_UPDATE);
+            id=3;
 
         } else if(messageType.equals(Statics.TYPE_PARTNER_REQUEST)){
             notificationIntent = new Intent(context, Main.class);
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             notificationIntent.setFlags(Statics.FLAG_PARTNER_REQUEST);
+            id=4;
         }
 
         else {

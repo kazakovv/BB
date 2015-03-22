@@ -36,7 +36,7 @@
     <string name="tab_love_box_title">Love Box</string>
     <string name="tab_friends_title">Friends</string>
     <string name="no_friends_added_message">Add friends to begin</string>
-    <string name="no_messages">You have no messages</string>
+    <string name="no_messages">You have no messages. Swipe down to refresh.</string>
     <string name="title_activity_edit_friends">EditFriendsActivity</string>
     <string name="error_title">Oops!</string>
     <string name="menu_camera">Camera</string>
