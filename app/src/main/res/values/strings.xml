@@ -118,6 +118,7 @@
     <string name="new_partner_added_successfully">Partner was added</string>
     <string name="existing_partner_deleted">Partner was deleted</string>
     <string name="dialog_delete_partner_confirmation">Are you sure you want to beak up with</string>
+    <string name="dialog_delete_partner_general_message">Are you sure you want to break up?</string>
     <string name="dialog_delete_partner_yes_button">Yes</string>
     <string name="dialog_delete_partner_no_button">No</string>
     <string name="toast_no_love_message">Please compose your love message first</string>

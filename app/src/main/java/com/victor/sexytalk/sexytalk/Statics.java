@@ -95,6 +95,8 @@ public class Statics {
     public static final String ALERTDIALOG_TITLE = "titleAD";
     public static final String ALERTDIALOG_MESSAGE="messageAD";
 
+    public static final String BREAK_UP_DIALOG_POSITION_TO_REMOVE = "positionToRemove";
+
     public static final String SHARED_PREFS="myPrefs";
     public static final String KEY_SAVED_EMAIL_FOR_LOGIN = "emailForLogin";
     //izpolzva se za reference dali ima chakashti zaiavki za partniori. Ako e true pokazvame buton na main t

@@ -141,8 +141,9 @@ public class AdapterSearchPartners extends ArrayAdapter<BackendlessUser> {
         final BackendlessUser selectedPartner = mFoundUsers.get(selectedPartnerPosition);
 
         BackendlessDataQuery dataQuery = new BackendlessDataQuery();
-        String whereClause = "email_userRequesting='" + mCurrentUser.getEmail() +"'" +
+        String whereClause = "email_userRequesting='" + mCurrentUser.getEmail() +"'" + " AND " +
                              "email_partnerToConfirm='" + selectedPartner.getEmail() + "'";
+        dataQuery.setWhereClause(whereClause);
         Backendless.Data.of(PartnersAddRequest.class).find(dataQuery, new AsyncCallback<BackendlessCollection<PartnersAddRequest>>() {
             @Override
             public void handleResponse(BackendlessCollection<PartnersAddRequest> pendingRequest) {

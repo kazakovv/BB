@@ -63,7 +63,7 @@ public class FragmentExistingPartners extends ListFragment {
             }
 
             AdapterExistingPartners adapter =
-                    new AdapterExistingPartners(mContext,mExistingPartners, mCurrentUser);
+                    new AdapterExistingPartners(mContext,mExistingPartners, mCurrentUser, getActivity());
             mListview.setAdapter(adapter);
 
             //updatevame list s partniori za vzeki sluchai. Tova se izkarva sled kato veche sme zaredili parvonachalnia spisak
@@ -85,7 +85,7 @@ public class FragmentExistingPartners extends ListFragment {
                         mCurrentUser.setProperty(Statics.KEY_PARTNERS,newListWithPartners);
                         //zarezdame spisakat nanovo
                         AdapterExistingPartners adapter =
-                                new AdapterExistingPartners(mContext,newPartners, mCurrentUser);
+                                new AdapterExistingPartners(mContext,newPartners, mCurrentUser, getActivity());
                         mListview.setAdapter(adapter);
 
                     }
