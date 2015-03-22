@@ -5,7 +5,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -105,12 +104,23 @@ public class AttachPictureToMessage  extends DialogFragment implements DialogInt
         return dialog;
     }
 
+
+    //tova promenia cveta na butona kato se klikne na nego
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onShow(DialogInterface dialog) {
+
+        Button positiveButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_POSITIVE);
+        positiveButton.setBackgroundResource(R.drawable.custom_dialog_button);
+
+        Button negativeButton = ((AlertDialog) dialog)
+                .getButton(AlertDialog.BUTTON_NEGATIVE);
+        negativeButton.setBackgroundResource(R.drawable.custom_dialog_button);
     }
 
-    //tuk zapochvat vatreshni helper metodi za switch statementa
+    /*
+    HELPER METODI
+     */
 
     private Uri getOutputMediaFileUri(int mediaType) {
         //parvo triabva da se proveri dali ima external storage
@@ -170,16 +180,5 @@ public class AttachPictureToMessage  extends DialogFragment implements DialogInt
         getActivity().startActivityForResult(takePhotoIntent, SendMessage.TAKE_PHOTO_REQUEST);
     }
 
-    //tova promenia cveta na butona kato se klikne na nego
-    @Override
-    public void onShow(DialogInterface dialog) {
 
-        Button positiveButton = ((AlertDialog) dialog)
-                .getButton(AlertDialog.BUTTON_POSITIVE);
-        positiveButton.setBackgroundResource(R.drawable.custom_dialog_button);
-
-        Button negativeButton = ((AlertDialog) dialog)
-                .getButton(AlertDialog.BUTTON_NEGATIVE);
-        negativeButton.setBackgroundResource(R.drawable.custom_dialog_button);
-    }
 }

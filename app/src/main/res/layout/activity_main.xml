@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:src="@drawable/header_navigation_drawer" />
+                android:src="@drawable/header_drawer" />
 
             <ImageView
                 android:id="@+id/drawer_header_image"

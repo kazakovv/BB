@@ -1,6 +1,6 @@
 package com.victor.sexytalk.sexytalk.UserInterfaces;
 
-import android.app.AlertDialog;
+
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -62,7 +62,8 @@ public class SendMessage extends ActionBarActivity {
     public static final int CHOOSE_PHOTO_REQUEST = 2;
     public static final int MEDIA_TYPE_IMAGE = 4;
     public static final int ACTIVITY_SEND_TO = 11;
-
+    //mMediaUri e statichna promenliva, za da moze da e dostapna ot AttachPictureToMessage dialog, kadeto
+    //ia zadavame, kogato iskame da snimame s kamerata
     public static Uri mMediaUri;
 
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; //1024*1024 = 1MB
@@ -72,8 +73,7 @@ public class SendMessage extends ActionBarActivity {
     protected MenuItem mRotateRight;
     protected ImageView imageViewForThumbnailPreview;
 
-    AttachPictureToMessage attachPictureToMessage;
-
+/*
     //onCLick listener za uload na picture
     protected DialogInterface.OnClickListener mUploadPicture =
             new DialogInterface.OnClickListener() {
@@ -163,7 +163,7 @@ public class SendMessage extends ActionBarActivity {
 
             };
 
-
+*/
     @Override
     //metod koito se vika kogato niakoi Intent varne rezultat
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -406,9 +406,8 @@ public class SendMessage extends ActionBarActivity {
 
 
         if (id == R.id.photoMenu) {
-            attachPictureToMessage = new AttachPictureToMessage();
+            AttachPictureToMessage attachPictureToMessage = new AttachPictureToMessage();
             attachPictureToMessage.show(getSupportFragmentManager(),"tag_attach");
-
             //TODO: TR da se napravi !!!!!!!!!!!!!!!!!!1 v stila na programata
             /*
             AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
