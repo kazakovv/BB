@@ -2,13 +2,16 @@ package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,13 +38,20 @@ public class FragmentPartnerRequests extends ListFragment {
     protected ListView mPendingPartnersRequestList;
     protected TextView emptyMessage;
     protected SwipeRefreshLayout mSwipeRefreshLayout;
+    protected SwipeRefreshLayout mSwipeRefreshEmptyMessage;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View inflatedView = inflater.inflate(R.layout.fragment_fragment_partner_requests,container,false);
-        emptyMessage = (TextView) inflatedView.findViewById(R.id.noPendingPartnerRequestsMessage);
+        emptyMessage = (TextView) inflatedView.findViewById(android.R.id.empty);
+
         mSwipeRefreshLayout = (SwipeRefreshLayout) inflatedView.findViewById(R.id.swipeRefreshLayoutPartnerRequests);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+
+        mSwipeRefreshEmptyMessage = (SwipeRefreshLayout) inflatedView.findViewById(R.id.swipeRefreshLayout_emptyView);
+        mSwipeRefreshEmptyMessage.setOnRefreshListener(mOnRefreshListener);
         return inflatedView;
     }
     //refresh listener za swipe refresh layout
@@ -54,11 +64,13 @@ public class FragmentPartnerRequests extends ListFragment {
         }
     };
 
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mPendingPartnersRequestList = getListView();
-        mPendingPartnersRequestList.setEmptyView(emptyMessage);
+        mPendingPartnersRequestList.setOnScrollListener(mOnScrollListener);
+        //mPendingPartnersRequestList.setEmptyView(emptyMessage);
 
         if(Backendless.UserService.CurrentUser() != null) {
             mCurrentUser = Backendless.UserService.CurrentUser();
@@ -66,9 +78,39 @@ public class FragmentPartnerRequests extends ListFragment {
         }
 
     }
+    //on scroll listener za list view
+    protected ListView.OnScrollListener mOnScrollListener = new AbsListView.OnScrollListener() {
+        @Override
+        public void onScrollStateChanged(AbsListView view, int scrollState) {
 
+
+        }
+
+        @Override
+        public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            boolean enable = false;
+
+            if(mPendingPartnersRequestList != null && mPendingPartnersRequestList.getChildCount() > 0){
+                // check if the first item of the list is visible
+                boolean firstItemVisible = mPendingPartnersRequestList.getFirstVisiblePosition() == 0;
+                // check if the top of the first item is visible
+                boolean topOfFirstItemVisible = mPendingPartnersRequestList.getChildAt(0).getTop() == 0;
+                // enabling or disabling the refresh layout
+                enable = firstItemVisible && topOfFirstItemVisible;
+            }
+            mSwipeRefreshLayout.setEnabled(enable);
+
+
+
+        }
+
+
+    };
     protected void checkForPendingPartnerRequests() {
         //proveriavame dali ima pending partner requests
+        //v zavisimost ot tova dali sme drapnali empty message ili veche e imalo neshto v spisaka
+        //puskame saotvetnia swipe to refresh
+
         String whereClause="email_partnerToConfirm='" + mCurrentUser.getEmail() + "'";
         BackendlessDataQuery query = new BackendlessDataQuery();
         QueryOptions queryOptions = new QueryOptions();
@@ -81,6 +123,10 @@ public class FragmentPartnerRequests extends ListFragment {
                 //spirame vratkata ako se refreshva swipe refresh
                 if(mSwipeRefreshLayout.isRefreshing()){
                     mSwipeRefreshLayout.setRefreshing(false);
+                }
+
+                if(mSwipeRefreshEmptyMessage.isRefreshing()){
+                    mSwipeRefreshEmptyMessage.setRefreshing(false);
                 }
 
                 if(pendingPartnerRequests.getData().size()>0) {
@@ -96,6 +142,9 @@ public class FragmentPartnerRequests extends ListFragment {
                 //spirame vratkata ako se refreshva swipe refresh
                 if(mSwipeRefreshLayout.isRefreshing()){
                     mSwipeRefreshLayout.setRefreshing(false);
+                }
+                if(mSwipeRefreshEmptyMessage.isRefreshing()){
+                    mSwipeRefreshEmptyMessage.setRefreshing(false);
                 }
                 Log.d("Vic","error" + backendlessFault.getMessage() );
                 Toast.makeText(getActivity(), R.string.general_server_error,Toast.LENGTH_LONG).show();

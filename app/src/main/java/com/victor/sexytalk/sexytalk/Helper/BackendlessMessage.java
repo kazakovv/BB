@@ -73,6 +73,16 @@ public class BackendlessMessage  {
             messagePush = senderUsername + " " + context.getResources().getString(R.string.partner_request_approved);
             messageType = Statics.KEY_PARTNER_REQUEST_APPROVED;
 
+        } else if( TYPE_MESSAGE.equals(Statics.KEY_UPDATE_SEXY_STATUS)) {
+            //zadavame saobshtenieto
+            if(sender.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)){
+                messagePush = sender.getProperty(Statics.KEY_USERNAME) + " " +
+                        context.getString(R.string.push_sexy_status_updated_female);
+            } else {
+                messagePush = sender.getProperty(Statics.KEY_USERNAME) + " " +
+                        context.getString(R.string.push_sexy_status_updated_male);
+            }
+            messageType = Statics.KEY_UPDATE_SEXY_STATUS;
         }
         PublishOptions publishOptions = new PublishOptions();
 

@@ -114,7 +114,7 @@
     <string name="pending_partner_request_reject_button">Reject</string>
     <string name="partner_search_list_button">Add</string>
     <string name="partner_delete_list_button">Delete</string>
-    <string name="no_pending_partner_requests_message">You have no pending partner requests</string>
+    <string name="no_pending_partner_requests_message">You have no pending partner requests. Swipe down to refresh.</string>
     <string name="new_partner_added_successfully">Partner was added</string>
     <string name="existing_partner_deleted">Partner was deleted</string>
     <string name="dialog_delete_partner_confirmation">Are you sure you want to beak up with</string>
@@ -152,6 +152,8 @@
     <string name="sexy_status_default">Tap to change your sexy status</string>
     <string name="sexy_status_not_set_male">has not updated his sexy status</string>
     <string name="sexy_status_not_set_female">has not updated her sexy status</string>
+    <string name="push_sexy_status_updated_female">updated her sexy status</string>
+    <string name="push_sexy_status_updated_male">updated his sexy status</string>
     <string name="check_email_sign_up_message">Checking if the email address is already in use</string>
     <string name="email_in_use">This email is already in use</string>
     <string name="searching">Searching</string>

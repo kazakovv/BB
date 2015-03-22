@@ -36,12 +36,24 @@ public class AttachPictureToMessage  extends DialogFragment implements DialogInt
     protected RadioButton mChoosePic;
     protected Context mContext;
     protected BackendlessUser mCurrentUser;
+    protected  Listener mListener;
+    protected Uri mMediaOutputUri;
+
+    //sluzhi za razmeniane na info m/u dialog box i SendMessage activity
+    public void setListener(Listener listener) {
+        mListener = listener;
+    }
+
+
+
+    public static interface Listener {
+        void returnData(int result, Uri mMediaOutputUri);
+    }
 
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        SendMessage.mMediaUri=null;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -77,14 +89,20 @@ public class AttachPictureToMessage  extends DialogFragment implements DialogInt
                         if (mTakePic.isChecked()) {
                             //snimame
 
+
+
                             //zadavame patia kam output Uri. Tova e statichna promenliva v SendMessage clasa.
                             //ne e elegantno, no kakvo da se pravi
-                            SendMessage.mMediaUri = getOutputMediaFileUri(SendMessage.MEDIA_TYPE_IMAGE); //tova e metod, koito e definiran po-dolu
-                            if (SendMessage.mMediaUri == null) {
+                            mMediaOutputUri = getOutputMediaFileUri(SendMessage.MEDIA_TYPE_IMAGE); //tova e metod, koito e definiran po-dolu
+                            if (mMediaOutputUri == null) {
                                 Toast.makeText(mContext, R.string.error_message_toast_external_storage, Toast.LENGTH_LONG).show();
                             } else {
+                                //izprashtame mMediaOutputUri kam SendMessageActivity
+                                mListener.returnData(SendMessage.TAKE_PHOTO_REQUEST,mMediaOutputUri);
                                 takePicture();
                             }
+
+
                         } else {
                             //izbirame pic ot galeriata na telefona
                             Intent choosePhotoIntent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -179,7 +197,7 @@ public class AttachPictureToMessage  extends DialogFragment implements DialogInt
     private void takePicture() {
 
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, SendMessage.mMediaUri);
+        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, mMediaOutputUri);
         getActivity().startActivityForResult(takePhotoIntent, SendMessage.TAKE_PHOTO_REQUEST);
     }
 

@@ -38,6 +38,7 @@ public class PushReceiver extends BackendlessBroadcastReceiver
     static void createNotification(Context context, String messageType, Intent intent,
                                    String tickerText, String contentTitle,
                                    String contentText) {
+        int id = 0;
         int appIcon = context.getApplicationInfo().icon;
 
         Intent notificationIntent;
@@ -51,7 +52,7 @@ public class PushReceiver extends BackendlessBroadcastReceiver
             notificationIntent.putExtra(Statics.KEY_MESSAGE_ID, messageId);
             notificationIntent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             notificationIntent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
-
+            id = 1;
         } else if(messageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
             notificationIntent = new Intent(context, ViewImageActivity.class);
 
@@ -64,7 +65,7 @@ public class PushReceiver extends BackendlessBroadcastReceiver
             notificationIntent.putExtra(Statics.KEY_LOVE_MESSAGE, loveMessage);
             notificationIntent.putExtra(Statics.KEY_USERNAME_SENDER, usernameSender);
             notificationIntent.putExtra(Statics.KEY_URL, mediaUrl);
-
+            id = 1;
         } else if(messageType.equals(Statics.TYPE_KISS)){
             notificationIntent = new Intent(context, ViewKissActivity.class);
             String loveMessage = intent.getStringExtra(Statics.KEY_LOVE_MESSAGE);
@@ -76,8 +77,19 @@ public class PushReceiver extends BackendlessBroadcastReceiver
             int numberOfKisses = Integer.valueOf(kissCount);
             notificationIntent.putExtra(Statics.KEY_NUMBER_OF_KISSES,numberOfKisses);
 
-        } else {
+        } else if (messageType.equals(Statics.TYPE_CALENDAR_UPDATE)) {
             notificationIntent = new Intent(context, Main.class);
+            notificationIntent.setFlags(Statics.FLAG_CALENDAR_UPDATE);
+
+        } else if(messageType.equals(Statics.TYPE_PARTNER_REQUEST)){
+            notificationIntent = new Intent(context, Main.class);
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            notificationIntent.setFlags(Statics.FLAG_PARTNER_REQUEST);
+        }
+
+        else {
+            notificationIntent = new Intent(context, Main.class);
+
         }
 
 
@@ -99,7 +111,7 @@ public class PushReceiver extends BackendlessBroadcastReceiver
         Notification notification = notificationBuilder.build();
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService( Context.NOTIFICATION_SERVICE );
-        notificationManager.notify( 0, notification );
+        notificationManager.notify( id, notification );
 
 
         //!!!!!!!!!!!!!!!!!!!!!! TOVA RABOTI SAMO, AKO E OTVORENA PROGRAMATA. TOGAVA SE UPDATEVA LOVE BOX

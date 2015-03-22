@@ -77,6 +77,8 @@ public class Statics {
 
     public static final String KEY_PARTNER_REQUEST_APPROVED = "partnerRequestApproved";
 
+    public static final String KEY_UPDATE_SEXY_STATUS = "updateSexyStatus";
+
     public static final String KEY_USER_REQUESTING_TO_UPDATE_PARTNERS = "userRequestingToUpdatePartners";
 
     public static final int PICASSO_ROUNDED_CORNERS = 30;
@@ -104,6 +106,10 @@ public class Statics {
 
     //display one message per day dialog warning
     public static String displayOneMessagePerDayDialogBox="displayOneMessageDialog";
+
+    //flags push receiver
+    public static int FLAG_CALENDAR_UPDATE = 1001;
+    public static int FLAG_PARTNER_REQUEST = 1002;
 
 }
 

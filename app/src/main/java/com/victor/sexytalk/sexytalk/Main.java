@@ -158,9 +158,12 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             }
 
 
+
         }
 
-
+        //proveriavame dali Main activity ne e startirana ot Push receiver i ne e zadaden
+        //flag, koito da prenasochva kam niakoi ekran
+        checkIntentFlags();
     }
 
 
@@ -185,7 +188,24 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             mDrawerToggle.onConfigurationChanged(newConfig);
         }
     }
+    protected void checkIntentFlags(){
+        //proerivame dali ne sa zadadeni nikakavi flagove ot push receiver
+        Integer flag = getIntent().getFlags();
+        if(flag != null) {
+            if(flag == Statics.FLAG_CALENDAR_UPDATE){
+                //prevkluchvame na love days
+                pager.setCurrentItem(1);
 
+            }
+
+            if(flag == Statics.FLAG_PARTNER_REQUEST){
+                Intent intent = new Intent(mContext,ManagePartnersMain.class);
+                intent.putExtra(Statics.KEY_PARTNERS_SELECT_TAB,Statics.KEY_PARTNERS_SELECT_PENDING_REQUESTS);
+                startActivity(intent);
+
+            }
+        }//krai na check za flagove
+    }
 
     protected void navigateToLogin() {
         //preprashta kam login screen

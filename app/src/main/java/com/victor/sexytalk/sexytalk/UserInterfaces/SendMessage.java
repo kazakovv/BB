@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class SendMessage extends ActionBarActivity {
+public class SendMessage extends ActionBarActivity implements AttachPictureToMessage.Listener {
     protected BackendlessUser mCurrentUser;
     protected Context mContext;
 
@@ -59,7 +59,7 @@ public class SendMessage extends ActionBarActivity {
     public static final int ACTIVITY_SEND_TO = 11;
     //mMediaUri e statichna promenliva, za da moze da e dostapna ot AttachPictureToMessage dialog, kadeto
     //ia zadavame, kogato iskame da snimame s kamerata
-    public static Uri mMediaUri;
+    protected  Uri mMediaUri;
 
     public static final int FILE_SIZE_LIMIT = 1024 * 1024 * 10; //1024*1024 = 1MB
 
@@ -311,8 +311,9 @@ public class SendMessage extends ActionBarActivity {
 
         if (id == R.id.photoMenu) {
             AttachPictureToMessage attachPictureToMessage = new AttachPictureToMessage();
+            //izpolzvame interface za prehvarliane na outputUri mezhdu AttachPictureToMessage dialog i SendMessage activity
+            attachPictureToMessage.setListener(this);
             attachPictureToMessage.show(getSupportFragmentManager(),"tag_attach");
-            //TODO: TR da se napravi !!!!!!!!!!!!!!!!!!1 v stila na programata
             /*
             AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
             builder.setTitle(R.string.menu_camera_alertdialog_title);
@@ -510,6 +511,19 @@ public class SendMessage extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+     //Interface
+    //vrashta rezultata ot dialogovata kutia za zakachane na snimka ot galeriata ili snimane s kamerata
+    @Override
+    public void returnData(int result, Uri mMediaOutputUri) {
+        //vzimame output Uri ot dialog box.
+        //problemat e che kogato se snima s kamerata outputUri, koeto se dobavia kam activity e null
+        //zatova triabva da go zapazim kato promenliva kato izberam da snimame i posle da prehvarim taya promenliva kam activity
+        //kogato izbirame kartinka ot galeriata outputUri moze da se prehvarlia s intent
+        if(result == TAKE_PHOTO_REQUEST) {
+            mMediaUri = mMediaOutputUri;
+        }
+    }
+
     /*
             Helper metodi
      */
@@ -550,4 +564,6 @@ public class SendMessage extends ActionBarActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+
+
 }

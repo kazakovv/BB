@@ -2,6 +2,7 @@ package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -15,14 +16,16 @@ import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
+import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
 
 public class ActivityChangeSexyStatus extends ActionBarActivity {
-protected Toolbar toolbar;
-protected EditText mSexyStatus;
-protected BackendlessUser mCurrentUser;
+    protected Toolbar toolbar;
+    protected EditText mSexyStatus;
+    protected BackendlessUser mCurrentUser;
+    protected Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +40,7 @@ protected BackendlessUser mCurrentUser;
         if(Backendless.UserService.CurrentUser() != null) {
             mCurrentUser = Backendless.UserService.CurrentUser();
         }
+        mContext = ActivityChangeSexyStatus.this ;
     }
 
 
@@ -66,6 +70,8 @@ protected BackendlessUser mCurrentUser;
 
                 mCurrentUser.setProperty(Statics.KEY_SEXY_STATUS,mSexyStatus.getText().toString());
                 //updatevame loklano
+
+                finish();//zatvariame prozoreca
                 Backendless.UserService.setCurrentUser(mCurrentUser);
                 String message = this.getResources().getString(R.string.saving_message);
                 Backendless.UserService.update(mCurrentUser, new DefaultCallback<BackendlessUser>(this,message) {
@@ -76,8 +82,15 @@ protected BackendlessUser mCurrentUser;
                        Intent data = new Intent();
                        data.putExtra(Statics.KEY_SET_STATUS, mSexyStatus.getText().toString().trim());
                        setResult(Activity.RESULT_OK, data);
-                       //TODO send push notification to all partners
-                       finish();
+
+                       //izprashtame push message
+                       if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]){
+                          BackendlessUser[] partners = (BackendlessUser[]) mCurrentUser.getProperty(Statics.KEY_PARTNERS);
+
+                           for(BackendlessUser partner : partners) {
+                               BackendlessMessage.sendPush(mCurrentUser, partner, null, mContext,Statics.KEY_UPDATE_SEXY_STATUS );
+                           }
+                       }
                        Toast.makeText(ActivityChangeSexyStatus.this,R.string.sexy_status_saved_message,Toast.LENGTH_LONG).show();
                    }
 
