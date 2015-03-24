@@ -66,6 +66,7 @@ public class Statics {
     public static final String KEY_PROFILE_PIC_PATH = "profilePicPath";
 
     public static final int MESSAGE_TIME_TO_DISPLAY = 24; //24 chasa
+    public static final int MESSAGE_TIME_BEFORE_NEXT_LOVE_MESSAGE = 24;
     public static final int SHORT_SIDE_TARGET_THUMBNAIL = 100;
     public static final int SHORT_SIDE_TARGET_PIC = 500;
 
@@ -83,6 +84,10 @@ public class Statics {
 
     public static final int PICASSO_ROUNDED_CORNERS = 30;
 
+
+    //construct message for dialog box one love message per day
+    public static final int DIALOG_BOX_ONE_LOVE_MESSAGE_TITLE = 500555;
+    public static final int DIALOG_BOX_ONE_LOVE_MESSAGE_MESSAGE_BODY = 600555;
     //onactivity result codes
     public static final int MENSTRUAL_CALENDAR_DIALOG = 11;
     public static final int UPDATE_STATUS = 22;
@@ -110,6 +115,8 @@ public class Statics {
     //flags push receiver
     public static int FLAG_CALENDAR_UPDATE = 1001;
     public static int FLAG_PARTNER_REQUEST = 1002;
+
+
 
 }
 

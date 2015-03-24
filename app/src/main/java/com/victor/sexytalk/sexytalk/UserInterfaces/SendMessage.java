@@ -22,8 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.backendless.Backendless;
+import com.backendless.BackendlessCollection;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
+import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.CustomDialogs.AttachPictureToMessage;
 import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
@@ -37,7 +40,10 @@ import com.victor.sexytalk.sexytalk.Statics;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -339,171 +345,9 @@ public class SendMessage extends ActionBarActivity implements AttachPictureToMes
                 Toast.makeText(this, R.string.toast_no_recepients, Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
             }
+            //ako gornite 2 check ne varnat greshka izprashtame saobshtenieto
+            sendMessage();
 
-            final List<BackendlessUser> recipients = new ArrayList<BackendlessUser>();
-            for(String email : backendlessRecipientEmails) {
-                recipients.add(BackendlessMessage.findBackendlessUserByEmail(mCurrentUser,email));
-
-            }
-
-            //izprashtame message
-            final Messages message = new Messages();
-            message.setSender(Backendless.UserService.CurrentUser());
-            message.setLoveMessage(messageToSend.getText().toString());
-            message.setRecepients(recipients);
-            message.setSederUsername((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
-            message.setRecepientEmails(backendlessRecipientEmails.get(0)); //ima samo 1 poluchatel.
-            //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
-            if (mMessageType == null) {
-                mMessageType = Statics.TYPE_TEXTMESSAGE;
-            }
-            message.setMessageType(mMessageType);
-
-            //ako saobshtenieto e Image ili Video, go izprashtame
-            //Parvo uploadvame file, posle izprashteme i saboshtenieto
-            //uploadvame file, ako ima takav
-            if (mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
-                //ako image uploadvame file na servera
-                //razbiva fila na array ot bitove, za da go smalim i kachim na servera
-
-                byte[] imageToUpload = ImageHelper.getByteArrayFromFile(SendMessage.this, mMediaUri);
-                String path = "";
-
-                //ako e image go smaliavame
-                if (imageToUpload != null && mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
-                    imageToUpload = ImageHelper.reduceImageForUpload(imageToUpload, Statics.SHORT_SIDE_TARGET_PIC);
-                    //zavartame image, ako ima nuzda
-                    Bitmap temp = BitmapFactory.decodeByteArray(imageToUpload, 0, imageToUpload.length);
-                    temp = ImageHelper.rotateImageIfNeeded(mContext,mMediaUri,temp);
-                    imageToUpload = ImageHelper.convertBitmapToByteArray(temp);
-                    path = "/pics/" +
-                            ImageHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_IMAGE_MESSAGE);
-                }
-
-
-                //kachvame file na servera
-                final String sendingMessage = mContext.getString(R.string.sending_message);
-                final String finalPath = path;//kopirame path kam image
-                Backendless.Files.saveFile(path, imageToUpload, true, new DefaultCallback<String>(mContext, sendingMessage) {
-                    @Override
-                    public void handleResponse(String s) {
-                        super.handleResponse(s);
-                        message.setMediaUrl(s);
-                        message.setBackendlessFilePath(finalPath);
-                        //filat e kachen na servera. izprashtame saobshtenieto
-
-                        Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext, sendingMessage) {
-                            @Override
-                            public void handleResponse(Messages messages) {
-                                super.handleResponse(messages);
-                                //Toast se pokazva ot helper metoda SendPushMessage
-                                //Toast.makeText(SendMessage.this,
-                                //      R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
-
-                                //izprashtame push message
-                                for (BackendlessUser recipient : recipients) {
-                                    //ako ne sa prazni izprashtame push message
-                                    BackendlessMessage.sendPush(mCurrentUser, recipient, message,
-                                            mContext, Statics.TYPE_IMAGE_MESSAGE);
-                                    switchToMainScreen();
-                                }//krai na send push
-
-                            }
-
-                            @Override
-                            public void handleFault(BackendlessFault backendlessFault) {
-                                super.handleFault(backendlessFault);
-                                Log.d("Vic", "error sending message " + backendlessFault.toString());
-                                String title = getResources().getString(R.string.error_title);
-                                String message = getResources().getString(R.string.error_sending_message);
-                                CustomAlertDialog dialogError = new CustomAlertDialog();
-                                Bundle dialogContent = new Bundle();
-                                dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
-                                dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
-                                dialogError.setArguments(dialogContent);
-                                dialogError.show(getFragmentManager(),"tag_alert_dialog");
-                                /*
-                                AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
-                                builder.setMessage(R.string.error_sending_message)
-                                        .setTitle(R.string.error_title)
-                                        .setPositiveButton(android.R.string.ok, null);
-                                AlertDialog dialog = builder.create();
-                                dialog.show();
-                                */
-                            }
-                        });
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        super.handleFault(backendlessFault);
-
-                        String title = getResources().getString(R.string.error_title);
-                        String message = getResources().getString(R.string.error_sending_message);
-                        CustomAlertDialog dialogError = new CustomAlertDialog();
-                        Bundle dialogContent = new Bundle();
-                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
-                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
-                        dialogError.setArguments(dialogContent);
-                        dialogError.show(getFragmentManager(),"tag_alert_dialog");
-                        /*
-                        Log.d("Vic", "error sending message " + backendlessFault.toString());
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
-                        builder.setMessage(R.string.error_sending_message)
-                                .setTitle(R.string.error_title)
-                                .setPositiveButton(android.R.string.ok, null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                        */
-                    }
-                });
-            } //krai na send image message
-
-
-            //izprashtame saobshtenieto
-            final String sendingMessage = mContext.getString(R.string.sending_message);
-            if (mMessageType.equals(Statics.TYPE_TEXTMESSAGE)) {
-                Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext, sendingMessage) {
-                    @Override
-                    public void handleResponse(Messages messages) {
-                        super.handleResponse(messages);
-                        //Toast se pokazva ot helper metoda send push message
-                        //Toast.makeText(mContext, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
-
-
-                        //izprashtame push message
-                        for (BackendlessUser recipient : recipients) {
-                            //ako ne sa prazni izprashtame push message
-                            BackendlessMessage.sendPush(mCurrentUser, recipient, message, mContext, Statics.TYPE_TEXTMESSAGE);
-                            switchToMainScreen();
-                        }
-                    }
-
-                    @Override
-                    public void handleFault(BackendlessFault backendlessFault) {
-                        super.handleFault(backendlessFault);
-                        Log.d("Vic", "error sending message " + backendlessFault.toString());
-                        String title = getResources().getString(R.string.error_title);
-                        String message = getResources().getString(R.string.error_sending_message);
-                        CustomAlertDialog dialogError = new CustomAlertDialog();
-                        Bundle dialogContent = new Bundle();
-                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
-                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
-                        dialogError.setArguments(dialogContent);
-                        dialogError.show(getFragmentManager(),"tag_alert_dialog");
-
-                        /*
-                        AlertDialog.Builder builder = new AlertDialog.Builder(SendMessage.this);
-                        //builder.setMessage(R.string.error_sending_file)
-                        builder.setMessage(R.string.error_sending_message)
-                                .setTitle(R.string.error_title)
-                                .setPositiveButton(android.R.string.ok, null);
-                        AlertDialog dialog = builder.create();
-                        dialog.show();
-                        */
-                    }
-                });
-            }//krai na send text message
 
         }//krai na send koda
 
@@ -530,31 +374,213 @@ public class SendMessage extends ActionBarActivity implements AttachPictureToMes
 
 
 
-    protected String constructWhereClause() {
-        String whereClause = "";
-        int numberOfRecepients = backendlessRecipientEmails.size();
-        for (int i = 0; i < numberOfRecepients; i++) {
-            whereClause = whereClause + "email=";
-            whereClause = whereClause + "'" + backendlessRecipientEmails.get(i) + "'";
+    protected void sendMessage(){
+        final List<BackendlessUser> recipients = new ArrayList<BackendlessUser>();
+        for(String email : backendlessRecipientEmails) {
+            recipients.add(BackendlessMessage.findBackendlessUserByEmail(mCurrentUser,email));
 
-            if (i < numberOfRecepients - 1) {
-                whereClause = whereClause + " OR ";
+        }
+
+        //proveriavame dali veche niama izprateno saobshtenie za denia
+        BackendlessUser recipient = recipients.get(0);
+        String whereClause = "senderEmail='" + mCurrentUser.getEmail() +"'" + " AND " +
+                "recepientEmails='" + recipient.getEmail() + "'";
+
+        BackendlessDataQuery query = new BackendlessDataQuery();
+        query.setWhereClause(whereClause);
+        String queryMessage = getResources().getString(R.string.query_check_message) +
+                " " + recipients.get(0).getProperty(Statics.KEY_USERNAME);
+        Backendless.Data.of(Messages.class).find(query,
+                new DefaultCallback<BackendlessCollection<Messages>>(mContext,queryMessage) {
+            @Override
+            public void handleResponse(BackendlessCollection<Messages> foundMessages) {
+                super.handleResponse(foundMessages);
+                if(foundMessages.getCurrentPage().size() > 0) {
+                  //ako ima saobshtenie porveriavame dali e izprateno predi poveche ot 1 den
+                    for(Messages messageOnServer : foundMessages.getCurrentPage()) {
+                        String timeToWait = checkIfLoveMessageAlreadySentToday(messageOnServer,
+                                Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_MESSAGE_BODY);
+                        if(timeToWait != null) {
+                            //ako ne e null, znachi sme izpratili saobshtenie predi po-malko ot 24h
+
+                            String title = checkIfLoveMessageAlreadySentToday(messageOnServer, Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_TITLE);
+                            String message = timeToWait;
+                            CustomAlertDialog notSoQuick = new CustomAlertDialog();
+                            Bundle dialogContent = new Bundle();
+                            dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                            dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                            notSoQuick.setArguments(dialogContent);
+                            notSoQuick.show(getFragmentManager(),"tag_alert_dialog");
+                            break;
+                            //krai na if message, ako triabva da chakame predi da izpratim saobshtenie
+
+                        } else {
+                            //niama izprateni saboshtenia za poslednite 24 chasa
+                            //izprashtame message
+                            Messages message = new Messages();
+                            message.setSender(Backendless.UserService.CurrentUser());
+                            message.setLoveMessage(messageToSend.getText().toString());
+                            message.setRecepients(recipients);
+                            message.setSederUsername((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
+                            message.setSenderEmail(mCurrentUser.getEmail());
+                            message.setRecepientEmails(backendlessRecipientEmails.get(0)); //ima samo 1 poluchatel.
+                            //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
+                            if (mMessageType == null) {
+                                mMessageType = Statics.TYPE_TEXTMESSAGE;
+                            }
+                            message.setMessageType(mMessageType);
+
+                            //izprashtame saobshtenieto
+                            if (mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
+                                sendImageMessage(message, recipients);
+                            }
+
+
+                            //izprashtame saobshtenieto
+                            if (mMessageType.equals(Statics.TYPE_TEXTMESSAGE)) {
+                                sendTextMessage(message, recipients);
+                            }
+                        }
+                    }//krai na for loop za pretarsvane na namereni saobshtenia
+                } //krai na if, ako ima namereno veche izprateno love message za denia
+            } //krai na uspeshno query za tarsena na izprateno love message za denia
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                super.handleFault(backendlessFault);
+                String title = getResources().getString(R.string.error_title);
+                String message = getResources().getString(R.string.error_sending_message);
+                CustomAlertDialog dialogError = new CustomAlertDialog();
+                Bundle dialogContent = new Bundle();
+                dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                dialogError.setArguments(dialogContent);
+                dialogError.show(getFragmentManager(),"tag_alert_dialog");
             }
+        });//krai na query za tarsene na izprateno love message za denia
+
+
+    }//krai na send message method
+
+
+    protected void sendImageMessage(final Messages message, final List<BackendlessUser> recipients){
+        //ako image uploadvame file na servera
+        //razbiva fila na array ot bitove, za da go smalim i kachim na servera
+
+        byte[] imageToUpload = ImageHelper.getByteArrayFromFile(SendMessage.this, mMediaUri);
+        String path = "";
+
+        //ako e image go smaliavame
+        if (imageToUpload != null && mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
+            imageToUpload = ImageHelper.reduceImageForUpload(imageToUpload, Statics.SHORT_SIDE_TARGET_PIC);
+            //zavartame image, ako ima nuzda
+            Bitmap temp = BitmapFactory.decodeByteArray(imageToUpload, 0, imageToUpload.length);
+            temp = ImageHelper.rotateImageIfNeeded(mContext,mMediaUri,temp);
+            imageToUpload = ImageHelper.convertBitmapToByteArray(temp);
+            path = "/pics/" +
+                    ImageHelper.getFileName(SendMessage.this, mMediaUri, Statics.TYPE_IMAGE_MESSAGE);
         }
 
-        return whereClause;
-    }
 
-    protected Bitmap createBitmapFromUri() {
-        Bitmap bitmap = null;
+        //kachvame file na servera
+        final String sendingMessage = mContext.getString(R.string.sending_message);
+        final String finalPath = path;//kopirame path kam image
+        Backendless.Files.saveFile(path, imageToUpload, true, new DefaultCallback<String>(mContext, sendingMessage) {
+            @Override
+            public void handleResponse(String s) {
+                super.handleResponse(s);
+                message.setMediaUrl(s);
+                message.setBackendlessFilePath(finalPath);
+                //filat e kachen na servera. izprashtame saobshtenieto
 
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mMediaUri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
+                Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext, sendingMessage) {
+                    @Override
+                    public void handleResponse(Messages messages) {
+                        super.handleResponse(messages);
+                        //Toast se pokazva ot helper metoda SendPushMessage
+                        //Toast.makeText(SendMessage.this,
+                        //      R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
+
+                        //izprashtame push message
+                        for (BackendlessUser recipient : recipients) {
+                            //ako ne sa prazni izprashtame push message
+                            BackendlessMessage.sendPush(mCurrentUser, recipient, message,
+                                    mContext, Statics.TYPE_IMAGE_MESSAGE);
+                            switchToMainScreen();
+                        }//krai na send push
+
+                    }
+
+                    @Override
+                    public void handleFault(BackendlessFault backendlessFault) {
+                        super.handleFault(backendlessFault);
+                        Log.d("Vic", "error sending message " + backendlessFault.toString());
+                        String title = getResources().getString(R.string.error_title);
+                        String message = getResources().getString(R.string.error_sending_message);
+                        CustomAlertDialog dialogError = new CustomAlertDialog();
+                        Bundle dialogContent = new Bundle();
+                        dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                        dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                        dialogError.setArguments(dialogContent);
+                        dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+                    }
+                });
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                super.handleFault(backendlessFault);
+
+                String title = getResources().getString(R.string.error_title);
+                String message = getResources().getString(R.string.error_sending_message);
+                CustomAlertDialog dialogError = new CustomAlertDialog();
+                Bundle dialogContent = new Bundle();
+                dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                dialogError.setArguments(dialogContent);
+                dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+            }
+        });
+    }//krai na send image message method
+
+    protected void sendTextMessage(final Messages message, final List<BackendlessUser> recipients){
+        String sendingMessage = mContext.getString(R.string.sending_message);
+
+        Backendless.Persistence.save(message, new DefaultCallback<Messages>(mContext, sendingMessage) {
+            @Override
+            public void handleResponse(Messages messages) {
+                super.handleResponse(messages);
+                //Toast se pokazva ot helper metoda send push message
+                //Toast.makeText(mContext, R.string.message_successfully_sent, Toast.LENGTH_LONG).show();
+
+
+                //izprashtame push message
+                for (BackendlessUser recipient : recipients) {
+                    //ako ne sa prazni izprashtame push message
+                    BackendlessMessage.sendPush(mCurrentUser, recipient, message, mContext, Statics.TYPE_TEXTMESSAGE);
+                    switchToMainScreen();
+                }
+            }
+
+            @Override
+            public void handleFault(BackendlessFault backendlessFault) {
+                super.handleFault(backendlessFault);
+                Log.d("Vic", "error sending message " + backendlessFault.toString());
+                String title = getResources().getString(R.string.error_title);
+                String message = getResources().getString(R.string.error_sending_message);
+                CustomAlertDialog dialogError = new CustomAlertDialog();
+                Bundle dialogContent = new Bundle();
+                dialogContent.putString(Statics.ALERTDIALOG_TITLE, title);
+                dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
+                dialogError.setArguments(dialogContent);
+                dialogError.show(getFragmentManager(),"tag_alert_dialog");
+
+
+            }
+        });
+    }//krai na send text message method
 
     protected void switchToMainScreen() {
         //Switch to main screen while waiting for the message to be sent.
@@ -564,6 +590,71 @@ public class SendMessage extends ActionBarActivity implements AttachPictureToMes
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
+
+    protected String checkIfLoveMessageAlreadySentToday(Messages message, int titleOrMessage){
+        int timeToWaitBeforeSendingNewLoveMessage = Statics.MESSAGE_TIME_BEFORE_NEXT_LOVE_MESSAGE;
+        String timeToWait = null;
+        Date dateMessageUploaded = message.getCreated();
+        Calendar c = Calendar.getInstance();
+        Date now = c.getTime();
+
+        //formatirane za time
+        NumberFormat formatter = NumberFormat.getNumberInstance();
+        formatter.setMinimumFractionDigits(0);
+        formatter.setMaximumFractionDigits(0);
+
+        long diff = (now.getTime() - dateMessageUploaded.getTime());
+        long seconds = diff / 1000;
+        long minutes = seconds / 60;
+        long hours = minutes / 60;
+
+        if(hours < timeToWaitBeforeSendingNewLoveMessage ) {
+            long timeRemaining =  timeToWaitBeforeSendingNewLoveMessage - hours;
+            if(timeRemaining < 1) {
+                //ostavat po-malko ot 1 chas
+                float time =  ((24 - hours)  * 60);
+                String minutesRemaining;
+                if(time < 1.5){
+                    //ako ostava po-malko ot 2 min
+                    minutesRemaining = mContext.getResources().getString(R.string.minute);
+                } else {
+                    //ako ostavat po-malko ot 60 min
+                    minutesRemaining = formatter.format(timeRemaining) + " " + mContext.getResources().getString(R.string.minutes);
+                }
+
+                if(titleOrMessage == Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_MESSAGE_BODY) {
+                    //tialoto na kutiata
+                    timeToWait = getResources().getString(R.string.you_have_to_wait) + " " +
+                            formatter.format(timeRemaining) + " " + minutesRemaining + " " +
+                            getResources().getString(R.string.before_you_can_send) + " " +
+                            message.getRecepients().get(0).getProperty(Statics.KEY_USERNAME) +
+                            "." + " " + getResources().getString(R.string.make_it_count);
+                } else if(titleOrMessage == Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_TITLE) {
+                    //zaglavie na kutiata
+                    timeToWait = getResources().getString(R.string.alert_dialog_title_too_many_messages)
+                            + " " + formatter.format(timeRemaining) + " " + minutesRemaining;
+                }
+
+                //ostavat chasove
+            } else  {
+                //ostavat niakolko chasa
+
+                if(titleOrMessage == Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_MESSAGE_BODY) {
+                    timeToWait = getResources().getString(R.string.you_have_to_wait) + " " +
+                            formatter.format(timeRemaining) + " " + getResources().getString(R.string.hours) + " " +
+                            getResources().getString(R.string.before_you_can_send) + " " +
+                            message.getRecepients().get(0).getProperty(Statics.KEY_USERNAME) +
+                            "." + " " + getResources().getString(R.string.make_it_count);
+                } else if (titleOrMessage == Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_TITLE) {
+                    timeToWait = getResources().getString(R.string.alert_dialog_title_too_many_messages)
+                            + " " + formatter.format(timeRemaining) + " " + getResources().getString(R.string.hours);
+                }
+            }
+        }//krai na check dali ima saobshtenia izpreteni predi po-malko ot 24 chasa
+        return timeToWait;
+    }
+
+
 
 
 }

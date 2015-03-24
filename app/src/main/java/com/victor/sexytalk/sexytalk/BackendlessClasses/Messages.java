@@ -22,6 +22,7 @@ public class Messages {
     private String backendlessFilePath;
     private String senderUsername;
     private String recepientEmails;
+    private String senderEmail;
     private String objectId;
     private int kissNumber;
     private Date created;
@@ -87,6 +88,13 @@ public class Messages {
     }
 
     public String getRecepientEmails() { return recepientEmails; }
+
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
+    }
+
+    public String getSenderEmail() { return senderEmail; }
+
 
     public Date getCreated()  { return created;  }
 
