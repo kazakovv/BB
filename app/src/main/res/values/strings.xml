@@ -216,10 +216,10 @@
     <string name="camera_choice_choose_pic">Choose a picture from your gallery</string>
 
     //za love message dali ima poveche ot 1 izprateno na den
-    <string name="you_have_to_wait">You can send only one love message to your loved one. You have to wait</string>
-    <string name="before_you_can_send">before you can send your next message to</string>
-    <string name="make_it_count">Make it count!</string>
-    <string name="alert_dialog_title_too_many_messages">Go slow! Wait another</string>
+    <string name="alert_dialog_title_too_many_messages">Go slow!</string>
+    <string name="you_have_to_wait">You can send only one love message per day to your loved one. Make the next one count!</string>
+    <string name="time_left">Time left:</string>
+
     <string name="query_check_message">Checking if you already sent a love message today to</string>
 
     <string name="guy">Guy</string>

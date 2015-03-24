@@ -112,6 +112,8 @@ public class Statics {
     //display one message per day dialog warning
     public static String displayOneMessagePerDayDialogBox="displayOneMessageDialog";
 
+    public static String DATE_CREATED_LOVE_MESSAGE = "loveMessageDateCreated";
+
     //flags push receiver
     public static int FLAG_CALENDAR_UPDATE = 1001;
     public static int FLAG_PARTNER_REQUEST = 1002;

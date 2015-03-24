@@ -30,6 +30,7 @@ import com.backendless.persistence.BackendlessDataQuery;
 import com.victor.sexytalk.sexytalk.BackendlessClasses.Messages;
 import com.victor.sexytalk.sexytalk.CustomDialogs.AttachPictureToMessage;
 import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
+import com.victor.sexytalk.sexytalk.CustomDialogs.LoveMessageTimeRemaining;
 import com.victor.sexytalk.sexytalk.CustomDialogs.OneLoveMessageDialog;
 import com.victor.sexytalk.sexytalk.Helper.ImageHelper;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
@@ -398,11 +399,17 @@ public class SendMessage extends ActionBarActivity implements AttachPictureToMes
                 if(foundMessages.getCurrentPage().size() > 0) {
                   //ako ima saobshtenie porveriavame dali e izprateno predi poveche ot 1 den
                     for(Messages messageOnServer : foundMessages.getCurrentPage()) {
-                        String timeToWait = checkIfLoveMessageAlreadySentToday(messageOnServer,
-                                Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_MESSAGE_BODY);
-                        if(timeToWait != null) {
+                        boolean haveToWaitMessageAlreadySentToday = checkIfLoveMessageAlreadySentToday(messageOnServer);
+                        if(haveToWaitMessageAlreadySentToday == true) {
                             //ako ne e null, znachi sme izpratili saobshtenie predi po-malko ot 24h
+                            Date dateCreated = messageOnServer.getCreated();
+                            Bundle dialogContent = new Bundle();
+                            dialogContent.putLong(Statics.DATE_CREATED_LOVE_MESSAGE, dateCreated.getTime());
+                            LoveMessageTimeRemaining loveMessageTimeRemaining = new LoveMessageTimeRemaining();
+                            loveMessageTimeRemaining.setArguments(dialogContent);
+                            loveMessageTimeRemaining.show(getSupportFragmentManager(),"tag_love");
 
+                            /*
                             String title = checkIfLoveMessageAlreadySentToday(messageOnServer, Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_TITLE);
                             String message = timeToWait;
                             CustomAlertDialog notSoQuick = new CustomAlertDialog();
@@ -411,38 +418,19 @@ public class SendMessage extends ActionBarActivity implements AttachPictureToMes
                             dialogContent.putString(Statics.ALERTDIALOG_MESSAGE,message);
                             notSoQuick.setArguments(dialogContent);
                             notSoQuick.show(getFragmentManager(),"tag_alert_dialog");
+                            */
                             break;
                             //krai na if message, ako triabva da chakame predi da izpratim saobshtenie
 
                         } else {
-                            //niama izprateni saboshtenia za poslednite 24 chasa
-                            //izprashtame message
-                            Messages message = new Messages();
-                            message.setSender(Backendless.UserService.CurrentUser());
-                            message.setLoveMessage(messageToSend.getText().toString());
-                            message.setRecepients(recipients);
-                            message.setSederUsername((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
-                            message.setSenderEmail(mCurrentUser.getEmail());
-                            message.setRecepientEmails(backendlessRecipientEmails.get(0)); //ima samo 1 poluchatel.
-                            //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
-                            if (mMessageType == null) {
-                                mMessageType = Statics.TYPE_TEXTMESSAGE;
-                            }
-                            message.setMessageType(mMessageType);
-
-                            //izprashtame saobshtenieto
-                            if (mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
-                                sendImageMessage(message, recipients);
-                            }
-
-
-                            //izprashtame saobshtenieto
-                            if (mMessageType.equals(Statics.TYPE_TEXTMESSAGE)) {
-                                sendTextMessage(message, recipients);
-                            }
+                            //ako imame namereni saobshtenia na servera, oabche sa po-stari ot 24 chasa
+                            constructMessageAndSend(recipients);
                         }
                     }//krai na for loop za pretarsvane na namereni saobshtenia
-                } //krai na if, ako ima namereno veche izprateno love message za denia
+                }  else {  //krai na if, ako ima namereno veche izprateno love message za denia
+                    //niama namereni saobshtenia izobshto na servera
+                    constructMessageAndSend(recipients);
+                }
             } //krai na uspeshno query za tarsena na izprateno love message za denia
 
             @Override
@@ -462,7 +450,33 @@ public class SendMessage extends ActionBarActivity implements AttachPictureToMes
 
     }//krai na send message method
 
+    protected void constructMessageAndSend(List<BackendlessUser> recipients){
+        //niama izprateni saboshtenia za poslednite 24 chasa
+        //izprashtame message
+        Messages message = new Messages();
+        message.setSender(Backendless.UserService.CurrentUser());
+        message.setLoveMessage(messageToSend.getText().toString());
+        message.setRecepients(recipients);
+        message.setSederUsername((String) mCurrentUser.getProperty(Statics.KEY_USERNAME));
+        message.setSenderEmail(mCurrentUser.getEmail());
+        message.setRecepientEmails(backendlessRecipientEmails.get(0)); //ima samo 1 poluchatel.
+        //zadavame tipa na saobshtenieto, ako ne e zadadeno veche, triabva da e samo text
+        if (mMessageType == null) {
+            mMessageType = Statics.TYPE_TEXTMESSAGE;
+        }
+        message.setMessageType(mMessageType);
 
+        //izprashtame saobshtenieto
+        if (mMessageType.equals(Statics.TYPE_IMAGE_MESSAGE)) {
+            sendImageMessage(message, recipients);
+        }
+
+
+        //izprashtame saobshtenieto
+        if (mMessageType.equals(Statics.TYPE_TEXTMESSAGE)) {
+            sendTextMessage(message, recipients);
+        }
+    }
     protected void sendImageMessage(final Messages message, final List<BackendlessUser> recipients){
         //ako image uploadvame file na servera
         //razbiva fila na array ot bitove, za da go smalim i kachim na servera
@@ -591,67 +605,23 @@ public class SendMessage extends ActionBarActivity implements AttachPictureToMes
         startActivity(intent);
     }
 
-    protected String checkIfLoveMessageAlreadySentToday(Messages message, int titleOrMessage){
-        int timeToWaitBeforeSendingNewLoveMessage = Statics.MESSAGE_TIME_BEFORE_NEXT_LOVE_MESSAGE;
-        String timeToWait = null;
+    protected boolean checkIfLoveMessageAlreadySentToday(Messages message){
+        boolean messageSentToday;
+
+        long timeToWaitBeforeSendingNewLoveMessage = 24*60*60*1000; //1 den (24h *60 min * 60sec *1000 mil sec)
         Date dateMessageUploaded = message.getCreated();
         Calendar c = Calendar.getInstance();
         Date now = c.getTime();
 
-        //formatirane za time
-        NumberFormat formatter = NumberFormat.getNumberInstance();
-        formatter.setMinimumFractionDigits(0);
-        formatter.setMaximumFractionDigits(0);
+        long timeElapsed = (now.getTime() - dateMessageUploaded.getTime());
 
-        long diff = (now.getTime() - dateMessageUploaded.getTime());
-        long seconds = diff / 1000;
-        long minutes = seconds / 60;
-        long hours = minutes / 60;
 
-        if(hours < timeToWaitBeforeSendingNewLoveMessage ) {
-            long timeRemaining =  timeToWaitBeforeSendingNewLoveMessage - hours;
-            if(timeRemaining < 1) {
-                //ostavat po-malko ot 1 chas
-                float time =  ((24 - hours)  * 60);
-                String minutesRemaining;
-                if(time < 1.5){
-                    //ako ostava po-malko ot 2 min
-                    minutesRemaining = mContext.getResources().getString(R.string.minute);
-                } else {
-                    //ako ostavat po-malko ot 60 min
-                    minutesRemaining = formatter.format(timeRemaining) + " " + mContext.getResources().getString(R.string.minutes);
-                }
-
-                if(titleOrMessage == Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_MESSAGE_BODY) {
-                    //tialoto na kutiata
-                    timeToWait = getResources().getString(R.string.you_have_to_wait) + " " +
-                            formatter.format(timeRemaining) + " " + minutesRemaining + " " +
-                            getResources().getString(R.string.before_you_can_send) + " " +
-                            message.getRecepients().get(0).getProperty(Statics.KEY_USERNAME) +
-                            "." + " " + getResources().getString(R.string.make_it_count);
-                } else if(titleOrMessage == Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_TITLE) {
-                    //zaglavie na kutiata
-                    timeToWait = getResources().getString(R.string.alert_dialog_title_too_many_messages)
-                            + " " + formatter.format(timeRemaining) + " " + minutesRemaining;
-                }
-
-                //ostavat chasove
-            } else  {
-                //ostavat niakolko chasa
-
-                if(titleOrMessage == Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_MESSAGE_BODY) {
-                    timeToWait = getResources().getString(R.string.you_have_to_wait) + " " +
-                            formatter.format(timeRemaining) + " " + getResources().getString(R.string.hours) + " " +
-                            getResources().getString(R.string.before_you_can_send) + " " +
-                            message.getRecepients().get(0).getProperty(Statics.KEY_USERNAME) +
-                            "." + " " + getResources().getString(R.string.make_it_count);
-                } else if (titleOrMessage == Statics.DIALOG_BOX_ONE_LOVE_MESSAGE_TITLE) {
-                    timeToWait = getResources().getString(R.string.alert_dialog_title_too_many_messages)
-                            + " " + formatter.format(timeRemaining) + " " + getResources().getString(R.string.hours);
-                }
-            }
-        }//krai na check dali ima saobshtenia izpreteni predi po-malko ot 24 chasa
-        return timeToWait;
+        if(timeElapsed < timeToWaitBeforeSendingNewLoveMessage ) {
+            messageSentToday = true;
+        } else {
+            messageSentToday =false;
+        }
+        return messageSentToday;
     }
 
 
