@@ -35,6 +35,8 @@ public class AdapterLoveDays extends RecyclerView.Adapter<AdapterLoveDays.Contac
     private FragmentLoveDays mFragmentLoveDays;
     private static int SEX_FEMALE = 0;
     private static int SEX_MALE = 1;
+    private static int CURRENT_USER_MALE = 2;
+    private static int CURRENT_USER_FEMALE = 3;
 
     public AdapterLoveDays(List<BackendlessUser> cardsToDisplay, Context mContext, FragmentLoveDays mFragmentLoveDays) {
         this.cardsToDisplay = cardsToDisplay;
@@ -84,7 +86,8 @@ public class AdapterLoveDays extends RecyclerView.Adapter<AdapterLoveDays.Contac
                     .into(contactViewHolder.vProfilePic);
         }
 
-        if(i == 0){
+        int viewType = contactViewHolder.getItemViewType();
+        if(viewType == CURRENT_USER_FEMALE || viewType == CURRENT_USER_MALE){
             //tuk sa nastroikite samo za tekushtia potrebitel
             //Tekushtiat potrebitel vinagi izliza kato parva karta
             //Seldvashtite karti sa za partniorite mu
@@ -122,7 +125,8 @@ public class AdapterLoveDays extends RecyclerView.Adapter<AdapterLoveDays.Contac
             //tuk sa nastroikite za partniorite na tekushtia potrebitel
             if(userToDisplay.getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)) {
                 //ako e zhena
-                Boolean sendSexyCalendarUpdate = (Boolean) userToDisplay.getProperty(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
+                Boolean sendSexyCalendarUpdate = (Boolean) userToDisplay
+                        .getProperty(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
                 if(sendSexyCalendarUpdate != null && sendSexyCalendarUpdate==true){
                     String cyclePhaseTitle = CycleStage.determineCyclePhase(userToDisplay,mContext);
                     contactViewHolder.vCyclePhase.setText(cyclePhaseTitle);
@@ -137,34 +141,58 @@ public class AdapterLoveDays extends RecyclerView.Adapter<AdapterLoveDays.Contac
             }
 
         }
-    }
+    } //krai na on bindviewholder
 
     @Override
     public int getItemViewType(int position) {
-        int viewType;
-        if(cardsToDisplay.get(position).getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)){
-            viewType = SEX_FEMALE;
+        int viewType=0;
+        //proveriavame dali ne e tekushtia potrebitel
+        if(position == 0){
+            //tekushtia potrebitel e tova
+            if(cardsToDisplay.get(position).getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE))
+            viewType = CURRENT_USER_FEMALE;
+
+            if(cardsToDisplay.get(position).getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE))
+                viewType = CURRENT_USER_MALE;
+
         } else {
-            viewType = SEX_MALE;
+
+            if (cardsToDisplay.get(position).getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_FEMALE)) {
+                viewType = SEX_FEMALE;
+            } else if (cardsToDisplay.get(position).getProperty(Statics.KEY_MALE_OR_FEMALE).equals(Statics.SEX_MALE)) {
+                viewType = SEX_MALE;
+            }
         }
         return viewType;
     }
 
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        //v zavisimost dali e maz ili zhena pokazvame saotvetnia lyaout
-        View itemView;
+        //pokazvame saotvetnia lyaout v zavisimost dali e maz ili zhena
+        // i dali e tek potrebitel ili partnior na tek potrebitel
+
+        View itemView=null;
         if(viewType == SEX_FEMALE) {
             //pokazvame layout za zhena
             itemView = LayoutInflater.
                     from(viewGroup.getContext()).
                     inflate(R.layout.item_love_days_female, viewGroup, false);
-        } else {
+        } else if( viewType ==SEX_MALE) {
             //pokazvame layout za maz
             itemView = LayoutInflater.
                     from(viewGroup.getContext()).
                     inflate(R.layout.item_love_days_male, viewGroup, false);
 
+        } else if(viewType == CURRENT_USER_FEMALE){
+            //tekusht potrebitel zhena
+            itemView = LayoutInflater.
+                    from(viewGroup.getContext()).
+                    inflate(R.layout.item_love_days_current_user_female, viewGroup, false);
+
+        } else if(viewType == CURRENT_USER_MALE) {
+            itemView = LayoutInflater.
+                    from(viewGroup.getContext()).
+                    inflate(R.layout.item_love_days_current_user_male, viewGroup, false);
         }
 
 

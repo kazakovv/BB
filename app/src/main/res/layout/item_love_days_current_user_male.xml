@@ -17,9 +17,9 @@
             android:id="@+id/card_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/title_message_female"
+            android:background="@color/title_message_male"
             android:text="Love message for the day"
-            android:textColor="@color/color_black"
+            android:textColor="@color/color_white"
             android:textSize="@dimen/message_title" />
 
         <ImageView
@@ -34,20 +34,6 @@
             android:scaleType="fitXY"
             android:src="@drawable/ic_action_person_black" />
 
-        <TextView
-            android:id="@+id/cyclePhase"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/card_title"
-            android:layout_alignParentLeft="true"
-            android:paddingLeft="@dimen/default_padding"
-            android:paddingRight="@dimen/default_padding"
-            android:text="@string/fragment_love_days_generic_title"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="@color/color_black"
-            android:layout_alignBottom="@+id/profilePicture"
-            android:layout_toLeftOf="@+id/profilePicture"
-            android:layout_toStartOf="@+id/profilePicture" />
 
         <TextView
             android:id="@+id/sexyStatus"
@@ -57,19 +43,6 @@
             android:text="@string/sexy_status_default"
             style="@style/SexyStatus" />
 
-        <Button
-            android:id="@+id/showSexyCalendar"
-            style="@style/DefaultButton.SmallText"
-            android:layout_width="@dimen/button_width"
-            android:layout_height="@dimen/button_height"
-            android:layout_below="@+id/sexyStatus"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/margin_top_button"
-            android:layout_marginLeft="@dimen/default_padding"
-            android:text="@string/title_activity_sexy_calendar"
-            android:layout_marginBottom="@dimen/default_padding"
-            android:layout_centerHorizontal="true"
-            android:textAlignment="center" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>
