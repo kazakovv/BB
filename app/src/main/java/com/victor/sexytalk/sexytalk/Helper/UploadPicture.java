@@ -76,7 +76,6 @@ public class UploadPicture {
                         return Uri.fromFile(mediaFile);
 
                     } else //ako niama external storage
-                        Log.d("Vic","no external strogage, mediaUri si null");
                     return null;
 
                 }

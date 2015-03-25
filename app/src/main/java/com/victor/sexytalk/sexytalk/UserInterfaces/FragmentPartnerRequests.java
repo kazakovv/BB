@@ -146,7 +146,6 @@ public class FragmentPartnerRequests extends ListFragment {
                 if(mSwipeRefreshEmptyMessage.isRefreshing()){
                     mSwipeRefreshEmptyMessage.setRefreshing(false);
                 }
-                Log.d("Vic","error" + backendlessFault.getMessage() );
                 Toast.makeText(getActivity(), R.string.general_server_error,Toast.LENGTH_LONG).show();
             }
         });

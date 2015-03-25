@@ -197,7 +197,6 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
                                                 @Override
                                                 public void handleFault(BackendlessFault backendlessFault) {
-                                                    Log.d("Vic","error" + backendlessFault.getMessage());
                                                     //skrivame spinner
                                                     holder.layoutButtons.setVisibility(View.VISIBLE);
                                                     holder.progressBar.setVisibility(View.GONE);
@@ -211,7 +210,6 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
                                 @Override
                                 public void handleFault(BackendlessFault backendlessFault) {
-                                    Log.d("Vic","error" + backendlessFault.getMessage());
                                     //skrivame spinner
                                     holder.layoutButtons.setVisibility(View.VISIBLE);
                                     holder.progressBar.setVisibility(View.GONE);
@@ -225,7 +223,6 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
                         @Override
                         public void handleFault(BackendlessFault backendlessFault) {
-                            Log.d("Vic","error" + backendlessFault.getMessage());
                             //skrivame spinner
                             holder.layoutButtons.setVisibility(View.VISIBLE);
                             holder.progressBar.setVisibility(View.GONE);

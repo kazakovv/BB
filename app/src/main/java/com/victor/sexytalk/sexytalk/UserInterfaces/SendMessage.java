@@ -192,7 +192,6 @@ public class SendMessage extends ActionBarActivity implements AttachPictureToMes
             } catch (Exception e) {
                 //handle exception here
                 Toast.makeText(SendMessage.this, R.string.error_loading_thumbnail, Toast.LENGTH_LONG).show();
-                Log.d("Vic", "Error loading thumbnail" + e.toString());
             }
             int initialWidth = bitmap.getWidth();
             int initalHeight = bitmap.getHeight();
