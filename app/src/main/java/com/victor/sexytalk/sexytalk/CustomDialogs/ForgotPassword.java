@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -41,13 +42,17 @@ public class ForgotPassword extends DialogFragment implements DialogInterface.On
                 // Add action buttons
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int id) {
+                    public void onClick(final DialogInterface dialog, int id) {
                         String email = mEmailForPasswordRecovery.getText().toString().trim();
                         if(!email.isEmpty()) {
                             //izprashtame email s password recovery
                             Backendless.UserService.restorePassword(email, new AsyncCallback<Void>() {
                                 @Override
                                 public void handleResponse(Void aVoid) {
+
+                                    Toast.makeText(mContext,R.string.recovery_email_sent_dialog,Toast.LENGTH_LONG).show();
+
+                                    /*
                                     String title = getResources().getString(R.string.title_recovery_password_dialog);
                                     String message = getResources().getString(R.string.recovery_email_sent_dialog);
                                     CustomAlertDialog dialogError = new CustomAlertDialog();
@@ -69,9 +74,14 @@ public class ForgotPassword extends DialogFragment implements DialogInterface.On
 
                                 @Override
                                 public void handleFault(BackendlessFault backendlessFault) {
+
                                     String error = backendlessFault.getCode();
                                     //niama nameren takav email
                                     if(error.equals(Statics.BACKENDLESS_INVALID_EMAIL_PASSWORD_RECOVERY)) {
+                                        String s = backendlessFault.getMessage();
+                                        Toast.makeText(mContext,R.string.email_not_found,Toast.LENGTH_LONG).show();
+
+                                        /*
                                         String title = getResources().getString(R.string.general_error_title);
                                         String message = getResources().getString(R.string.email_not_found);
                                         CustomAlertDialog dialogError = new CustomAlertDialog();
@@ -90,6 +100,9 @@ public class ForgotPassword extends DialogFragment implements DialogInterface.On
                                         */
                                     } else {
                                         //niakakva druga greshka
+                                        Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                        //Toast.makeText(mContext,R.string.general_server_error,Toast.LENGTH_LONG).show();
+                                        /*
                                         String title = getResources().getString(R.string.general_error_title);
                                         String message = getResources().getString(R.string.general_server_error);
                                         CustomAlertDialog dialogError = new CustomAlertDialog();

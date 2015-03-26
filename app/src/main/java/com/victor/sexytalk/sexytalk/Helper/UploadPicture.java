@@ -277,6 +277,7 @@ public class UploadPicture {
                     @Override
                     public void handleFault(BackendlessFault backendlessFault) {
                         super.handleFault(backendlessFault);
+                        String f = backendlessFault.getMessage();
                         Toast.makeText(context,R.string.error_uploading_profile_pic,Toast.LENGTH_LONG).show();
 
                     }

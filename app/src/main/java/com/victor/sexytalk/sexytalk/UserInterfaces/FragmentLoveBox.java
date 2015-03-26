@@ -438,7 +438,7 @@ protected void searchForMessages(boolean hideFragment){
             if(mSwipeRefreshLayout_emptyView.isRefreshing()){
                 mSwipeRefreshLayout_emptyView.setRefreshing(false);
             }
-
+            String f  = backendlessFault.getMessage();
             Toast.makeText(getListView().getContext(),R.string.general_server_error,Toast.LENGTH_LONG).show();
         }
     });

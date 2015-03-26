@@ -101,24 +101,10 @@ public class FragmentLoveDays extends Fragment {
         }
 
         if(requestCode ==  Statics.MENSTRUAL_CALENDAR_DIALOG) {
-
-
-            if (resultCode == Activity.RESULT_OK) {
-                BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-                loadCardList(currentUser);
-
-                Bundle bundle = data.getExtras();
-                Boolean sendSexyCalendarUpdateToPartners =
-                        bundle.getBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS);
-                //izchisliavam v koi etap ot cikala e i updatevame statusite
-
-
-                if(sendSexyCalendarUpdateToPartners == true) {
-                    //TODO: izprashtam update na partniorite
-                }
-
-            }
+            BackendlessUser user = (BackendlessUser) data.getSerializableExtra("user");
+            loadCardList(user);
         }
+
     } //krai na onActivity result
 
     @Override
@@ -213,6 +199,7 @@ public class FragmentLoveDays extends Fragment {
     }
 
     protected void loadCardList(BackendlessUser currentUser) {
+
         cardsToDisplay = new ArrayList<BackendlessUser>();
         cardsToDisplay.add(currentUser);
 

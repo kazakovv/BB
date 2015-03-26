@@ -21,7 +21,7 @@ public class SexyTalkApplication extends Application {
 
         String appVersion = "v1";
         String appID = "8269D96C-7534-B883-FFAB-4A95AFE02600";
-        String sectetKey = "C781E2EC-EEC3-1161-FF38-D7BD09E6E200";
+        String sectetKey = "D33D1EB0-C901-002B-FF35-C6D2C21AB200";
         Backendless.setUrl("https://api.backendless.com");
         Backendless.initApp(this,appID,sectetKey,appVersion);
 

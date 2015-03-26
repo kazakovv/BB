@@ -120,10 +120,11 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                         //vrashta infoto kam onActivityResult v FragmentDays
                         Intent i = new Intent();
                         Bundle extras = new Bundle();
+                        extras.putSerializable("user",mCurrentUser);
                         extras.putString(Statics.TITLE_CYCLE,titleCycle);
                         extras.putBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS,sendSexyCalendarUpdateToPartners.isChecked());
                         i.putExtras(extras);
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, i);
+                        getTargetFragment().onActivityResult(getTargetRequestCode(), Statics.MENSTRUAL_CALENDAR_DIALOG, i);
 
                         dismiss();
                     }//krai na else statment
@@ -175,8 +176,6 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
             mCurrentUser.setProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,
                     Integer.parseInt(spinnerCycle.getSelectedItem().toString()) );
             mCurrentUser.setProperty(Statics.FIRST_DAY_OF_CYCLE, firstDayOfCycle.getTime());
-            //updatevame current user lokalno
-            Backendless.UserService.setCurrentUser(mCurrentUser);
 
         if(sendSexyCalendarUpdateToPartners.isChecked()) {
             mCurrentUser.setProperty(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS, true);
@@ -184,6 +183,10 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
             mCurrentUser.setProperty(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS, false);
         }
 
+        //updatevame current user lokalno
+        Backendless.UserService.setCurrentUser(mCurrentUser);
+
+        //updatevame na servera
         Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
             @Override
             public void handleResponse(BackendlessUser backendlessUser) {
@@ -194,6 +197,7 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                 } else {
                     Toast.makeText(context,R.string.calendar_saved, Toast.LENGTH_LONG).show();
                 }
+
             }
 
             @Override
