@@ -1,7 +1,6 @@
 package com.victor.sexytalk.sexytalk.UserInterfaces;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -101,8 +100,8 @@ public class FragmentLoveDays extends Fragment {
         }
 
         if(requestCode ==  Statics.MENSTRUAL_CALENDAR_DIALOG) {
-            BackendlessUser user = (BackendlessUser) data.getSerializableExtra("user");
-            loadCardList(user);
+           // BackendlessUser user = (BackendlessUser) data.getSerializableExtra("user");
+            loadCardList(mCurrentUser);
         }
 
     } //krai na onActivity result
@@ -199,11 +198,11 @@ public class FragmentLoveDays extends Fragment {
     }
 
     protected void loadCardList(BackendlessUser currentUser) {
-
+        
         cardsToDisplay = new ArrayList<BackendlessUser>();
         cardsToDisplay.add(currentUser);
 
-        if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]) {
+        if(currentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]   ) {
            BackendlessUser[] partners = (BackendlessUser[]) currentUser.getProperty(Statics.KEY_PARTNERS);
             //updatevame cardList i prezarezhdame list
 

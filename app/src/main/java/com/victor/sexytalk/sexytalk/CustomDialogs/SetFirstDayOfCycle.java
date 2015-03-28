@@ -62,9 +62,9 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
         sendSexyCalendarUpdateToPartners = (CheckBox) inflatedView.findViewById(R.id.sendSexyCalendarUpdateCheck);
         context = inflatedView.getContext();
         cyclePhaseStatus = (TextView) getActivity().findViewById(R.id.sexyStatus);
-        if(Backendless.UserService.CurrentUser() != null) {
-            mCurrentUser = Backendless.UserService.CurrentUser();
-        }
+
+        mCurrentUser = Backendless.UserService.CurrentUser();
+
 
         //sazdavame masiv s vazmoznostite za prodalzhitelnostta na cikala
         //stoinostite sa ot 21 do 35 dena
@@ -112,18 +112,19 @@ public class SetFirstDayOfCycle extends DialogFragment implements AdapterView.On
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        String averageCycleLength = spinnerCycle.getSelectedItem().toString();
                         updateCurrentUser();
+
+                        String averageCycleLength = spinnerCycle.getSelectedItem().toString();
                         String titleCycle =
                                 CycleStage.determineCyclePhase(mCurrentUser, context);
 
                         //vrashta infoto kam onActivityResult v FragmentDays
                         Intent i = new Intent();
-                        Bundle extras = new Bundle();
-                        extras.putSerializable("user",mCurrentUser);
-                        extras.putString(Statics.TITLE_CYCLE,titleCycle);
-                        extras.putBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS,sendSexyCalendarUpdateToPartners.isChecked());
-                        i.putExtras(extras);
+                        //Bundle extras = new Bundle();
+                        //extras.putSerializable("user",mCurrentUser);
+                        //extras.putString(Statics.TITLE_CYCLE,titleCycle);
+                        //extras.putBoolean(Statics.SEND_SEXY_CALENDAR_UPDATE_TO_PARTNERS,sendSexyCalendarUpdateToPartners.isChecked());
+                        //i.putExtras(extras);
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Statics.MENSTRUAL_CALENDAR_DIALOG, i);
 
                         dismiss();

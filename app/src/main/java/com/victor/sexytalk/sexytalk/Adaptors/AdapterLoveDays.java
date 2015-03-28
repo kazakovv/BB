@@ -1,9 +1,7 @@
 package com.victor.sexytalk.sexytalk.Adaptors;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -114,7 +112,6 @@ public class AdapterLoveDays extends RecyclerView.Adapter<AdapterLoveDays.Contac
                 contactViewHolder.vPrivateDays.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         SetFirstDayOfCycle newDialog = new SetFirstDayOfCycle();
                         newDialog.setTargetFragment(mFragmentLoveDays, Statics.MENSTRUAL_CALENDAR_DIALOG);
                         newDialog.show(mFragmentLoveDays.getFragmentManager(),"Welcome");
