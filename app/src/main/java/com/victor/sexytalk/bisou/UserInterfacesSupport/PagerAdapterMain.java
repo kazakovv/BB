@@ -26,11 +26,10 @@ public class PagerAdapterMain extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-
-                return new FragmentLoveBox();
+                return new FragmentLoveDays();
             case 1:
 
-                return new FragmentLoveDays();
+                return new FragmentLoveBox();
             default:
                 break;
         }
@@ -43,9 +42,9 @@ public class PagerAdapterMain extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
-                return mContext.getResources().getString(R.string.tab_love_box_title);
-            case 1:
                 return mContext.getResources().getString(R.string.tab_love_days_title);
+            case 1:
+                return mContext.getResources().getString(R.string.tab_love_box_title);
         }
         return super.getPageTitle(position);
 

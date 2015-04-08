@@ -20,6 +20,10 @@
         android:textStyle="bold"
         android:textSize="@dimen/title_cycle_period"/>
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/phase_description"/>
+    <TextView
         android:id="@+id/remainingDaysMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

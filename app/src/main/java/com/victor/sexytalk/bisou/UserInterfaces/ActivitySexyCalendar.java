@@ -21,6 +21,7 @@ protected Toolbar toolbar;
 protected Date mFirstDayOfCycle;
 protected int mAverageLengthOfCycle;
 protected TextView mCycleTitle;
+protected TextView mPhaseDescription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +32,8 @@ protected TextView mCycleTitle;
         setSupportActionBar(toolbar);
 
         mCycleTitle = (TextView) findViewById(R.id.cycleTitle);
+        mPhaseDescription = (TextView) findViewById(R.id.phase_description);
+
         //vzimame stoinostite, za zarezdane na kalendara
         Intent intent = getIntent();
         mFirstDayOfCycle = (Date) intent.getSerializableExtra(Statics.FIRST_DAY_OF_CYCLE);
@@ -76,7 +79,8 @@ protected TextView mCycleTitle;
         if(days >= 0 && days <= 4 ) { //obshto 5 dena of bleeding
             //bleeding
             //bleeding trae 5 dena! broi se i day 0 do 4
-            mCycleTitle.setText(R.string.period_no_love_days);
+            mCycleTitle.setText(R.string.period_bleeding);
+            mPhaseDescription.setText(R.string.description_bleeding_phase);
             int lastDay = 4 - days ;
 
             //dateToBeAdded.add(Calendar.DAY_OF_MONTH,lastDay);
@@ -92,7 +96,8 @@ protected TextView mCycleTitle;
         } else if (days > 4 && days < firstDayOfOvulation ) {
             //folicurar phase
             // active energetic
-            mCycleTitle.setText(R.string.period_love_days);
+            mCycleTitle.setText(R.string.period_follicular_phase);
+            mPhaseDescription.setText(R.string.description_follicular_phase);
 
             //dobaviame vsichki dati m/u
             for(int i = (days+1); i < firstDayOfOvulation; i++) {
@@ -103,7 +108,8 @@ protected TextView mCycleTitle;
             //ovulation
             //sexy
             //dobaviame vsichki dati m/u
-            mCycleTitle.setText(R.string.period_baby_days);
+            mCycleTitle.setText(R.string.period_ovulation);
+            mPhaseDescription.setText(R.string.description_ovulation);
 
             for(int i = (days+1); i < lastDayOfOvulation; i++) {
                 dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
@@ -113,7 +119,8 @@ protected TextView mCycleTitle;
         } else if (days >= lastDayOfOvulation && days <= averageCycleLength) {
             //luteal
             //dobaviame vsichki dati m/u
-            mCycleTitle.setText(R.string.period_love_days);
+            mCycleTitle.setText(R.string.period_luteal);
+            mPhaseDescription.setText(R.string.description_luteal);
 
             for(int i = (days+1); i <= averageCycleLength; i++) {
                 dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);

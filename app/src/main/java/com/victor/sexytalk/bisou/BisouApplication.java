@@ -7,7 +7,7 @@ import com.backendless.Backendless;
 /**
  * Created by Victor on 09/12/2014.
  */
-public class SexyTalkApplication extends Application {
+public class BisouApplication extends Application {
 
     @Override
     public void onCreate() {
