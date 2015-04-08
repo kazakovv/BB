@@ -189,6 +189,7 @@ public class AdapterPartnerRequests extends ArrayAdapter<PartnersAddRequest> {
 
                                                     //updatevame lokalno tekushtia potrebitel
                                                     Backendless.UserService.setCurrentUser(mCurrentUser);
+
                                                     //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                                                     // TUK E KRAIAT NA USPESHNO DOBAVIANE NA PARTNIOR
                                                     // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111

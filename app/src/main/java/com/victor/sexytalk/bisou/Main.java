@@ -2,8 +2,10 @@ package com.victor.sexytalk.bisou;
 
 
 import android.app.DialogFragment;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.opengl.Visibility;
 import android.os.Bundle;
@@ -167,7 +169,31 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
         checkIntentFlags();
     }
 
+    //register your activity onResume() za poluchavane na broadcast ot push receiver
+    //izpolzva se za pokavane na addpartner request icon
+    @Override
+    public void onResume() {
+        super.onResume();
+        mContext.registerReceiver(mMessageReceiver, new IntentFilter(Statics.FLAG_INTENT_ADD_PARTNER));
+    }
 
+    //Must unregister onPause()
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mContext.unregisterReceiver(mMessageReceiver);
+    }
+
+
+    //This is the handler that will manager to process the broadcast intent
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+           if(addPartner != null) {
+           addPartner.setVisible(true);
+           }
+        }
+    };
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -200,11 +226,9 @@ public class Main extends ActionBarActivity implements MaterialTabListener {
             }
 
             if(flag == Statics.FLAG_PARTNER_REQUEST){
-
                 Intent intent = new Intent(mContext,ManagePartnersMain.class);
                 intent.putExtra(Statics.KEY_PARTNERS_SELECT_TAB,Statics.KEY_PARTNERS_SELECT_PENDING_REQUESTS);
                 startActivity(intent);
-
             }
         }//krai na check za flagove
     }

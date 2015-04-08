@@ -118,6 +118,9 @@ public class Statics {
     public static int FLAG_CALENDAR_UPDATE = 1001;
     public static int FLAG_PARTNER_REQUEST = 1002;
 
+    //name for partner request intent da pokazva add partner icon if activity is running
+    public static String FLAG_INTENT_ADD_PARTNER = "addPartnerRequest";
+
 
 
 }

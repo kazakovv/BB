@@ -83,7 +83,12 @@ public class PushReceiver extends BackendlessBroadcastReceiver
         } else if(messageType.equals(Statics.TYPE_PARTNER_REQUEST)){
             notificationIntent = new Intent(context, Main.class);
             notificationIntent.setFlags(Statics.FLAG_PARTNER_REQUEST);
+
             id=4;
+            Statics.pendingPartnerRequest=true;
+            //send broadcast
+            Intent showAddPartnerIcon = new Intent(Statics.FLAG_INTENT_ADD_PARTNER);
+            context.sendBroadcast(showAddPartnerIcon);
         }
 
         else {
