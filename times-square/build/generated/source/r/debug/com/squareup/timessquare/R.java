@@ -153,6 +153,8 @@ containing a value of this type.
     }
     public static final class style {
         public static int CalendarCell=0x7f070000;
+        /**  <item name="android:textStyle">bold</item> 
+         */
         public static int CalendarCell_CalendarDate=0x7f070001;
         public static int CalendarCell_DayHeader=0x7f070002;
         public static int CalendarTitle=0x7f070003;

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 import com.victor.sexytalk.sexytalk.CustomDialogs.CustomAlertDialog;
 import com.victor.sexytalk.sexytalk.Helper.BackendlessMessage;
@@ -74,14 +75,14 @@ public class ActivityChangeSexyStatus extends ActionBarActivity {
                 finish();//zatvariame prozoreca
                 Backendless.UserService.setCurrentUser(mCurrentUser);
                 String message = this.getResources().getString(R.string.saving_message);
-                Backendless.UserService.update(mCurrentUser, new DefaultCallback<BackendlessUser>(this,message) {
+                Backendless.UserService.update(mCurrentUser, new AsyncCallback<BackendlessUser>() {
                    @Override
                    public void handleResponse(BackendlessUser backendlessUser) {
-                       super.handleResponse(backendlessUser);
 
                        Intent data = new Intent();
                        data.putExtra(Statics.KEY_SET_STATUS, mSexyStatus.getText().toString().trim());
                        setResult(Activity.RESULT_OK, data);
+
 
                        //izprashtame push message
                        if(mCurrentUser.getProperty(Statics.KEY_PARTNERS) instanceof BackendlessUser[]){
@@ -96,7 +97,6 @@ public class ActivityChangeSexyStatus extends ActionBarActivity {
 
                    @Override
                    public void handleFault(BackendlessFault backendlessFault) {
-                        super.handleFault(backendlessFault);
                        String title = getResources().getString(R.string.general_error_title);
                        String message = getResources().getString(R.string.error_updating_status);
                        CustomAlertDialog changeStatus = new CustomAlertDialog();

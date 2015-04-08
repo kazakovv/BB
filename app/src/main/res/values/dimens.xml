@@ -37,7 +37,7 @@
     <dimen name="kiss_count_font">15sp</dimen>
     <dimen name="kiss_title_font">50sp</dimen>
 
-    <dimen name="signup_activity_top_margin">78dp</dimen>
+    <dimen name="signup_activity_top_margin">110dp</dimen>
     <dimen name="Send_to">17sp</dimen>
 
     <dimen name="round_button_height">45dp</dimen>

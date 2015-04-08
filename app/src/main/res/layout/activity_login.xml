@@ -5,13 +5,14 @@
     android:background="@color/color_white"
 
     tools:context="com.example.victor.swipeviews.LoginActivity">
+
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/background"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:background="@drawable/background" />
 
     <LinearLayout
         android:id="@+id/linerLayoutFields"
@@ -26,22 +27,22 @@
 
         <EditText
             android:id="@+id/login_email"
-            android:maxLength="@integer/max_email_length"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_email"
             android:background="@drawable/_edit_text_holo_light"
-            android:inputType="textEmailAddress" />
+            android:hint="@string/hint_email"
+            android:inputType="textEmailAddress"
+            android:maxLength="@integer/max_email_length" />
 
         <EditText
             android:id="@+id/login_password"
-            android:maxLength="@integer/max_password_length"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/_edit_text_holo_light"
             android:ems="10"
             android:hint="@string/hint_login_password"
-            android:background="@drawable/_edit_text_holo_light"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:maxLength="@integer/max_password_length" />
     </LinearLayout>
 
 

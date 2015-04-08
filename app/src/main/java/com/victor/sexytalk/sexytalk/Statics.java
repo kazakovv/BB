@@ -1,5 +1,7 @@
 package com.victor.sexytalk.sexytalk;
 
+import com.backendless.BackendlessUser;
+
 /**
  * Created by Victor on 09/12/2014.
  */

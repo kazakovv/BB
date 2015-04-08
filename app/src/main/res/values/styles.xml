@@ -32,6 +32,7 @@
         <item name="android:layout_gravity">center</item>
     </style>
 
+
     <!--
     <style name="CustomActivityTheme" parent="AppTheme">
         <item name="android:homeAsUpIndicator">@drawable/ic_drawer</item>
