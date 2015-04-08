@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.victor.sexytalk.sexytalk"
+    package="com.victor.sexytalk.bisou"
 
     >
 
@@ -13,7 +13,7 @@
     <uses-permission android:name="com.victor.sexytalk.sexytalk.permission.C2D_MESSAGE" />
 
     <permission
-        android:name="com.victor.sexytalk.sexytalk.permission.C2D_MESSAGE"
+        android:name="com.victor.sexytalk.bisou.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
     <uses-feature
@@ -27,14 +27,14 @@
 
 
     <application
-        android:name=".SexyTalkApplication"
+        android:name="com.victor.sexytalk.bisou.SexyTalkApplication"
         android:allowBackup="true"
         android:icon="@drawable/launch_icon"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".SplashScreen"
+            android:name="com.victor.sexytalk.bisou.SplashScreen"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
@@ -46,85 +46,85 @@
         </activity>
 
         <activity
-            android:name=".Main"
+            android:name="com.victor.sexytalk.bisou.Main"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
 
         </activity>
         <activity
-            android:name=".UserInterfaces.LoginActivity"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.LoginActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserInterfaces.SignUpActivity"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.SignUpActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserInterfaces.SendMessage"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.SendMessage"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
-            android:parentActivityName=".Main"
+            android:parentActivityName="com.victor.sexytalk.bisou.Main"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserInterfaces.SendTo"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.SendTo"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:parentActivityName=".UserInterfaces.SendMessage"
+            android:parentActivityName="com.victor.sexytalk.bisou.UserInterfaces.SendMessage"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserInterfaces.ViewTextMessageActivity"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.ViewTextMessageActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".Main" />
+            android:parentActivityName="com.victor.sexytalk.bisou.Main" />
         <activity
-            android:name=".UserInterfaces.ViewImageActivity"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.ViewImageActivity"
             android:label="@string/app_name"
-            android:parentActivityName=".Main" />
+            android:parentActivityName="com.victor.sexytalk.bisou.Main" />
         <activity
-            android:name=".UserInterfaces.ViewKissActivity"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.ViewKissActivity"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:parentActivityName=".Main"
+            android:parentActivityName="com.victor.sexytalk.bisou.Main"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ManagePartnersMain"
+            android:name="com.victor.sexytalk.bisou.ManagePartnersMain"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:parentActivityName=".Main"
+            android:parentActivityName="com.victor.sexytalk.bisou.Main"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".UserInterfaces.ActivityChangeSexyStatus"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.ActivityChangeSexyStatus"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:parentActivityName=".Main"
+            android:parentActivityName="com.victor.sexytalk.bisou.Main"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".UserInterfaces.ActivitySexyCalendar"
+            android:name="com.victor.sexytalk.bisou.UserInterfaces.ActivitySexyCalendar"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
-            android:parentActivityName=".Main"
+            android:parentActivityName="com.victor.sexytalk.bisou.Main"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CustomDialogs.SetBirthday"
+            android:name="com.victor.sexytalk.bisou.CustomDialogs.SetBirthday"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_set_birthday"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CustomDialogs.ChangePassword"
+            android:name="com.victor.sexytalk.bisou.CustomDialogs.ChangePassword"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_change_password"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".CustomDialogs.ForgotPassword"
+            android:name="com.victor.sexytalk.bisou.CustomDialogs.ForgotPassword"
             android:configChanges="orientation|keyboardHidden"
             android:label="@string/title_activity_forgot_password"
             android:screenOrientation="portrait" />
 
         <receiver
-            android:name=".PushReceiver"
+            android:name="com.victor.sexytalk.bisou.PushReceiver"
             android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />

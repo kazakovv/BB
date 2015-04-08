@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/color_white"
-    tools:context="com.victor.sexytalk.sexytalk.UserInterfaces.ActivitySexyCalendar">
+    tools:context="com.victor.sexytalk.bisou.UserInterfaces.ActivitySexyCalendar">
 
     <include
         android:id="@+id/toolbar"
