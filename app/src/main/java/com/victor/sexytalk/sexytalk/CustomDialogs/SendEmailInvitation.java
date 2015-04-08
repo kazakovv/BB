@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.victor.sexytalk.sexytalk.Helper.SharedPrefsHelper;
 import com.victor.sexytalk.sexytalk.R;
 import com.victor.sexytalk.sexytalk.Statics;
 
@@ -40,8 +39,8 @@ public class SendEmailInvitation extends DialogFragment implements DialogInterfa
                     public void onClick(DialogInterface dialog, int which) {
                         //send email
 
-                        String subject = getActivity().getResources().getString(R.string.email_invite_to_sexytalk_subject);
-                        String body = getActivity().getResources().getString(R.string.email_invite_to_sexytalk_body);
+                        String subject = getActivity().getResources().getString(R.string.email_invite_to_bisou_subject);
+                        String body = getActivity().getResources().getString(R.string.email_invite_to_bisou_body);
                         Intent i = new Intent(Intent.ACTION_SEND);
                         i.setType("message/rfc822");
                         if (emailToSend != null) {
