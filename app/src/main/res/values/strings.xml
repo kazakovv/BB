@@ -160,14 +160,14 @@
 
     //sexy calendar
     <string name="period_bleeding">Critical zone! Be careful.</string>
-    <string name="period_follicular_phase">Funny social week </string>
-    <string name="period_ovulation">Confidence and optimism</string>
-    <string name="period_luteal">Sleepy quiet week</string>
+    <string name="period_follicular_phase">Charm and Sharper memory!</string>
+    <string name="period_ovulation">Sexy, Smiling Seconds!</string>
+    <string name="period_luteal">Sleepy Quiet Week</string>
 
-    <string name="description_bleeding_phase">Final days of women’s cycle… they can suffer from wide variety of PMS-related symptoms as irritability and negativity.</string>
-    <string name="description_follicular_phase">Once ladies have past the fatiguing part of their period the rise in estrogen will be boosting their energy and optimism, they will want to socialize and have lots of fun!</string>
-    <string name="description_ovulation">Ovulation…The ladies are confident, cheerful and have a sharper memory!</string>
-    <string name="description_luteal">Final days of women’s cycle… they can suffer from wide variety of PMS-related symptoms as irritability and negativity.</string>
+    <string name="description_bleeding_phase">Period... Due to the rise in estrogen ladies will be nervous and a bit angry!</string>
+    <string name="description_follicular_phase">Pre-ovulation... The ladies are confident, cheerful and have a sharper memory!</string>
+    <string name="description_ovulation"> Ovulation... Ladies are on their top! Smiles and beauty are the other name of this fantastic time!</string>
+    <string name="description_luteal">Final days of women’s cycle... Ladies can suffer from wide variety of PMS-related symptoms as irritability and negativity.</string>
 
     <string name="sub_title_remaining_days">Remaining days in this period</string>
     <string name="sexyCalendar_needs_updating_message">Sexy Calendar needs to be updated</string>
