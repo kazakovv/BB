@@ -1,5 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="android:Theme.Holo.Light">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:editTextBackground">@drawable/_edit_text_holo_light</item>
+
+        <item name="android:textColorHighlight">#99e91e63</item>
+        <item name="android:textSelectHandleLeft">@drawable/_text_select_handle_left</item>
+        <item name="android:textSelectHandleRight">@drawable/_text_select_handle_right</item>
+        <item name="android:textSelectHandle">@drawable/_text_select_handle_middle</item>
+
+        <item name="android:listChoiceIndicatorMultiple">@drawable/_btn_check_holo_light</item>
+
+        <item name="android:dropDownSpinnerStyle">@style/Spinner</item>
+
+        <item name="android:buttonStyleToggle">@style/Toggle</item>
+        <item name="android:listChoiceIndicatorSingle">@drawable/apptheme_btn_radio_holo_light</item>
+    </style>
+
+    <!-- style za sexy status -->
+    <style name="SexyStatus">
+
+        <item name="android:paddingTop">@dimen/default_padding</item>
+        <item name="android:paddingLeft">@dimen/default_padding</item>
+        <item name="android:paddingRight">@dimen/default_padding</item>
+        <item name="android:textColor">@color/second_accent_color</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+
+    <!--
+    <style name="CustomActivityTheme" parent="AppTheme">
+        <item name="android:homeAsUpIndicator">@drawable/ic_drawer</item>
+    </style>
+-->
+    <!-- style za zaglaviata n dialog box-->
+    <style name="DialogWindowTitle" parent="@android:style/TextAppearance.Holo.DialogWindowTitle">
+        <item name="android:textColor">@color/apptheme_color</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/alert_dialog_title_text_size</item>
+        <item name="android:layout_marginBottom">@dimen/margin_bottom_dialog_box_title</item>
+    </style>
+
+    <style name="CustomAlertDialogText">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <!--  <item name="android:textSize">@dimen/alert_dialog_message_text_size</item> -->
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:paddingBottom">@dimen/default_padding</item>
+    </style>
+
+
+    <style name="DefaultButton">
+        <item name="android:textSize">@dimen/default_button_text_size</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:background">@drawable/button_custom</item>
+    </style>
+
+    <style name="DefaultButton.SmallText">
+        <item name="android:textSize">@dimen/default_button_small_text_size</item>
+        <item name="android:textColor">@color/color_white</item>
+        <item name="android:background">@drawable/button_custom</item>
+    </style>
+
+
+    <style name="AlertDialogCustom" parent="Theme.AppCompat.Light.Dialog">
+
+        <!--
+        <item name="android:typeface">monospace</item>
+        <item name="android:textSize">10sp</item>
+        -->
+    </style>
+
+    <!-- Avotomatichno generirano ot android asset studio-->
+
+    <style name="Spinner" parent="android:Widget.Holo.Light.Spinner">
+        <item name="android:background">@drawable/_spinner_background_holo_light</item>
+        <item name="android:dropDownSelector">@drawable/_list_selector_holo_light</item>
+    </style>
+
+    <style name="Toggle" parent="android:Widget.Holo.Light.Button.Toggle">
+        <item name="android:background">@drawable/_btn_toggle_holo_light</item>
     </style>
 </resources>
