@@ -94,32 +94,37 @@ protected BackendlessUser mCurrentUser;
 
         String cycleStage = CycleStage.determineCyclePhase(mCurrentUser,getApplicationContext());
 
-        if(cycleStage.equals(getResources().getString(R.string.period_bleeding) )) { //obshto 5 dena of bleeding
+        if(cycleStage.equals(getResources().getString(R.string.period_bleeding) )) {
             //bleeding
             //bleeding trae 5 dena! broi se i day 0 do 4
             mCycleTitle.setText(R.string.period_bleeding);
             mPhaseDescription.setText(R.string.description_bleeding_phase);
-            int lastDay = 4 - days ;
+            int lastDay = 5 - days ;
 
             //dateToBeAdded.add(Calendar.DAY_OF_MONTH,lastDay);
             //datesToBeSelected.add(dateToBeAdded.getTime());
 
             //dobaviame vsichki dati m/u
-            for(int i = (days+1); i < lastDay; i++) {
-                dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
-                datesToBeSelected.add(dateToBeAdded.getTime());
+            for(int i = 1; i < lastDay; i++) {
+                dateToBeAdded.clear();
+                dateToBeAdded.setTime(new Date());
+                dateToBeAdded.add(Calendar.DATE,i);
+                datesToBeSelected.add( dateToBeAdded.getTime() );
             }
 
 
         } else if (cycleStage.equals(getResources().getString(R.string.period_follicular_phase)) ) {
             //folicurar phase
-            // active energetic
+            //active energetic
             mCycleTitle.setText(R.string.period_follicular_phase);
             mPhaseDescription.setText(R.string.description_follicular_phase);
+            int lastDay = firstDayOfOvulation - days;
 
             //dobaviame vsichki dati m/u
-            for(int i = (days+1); i < firstDayOfOvulation; i++) {
-                dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
+            for(int i = 1; i < lastDay ; i++) {
+                dateToBeAdded.clear();
+                dateToBeAdded.setTime(new Date());
+                dateToBeAdded.add(Calendar.DATE,i);
                 datesToBeSelected.add(dateToBeAdded.getTime());
             }
         } else if (cycleStage.equals(getResources().getString(R.string.period_ovulation))) {
@@ -128,9 +133,12 @@ protected BackendlessUser mCurrentUser;
             //dobaviame vsichki dati m/u
             mCycleTitle.setText(R.string.period_ovulation);
             mPhaseDescription.setText(R.string.description_ovulation);
+            int lastDay = lastDayOfOvulation - days;
 
-            for(int i = (days+1); i < lastDayOfOvulation; i++) {
-                dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
+            for(int i = 1; i < lastDay; i++) {
+                dateToBeAdded.clear();
+                dateToBeAdded.setTime(new Date());
+                dateToBeAdded.add(Calendar.DATE,i);
                 datesToBeSelected.add(dateToBeAdded.getTime());
             }
 
@@ -139,14 +147,18 @@ protected BackendlessUser mCurrentUser;
             //dobaviame vsichki dati m/u
             mCycleTitle.setText(R.string.period_luteal);
             mPhaseDescription.setText(R.string.description_luteal);
+            int lastDay = averageCycleLength - days;
 
-            for(int i = (days+1); i <= averageCycleLength; i++) {
-                dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
+            for(int i = 1; i <= lastDay; i++) {
+                dateToBeAdded.clear();
+                dateToBeAdded.setTime(new Date());
+                dateToBeAdded.add(Calendar.DATE,i);
                 datesToBeSelected.add(dateToBeAdded.getTime());
             }
         } else {
             //tr da se updatene kalendara
             mCycleTitle.setText(R.string.sexyCalendar_needs_updating_message);
+            mPhaseDescription.setText(" ");
             TextView remainingDaysMessage = (TextView) findViewById(R.id.remainingDaysMessage);
             remainingDaysMessage.setVisibility(View.INVISIBLE);
         }
