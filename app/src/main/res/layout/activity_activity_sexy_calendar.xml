@@ -18,17 +18,27 @@
         android:layout_marginBottom="@dimen/default_padding"
         android:textColor="@color/apptheme_color"
         android:textStyle="bold"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="@dimen/default_padding"
         android:textSize="@dimen/title_cycle_period"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/phase_description"/>
+        android:id="@+id/phase_description"
+        android:textColor="@color/apptheme_color"
+        android:textStyle="italic"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="@dimen/default_padding"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:textSize="@dimen/subtitle_description_calendar"/>
     <TextView
         android:id="@+id/remainingDaysMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:textSize="@dimen/subtitle_cycle_period"
+        android:layout_marginLeft="@dimen/default_padding"
+        android:layout_marginRight="@dimen/default_padding"
+        android:textSize="@dimen/remaining_days_in_period"
         android:layout_marginBottom="@dimen/default_padding"
         android:textColor="@color/second_accent_color"
         android:text="@string/sub_title_remaining_days"/>

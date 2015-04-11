@@ -20,7 +20,8 @@
     <dimen name="image_rotation_arrow">30dp</dimen>
     <dimen name="message_title">30sp</dimen>
     <dimen name="title_cycle_period">40sp</dimen>
-    <dimen name="subtitle_cycle_period">20sp</dimen>
+    <dimen name="subtitle_description_calendar">20dp</dimen>
+    <dimen name="remaining_days_in_period">20sp</dimen>
     <dimen name="text_size_sub_title">20sp</dimen>
     <dimen name="padding_sub_title">15dp</dimen>
     <dimen name="button_width">150dp</dimen>

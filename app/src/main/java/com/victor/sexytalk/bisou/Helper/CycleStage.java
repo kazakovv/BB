@@ -23,6 +23,8 @@ public class CycleStage {
             firstDayOfCycle.setTime((Date) user.getProperty(Statics.FIRST_DAY_OF_CYCLE));
             Calendar now = Calendar.getInstance();
 
+
+
             long difference = now.getTimeInMillis() - firstDayOfCycle.getTimeInMillis();
 
             final int days = (int) (difference / (24 * 60 * 60 * 1000));

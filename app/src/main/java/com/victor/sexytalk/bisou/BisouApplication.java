@@ -15,7 +15,7 @@ public class BisouApplication extends Application {
 
         String appVersion = "v1";
         String appID = "8269D96C-7534-B883-FFAB-4A95AFE02600";
-        String sectetKey = "2F2963AC-AE1B-A195-FF89-D1A9EF06C800";
+        String sectetKey = "6E90BE90-B3A9-C20F-FFA7-3BEBB6D94600";
         Backendless.setUrl("https://api.backendless.com");
         Backendless.initApp(this,appID,sectetKey,appVersion);
 

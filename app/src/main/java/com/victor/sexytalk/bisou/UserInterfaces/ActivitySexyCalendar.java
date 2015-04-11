@@ -7,7 +7,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
 import com.squareup.timessquare.CalendarPickerView;
+import com.victor.sexytalk.bisou.Helper.CycleStage;
 import com.victor.sexytalk.bisou.R;
 import com.victor.sexytalk.bisou.Statics;
 
@@ -22,6 +25,8 @@ protected Date mFirstDayOfCycle;
 protected int mAverageLengthOfCycle;
 protected TextView mCycleTitle;
 protected TextView mPhaseDescription;
+protected BackendlessUser mCurrentUser;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +40,18 @@ protected TextView mPhaseDescription;
         mPhaseDescription = (TextView) findViewById(R.id.phase_description);
 
         //vzimame stoinostite, za zarezdane na kalendara
-        Intent intent = getIntent();
+
+        /*Intent intent = getIntent();
         mFirstDayOfCycle = (Date) intent.getSerializableExtra(Statics.FIRST_DAY_OF_CYCLE);
         mAverageLengthOfCycle = intent.getIntExtra(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE,0);
+        */
+        mCurrentUser = Backendless.UserService.CurrentUser();
+        mFirstDayOfCycle = (Date) mCurrentUser.getProperty(Statics.FIRST_DAY_OF_CYCLE);
+        mAverageLengthOfCycle = (int) mCurrentUser.getProperty(Statics.AVERAGE_LENGTH_OF_MENSTRUAL_CYCLE);
+        Calendar firstDayOfCycle = Calendar.getInstance();
+        firstDayOfCycle.setTime(mFirstDayOfCycle);
 
-        ArrayList<Date> datesToBeSelected = returnDurationOfCurrentCycle(mFirstDayOfCycle,mAverageLengthOfCycle);
+        ArrayList<Date> datesToBeSelected = returnDurationOfCurrentCycle(firstDayOfCycle,mAverageLengthOfCycle);
         Calendar firstDate = Calendar.getInstance();
         firstDate.setTime(datesToBeSelected.get(0));
         firstDate.add(Calendar.DAY_OF_MONTH,-1);
@@ -62,13 +74,16 @@ protected TextView mPhaseDescription;
     HELPER METODI
      */
 
-    protected ArrayList<Date> returnDurationOfCurrentCycle(Date mFirstDayOfCycle, int averageCycleLength){
+    protected ArrayList<Date> returnDurationOfCurrentCycle(Calendar mFirstDayOfCycle, int averageCycleLength){
         ArrayList<Date> datesToBeSelected = new ArrayList<Date>();
 
 
         Calendar now = Calendar.getInstance();
 
-        long difference = now.getTimeInMillis() - mFirstDayOfCycle.getTime();
+
+
+
+        long difference = now.getTimeInMillis() - mFirstDayOfCycle.getTimeInMillis();
 
         final int days = (int) (difference /(24 * 60 * 60 * 1000));
         final int firstDayOfOvulation = averageCycleLength - 14;
@@ -76,7 +91,10 @@ protected TextView mPhaseDescription;
 
         datesToBeSelected.add(now.getTime()); //dobaviame dnes
         Calendar dateToBeAdded = Calendar.getInstance();
-        if(days >= 0 && days <= 4 ) { //obshto 5 dena of bleeding
+
+        String cycleStage = CycleStage.determineCyclePhase(mCurrentUser,getApplicationContext());
+
+        if(cycleStage.equals(getResources().getString(R.string.period_bleeding) )) { //obshto 5 dena of bleeding
             //bleeding
             //bleeding trae 5 dena! broi se i day 0 do 4
             mCycleTitle.setText(R.string.period_bleeding);
@@ -93,7 +111,7 @@ protected TextView mPhaseDescription;
             }
 
 
-        } else if (days > 4 && days < firstDayOfOvulation ) {
+        } else if (cycleStage.equals(getResources().getString(R.string.period_follicular_phase)) ) {
             //folicurar phase
             // active energetic
             mCycleTitle.setText(R.string.period_follicular_phase);
@@ -104,7 +122,7 @@ protected TextView mPhaseDescription;
                 dateToBeAdded.add(Calendar.DAY_OF_MONTH,1);
                 datesToBeSelected.add(dateToBeAdded.getTime());
             }
-        } else if (days >= firstDayOfOvulation && days < lastDayOfOvulation) {
+        } else if (cycleStage.equals(getResources().getString(R.string.period_ovulation))) {
             //ovulation
             //sexy
             //dobaviame vsichki dati m/u
@@ -116,7 +134,7 @@ protected TextView mPhaseDescription;
                 datesToBeSelected.add(dateToBeAdded.getTime());
             }
 
-        } else if (days >= lastDayOfOvulation && days <= averageCycleLength) {
+        } else if (cycleStage.equals(getResources().getString(R.string.period_luteal)) ) {
             //luteal
             //dobaviame vsichki dati m/u
             mCycleTitle.setText(R.string.period_luteal);
