@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MaterialTabsModule/MaterialTabsModule.iml" filepath="$PROJECT_DIR$/MaterialTabsModule/MaterialTabsModule.iml" />
       <module fileurl="file://$PROJECT_DIR$/STB.iml" filepath="$PROJECT_DIR$/STB.iml" />
-      <module fileurl="file://$PROJECT_DIR$/STB2.iml" filepath="$PROJECT_DIR$/STB2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/backendless/backendless.iml" filepath="$PROJECT_DIR$/backendless/backendless.iml" />
       <module fileurl="file://$PROJECT_DIR$/commons-io-2.4/commons-io-2.4.iml" filepath="$PROJECT_DIR$/commons-io-2.4/commons-io-2.4.iml" />
@@ -13,4 +12,3 @@
     </modules>
   </component>
 </project>
-

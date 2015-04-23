@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.victor.sexytalk.bisou.UserInterfaces.FragmentSearchPartners">
+    tools:context="com.victor.sexytalk.sexytalk.UserInterfaces.FragmentSearchPartners">
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
-        android:hint="@string/edit_partners_search_hint"
+        android:hint="@string/hint_search_partner_by_email"
         android:id="@+id/searchField"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

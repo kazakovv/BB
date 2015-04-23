@@ -15,7 +15,7 @@
         android:id="@+id/layoutFragmentLoveDays"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.victor.sexytalk.bisou.UserInterfaces.FragmentLoveDays">
+        tools:context="com.victor.sexytalk.sexytalk.UserInterfaces.FragmentLoveDays">
 
         <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/swipeRefreshLayout"

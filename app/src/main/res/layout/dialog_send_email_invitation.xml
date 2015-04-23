@@ -11,14 +11,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_invite_partner_join_bisou_title"
+        android:text="@string/dialog_invite_partner_join_lovespot_title"
         style="@style/DialogWindowTitle"/>
 
     <TextView
         android:id="@+id/drawerListItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/dialog_message_partner_not_joined_bisou"
+        android:text="@string/dialog_message_partner_not_joined_lovespot"
         style="@style/CustomAlertDialogText"/>
 
 </LinearLayout>

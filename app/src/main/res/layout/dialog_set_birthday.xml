@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/default_padding"
     android:paddingRight="@dimen/default_padding"
     android:paddingTop="@dimen/default_padding"
-    tools:context="com.victor.sexytalk.bisou.CustomDialogs.SetBirthday">
+    tools:context="com.victor.sexytalk.sexytalk.CustomDialogs.SetBirthday">
 
     <TextView
         style="@style/DialogWindowTitle"

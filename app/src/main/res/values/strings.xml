@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Bisou</string>
+    <string name="app_name">LoveSpot</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_live_card_service">Hello World LiveCard</string>
@@ -96,8 +96,8 @@
     <string name="general_server_error">Sorry, there was a server error</string>
     <string name="partner_hasnt_updated_calendar">has not updated her calendar</string>
     <string name="general_calendar_error">Please update your Private Days</string>
-    <string name="fragment_love_days_generic_title">Please update your private days to start using all of Bisou\'s functions</string>
-    <string name="no_partners_message">Connect with a partner to start using Bisou</string>
+    <string name="fragment_love_days_generic_title">Please update your private days to start using all of LoveSpot\'s functions</string>
+    <string name="no_partners_message">Connect with a partner to start using LoveSpot</string>
     <string name="no_partners_found">No partners were found</string>
     <string name="edit_partners_search_button">Search</string>
     <string name="edit_partners_search_hint">Email</string>
@@ -209,10 +209,13 @@
     <string name="toast_username_updated">Your username was updated</string>
     <string name="dialog_change_username_title">Change your username</string>
 
-    <string name="dialog_invite_partner_join_bisou_title">Invite your loved one to join Bisou</string>
-    <string name="dialog_message_partner_not_joined_bisou">You partner is not using Bisou. Do you want to send an invitation by email?</string>
-    <string name="email_invite_to_bisou_subject">I want to have a Bisou with you</string>
-    <string name="email_invite_to_bisou_body">Hi honey, let\'s start sexy talking! Just download Bisou from the Google Play. I am waiting for you... :) </string>
+    <string name="dialog_invite_partner_join_lovespot_title">Invite your loved one to join LoveSpot</string>
+    <string name="dialog_message_partner_not_joined_lovespot">You partner is not using LoveSpot. Do you want to send an invitation by email?</string>
+    <string name="email_invite_to_lovespot_subject">I want to have a LoveSpot with you</string>
+    <string name="email_invite_to_lovespot_body">Hi honey, \n \n
+        Join me in LoveSpot! Just download LoveSpot from the Google Play or click on the link below. I am waiting for you... :) \n \n
+        <a href="https://play.google.com/store/apps/details?id=com.victor.sexytalk.sexytalk">LoveSpot</a> </string>
+
     <string name="toast_no_email_clients_installed">"There are no email clients installed."</string>
     <string name="partner_request_approved">and you are now connected</string>
 
@@ -223,7 +226,9 @@
     <string name="menu_camera_alertdialog_title">Change your profile picture</string>
     <string name="camera_choice_take_pic">Take a picture</string>
     <string name="camera_choice_choose_pic">Choose a picture from your gallery</string>
-
+    <string name="dialog_no_partners_title">Add a partner</string>
+    <string name="dialog_no_partners_message">Invite a partner and begin using LoveSpot</string>
+    <string name="hint_search_partner_by_email">Search partner by email</string>
     //za love message dali ima poveche ot 1 izprateno na den
     <string name="alert_dialog_title_too_many_messages">Go slow!</string>
     <string name="you_have_to_wait">You can send only one love message per day to your loved one. Make the next one count!</string>
