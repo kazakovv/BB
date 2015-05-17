@@ -60,6 +60,13 @@
         <item name="android:background">@drawable/button_custom</item>
     </style>
 
+    <style name="LoginButton">
+        <item name="android:textSize">@dimen/default_button_text_size</item>
+        <item name="android:textColor">@color/color_black</item>
+        <item name="android:background">@drawable/button_login</item>
+
+    </style>
+
     <style name="DefaultButton.SmallText">
         <item name="android:textSize">@dimen/default_button_small_text_size</item>
         <item name="android:textColor">@color/color_white</item>

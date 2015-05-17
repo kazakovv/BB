@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_white"
+    android:background="@color/apptheme_color"
 
     tools:context="com.example.victor.swipeviews.LoginActivity">
 
@@ -23,7 +23,8 @@
         android:layout_marginTop="@dimen/login_vertical_margin"
         android:orientation="vertical"
         android:paddingLeft="@dimen/login_padding"
-        android:paddingRight="@dimen/login_padding">
+        android:paddingRight="@dimen/login_padding"
+        android:background="@color/color_white">
 
         <EditText
             android:id="@+id/login_email"
@@ -43,29 +44,28 @@
             android:hint="@string/hint_login_password"
             android:inputType="textPassword"
             android:maxLength="@integer/max_password_length" />
+        <Button
+            android:id="@+id/logInButton"
+            style="@style/LoginButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:text="@string/log_in_button" />
+
+        <TextView
+            android:id="@+id/signUpText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logInButton"
+            android:text="@string/sign_up_text"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/longin_screen_no_account_message_margin"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
     </LinearLayout>
 
 
-    <Button
-        android:id="@+id/logInButton"
-        style="@style/DefaultButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/linerLayoutFields"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:text="@string/log_in_button" />
-
-    <TextView
-        android:id="@+id/signUpText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/logInButton"
-        android:layout_centerHorizontal="true"
-        android:text="@string/sign_up_text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 
 </RelativeLayout>

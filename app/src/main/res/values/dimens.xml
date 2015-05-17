@@ -62,5 +62,5 @@
     <dimen name="navigation_drawer_margin_items">15dp</dimen>
     <dimen name="navigation_drawer_list_row_hight">28dp</dimen>
     <dimen name="nav_drawer_list_margin_top">6dp</dimen>
-
+    <dimen name="longin_screen_no_account_message_margin">15dp</dimen>
 </resources>

@@ -13,17 +13,11 @@ public class LoveSpotApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
-        String appVersion = "";
-        String appID = "";
-        String sectetKey = "";
-        Backendless.setUrl("");
-        Backendless.initApp(this,appID,sectetKey,appVersion);
-
-
-        //Backendless.Data.mapTableToClass("Users", BackendlessUser.class);
-        //Backendless.Data.mapTableToClass("PartnersAddRequest",BackendlessUser.class);
-
-
+        String appVersion = "v1";
+        String appID = "8269D96C-7534-B883-FFAB-4A95AFE02600";
+        String sectetKey = "4F549B0E-7AD0-80D5-FF7B-64AA08BA8400";
+        Backendless.setUrl("https://api.backendless.com");
+        Backendless.initApp(this, appID, sectetKey, appVersion);
 
     }
 }

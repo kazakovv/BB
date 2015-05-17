@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.text.Html;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -41,13 +43,16 @@ public class SendEmailInvitation extends DialogFragment implements DialogInterfa
 
                         String subject = getActivity().getResources().getString(R.string.email_invite_to_lovespot_subject);
                         String body = getActivity().getResources().getString(R.string.email_invite_to_lovespot_body);
+                        String link_val ="https://play.google.com/store/apps/details?id=com.victor.sexytalk.sexytalk";
+                        body = body + "\n" +  "<a href=\"" + link_val + "\">" +
+                                getActivity().getResources().getString(R.string.app_name) + "</a>";
                         Intent i = new Intent(Intent.ACTION_SEND);
                         i.setType("message/rfc822");
                         if (emailToSend != null) {
                             i.putExtra(Intent.EXTRA_EMAIL, new String[]{emailToSend});
                         }
                         i.putExtra(Intent.EXTRA_SUBJECT, subject);
-                        i.putExtra(Intent.EXTRA_TEXT, body);
+                        i.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(body));
                         try {
                             startActivity(Intent.createChooser(i, "Send mail..."));
                         } catch (android.content.ActivityNotFoundException ex) {

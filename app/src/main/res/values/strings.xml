@@ -211,10 +211,11 @@
 
     <string name="dialog_invite_partner_join_lovespot_title">Invite your loved one to join LoveSpot</string>
     <string name="dialog_message_partner_not_joined_lovespot">You partner is not using LoveSpot. Do you want to send an invitation by email?</string>
-    <string name="email_invite_to_lovespot_subject">I want to have a LoveSpot with you</string>
+    <string name="email_invite_to_lovespot_subject">Join me in LoveSpot</string>
     <string name="email_invite_to_lovespot_body">Hi honey, \n \n
-        Join me in LoveSpot! Just download LoveSpot from the Google Play or click on the link below. I am waiting for you... :) \n \n
-        <a href="https://play.google.com/store/apps/details?id=com.victor.sexytalk.sexytalk">LoveSpot</a> </string>
+        Join me in LoveSpot! Just download LoveSpot from the Google Play or click on the link below.
+        I am waiting for you... :)
+         </string>
 
     <string name="toast_no_email_clients_installed">"There are no email clients installed."</string>
     <string name="partner_request_approved">and you are now connected</string>

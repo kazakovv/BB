@@ -2,14 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_white"
+    android:background="@color/apptheme_color"
 
     tools:context="com.victor.sexytalk.sexytalk.SplashScreen">
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/splash_screen"
+        android:src="@drawable/background"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 
